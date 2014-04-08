@@ -1,5 +1,5 @@
 var chai = require('chai');
-var ServerApp = require('../../server/app');
+var ServerApp = require('../../server/serverApp');
 
 var app;
 describe('ServerApp', function() {
