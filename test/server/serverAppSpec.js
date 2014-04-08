@@ -1,14 +1,14 @@
 var chai = require('chai');
 var ServerApp = require('../../server/serverApp');
 
-var app;
+var serverApp;
 describe('ServerApp', function() {
   beforeEach(function() {
-    app = new ServerApp();
+    serverApp = new ServerApp();
   });
 
   it('Builds', function() {
-    chai.expect(app).to.not.be.null;
+    chai.expect(serverApp).to.not.be.null;
   });
 
   describe('Server and Port setup', function() {
@@ -25,10 +25,10 @@ describe('ServerApp', function() {
     it('Defaults to localhost:8080', function() {
       process.env = {};
 
-      app.setupVariables();
+      serverApp.initialize();
 
-      chai.expect(app.ipaddress).to.equal('127.0.0.1');
-      chai.expect(app.port).to.equal(8080);
+      chai.expect(serverApp.ipaddress).to.equal('127.0.0.1');
+      chai.expect(serverApp.port).to.equal(8080);
     });
 
     it('Uses OPENSHIFT parameters if specified', function() {
@@ -37,10 +37,10 @@ describe('ServerApp', function() {
         OPENSHIFT_NODEJS_PORT: 3030
       };
 
-      app.setupVariables();
+      serverApp.initialize();
 
-      chai.expect(app.ipaddress).to.equal('1.2.3.4');
-      chai.expect(app.port).to.equal(3030);
+      chai.expect(serverApp.ipaddress).to.equal('1.2.3.4');
+      chai.expect(serverApp.port).to.equal(3030);
     });
 
   });
