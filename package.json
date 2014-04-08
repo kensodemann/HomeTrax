@@ -1,7 +1,7 @@
 {
-  "name": "OpenShift-Sample-App",
+  "name": "Home-App",
   "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "description": "Track My Personal Information",
   "keywords": [
     "OpenShift",
     "Node.js",
@@ -9,8 +9,8 @@
     "openshift"
   ],
   "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
+    "name": "Ken Sodemann",
+    "email": "ken.sodemann@gmail.com",
     "url": "http://www.openshift.com/"
   },
   "homepage": "http://www.openshift.com/",
@@ -18,18 +18,19 @@
     "type": "git",
     "url": "https://github.com/openshift/origin-server"
   },
-
   "engines": {
     "node": ">= 0.10.0",
     "npm": ">= 1.3.0"
   },
-
   "dependencies": {
-    "express": "~3.4.4"
+    "express": "~3.5.1",
+    "jade": "~1.3.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "~1.9.1",
+    "sinon": "~1.9.1"
+  },
   "bundleDependencies": [],
-
   "private": true,
   "main": "server.js"
 }
