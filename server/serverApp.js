@@ -17,33 +17,7 @@ var ServerApp = function() {
       self.ipaddress = "127.0.0.1";
     };
   };
-
-
-  /**
-   *  Populate the cache.
-   *  TODO: I doubt we will have any cache like this.  Remove this once the
-   *        first angular created page is in place.
-   */
-  self.populateCache = function() {
-    if (typeof self.zcache === "undefined") {
-      self.zcache = {
-        'index.html': ''
-      };
-    }
-
-    //  Local cache for static content.
-    self.zcache['index.html'] = fs.readFileSync('./index.html');
-  };
-
-
-  /**
-   *  Retrieve entry (content) from cache.
-   *  @param {string} key  Key identifying content to retrieve from cache.
-   */
-  self.cache_get = function(key) {
-    return self.zcache[key];
-  };
-
+ 
 
   /**
    *  terminator === the termination handler
@@ -99,16 +73,11 @@ var ServerApp = function() {
     };
 
     self.routes['/'] = function(req, res) {
-      res.setHeader('Content-Type', 'text/html');
-      res.send(self.cache_get('index.html'));
+    	res.render('index');
     };
   };
 
 
-  /**
-   *  Initialize the server (express) and create the routes and register
-   *  the handlers.
-   */
   self.initializeServer = function() {
     self.createRoutes();
     self.app = express();
@@ -121,22 +90,14 @@ var ServerApp = function() {
     }
   };
 
-
-  /**
-   *  Initializes the sample application.
-   */
   self.initialize = function() {
     self.setupVariables();
-    self.populateCache();
     self.setupTerminationHandlers();
 
     self.initializeServer();
   };
 
 
-  /**
-   *  Start the server (starts up the sample application).
-   */
   self.start = function() {
     //  Start the app on the specific interface (and port).
     self.app.listen(self.port, self.ipaddress, function() {

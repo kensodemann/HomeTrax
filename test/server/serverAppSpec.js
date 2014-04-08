@@ -1,4 +1,4 @@
-var chai = require('chai');
+var expect = require('chai').expect;
 var sinon = require('sinon');
 
 var ServerApp = require('../../server/serverApp');
@@ -11,7 +11,7 @@ describe('ServerApp', function() {
   });
 
   it('Builds', function() {
-    chai.expect(serverApp).to.not.be.null;
+    expect(serverApp).to.not.be.null;
   });
 
   describe('Server and Port setup', function() {
@@ -30,8 +30,8 @@ describe('ServerApp', function() {
 
       serverApp.initialize();
 
-      chai.expect(serverApp.ipaddress).to.equal('127.0.0.1');
-      chai.expect(serverApp.port).to.equal(8080);
+      expect(serverApp.ipaddress).to.equal('127.0.0.1');
+      expect(serverApp.port).to.equal(8080);
     });
 
     it('Uses OPENSHIFT parameters if specified', function() {
@@ -42,8 +42,8 @@ describe('ServerApp', function() {
 
       serverApp.initialize();
 
-      chai.expect(serverApp.ipaddress).to.equal('1.2.3.4');
-      chai.expect(serverApp.port).to.equal(3030);
+      expect(serverApp.ipaddress).to.equal('1.2.3.4');
+      expect(serverApp.port).to.equal(3030);
     });
   });
 
@@ -52,12 +52,12 @@ describe('ServerApp', function() {
 
   	it('Sets the view path correctly', function(){
   		serverApp.initialize();
-  		chai.expect(serverApp.app.get('views')).to.equal(rootPath + '/server/views');
+  		expect(serverApp.app.get('views')).to.equal(rootPath + '/server/views');
   	});
 
   	it('Uses Jade as the view engine', function(){
   		serverApp.initialize();
-  		chai.expect(serverApp.app.get('view engine')).to.equal('jade');
+  		expect(serverApp.app.get('view engine')).to.equal('jade');
   	});
   });
 });
