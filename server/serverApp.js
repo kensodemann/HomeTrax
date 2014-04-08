@@ -1,5 +1,6 @@
 var express = require('express');
 var fs = require('fs');
+var config = require('./config/config');
 
 var ServerApp = function() {
   var self = this;
@@ -111,6 +112,8 @@ var ServerApp = function() {
   self.initializeServer = function() {
     self.createRoutes();
     self.app = express();
+
+    require('./config/express')(self.app, config);
 
     //  Add handlers for the app (from the routes).
     for (var r in self.routes) {
