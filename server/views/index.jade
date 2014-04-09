@@ -1,5 +1,11 @@
 extend ../includes/layout
 
 block main-content
+	//- section.content
+	//- 	h1 Hello World!!
+
 	section.content
-		h1 Hello World!!
+		div(ng-view)
+
+	footer.container.text-center
+		p &copy; 2014 Kenneth W. Sodemann
