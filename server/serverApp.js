@@ -17,7 +17,7 @@ var ServerApp = function() {
       self.ipaddress = "127.0.0.1";
     };
   };
- 
+
 
   /**
    *  terminator === the termination handler
@@ -72,13 +72,13 @@ var ServerApp = function() {
       res.send("<html><body><img src='" + link + "'></body></html>");
     };
 
-    self.routes['/partials/*'] = function(req, res){
+    self.routes['/partials/*'] = function(req, res) {
       res.render('../../public/app/' + req.params);
     };
 
     self.routes['/'] = function(req, res) {
       console.log('In root path');
-    	res.render('index');
+      res.render('index');
     };
   };
 
@@ -91,9 +91,18 @@ var ServerApp = function() {
 
     //  Add handlers for the app (from the routes).
     for (var r in self.routes) {
-      self.app.get(r, self.routes[r]);
+      self.app.get(r, redirectSec, self.routes[r]);
     }
   };
+
+  function redirectSec(req, res, next) {
+    if (req.headers['x-forwarded-proto'] == 'http') {
+      res.redirect('https://' + req.headers.host + req.path);
+    } else {
+      return next();
+    }
+  }
+
 
   self.initialize = function() {
     self.setupVariables();
