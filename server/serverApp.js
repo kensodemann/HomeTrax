@@ -72,7 +72,12 @@ var ServerApp = function() {
       res.send("<html><body><img src='" + link + "'></body></html>");
     };
 
+    self.routes['/partials/*'] = function(req, res){
+      res.render('../../public/app/' + req.params);
+    };
+
     self.routes['/'] = function(req, res) {
+      console.log('In root path');
     	res.render('index');
     };
   };
