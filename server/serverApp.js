@@ -18,6 +18,13 @@ var ServerApp = function() {
     };
   };
 
+<<<<<<< HEAD
+=======
+  self.setupConnectString = function() {
+    self.connectString = '127.0.0.1:27017/HomeApp';
+  };
+
+>>>>>>> Start setting up connect string.
 
   /**
    *  terminator === the termination handler
@@ -106,6 +113,7 @@ var ServerApp = function() {
 
   self.initialize = function() {
     self.setupVariables();
+    self.setupConnectString();
     self.setupTerminationHandlers();
 
     self.initializeServer();

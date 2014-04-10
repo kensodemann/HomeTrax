@@ -47,17 +47,34 @@ describe('ServerApp', function() {
     });
   });
 
-  describe('View Configuration', function(){
-  	var rootPath = path.normalize(__dirname + "/../../");
+  describe('View Configuration', function() {
+    var rootPath = path.normalize(__dirname + "/../../");
 
-  	it('Sets the view path correctly', function(){
-  		serverApp.initialize();
-  		expect(serverApp.app.get('views')).to.equal(rootPath + '/server/views');
-  	});
+    it('Sets the view path correctly', function() {
+      serverApp.initialize();
+      expect(serverApp.app.get('views')).to.equal(rootPath + '/server/views');
+    });
 
-  	it('Uses Jade as the view engine', function(){
-  		serverApp.initialize();
-  		expect(serverApp.app.get('view engine')).to.equal('jade');
-  	});
+    it('Uses Jade as the view engine', function() {
+      serverApp.initialize();
+      expect(serverApp.app.get('view engine')).to.equal('jade');
+    });
+  });
+
+  describe('Mongo Configuration', function() {
+    var previousEnv;
+
+    beforeEach(function() {
+      previousEnv = process.env;
+    });
+
+    afterEach(function() {
+      process.env = previousEnv;
+    });
+
+    it('Uses localhost and default port if not in process env', function() {
+      serverApp.initialize();
+      expect(serverApp.connectString).to.equal('127.0.0.1:27017/HomeApp');
+    });
   });
 });
