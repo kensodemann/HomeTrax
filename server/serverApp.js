@@ -1,9 +1,11 @@
 var express = require('express');
 var fs = require('fs');
 var config = require('./config/config');
+var mongojs = require('mongojs');
 
 var ServerApp = function() {
   var self = this;
+  var mongoMessage = "I am not ready yet!";
 
   self.setupVariables = function() {
     //  Set the environment variables we need.
@@ -16,6 +18,34 @@ var ServerApp = function() {
       console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
       self.ipaddress = "127.0.0.1";
     };
+  };
+
+  self.setupConnectString = function() {
+    if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+      self.connectString = openShiftConnectString(process.env);
+    } else {
+      self.connectString = '127.0.0.1:27017/HomeApp';
+    }
+  };
+
+  function openShiftConnectString(env) {
+    return env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+      env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+      env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+      env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+      env.OPENSHIFT_APP_NAME;
+  }
+
+
+  /*
+   * Walking Skel code that is just used to get the mongo message
+   */
+  self.getMongoMessage = function() {
+    var db = mongojs(self.connectString, ['message']);
+    db.message.findOne(function(err, item) {
+      if (err) throw err;
+      mongoMessage = item.text;
+    });
   };
 
 
@@ -77,8 +107,9 @@ var ServerApp = function() {
     };
 
     self.routes['/'] = function(req, res) {
-      console.log('In root path');
-      res.render('index');
+      res.render('index', {
+        mongoMessage: mongoMessage
+      });
     };
   };
 
@@ -106,6 +137,8 @@ var ServerApp = function() {
 
   self.initialize = function() {
     self.setupVariables();
+    self.setupConnectString();
+    self.getMongoMessage();
     self.setupTerminationHandlers();
 
     self.initializeServer();
