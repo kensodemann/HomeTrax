@@ -74,7 +74,7 @@ describe('ServerApp', function() {
 
     it('Uses localhost and default port if not in process env', function() {
       process.env = {};
-      serverApp.initialize();
+      serverApp.setupConnectString();
       expect(serverApp.connectString).to.equal('127.0.0.1:27017/HomeApp');
     });
 
@@ -86,7 +86,7 @@ describe('ServerApp', function() {
         OPENSHIFT_MONGODB_DB_PORT: 1234,
         OPENSHIFT_APP_NAME: "HomeApp"
       };
-      serverApp.initialize();
+      serverApp.setupConnectString();
       expect(serverApp.connectString).to.equal("jimmy:someSecret@billy:1234/HomeApp");
     });
   });

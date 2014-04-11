@@ -1,9 +1,11 @@
 var express = require('express');
 var fs = require('fs');
 var config = require('./config/config');
+var mongojs = require('mongojs');
 
 var ServerApp = function() {
   var self = this;
+  var mongoMessage = "I am not ready yet!";
 
   self.setupVariables = function() {
     //  Set the environment variables we need.
@@ -33,6 +35,19 @@ var ServerApp = function() {
       env.OPENSHIFT_MONGODB_DB_PORT + '/' +
       env.OPENSHIFT_APP_NAME;
   }
+
+
+  /*
+   * Walking Skel code that is just used to get the mongo message
+   */
+  self.getMongoMessage = function() {
+    var db = mongojs(self.connectString, ['message']);
+    db.message.findOne(function(err, item) {
+      if (err) throw err;
+      mongoMessage = item.text;
+    });
+  };
+
 
   /**
    *  terminator === the termination handler
@@ -92,8 +107,9 @@ var ServerApp = function() {
     };
 
     self.routes['/'] = function(req, res) {
-      console.log('In root path');
-      res.render('index');
+      res.render('index', {
+        mongoMessage: mongoMessage
+      });
     };
   };
 
@@ -122,6 +138,7 @@ var ServerApp = function() {
   self.initialize = function() {
     self.setupVariables();
     self.setupConnectString();
+    self.getMongoMessage();
     self.setupTerminationHandlers();
 
     self.initializeServer();
