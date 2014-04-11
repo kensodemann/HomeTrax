@@ -18,13 +18,21 @@ var ServerApp = function() {
     };
   };
 
-<<<<<<< HEAD
-=======
   self.setupConnectString = function() {
-    self.connectString = '127.0.0.1:27017/HomeApp';
+    if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+      self.connectString = openShiftConnectString(process.env);
+    } else {
+      self.connectString = '127.0.0.1:27017/HomeApp';
+    }
   };
 
->>>>>>> Start setting up connect string.
+  function openShiftConnectString(env) {
+    return env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+      env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+      env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+      env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+      env.OPENSHIFT_APP_NAME;
+  }
 
   /**
    *  terminator === the termination handler

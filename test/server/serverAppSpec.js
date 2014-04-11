@@ -73,8 +73,21 @@ describe('ServerApp', function() {
     });
 
     it('Uses localhost and default port if not in process env', function() {
+      process.env = {};
       serverApp.initialize();
       expect(serverApp.connectString).to.equal('127.0.0.1:27017/HomeApp');
+    });
+
+    it('Uses OpenShift parameters when supplied', function(){
+      process.env = {
+        OPENSHIFT_MONGODB_DB_USERNAME: "jimmy",
+        OPENSHIFT_MONGODB_DB_PASSWORD: "someSecret",
+        OPENSHIFT_MONGODB_DB_HOST: "billy",
+        OPENSHIFT_MONGODB_DB_PORT: 1234,
+        OPENSHIFT_APP_NAME: "HomeApp"
+      };
+      serverApp.initialize();
+      expect(serverApp.connectString).to.equal("jimmy:someSecret@billy:1234/HomeApp");
     });
   });
 });
