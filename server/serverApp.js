@@ -93,7 +93,7 @@ var ServerApp = function() {
       res.render('../../public/app/' + req.params);
     };
 
-    self.routes['/'] = function(req, res) {
+    self.routes['*'] = function(req, res) {
       res.render('index', {
         mongoMessage: mongoMessage
       });

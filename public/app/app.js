@@ -7,6 +7,21 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     templateUrl: '/partials/main/main',
     controller: 'trxMainCtrl'
   });
+
+  $routeProvider.when('/about', {
+    templateUrl: '/partials/main/about',
+    controller: 'trxAboutCtrl'
+  });
+
+  $routeProvider.when('/calendar',{
+    templateUrl: '/partials/calendar/main',
+    controller: 'trxCalendarCtrl'
+  });
+
+  $routeProvider.when('/finance/account',{
+    templateUrl: '/partials/finance/account',
+    controller: 'trxFinancialAccountCtrl'
+  });
 });
 
 angular.module('app').run(function($rootScope, $location) {
