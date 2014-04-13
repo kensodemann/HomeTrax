@@ -1,15 +1,22 @@
-function openShiftConnectString(env) {
-  return env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
-    env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
-    env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-    env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-    env.OPENSHIFT_APP_NAME;
+var mongojs = require('mongojs');
+
+var collections = ['message'];
+
+function openShiftConnectString() {
+  return process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+    process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+    process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+    process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+    process.env.OPENSHIFT_APP_NAME;
 }
 
-module.exports.connectString = function(env) {
-  if (env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+function connectString() {
+  if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
     return openShiftConnectString(process.env);
   } else {
     return '127.0.0.1:27017/HomeApp';
   }
 }
+
+var cs = connectString();
+module.exports = mongojs(cs, collections);

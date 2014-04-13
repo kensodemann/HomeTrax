@@ -1,7 +1,7 @@
 var express = require('express');
 var fs = require('fs');
 var config = require('./config/config');
-var mongojs = require('mongojs');
+var db = require('./config/database');
 
 var ServerApp = function() {
   var self = this;
@@ -20,15 +20,11 @@ var ServerApp = function() {
     };
   };
 
-  self.setupConnectString = function() {
-    self.connectString = require('./config/database').connectString(process.env);
-  };
 
   /*
    * Walking Skel code that is just used to get the mongo message
    */
   self.getMongoMessage = function() {
-    var db = mongojs(self.connectString, ['message']);
     db.message.findOne(function(err, item) {
       if (err) throw err;
       mongoMessage = item.text;
@@ -124,7 +120,6 @@ var ServerApp = function() {
 
   self.initialize = function() {
     self.setupVariables();
-    self.setupConnectString();
     self.getMongoMessage();
     self.setupTerminationHandlers();
 
