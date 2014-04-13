@@ -21,21 +21,8 @@ var ServerApp = function() {
   };
 
   self.setupConnectString = function() {
-    if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
-      self.connectString = openShiftConnectString(process.env);
-    } else {
-      self.connectString = '127.0.0.1:27017/HomeApp';
-    }
+    self.connectString = require('./config/database').connectString(process.env);
   };
-
-  function openShiftConnectString(env) {
-    return env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
-      env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
-      env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-      env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-      env.OPENSHIFT_APP_NAME;
-  }
-
 
   /*
    * Walking Skel code that is just used to get the mongo message
@@ -106,7 +93,7 @@ var ServerApp = function() {
       res.render('../../public/app/' + req.params);
     };
 
-    self.routes['/'] = function(req, res) {
+    self.routes['*'] = function(req, res) {
       res.render('index', {
         mongoMessage: mongoMessage
       });
