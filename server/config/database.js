@@ -1,6 +1,6 @@
 var mongojs = require('mongojs');
 
-var collections = ['message'];
+var collections = ['message', 'users'];
 
 function openShiftConnectString() {
   return process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +

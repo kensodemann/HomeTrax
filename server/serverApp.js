@@ -123,6 +123,9 @@ var ServerApp = function() {
     self.getMongoMessage();
     self.setupTerminationHandlers();
 
+    require('./config/passport')();
+    require('./config/initialData')();
+
     self.initializeServer();
   };
 
