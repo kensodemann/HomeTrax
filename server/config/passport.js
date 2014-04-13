@@ -1,7 +1,8 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var db = require('./database');
-var authentication = require('../services/authentication')
+var authentication = require('../services/authentication');
+var ObjectId = require("mongojs").ObjectId;
 
 module.exports = function() {
   passport.use(new LocalStrategy(
@@ -12,6 +13,7 @@ module.exports = function() {
         function(err, user) {
           if (user && authentication.passwordIsValid(user, password)) {
             return done(null, {
+              _id: user._id,
               username: user.username
             });
           } else {
@@ -28,15 +30,15 @@ module.exports = function() {
   });
 
   passport.deserializeUser(function(id, done) {
-    User.findOne({
-      _id: id
-    }).exec(function(err, user) {
+    db.users.findOne({
+      _id: ObjectId(id)
+    },
+    function(err, user) {
       if (user) {
         return done(null, user);
       } else {
         return done(null, false);
       }
     })
-  })
-
+  });
 }
