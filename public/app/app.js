@@ -18,6 +18,11 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     controller: 'trxCalendarCtrl'
   });
 
+  $routeProvider.when('/login',{
+    templateUrl: '/partials/account/login',
+    controller: 'trxLoginCtrl'
+  });
+
   $routeProvider.when('/finance/account',{
     templateUrl: '/partials/finance/account',
     controller: 'trxFinancialAccountCtrl'
