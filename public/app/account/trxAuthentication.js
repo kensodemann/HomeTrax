@@ -28,5 +28,15 @@ angular.module('app').factory('trxAuthentication', function($http, trxIdentity, 
       });
       return dfd.promise;
     },
+
+    currentUserAuthorizedForRoute: function(role) {
+      if (!trxIdentity.isAuthenticated()) {
+        return $q.reject('Not Logged In');
+      } else if (role !== '' && !trxIdentity.isAuthorized(role)) {
+        return $q.reject('Not Authorized');
+      } else {
+        return true;
+      }
+    }
   }
 })

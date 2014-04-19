@@ -14,7 +14,8 @@ module.exports = function() {
           if (user && authentication.passwordIsValid(user, password)) {
             return done(null, {
               _id: user._id,
-              username: user.username
+              username: user.username,
+              roles: user.roles
             });
           } else {
             return done(null, false);

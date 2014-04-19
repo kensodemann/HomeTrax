@@ -14,18 +14,7 @@
 				a(href="/calendar") Calendar
 			li.dropdown
 				a.dropdown-toggle(href="#", data-toggle="dropdown") Finance
-				ul.dropdown-menu
-					li
-						a(href="/finance/account?acct=bank1") Checking
-					li
-						a(href="/finance/account?acct=bank2") Savings
-					li
-						a(href="/finance/account?acct=credit1") Credit Card
-					li
-						a(href="/") One Per Account
-					li.divider
-					li
-						a(href="/finance/setup") Setup
+				ul.dropdown-menu(ng-controller="trxFinanceMenuCtrl", ng-include="'/partials/finance/finance-menu'")
 		span(ng-include="'/partials/account/login-menu'")
 		ul.nav.navbar-nav.navbar-right
 			li
