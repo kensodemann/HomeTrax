@@ -1,0 +1,9 @@
+div.container
+	form.form-signin
+		fieldset
+			div
+				input.form-control(placeholder="Email", ng-model="username")
+			div
+				input.form-control(type="password", placeholder="Password", ng-model="password")
+			div
+				button.btn.btn-primary(ng-click="signin(username, password)") Sign In
