@@ -9,21 +9,8 @@ function redirectSec(req, res, next) {
   }
 }
 
-var mongoMessage = "Something is wrong...";
-
-/*
- * Walking Skel code that is just used to get the mongo message
- */
-getMongoMessage = function() {
-  db.message.findOne(function(err, item) {
-    if (err) throw err;
-    mongoMessage = item.text;
-  });
-};
 
 module.exports = function(app) {
-  getMongoMessage();
-
   // app.get('/api/users', auth.requiresRole('admin'), function(req, res) {
   //   User.find({}).exec(function(err, collection) {
   //     res.send(collection);
@@ -43,7 +30,6 @@ module.exports = function(app) {
 
   app.get('*', redirectSec, function(req, res) {
     res.render('index', {
-      mongoMessage: mongoMessage,
       bootstrappedUser: req.user
     });
   });
