@@ -6,23 +6,35 @@ describe('trxLoginMenuCtrl', function() {
 
   beforeEach(module('app'));
 
-  beforeEach(inject(function($controller, $rootScope){
-  	scope = $rootScope.$new();
-  	$controllerConstructor = $controller;
+  beforeEach(inject(function($controller, $rootScope) {
+    scope = $rootScope.$new();
+    $controllerConstructor = $controller;
   }));
-  
 
-  it('Should set the identity to the injected identity object', inject(function($controller, $rootScope) {
-    var mockIdentity = {};
 
-    var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
-      $scope: scope,
-      trxIdentity: mockIdentity,
-      trxAuthentication: {},
-      $location: {}
+  describe('identity', function() {
+    it('Should set the identity to the injected identity object', function() {
+      var mockIdentity = {};
+
+      var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
+        $scope: scope,
+        trxIdentity: mockIdentity,
+        trxAuthentication: {},
+        $location: {}
+      });
+
+      expect(scope.identity).to.equal(mockIdentity);
     });
+  });
 
-    expect(scope.identity).to.equal(mockIdentity);
-  }));
 
+  describe('logout', function(){
+  	it('Should call trxAuthentication.logoutUser()', function(){
+
+  	});
+
+  	it('Should redict to the login page', function(){
+
+  	});
+  });
 })
