@@ -28,13 +28,46 @@ describe('trxLoginMenuCtrl', function() {
   });
 
 
-  describe('logout', function(){
-  	it('Should call trxAuthentication.logoutUser()', function(){
+  describe('logout', function() {
+    var dfd;
+    var mockAuth;
 
-  	});
+    beforeEach(inject(function($q) {
+      dfd = $q.defer();
+      mockAuth = sinon.stub({
+        logoutUser: function() {}
+      });
+      mockAuth.logoutUser.returns(dfd.promise);
+    }));
 
-  	it('Should redict to the login page', function(){
+    it('Should call trxAuthentication.logoutUser()', function() {
+      var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
+        $scope: scope,
+        trxIdentity: {},
+        trxAuthentication: mockAuth,
+        $location: {}
+      });
+      scope.logout();
 
-  	});
+      expect(mockAuth.logoutUser.calledOnce).to.be.true;
+    });
+
+    it('Should redict to the login page', function() {
+      var mockLocation = sinon.stub({
+        path: function() {}
+      });
+
+      var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
+        $scope: scope,
+        trxIdentity: {},
+        trxAuthentication: mockAuth,
+        $location: mockLocation
+      });
+      scope.logout();
+      dfd.resolve();
+      scope.$digest();
+
+      expect(mockLocation.path.calledWith('/login')).to.be.true;
+    });
   });
 })
