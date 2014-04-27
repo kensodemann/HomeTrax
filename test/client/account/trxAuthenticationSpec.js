@@ -25,7 +25,7 @@ describe('trxAuthentication', function() {
   });
 
   beforeEach(inject(function($rootScope, $q, trxAuthentication) {
-  	scope = $rootScope;
+    scope = $rootScope;
     dfd = $q.defer();
     mockHttp.post.returns(dfd.promise);
     serviceUnderTest = trxAuthentication;
@@ -84,7 +84,25 @@ describe('trxAuthentication', function() {
   });
 
   describe('logoutUser', function() {
+    it('Returns a promise', function() {
+      var p = serviceUnderTest.logoutUser();
+      expect(p.then).to.be.a('function');
+    });
 
+    it('posts to the logout endpoint', function() {
+      serviceUnderTest.logoutUser();
+      expect(mockHttp.post.calledWith('/logout', {logout: true})).to.be.true;
+    });
+
+    it('Clears the current user when logout complete', function(done){
+    	mockIdentity.currentUser = {firstName: 'James', lastName: 'Jones'};
+    	serviceUnderTest.logoutUser().then(function(){
+    		expect(mockIdentity.currentUser).to.be.undefined;
+    		done();
+    	});
+    	dfd.resolve();
+    	scope.$digest();
+    });
   });
 
   describe('currentUserAuthorizedForRoute', function() {
