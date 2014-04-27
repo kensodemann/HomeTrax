@@ -15,7 +15,18 @@
 			li.dropdown
 				a.dropdown-toggle(href="#", data-toggle="dropdown") Finance
 				ul.dropdown-menu(ng-controller="trxFinanceMenuCtrl", ng-include="'/partials/finance/finance-menu'")
-		span(ng-include="'/partials/account/login-menu'")
+		span(ng-include="'/partials/account/login-menu'", ng-controller="trxLoginMenuCtrl")
+		span(ng-include="'/partials/account/user-admin-menu'")
+			//- , ng-controller="trxLoginMenuCtrl")
+		//- span
+		//- 	ul.nav.navbar-nav.navbar-right
+		//- 		li.dropdown
+		//- 			a.dropdown-toggle(href="#", data-toggle="dropdown") User Admin
+		//- 			ul.dropdown-menu
+		//- 				li
+		//- 					a(href="/account/myprofile") My Profile
+		//- 				li
+		//- 					a(href="/account/userlist") User List
 		ul.nav.navbar-nav.navbar-right
 			li
 				a(href="/about") About

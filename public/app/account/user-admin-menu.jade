@@ -1,0 +1,9 @@
+ul.nav.navbar-nav.navbar-right(ng-controller="trxLoginMenuCtrl")
+	li.dropdown
+		//(ng-show="identity.isAuthenticated()")
+		a.dropdown-toggle(href="#", data-toggle="dropdown") User Admin
+		ul.dropdown-menu
+			li
+				a(href="/account/myprofile") My Profile
+			li
+				a(href="/account/userlist") User List
