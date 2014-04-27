@@ -91,21 +91,62 @@ describe('trxAuthentication', function() {
 
     it('posts to the logout endpoint', function() {
       serviceUnderTest.logoutUser();
-      expect(mockHttp.post.calledWith('/logout', {logout: true})).to.be.true;
+      expect(mockHttp.post.calledWith('/logout', {
+        logout: true
+      })).to.be.true;
     });
 
-    it('Clears the current user when logout complete', function(done){
-    	mockIdentity.currentUser = {firstName: 'James', lastName: 'Jones'};
-    	serviceUnderTest.logoutUser().then(function(){
-    		expect(mockIdentity.currentUser).to.be.undefined;
-    		done();
-    	});
-    	dfd.resolve();
-    	scope.$digest();
+    it('Clears the current user when logout complete', function(done) {
+      mockIdentity.currentUser = {
+        firstName: 'James',
+        lastName: 'Jones'
+      };
+      serviceUnderTest.logoutUser().then(function() {
+        expect(mockIdentity.currentUser).to.be.undefined;
+        done();
+      });
+      dfd.resolve();
+      scope.$digest();
     });
   });
 
   describe('currentUserAuthorizedForRoute', function() {
+    it('returns a rejected promise if the user is not logged in', function(done) {
+      mockIdentity.isAuthenticated.returns(false);
+      mockIdentity.isAuthorized.returns(false);
+      serviceUnderTest.currentUserAuthorizedForRoute('someRole')
+        .then(function(data) {}, function(msg) {
+          expect(msg).to.equal('Not Logged In');
+          done();
+        });
+      scope.$apply();
+    });
 
+    it('returns a rejected promise if the user is not authorized for role', function(done) {
+      mockIdentity.isAuthenticated.returns(true);
+      mockIdentity.isAuthorized.returns(false);
+      serviceUnderTest.currentUserAuthorizedForRoute('someRole')
+        .then(function(data) {}, function(msg) {
+          expect(msg).to.equal('Not Authorized');
+          done();
+        });
+      expect(mockIdentity.isAuthorized.calledWith('someRole')).to.be.true;
+      scope.$apply();
+    });
+
+    it('returns true if user is athenticated and authorized for role', function() {
+      mockIdentity.isAuthenticated.returns(true);
+      mockIdentity.isAuthorized.returns(true);
+      var result = serviceUnderTest.currentUserAuthorizedForRoute('someRole');
+      expect(result).to.be.true;
+      expect(mockIdentity.isAuthorized.calledWith('someRole')).to.be.true;
+    });
+
+    it('does not check authorization if there is no role', function() {
+      mockIdentity.isAuthenticated.returns(true);
+      var result = serviceUnderTest.currentUserAuthorizedForRoute('');
+      expect(result).to.be.true;
+      expect(mockIdentity.isAuthorized.called).to.be.false;
+    })
   });
 })
