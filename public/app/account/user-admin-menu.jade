@@ -1,6 +1,5 @@
-ul.nav.navbar-nav.navbar-right(ng-controller="trxLoginMenuCtrl")
-	li.dropdown
-		//(ng-show="identity.isAuthenticated()")
+ul.nav.navbar-nav.navbar-right(ng-controller="trxUserAdminMenuCtrl")
+	li.dropdown(ng-show="identity.isAuthenticated()")
 		a.dropdown-toggle(href="#", data-toggle="dropdown") User Admin
 		ul.dropdown-menu
 			li
