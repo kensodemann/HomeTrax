@@ -65,7 +65,7 @@ describe('trxLoginMenuCtrl', function() {
       });
       scope.logout();
       dfd.resolve();
-      scope.$digest();
+      scope.$apply();
 
       expect(mockLocation.path.calledWith('/login')).to.be.true;
     });

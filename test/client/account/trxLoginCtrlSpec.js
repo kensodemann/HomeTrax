@@ -48,7 +48,7 @@ describe('trxLoginCtrl', function() {
       });
       scope.signin('jeff', 'FireW00d');
       dfd.resolve(true);
-      scope.$digest();
+      scope.$apply();
 
       expect(mockLocation.path.calledWith('/')).to.be.true;
       expect(mockLocation.replace.calledOnce).to.be.true;

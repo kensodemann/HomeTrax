@@ -61,7 +61,7 @@ describe('trxAuthentication', function() {
           }
         }
       });
-      scope.$digest();
+      scope.$apply();
     });
 
     it('Resolves False and does not set Current User if login fails', function(done) {
@@ -79,7 +79,7 @@ describe('trxAuthentication', function() {
           }
         }
       });
-      scope.$digest();
+      scope.$apply();
     });
   });
 
@@ -106,7 +106,7 @@ describe('trxAuthentication', function() {
         done();
       });
       dfd.resolve();
-      scope.$digest();
+      scope.$apply();
     });
   });
 
