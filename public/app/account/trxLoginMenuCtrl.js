@@ -1,10 +1,10 @@
 angular.module('app')
-  .controller('trxLoginMenuCtrl', ['$scope', 'trxIdentity', 'trxAuthentication', '$location',
-    function($scope, trxIdentity, trxAuthentication, $location) {
+  .controller('trxLoginMenuCtrl', ['$scope', 'trxIdentity', 'trxAuthService', '$location',
+    function($scope, trxIdentity, trxAuthService, $location) {
       $scope.identity = trxIdentity;
 
       $scope.logout = function() {
-        trxAuthentication.logoutUser()
+        trxAuthService.logoutUser()
           .then(function() {
             $location.path('/login');
           });

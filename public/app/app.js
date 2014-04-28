@@ -4,13 +4,13 @@ angular.module('app')
   .config(function($routeProvider, $locationProvider) {
     var routeRoleChecks = {
       admin: {
-        auth: function(trxAuthentication) {
-          return trxAuthentication.currentUserAuthorizedForRoute('admin')
+        auth: function(trxAuthService) {
+          return trxAuthService.currentUserAuthorizedForRoute('admin')
         }
       },
       user: {
-        auth: function(trxAuthentication) {
-          return trxAuthentication.currentUserAuthorizedForRoute('')
+        auth: function(trxAuthService) {
+          return trxAuthService.currentUserAuthorizedForRoute('')
         }
       },
     }

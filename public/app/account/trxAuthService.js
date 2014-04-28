@@ -1,4 +1,4 @@
-angular.module('app').factory('trxAuthentication', function($http, trxIdentity, $q, trxUser) {
+angular.module('app').factory('trxAuthService', function($http, trxIdentity, $q, trxUser) {
   return {
     authenticateUser: function(username, password) {
       var dfd = $q.defer();
