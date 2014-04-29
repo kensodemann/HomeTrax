@@ -26,7 +26,7 @@ describe('trxUserListCtrl', function() {
         $scope: scope,
         trxUser: mockUser
       });
-      scope.users();
+      var users = scope.users;
 
       expect(mockUser.query.called).to.be.true;
     });

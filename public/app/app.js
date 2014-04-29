@@ -44,6 +44,12 @@ angular.module('app')
       controller: 'trxFinancialAccountCtrl',
       resolve: routeRoleChecks.admin
     });
+
+    $routeProvider.when('/account/userlist', {
+      templateUrl: '/partials/account/user-list',
+      controller: 'trxUserListCtrl',
+      resolve: routeRoleChecks.admin
+    });
   });
 
 angular.module('app').run(function($rootScope, $location) {
