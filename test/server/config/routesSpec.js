@@ -8,7 +8,7 @@ describe('routes', function() {
 
   beforeEach(function() {
     app = express();
-    var fakeViewPath = path.normalize(__dirname + '/../mockViews');
+    var fakeViewPath = path.normalize(__dirname + '/../mockViews/server/views');
     app.set('view engine', 'jade');
     app.set('views', fakeViewPath);
     require('../../../server/config/routes')(app);
@@ -28,11 +28,11 @@ describe('routes', function() {
       .expect(200, done);
   });
 
-  // it('Loads valid partials', function(done) {
-  //   request(app)
-  //     .get('/partials/calendar/main')
-  //     .expect('<index></index>')
-  //     .expect(200, done);
-  // });
+  it('Loads valid partials', function(done) {
+    request(app)
+      .get('/partials/main')
+      .expect('<main></main>')
+      .expect(200, done);
+  });
 
 });
