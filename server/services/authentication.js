@@ -39,6 +39,13 @@ exports.requiresApiLogin = function(req, res, next) {
   }
 };
 
-exports.requiresRole = function(req, res, next) {
-
+exports.requiresRole = function(role) {
+  return function(req, res, next) {
+    if (req.isAuthenticated() && req.user.roles.indexOf(role) !== -1) {
+      next();
+    } else {
+      res.status(403);
+      res.end();
+    }
+  };
 };
