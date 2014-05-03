@@ -11,11 +11,11 @@ function redirectSec(req, res, next) {
 
 
 module.exports = function(app) {
-  // app.get('/api/users', auth.requiresRole('admin'), function(req, res) {
-  //   User.find({}).exec(function(err, collection) {
-  //     res.send(collection);
-  //   })
-  // });
+  app.get('/api/users', redirectSec, authentication.requiresRole('admin'), function(req, res) {
+    db.users.find({}, function(err, users) {
+      res.send(users);
+    });
+  });
 
   app.post('/login', redirectSec, authentication.authenticate);
 

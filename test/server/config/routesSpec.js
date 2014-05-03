@@ -49,17 +49,17 @@ describe('routes', function() {
   });
 
   describe('login', function() {
-  	var authCalled;
+    var authCalled;
     var authStub = {
       authenticate: function(req, res, next) {
-      	authCalled = true;
+        authCalled = true;
         res.send({
           success: true
         });
       }
     };
     beforeEach(function() {
-    	authCalled = false;
+      authCalled = false;
       proxyquire('../../../server/config/routes', {
         '../services/authentication': authStub
       })(app);
@@ -74,7 +74,46 @@ describe('routes', function() {
           done();
         });
     });
-
   });
 
+  describe('api/users', function() {
+    var authStub;
+    var calledWith = '';
+    beforeEach(function() {
+      authStub = {
+        requiresRole: function(role) {
+          return function(req, res, next) {
+            calledWith = role;
+            next();
+          }
+        }
+      };
+      proxyquire('../../../server/config/routes', {
+        '../services/authentication': authStub
+      })(app);
+    });
+
+    it('Requires Admin User', function(done) {
+      request(app)
+        .get('/api/users')
+        .expect(200)
+        .end(function(err, res) {
+          debugger;
+          expect(calledWith).to.equal('admin');
+          done();
+        });
+    });
+
+    it('Returns User Data', function(done) {
+      // TODO: use a test database, load the collection and verify the data returned in the body
+      request(app)
+        .get('/api/users')
+        .expect(200)
+        .end(function(err, res) {
+          debugger;
+          expect(res.body.length).to.equal(2);
+          done();
+        });
+    });
+  });
 });
