@@ -1,3 +1,12 @@
 div.container
-	ul(ng-repeat="user in users")
-		li {{user.firstName}}
+	table.table
+		thead
+			tr
+				th First Name
+				th Last Name
+				th Username
+		tbody(ng-repeat="user in users")
+			tr
+				td {{user.firstName}}
+				td {{user.lastName}}
+				td {{user.username}}
