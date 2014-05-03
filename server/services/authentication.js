@@ -29,3 +29,16 @@ exports.authenticate = function(req, res, next) {
   });
   auth(req, res, next);
 };
+
+exports.requiresApiLogin = function(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.status(403);
+    res.end();
+  }
+};
+
+exports.requiresRole = function(req, res, next) {
+
+};
