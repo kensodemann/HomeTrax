@@ -4,6 +4,7 @@ var path = require('path');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
 var sinon = require('sinon');
+var db = require('../../../server/config/database');
 
 describe('routes', function() {
   var app;
@@ -79,7 +80,26 @@ describe('routes', function() {
   describe('api/users', function() {
     var authStub;
     var calledWith = '';
+
+    function loadUsers() {
+      db.users.remove({}, function() {
+        db.users.save({
+          firstName: 'Ken',
+          lastName: 'Sodemann'
+        });
+        db.users.save({
+          firstName: 'Lisa',
+          lastName: 'Buerger'
+        });
+        db.users.save({
+          firstName: 'Geoff',
+          lastName: 'Jones'
+        });
+      });
+    }
+
     beforeEach(function() {
+      loadUsers();
       authStub = {
         requiresRole: function(role) {
           return function(req, res, next) {
@@ -93,25 +113,26 @@ describe('routes', function() {
       })(app);
     });
 
+    afterEach(function(){
+      db.users.remove();
+    });
+
     it('Requires Admin User', function(done) {
       request(app)
         .get('/api/users')
         .expect(200)
         .end(function(err, res) {
-          debugger;
           expect(calledWith).to.equal('admin');
           done();
         });
     });
 
     it('Returns User Data', function(done) {
-      // TODO: use a test database, load the collection and verify the data returned in the body
       request(app)
         .get('/api/users')
         .expect(200)
         .end(function(err, res) {
-          debugger;
-          expect(res.body.length).to.equal(2);
+          expect(res.body.length).to.equal(3);
           done();
         });
     });
