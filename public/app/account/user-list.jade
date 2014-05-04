@@ -9,4 +9,6 @@ div.container
 			tr
 				td {{user.firstName}}
 				td {{user.lastName}}
-				td {{user.username}}
+				td
+					a(href = "#") {{user.username}}
+	button.btn.btn-primary Add New
