@@ -13,25 +13,25 @@ describe('trxLoginCtrl', function() {
 
   describe('signin', function() {
     var dfd;
-    var mockAuth;
+    var mockAuthService;
 
     beforeEach(inject(function($q) {
       dfd = $q.defer();
-      mockAuth = sinon.stub({
+      mockAuthService = sinon.stub({
         authenticateUser: function() {}
       });
-      mockAuth.authenticateUser.returns(dfd.promise);
+      mockAuthService.authenticateUser.returns(dfd.promise);
     }));
 
     it('Should call authenticateUser', function() {
       var ctrl = $controllerConstructor('trxLoginCtrl', {
         $scope: scope,
         $location: {},
-        trxAuthentication: mockAuth
+        trxAuthService: mockAuthService
       });
       scope.signin('jeff', 'FireW00d');
 
-      expect(mockAuth.authenticateUser.calledWith('jeff', 'FireW00d')).to.be.true;
+      expect(mockAuthService.authenticateUser.calledWith('jeff', 'FireW00d')).to.be.true;
     });
 
     it('Should redirect to index on success', function() {
@@ -44,7 +44,7 @@ describe('trxLoginCtrl', function() {
       var ctrl = $controllerConstructor('trxLoginCtrl', {
         $scope: scope,
         $location: mockLocation,
-        trxAuthentication: mockAuth
+        trxAuthService: mockAuthService
       });
       scope.signin('jeff', 'FireW00d');
       dfd.resolve(true);

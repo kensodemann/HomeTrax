@@ -4,13 +4,13 @@ angular.module('app')
   .config(function($routeProvider, $locationProvider) {
     var routeRoleChecks = {
       admin: {
-        auth: function(trxAuthentication) {
-          return trxAuthentication.currentUserAuthorizedForRoute('admin')
+        auth: function(trxAuthService) {
+          return trxAuthService.currentUserAuthorizedForRoute('admin')
         }
       },
       user: {
-        auth: function(trxAuthentication) {
-          return trxAuthentication.currentUserAuthorizedForRoute('')
+        auth: function(trxAuthService) {
+          return trxAuthService.currentUserAuthorizedForRoute('')
         }
       },
     }
@@ -42,6 +42,12 @@ angular.module('app')
     $routeProvider.when('/finance/account', {
       templateUrl: '/partials/finance/account',
       controller: 'trxFinancialAccountCtrl',
+      resolve: routeRoleChecks.admin
+    });
+
+    $routeProvider.when('/account/userlist', {
+      templateUrl: '/partials/account/user-list',
+      controller: 'trxUserListCtrl',
       resolve: routeRoleChecks.admin
     });
   });

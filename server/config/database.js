@@ -13,8 +13,10 @@ function openShiftConnectString() {
 function connectString() {
   if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
     return openShiftConnectString(process.env);
+  } else if (process.env.NODE_ENV === 'development') {
+    return '127.0.0.1:27017/HomeApp'
   } else {
-    return '127.0.0.1:27017/HomeApp';
+    return '127.0.0.1:27017/HomeAppTest';
   }
 }
 

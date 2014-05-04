@@ -11,7 +11,7 @@ function createDefaultUsers() {
       var hash = encryption.hash(salt, 'ken');
       db.users.save({
         firstName: 'Ken',
-        lastName: 'sodemann',
+        lastName: 'Sodemann',
         username: 'ken',
         salt: salt,
         hashedPassword: hash,
@@ -21,7 +21,7 @@ function createDefaultUsers() {
       hash = encryption.hash(salt, 'lisa');
       db.users.save({
         firstName: 'Lisa',
-        lastName: 'sodemann',
+        lastName: 'Sodemann',
         username: 'lisa',
         salt: salt,
         hashedPassword: hash,

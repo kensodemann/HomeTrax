@@ -1,6 +1,9 @@
+// force use of testing database (serverApp sets up some initial data)
+process.env.NODE_ENV = 'testing';
+
 var expect = require('chai').expect;
 var sinon = require('sinon');
-
+var db = require('../../server/config/database');
 var ServerApp = require('../../server/serverApp');
 var path = require('path');
 
@@ -8,6 +11,11 @@ var serverApp;
 describe('ServerApp', function() {
   beforeEach(function() {
     serverApp = new ServerApp();
+  });
+
+  afterEach(function() {
+    // clean up initial data creation
+    db.users.remove();
   });
 
   it('Builds', function() {

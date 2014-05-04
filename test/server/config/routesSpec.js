@@ -4,6 +4,7 @@ var path = require('path');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
 var sinon = require('sinon');
+var db = require('../../../server/config/database');
 
 describe('routes', function() {
   var app;
@@ -49,17 +50,17 @@ describe('routes', function() {
   });
 
   describe('login', function() {
-  	var authCalled;
+    var authCalled;
     var authStub = {
       authenticate: function(req, res, next) {
-      	authCalled = true;
+        authCalled = true;
         res.send({
           success: true
         });
       }
     };
     beforeEach(function() {
-    	authCalled = false;
+      authCalled = false;
       proxyquire('../../../server/config/routes', {
         '../services/authentication': authStub
       })(app);
@@ -74,7 +75,66 @@ describe('routes', function() {
           done();
         });
     });
-
   });
 
+  describe('api/users', function() {
+    var authStub;
+    var calledWith = '';
+
+    function loadUsers() {
+      db.users.remove({}, function() {
+        db.users.save({
+          firstName: 'Ken',
+          lastName: 'Sodemann'
+        });
+        db.users.save({
+          firstName: 'Lisa',
+          lastName: 'Buerger'
+        });
+        db.users.save({
+          firstName: 'Geoff',
+          lastName: 'Jones'
+        });
+      });
+    }
+
+    beforeEach(function() {
+      loadUsers();
+      authStub = {
+        requiresRole: function(role) {
+          return function(req, res, next) {
+            calledWith = role;
+            next();
+          }
+        }
+      };
+      proxyquire('../../../server/config/routes', {
+        '../services/authentication': authStub
+      })(app);
+    });
+
+    afterEach(function(){
+      db.users.remove();
+    });
+
+    it('Requires Admin User', function(done) {
+      request(app)
+        .get('/api/users')
+        .expect(200)
+        .end(function(err, res) {
+          expect(calledWith).to.equal('admin');
+          done();
+        });
+    });
+
+    it('Returns User Data', function(done) {
+      request(app)
+        .get('/api/users')
+        .expect(200)
+        .end(function(err, res) {
+          expect(res.body.length).to.equal(3);
+          done();
+        });
+    });
+  });
 });

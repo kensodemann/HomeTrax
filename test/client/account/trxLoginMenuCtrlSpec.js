@@ -19,7 +19,7 @@ describe('trxLoginMenuCtrl', function() {
       var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
         $scope: scope,
         trxIdentity: mockIdentity,
-        trxAuthentication: {},
+        trxAuthService: {},
         $location: {}
       });
 
@@ -30,26 +30,26 @@ describe('trxLoginMenuCtrl', function() {
 
   describe('logout', function() {
     var dfd;
-    var mockAuth;
+    var mockAuthService;
 
     beforeEach(inject(function($q) {
       dfd = $q.defer();
-      mockAuth = sinon.stub({
+      mockAuthService = sinon.stub({
         logoutUser: function() {}
       });
-      mockAuth.logoutUser.returns(dfd.promise);
+      mockAuthService.logoutUser.returns(dfd.promise);
     }));
 
-    it('Should call trxAuthentication.logoutUser()', function() {
+    it('Should call trxAuthService.logoutUser()', function() {
       var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
         $scope: scope,
         trxIdentity: {},
-        trxAuthentication: mockAuth,
+        trxAuthService: mockAuthService,
         $location: {}
       });
       scope.logout();
 
-      expect(mockAuth.logoutUser.calledOnce).to.be.true;
+      expect(mockAuthService.logoutUser.calledOnce).to.be.true;
     });
 
     it('Should redict to the login page', function() {
@@ -60,7 +60,7 @@ describe('trxLoginMenuCtrl', function() {
       var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
         $scope: scope,
         trxIdentity: {},
-        trxAuthentication: mockAuth,
+        trxAuthService: mockAuthService,
         $location: mockLocation
       });
       scope.logout();

@@ -1,6 +1,6 @@
 'use strict'
 
-describe('trxAuthentication', function() {
+describe('trxAuthService', function() {
   var mockHttp;
   var mockIdentity;
   var dfd;
@@ -24,11 +24,11 @@ describe('trxAuthentication', function() {
     });
   });
 
-  beforeEach(inject(function($rootScope, $q, trxAuthentication) {
+  beforeEach(inject(function($rootScope, $q, trxAuthService) {
     scope = $rootScope;
     dfd = $q.defer();
     mockHttp.post.returns(dfd.promise);
-    serviceUnderTest = trxAuthentication;
+    serviceUnderTest = trxAuthService;
   }));
 
   describe('authenticateUser', function() {
