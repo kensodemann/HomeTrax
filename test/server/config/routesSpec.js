@@ -3,7 +3,6 @@ var express = require('express');
 var path = require('path');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
-var sinon = require('sinon');
 var db = require('../../../server/config/database');
 
 describe('routes', function() {
