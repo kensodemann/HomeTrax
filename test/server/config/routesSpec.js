@@ -76,7 +76,7 @@ describe('routes', function() {
     });
   });
 
-  describe('api/users', function() {
+  describe('api/users GET', function() {
     var authStub;
     var calledWith = '';
 
@@ -113,8 +113,8 @@ describe('routes', function() {
       })(app);
     });
 
-    afterEach(function(done){
-      db.users.remove(function(){
+    afterEach(function(done) {
+      db.users.remove(function() {
         done();
       });
     });
@@ -137,6 +137,32 @@ describe('routes', function() {
           expect(res.body.length).to.equal(3);
           done();
         });
+    });
+  });
+
+  describe('api/users POST', function() {
+    it('Requires admin user', function(done) {
+      done();
+    });
+
+    it('Does not allow multiple users with the same username', function(done) {
+      done();
+    });
+
+    it('Does not allow username to be empty', function(done) {
+      done();
+    });
+
+    it('Does not allow firstName to be empty', function(done) {
+      done();
+    });
+
+    it('Does not allow lastName to be empty', function(done) {
+      done();
+    });
+
+    it('Saves a new user if valid', function(done) {
+      done();
     });
   });
 });
