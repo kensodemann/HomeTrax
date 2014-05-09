@@ -80,7 +80,7 @@ describe('routes', function() {
     var authStub;
     var calledWith = '';
 
-    function loadUsers() {
+    function loadUsers(done) {
       db.users.remove({}, function() {
         db.users.save({
           firstName: 'Ken',
@@ -95,10 +95,11 @@ describe('routes', function() {
           lastName: 'Jones'
         });
       });
+      done();
     }
 
-    beforeEach(function() {
-      loadUsers();
+    beforeEach(function(done) {
+      loadUsers(done);
       authStub = {
         requiresRole: function(role) {
           return function(req, res, next) {
@@ -112,8 +113,10 @@ describe('routes', function() {
       })(app);
     });
 
-    afterEach(function(){
-      db.users.remove();
+    afterEach(function(done){
+      db.users.remove(function(){
+        done();
+      });
     });
 
     it('Requires Admin User', function(done) {
