@@ -1,5 +1,5 @@
 var authentication = require('../services/authentication');
-var db = require('./database');
+var usersController = require('../controllers/users');
 
 function redirectSec(req, res, next) {
   if (req.headers['x-forwarded-proto'] == 'http') {
@@ -9,16 +9,10 @@ function redirectSec(req, res, next) {
   }
 }
 
-
 module.exports = function(app) {
-  app.get('/api/users', redirectSec, authentication.requiresRole('admin'), function(req, res) {
-    db.users.find({}, function(err, users) {
-      res.send(users);
-    });
-  });
+  app.get('/api/users', redirectSec, authentication.requiresRole('admin'), usersController.getUsers);
 
   app.post('/login', redirectSec, authentication.authenticate);
-
   app.post('/logout', function(req, res) {
     req.logout();
     res.end();
