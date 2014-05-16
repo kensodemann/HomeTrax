@@ -1,4 +1,5 @@
 var db = require('../config/database');
+var ObjectId = require("mongojs").ObjectId;
 
 module.exports.getUsers = function(req, res) {
   db.users.find({}, function(err, users) {
@@ -17,7 +18,13 @@ module.exports.addUser = function(req, res, next) {
 };
 
 module.exports.updateUser = function(req, res, next) {
-  res.send({});
+  validate(req, function(err, user) {
+    if (err) {
+      return sendError(err, res);
+    } else {
+      update(user, res);
+    }
+  });
 };
 
 
@@ -31,7 +38,7 @@ function validate(req, callback) {
 
   db.users.findOne({
       "_id": {
-        $ne: user._id
+        $ne: ObjectId(user._id)
       },
       "username": user.username
     },
@@ -60,6 +67,22 @@ function validateRequiredFields(user) {
 
 function insert(user, res) {
   db.users.insert(user, function(err, user) {
+    if (err) {
+      return sendError(err, res);
+    }
+    res.status(200);
+    return res.send(user);
+  });
+}
+
+function update(user, res) {
+  db.users.update({
+    _id: ObjectId(user._id)
+  }, {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    username: user.username
+  }, {}, function(err, something) {
     if (err) {
       return sendError(err, res);
     }

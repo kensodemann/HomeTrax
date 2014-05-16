@@ -275,4 +275,129 @@ describe('routes', function() {
         });
     });
   });
+
+  describe('api/users PUT', function() {
+    var called = false;;
+    var testUser;
+
+    function loadUsers(done) {
+      db.users.remove({}, function() {
+        db.users.save({
+          firstName: 'Ken',
+          lastName: 'Sodemann',
+          username: 'kws@email.com'
+        });
+        db.users.save({
+          firstName: 'Lisa',
+          lastName: 'Buerger',
+          username: 'llb@email.com'
+        }, function() {
+          db.users.findOne({
+            username: 'kws@email.com'
+          }, function(err, user) {
+            testUser = user;
+            done();
+          });
+        });
+      });
+    }
+
+    beforeEach(function(done) {
+      loadUsers(done);
+      authStub = {
+        requiresApiLogin: function(req, res, next) {
+          called = true;
+          next();
+        }
+      };
+      proxyquire('../../../server/config/routes', {
+        '../services/authentication': authStub
+      })(app);
+    });
+
+    afterEach(function(done) {
+      db.users.remove(function() {
+        done();
+      });
+    });
+
+    it('Requires logged in user', function(done) {
+      request(app)
+        .put('/api/users')
+        .send(testUser)
+        .end(function(err, res) {
+          debugger;
+          expect(res.status).to.equal(200);
+          expect(called).to.be.true;
+          done();
+        });
+    });
+
+    it('Does not allow multiple users with the same username', function(done) {
+      testUser.username = 'llb@email.com';
+      request(app)
+        .put('/api/users')
+        .send(testUser)
+        .end(function(err, res) {
+          expect(res.status).to.equal(400);
+          expect(res.body.reason).to.equal('Error: User llb@email.com already exists');
+          done();
+        });
+    });
+
+    it('Does not allow username to be empty', function(done) {
+      testUser.username = '';
+      request(app)
+        .put('/api/users')
+        .send(testUser)
+        .end(function(err, res) {
+          expect(res.status).to.equal(400);
+          expect(res.body.reason).to.equal('Error: Username is required');
+          done();
+        });
+    });
+
+    it('Does not allow firstName to be empty', function(done) {
+      testUser.firstName = '';
+      request(app)
+        .put('/api/users')
+        .send(testUser)
+        .end(function(err, res) {
+          expect(res.status).to.equal(400);
+          expect(res.body.reason).to.equal('Error: First Name is required');
+          done();
+        });
+    });
+
+    it('Does not allow lastName to be empty', function(done) {
+      testUser.lastName = '';
+      request(app)
+        .put('/api/users')
+        .send(testUser)
+        .end(function(err, res) {
+          expect(res.status).to.equal(400);
+          expect(res.body.reason).to.equal('Error: Last Name is required');
+          done();
+        });
+    });
+
+    it('Saves changes to user if valid', function(done) {
+      testUser.lastName = 'Flintstone';
+      request(app)
+        .put('/api/users')
+        .send(testUser)
+        .end(function(err, res) {
+          expect(res.status).to.equal(200);
+          db.users.findOne({
+              _id: testUser._id
+            },
+            function(err, user) {
+              expect(user.firstName).to.equal('Ken');
+              expect(user.lastName).to.equal('Flintstone');
+              expect(user.username).to.equal('kws@email.com');
+              done();
+            });
+        });
+    });
+  });
 });
