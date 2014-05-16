@@ -17,6 +17,7 @@ module.exports = function(app, config) {
     }));
 
     app.use(express.logger('dev'));
+    app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.json());
     app.use(express.urlencoded());
