@@ -32,4 +32,18 @@ describe('trxUserListCtrl', function() {
     });
   });
 
+  describe('update', function() {
+    var mockUser;
+
+    beforeEach(function() {
+      mockUser = sinon.stub({
+        update: function() {}
+      });
+    });
+
+    it('calls the user service to save changes to a user', function() {
+
+    });
+  });
+
 })
