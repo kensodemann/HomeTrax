@@ -79,9 +79,11 @@ function update(id, userData, res) {
   db.users.update({
     _id: ObjectId(id)
   }, {
-    firstName: userData.firstName,
-    lastName: userData.lastName,
-    username: userData.username
+    $set: {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      username: userData.username
+    }
   }, {}, function(err) {
     if (err) {
       return sendError(err, res);
