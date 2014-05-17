@@ -37,12 +37,19 @@ describe('trxUserListCtrl', function() {
 
     beforeEach(function() {
       mockUser = sinon.stub({
-        update: function() {}
+        query: function() {},
+        $update: function() {}
       });
     });
 
     it('calls the user service to save changes to a user', function() {
+      var ctrl = $controllerConstructor('trxUserListCtrl', {
+        $scope: scope,
+        trxUser: mockUser
+      });
+      scope.update(mockUser);
 
+      expect(mockUser.$update.called).to.be.true;
     });
   });
 

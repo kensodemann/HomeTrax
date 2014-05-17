@@ -4,11 +4,11 @@ angular.module('app')
       $scope.users = trxUser.query();
 
       $scope.update = function(user) {
-        var myScope = $scope;
+        user.$update();
       };
 
       $scope.create = function() {
-        console.log("Well ain't that this shit?  I am not done yet.");
+        console.log("Well ain't that this shit?  Create is not written yet.");
       };
     }
   ])
