@@ -323,10 +323,9 @@ describe('routes', function() {
 
     it('Requires logged in user', function(done) {
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
-          debugger;
           expect(res.status).to.equal(200);
           expect(called).to.be.true;
           done();
@@ -336,7 +335,7 @@ describe('routes', function() {
     it('Does not allow multiple users with the same username', function(done) {
       testUser.username = 'llb@email.com';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -348,7 +347,7 @@ describe('routes', function() {
     it('Does not allow username to be empty', function(done) {
       testUser.username = '';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -360,7 +359,7 @@ describe('routes', function() {
     it('Does not allow firstName to be empty', function(done) {
       testUser.firstName = '';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -372,7 +371,7 @@ describe('routes', function() {
     it('Does not allow lastName to be empty', function(done) {
       testUser.lastName = '';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -384,7 +383,7 @@ describe('routes', function() {
     it('Saves changes to user if valid', function(done) {
       testUser.lastName = 'Flintstone';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
