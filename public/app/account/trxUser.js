@@ -1,6 +1,6 @@
 angular.module('app').factory('trxUser', function($resource) {
   var UserResource = $resource('/api/users/:id', {
-    _id: "@id"
+    id: "@_id"
   }, {
     update: {
       method: 'PUT',
