@@ -4,7 +4,11 @@ angular.module('app')
       $scope.users = trxUser.query();
 
       $scope.update = function(user) {
-        user.$update();
+        user.$update().then(function() {
+          console.log('It worked');
+        }, function(response) {
+          console.log('It Failed: ' + response.data.reason);
+        });
       };
 
       $scope.create = function() {

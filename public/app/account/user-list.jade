@@ -11,7 +11,7 @@ div.container
 				td {{user.lastName}}
 				td
 					a(href = "", data-toggle='modal', data-target='#edit' + '{{user.username}}') {{user.username}}
-					.modal.fade(id='edit' + '{{user.username}}', role='dialog')
+					.modal.fade(id='edit' + '{{user.username}}', role='dialog', my-modal)
 						.modal-dialog
 							.modal-content
 								.modal-header

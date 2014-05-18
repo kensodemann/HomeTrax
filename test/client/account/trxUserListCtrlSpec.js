@@ -4,11 +4,13 @@ describe('trxUserListCtrl', function() {
   beforeEach(module('app'));
 
   var scope;
-  var $controllerConstructor
+  var $controllerConstructor;
+  var q;
 
-  beforeEach(inject(function($controller, $rootScope) {
+  beforeEach(inject(function($controller, $rootScope, $q) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
+    q = $q;
   }));
 
 
@@ -34,12 +36,15 @@ describe('trxUserListCtrl', function() {
 
   describe('update', function() {
     var mockUser;
+    var dfdUpdate;
 
     beforeEach(function() {
       mockUser = sinon.stub({
         query: function() {},
         $update: function() {}
       });
+      dfdUpdate = q.defer();
+      mockUser.$update.returns(dfdUpdate.promise);
     });
 
     it('calls the user service to save changes to a user', function() {
