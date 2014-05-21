@@ -52,6 +52,22 @@ angular.module('app')
     });
   });
 
+angular.module('app').directive('modal', function() {
+  return {
+    restrict: 'C',
+    controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
+      $scope.$watch($attrs.trigger, function(newValue, oldValue) {
+        if (!!newValue && !oldValue) {
+          $element.modal('show');
+        }
+        if (!!oldValue && !newValue) {
+          $element.modal('hide');
+        }
+      });
+    }]
+  };
+});
+
 angular.module('app').run(function($rootScope, $location) {
   $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
     if (rejection === 'Not Authorized') {
