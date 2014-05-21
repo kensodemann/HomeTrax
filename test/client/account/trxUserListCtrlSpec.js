@@ -171,10 +171,10 @@ describe('trxUserListCtrl', function() {
       expect(scope.user).to.be.a('object');
     });
 
-    // it('Set the editor title', function() {
-    //   scope.edit(mockUser);
-    //   expect(scope.editorTitle).to.equal('Edit fred');
-    // });
+    it('Set the editor title', function() {
+      scope.create();
+      expect(scope.editorTitle).to.equal('New User');
+    });
 
     // it('calls the user service to save changes to a user', function() {
     //   scope.edit(mockUser);
