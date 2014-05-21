@@ -140,28 +140,29 @@ describe('trxUserListCtrl', function() {
   });
 
   describe('Creating New User', function() {
-    var mockUser;
     var mockNotifier;
-    var dfd;
+    var $httpBackend;
+
+    beforeEach(inject(function($injector) {
+      $httpBackend = $injector.get('$httpBackend');
+      $httpBackend.when('GET', '/api/users').respond([{
+        username: 'userX'
+      }, {
+        username: 'xxx'
+      }]);
+    }));
 
     beforeEach(function() {
       mockNotifier = sinon.stub({
         error: function() {},
         notify: function() {}
       });
-      mockUser = sinon.stub({
-        query: function() {},
-        save: function() {}
-      });
-      dfd = q.defer();
-      mockUser.save.returns(dfd.promise);
       createController();
     });
 
     function createController() {
       var ctrl = $controllerConstructor('trxUserListCtrl', {
         $scope: scope,
-        trxUser: mockUser,
         trxNotifier: mockNotifier
       });
     }
@@ -176,70 +177,51 @@ describe('trxUserListCtrl', function() {
       expect(scope.editorTitle).to.equal('New User');
     });
 
-    // it('calls the user service to save changes to a user', function() {
-    //   scope.edit(mockUser);
-    //   scope.save();
-    //   expect(mockUser.$update.called).to.be.true;
-    // });
+    it('clears the user on the scope if the save is successful', function() {
+      $httpBackend.expectPOST('/api/users', {}).respond(201, {});
+      scope.create();
+      scope.save();
+      $httpBackend.flush();
+      expect(scope.user).to.be.undefined;
+      expect(scope.editorTitle).to.be.undefined;
+    });
 
-    // it('clears the user on the scope if the save is successful', function(done) {
-    //   scope.edit(mockUser);
-    //   scope.save().then(function() {
-    //     expect(scope.user).to.be.undefined;
-    //     expect(scope.editorTitle).to.be.undefined;
-    //     done();
-    //   });
-    //   dfd.resolve();
-    //   scope.$apply();
-    // });
+    it('does not clear the user on the scope if the save is not successful', function() {
+      $httpBackend.expectPOST('/api/users', {}).respond(400, {
+        reason: 'you are a failure'
+      });
+      scope.create();
+      scope.save();
+      $httpBackend.flush();
+      expect(scope.user).to.be.a('Object');
+      expect(scope.editorTitle).to.equal('New User');
+    });
 
-    // it('does not clear the user on the scope if the save is not successful', function(done) {
-    //   scope.edit(mockUser);
-    //   scope.save().then(function() {
-    //     expect(scope.user).to.equal(mockUser);
-    //     expect(scope.editorTitle).to.equal('Edit fred');
-    //     done();
-    //   });
-    //   dfd.reject({
-    //     data: {
-    //       reason: 'you are a failure'
-    //     }
-    //   });
-    //   scope.$apply();
-    // });
+    it('does not show a notification if the save was successful', function() {
+      $httpBackend.expectPOST('/api/users', {}).respond(201, {});
+      scope.create();
+      scope.save();
+      $httpBackend.flush();
+      expect(mockNotifier.error.called).to.be.false;
+      expect(mockNotifier.notify.called).to.be.false;
+    });
 
-    // it('does not show a notification if the update was successful', function(done) {
-    //   scope.edit(mockUser);
-    //   scope.save().then(function() {
-    //     expect(mockNotifier.error.called).to.be.false;
-    //     expect(mockNotifier.notify.called).to.be.false;
-    //     done();
-    //   });
-    //   dfd.resolve();
-    //   scope.$apply();
-    // });
+    it('shows an error notification if the update failed', function() {
+      $httpBackend.expectPOST('/api/users', {}).respond(400, {
+        reason: 'you are a failure'
+      });
+      scope.create();
+      scope.save();
+      $httpBackend.flush();
+      expect(mockNotifier.error.calledWith('Create New User Failed: you are a failure')).to.be.true;
+      expect(mockNotifier.notify.called).to.be.false;
+    });
 
-    // it('shows an error notification if the update failed', function(done) {
-    //   scope.edit(mockUser);
-    //   scope.save().then(function() {
-    //     expect(mockNotifier.error.calledWith('Update Failed: you are a failure')).to.be.true;
-    //     expect(mockNotifier.notify.called).to.be.false;
-    //     done();
-    //   });
-    //   dfd.reject({
-    //     data: {
-    //       reason: 'you are a failure'
-    //     }
-    //   });
-    //   scope.$apply();
-    // });
-
-    // it('clears the user on the scope if the edit is cancelled', function() {
-    //   scope.edit(mockUser);
-    //   scope.cancel();
-    //   expect(mockUser.$update.called).to.be.false;
-    //   expect(scope.user).to.be.undefined;
-    //   expect(scope.editorTitle).to.be.undefined;
-    // });
+    it('clears the user on the scope if the edit is cancelled', function() {
+      scope.create();
+      scope.cancel();
+      expect(scope.user).to.be.undefined;
+      expect(scope.editorTitle).to.be.undefined;
+    });
   });
 })
