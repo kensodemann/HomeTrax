@@ -61,6 +61,7 @@ var ServerApp = function() {
   self.initializeServer = function() {
     self.app = express();
 
+    debugger;
     require('./config/express')(self.app, config);
     require('./config/routes')(self.app);
   };
