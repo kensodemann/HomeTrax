@@ -34,27 +34,67 @@ describe('trxUserListCtrl', function() {
     });
   });
 
-  describe('update', function() {
+  describe('editing existing user', function() {
     var mockUser;
-    var dfdUpdate;
+    var dfd;
 
     beforeEach(function() {
       mockUser = sinon.stub({
         query: function() {},
         $update: function() {}
       });
-      dfdUpdate = q.defer();
-      mockUser.$update.returns(dfdUpdate.promise);
+      dfd = q.defer();
+      mockUser.$update.returns(dfd.promise);
+      createController();
     });
 
-    it('calls the user service to save changes to a user', function() {
+    function createController() {
       var ctrl = $controllerConstructor('trxUserListCtrl', {
         $scope: scope,
         trxUser: mockUser
       });
-      scope.update(mockUser);
+    }
 
+    it('Sets the user in the scope', function() {
+      scope.edit(mockUser);
+      expect(scope.user).to.equal(mockUser);
+    });
+
+    it('calls the user service to save changes to a user', function() {
+      scope.edit(mockUser);
+      scope.save();
       expect(mockUser.$update.called).to.be.true;
+    });
+
+    it('clears the user on the scope if the save is successful', function(done) {
+      scope.edit(mockUser);
+      scope.save().then(function() {
+        expect(scope.user).to.be.undefined;
+        done();
+      });
+      dfd.resolve();
+      scope.$apply();
+    });
+
+    it('does not clear the user on the scope if the save is not successful', function(done) {
+      scope.edit(mockUser);
+      scope.save().then(function() {
+        expect(scope.user).to.equal(mockUser);
+        done();
+      });
+      dfd.reject({
+        data: {
+          reason: 'you are a failure'
+        }
+      });
+      scope.$apply();
+    });
+
+    it('clears the user on the scope if the edit is cancelled', function() {
+      scope.edit(mockUser);
+      scope.cancel();
+      expect(mockUser.$update.called).to.be.false;
+      expect(scope.user).to.be.undefined;
     });
   });
 

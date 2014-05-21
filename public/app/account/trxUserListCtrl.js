@@ -7,8 +7,8 @@ angular.module('app')
         $scope.user = user;
       }
 
-      $scope.update = function(user) {
-        user.$update().then(function() {
+      $scope.save = function() {
+        return $scope.user.$update().then(function() {
           $scope.user = undefined;
         }, function(response) {
           console.log('It Failed: ' + response.data.reason);
