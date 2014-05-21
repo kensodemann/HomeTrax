@@ -5,11 +5,13 @@ angular.module('app')
 
       $scope.edit = function(user) {
         $scope.user = user;
+        $scope.editorTitle = 'Edit ' + user.username;
       }
 
       $scope.save = function() {
         return $scope.user.$update().then(function() {
           $scope.user = undefined;
+          $scope.editorTitle = undefined;
         }, function(response) {
         	trxNotifier.error('Update Failed: ' + response.data.reason);
         });
@@ -17,6 +19,7 @@ angular.module('app')
 
       $scope.cancel = function() {
         $scope.user = undefined;
+        $scope.editorTitle = undefined;
       }
 
       $scope.create = function() {

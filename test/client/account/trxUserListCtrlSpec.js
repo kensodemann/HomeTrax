@@ -50,6 +50,7 @@ describe('trxUserListCtrl', function() {
       });
       dfd = q.defer();
       mockUser.$update.returns(dfd.promise);
+      mockUser.username = 'fred';
       createController();
     });
 
@@ -66,6 +67,11 @@ describe('trxUserListCtrl', function() {
       expect(scope.user).to.equal(mockUser);
     });
 
+    it('Set the editor title', function(){
+      scope.edit(mockUser);
+      expect(scope.editorTitle).to.equal('Edit fred');
+    });
+
     it('calls the user service to save changes to a user', function() {
       scope.edit(mockUser);
       scope.save();
@@ -76,6 +82,7 @@ describe('trxUserListCtrl', function() {
       scope.edit(mockUser);
       scope.save().then(function() {
         expect(scope.user).to.be.undefined;
+        expect(scope.editorTitle).to.be.undefined;
         done();
       });
       dfd.resolve();
@@ -86,6 +93,7 @@ describe('trxUserListCtrl', function() {
       scope.edit(mockUser);
       scope.save().then(function() {
         expect(scope.user).to.equal(mockUser);
+        expect(scope.editorTitle).to.equal('Edit fred');
         done();
       });
       dfd.reject({
@@ -127,6 +135,7 @@ describe('trxUserListCtrl', function() {
       scope.cancel();
       expect(mockUser.$update.called).to.be.false;
       expect(scope.user).to.be.undefined;
+      expect(scope.editorTitle).to.be.undefined;
     });
   });
 
