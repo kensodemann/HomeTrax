@@ -1,6 +1,6 @@
 angular.module('app')
-  .controller('trxUserListCtrl', ['$scope', 'trxUser',
-    function($scope, trxUser) {
+  .controller('trxUserListCtrl', ['$scope', 'trxUser', 'trxNotifier',
+    function($scope, trxUser, trxNotifier) {
       $scope.users = trxUser.query();
 
       $scope.edit = function(user) {
@@ -11,7 +11,7 @@ angular.module('app')
         return $scope.user.$update().then(function() {
           $scope.user = undefined;
         }, function(response) {
-          console.log('It Failed: ' + response.data.reason);
+        	trxNotifier.error('Update Failed: ' + response.data.reason);
         });
       };
 

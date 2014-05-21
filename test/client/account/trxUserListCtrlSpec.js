@@ -36,9 +36,14 @@ describe('trxUserListCtrl', function() {
 
   describe('editing existing user', function() {
     var mockUser;
+    var mockNotifier;
     var dfd;
 
     beforeEach(function() {
+      mockNotifier = sinon.stub({
+        error: function() {},
+        notify: function(){}
+      });
       mockUser = sinon.stub({
         query: function() {},
         $update: function() {}
@@ -51,7 +56,8 @@ describe('trxUserListCtrl', function() {
     function createController() {
       var ctrl = $controllerConstructor('trxUserListCtrl', {
         $scope: scope,
-        trxUser: mockUser
+        trxUser: mockUser,
+        trxNotifier: mockNotifier
       });
     }
 
@@ -80,6 +86,32 @@ describe('trxUserListCtrl', function() {
       scope.edit(mockUser);
       scope.save().then(function() {
         expect(scope.user).to.equal(mockUser);
+        done();
+      });
+      dfd.reject({
+        data: {
+          reason: 'you are a failure'
+        }
+      });
+      scope.$apply();
+    });
+
+    it('does not show a notification if the update was successful', function(done) {
+      scope.edit(mockUser);
+      scope.save().then(function() {
+        expect(mockNotifier.error.called).to.be.false;
+        expect(mockNotifier.notify.called).to.be.false;
+        done();
+      });
+      dfd.resolve();
+      scope.$apply();
+    });
+
+    it('shows an error notification if the update failed', function(done) {
+      scope.edit(mockUser);
+      scope.save().then(function() {
+        expect(mockNotifier.error.calledWith('Update Failed: you are a failure')).to.be.true;
+        expect(mockNotifier.notify.called).to.be.false;
         done();
       });
       dfd.reject({
