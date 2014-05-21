@@ -23,6 +23,7 @@ angular.module('app')
       }
 
       $scope.create = function() {
+      	$scope.user = new Object();
         console.log("Well ain't that this shit?  Create is not written yet.");
       };
     }
