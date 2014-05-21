@@ -285,12 +285,16 @@ describe('routes', function() {
         db.users.save({
           firstName: 'Ken',
           lastName: 'Sodemann',
-          username: 'kws@email.com'
+          username: 'kws@email.com',
+          salt: 'NH4Cl',
+          password: 'ThisIsFreaky'
         });
         db.users.save({
           firstName: 'Lisa',
           lastName: 'Buerger',
-          username: 'llb@email.com'
+          username: 'llb@email.com',
+          salt: 'CaCl2',
+          password: 'IAmSexyBee'
         }, function() {
           db.users.findOne({
             username: 'kws@email.com'
@@ -323,10 +327,9 @@ describe('routes', function() {
 
     it('Requires logged in user', function(done) {
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
-          debugger;
           expect(res.status).to.equal(200);
           expect(called).to.be.true;
           done();
@@ -336,7 +339,7 @@ describe('routes', function() {
     it('Does not allow multiple users with the same username', function(done) {
       testUser.username = 'llb@email.com';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -348,7 +351,7 @@ describe('routes', function() {
     it('Does not allow username to be empty', function(done) {
       testUser.username = '';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -360,7 +363,7 @@ describe('routes', function() {
     it('Does not allow firstName to be empty', function(done) {
       testUser.firstName = '';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -372,7 +375,7 @@ describe('routes', function() {
     it('Does not allow lastName to be empty', function(done) {
       testUser.lastName = '';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -382,9 +385,11 @@ describe('routes', function() {
     });
 
     it('Saves changes to user if valid', function(done) {
+      testUser.firstName = 'Fred';
       testUser.lastName = 'Flintstone';
+      testUser.username = 'ff@email.com';
       request(app)
-        .put('/api/users')
+        .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
@@ -392,9 +397,33 @@ describe('routes', function() {
               _id: testUser._id
             },
             function(err, user) {
-              expect(user.firstName).to.equal('Ken');
+              expect(user.firstName).to.equal('Fred');
               expect(user.lastName).to.equal('Flintstone');
-              expect(user.username).to.equal('kws@email.com');
+              expect(user.username).to.equal('ff@email.com');
+              done();
+            });
+        });
+    });
+
+    it('Does not effect the salt or password', function(done) {
+      var origSalt = testUser.salt;
+      var origPassword = testUser.password;
+      testUser.firstName = 'Fred';
+      testUser.lastName = 'Flintstone';
+      testUser.username = 'ff@email.com';
+      testUser.salt = 'NaCl';
+      testUser.password = 'SomethingElse';
+      request(app)
+        .put('/api/users/' + testUser._id)
+        .send(testUser)
+        .end(function(err, res) {
+          expect(res.status).to.equal(200);
+          db.users.findOne({
+              _id: testUser._id
+            },
+            function(err, user) {
+              expect(user.salt).to.equal(origSalt);
+              expect(user.password).to.equal(origPassword);
               done();
             });
         });

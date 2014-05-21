@@ -12,7 +12,7 @@ function redirectSec(req, res, next) {
 module.exports = function(app) {
   app.get('/api/users', redirectSec, authentication.requiresRole('admin'), usersController.getUsers);
   app.post('/api/users', authentication.requiresRole('admin'), usersController.addUser);
-  app.put('/api/users', authentication.requiresApiLogin, usersController.updateUser);
+  app.put('/api/users/:id', authentication.requiresApiLogin, usersController.updateUser);
 
   app.post('/login', redirectSec, authentication.authenticate);
   app.post('/logout', function(req, res) {

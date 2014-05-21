@@ -22,7 +22,7 @@ module.exports.updateUser = function(req, res, next) {
     if (err) {
       return sendError(err, res);
     } else {
-      update(user, res);
+      update(req.params.id, user, res);
     }
   });
 };
@@ -75,19 +75,21 @@ function insert(user, res) {
   });
 }
 
-function update(user, res) {
+function update(id, userData, res) {
   db.users.update({
-    _id: ObjectId(user._id)
+    _id: ObjectId(id)
   }, {
-    firstName: user.firstName,
-    lastName: user.lastName,
-    username: user.username
-  }, {}, function(err, something) {
+    $set: {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      username: userData.username
+    }
+  }, {}, function(err) {
     if (err) {
       return sendError(err, res);
     }
     res.status(200);
-    return res.send(user);
+    return res.send(userData);
   });
 }
 
