@@ -11,6 +11,7 @@ div.container
 				td {{user.lastName}}
 				td
 					a(href = "", ng-click="edit(user)") {{user.username}}
+	button.btn.btn-default(ng-click="create()") Add New Dude
 
 .modal.fade(role='dialog', trigger='user', data-keyboard="false", data-backdrop="static")
 	.modal-dialog
@@ -36,5 +37,3 @@ div.container
 				.modal-footer
 					button.btn.btn-default(type='button', ng-click="cancel()") Close
 					button.btn.btn-primary(type='button', ng-click='save()', ng-disabled="userEditor.$invalid") Save
-	
-button.btn.btn-primary(ng-click="create()") Add New Dude
