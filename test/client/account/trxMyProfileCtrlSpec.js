@@ -5,46 +5,48 @@ describe('trxMyProfileCtrl', function() {
 
   var scope;
   var $controllerConstructor;
+  var mockUser;
+  var mockIdentiy;
 
-  beforeEach(inject(function($controller, $rootScope, $q) {
+  beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
+
+    createMocks();
+    createController();
   }));
 
-  describe('Initialization', function() {
-    beforeEach(function() {
-      createController();
+  function createMocks() {
+    mockUser = sinon.stub({
+      get: function() {}
     });
+    mockIdentiy = sinon.stub({
+      currentUser: {
+        _id: '123456789009876543211234'
+      }
+    });
+  }
 
-    function createController() {
-      var ctrl = $controllerConstructor('trxMyProfileCtrl', {
-        $scope: scope
-      });
-    }
+  function createController() {
+    var ctrl = $controllerConstructor('trxMyProfileCtrl', {
+      $scope: scope,
+      trxUser: mockUser,
+      trxIdentity: mockIdentiy
+    });
+  }
+
+  describe('Initialization', function() {
+    it('Gets the currently logged in user', function() {
+      expect(mockUser.get.calledWith({
+        id: mockIdentiy.currentUser._id
+      })).to.be.true;
+    });
   });
 
   describe('Changing the password', function() {
-    var mockIdentiy;
-
-    beforeEach(function() {
-      mockIdentiy = sinon.stub({
-        currentUser: {
-          _id: 123456789
-        }
-      });
-      createController();
-    });
-
-    function createController() {
-      var ctrl = $controllerConstructor('trxMyProfileCtrl', {
-        $scope: scope,
-        trxIdentity: mockIdentiy
-      });
-    }
-
     it('sets the user data', function() {
       scope.setPassword();
-      expect(scope.passwordData._id).to.equal(123456789);
+      expect(scope.passwordData._id).to.equal('123456789009876543211234');
     });
 
     it('clears the user data on cancel', function() {
