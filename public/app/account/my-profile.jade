@@ -1,4 +1,21 @@
 div.container
-	form.well
+	form.form-horizontal.well(name="profileForm")
 		h2.text-center My Profile
-			p {{message}}
+		fieldset
+			.form-group
+				label.col-md-2.control-label(for='username') Username
+				group.col-md-10
+					input.form-control(name='username', type='text', ng-model='user.username', required)
+			.form-group
+				label.col-md-2.control-label(for='firstName') First Name
+				.col-md-10
+					input.form-control(name='firstName', type='text', ng-model='user.firstName', required)
+			.form-group
+				label.col-md-2.control-label(for='lastName') Last Name
+				.col-md-10
+					input.form-control(name='lastName', type='text', ng-model='user.lastName', required)
+		.form-group
+			.col-md-offset-2.col-md-10
+				button.btn.btn-default(type='button', ng-click="reset()") Reset
+				button.btn.btn-primary(type='submit', ng-click='save()', ng-disabled="userEditor.$invalid") Save
+				button.btn.btn-default(type='button', ng-click='getNewPassword()') Set Password
