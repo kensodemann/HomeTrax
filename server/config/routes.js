@@ -11,11 +11,9 @@ function redirectSec(req, res, next) {
 
 module.exports = function(app) {
   app.get('/api/users', redirectSec, authentication.requiresRole('admin'), usersController.getUsers);
-  // TODO: Need to create a new "requiresRole" type filter that limits to a role or is requesting
-  //       the currently logged in user.  Use it in the PUT as well.
-  app.get('/api/users/:id', redirectSec, usersController.getUserById);
+  app.get('/api/users/:id', redirectSec, authentication.requiresRoleOrIsCurrentUser('admin'), usersController.getUserById);
   app.post('/api/users', authentication.requiresRole('admin'), usersController.addUser);
-  app.put('/api/users/:id', authentication.requiresApiLogin, usersController.updateUser);
+  app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'), usersController.updateUser);
 
   app.post('/login', redirectSec, authentication.authenticate);
   app.post('/logout', function(req, res) {

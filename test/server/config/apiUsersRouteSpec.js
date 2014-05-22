@@ -19,7 +19,8 @@ describe('api/users Routes', function() {
 
   describe('GET', function() {
     var authStub;
-    var calledWith = '';
+    var roleCalledWith;
+    var roleOrCurrentCalledWith;
 
     function loadUsers(done) {
       db.users.remove({}, function() {
@@ -50,11 +51,19 @@ describe('api/users Routes', function() {
       authStub = {
         requiresRole: function(role) {
           return function(req, res, next) {
-            calledWith = role;
+            roleCalledWith = role;
+            next();
+          }
+        },
+        requiresRoleOrIsCurrentUser: function(role) {
+          return function(req, res, next) {
+            roleOrCurrentCalledWith = role;
             next();
           }
         }
       };
+      roleCalledWith = '';
+      roleOrCurrentCalledWith = '';
       proxyquire('../../../server/config/routes', {
         '../services/authentication': authStub
       })(app);
@@ -71,7 +80,7 @@ describe('api/users Routes', function() {
         .get('/api/users')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
-          expect(calledWith).to.equal('admin');
+          expect(roleCalledWith).to.equal('admin');
           done();
         });
     });
@@ -102,6 +111,15 @@ describe('api/users Routes', function() {
     });
 
     describe('by Id', function() {
+      it('Requires Admin or Current User', function(done) {
+        request(app)
+          .get('/api/users/123456789012345678901234')
+          .end(function(err, res) {
+            expect(roleOrCurrentCalledWith).to.equal('admin');
+            done();
+          });
+      });
+
       it('Gets the specified user if it exists', function(done) {
         db.users.findOne({
           firstName: 'Lisa'
@@ -268,7 +286,7 @@ describe('api/users Routes', function() {
   });
 
   describe('PUT', function() {
-    var called = false;;
+    var calledWith = '';
     var testUser;
 
     function loadUsers(done) {
@@ -300,9 +318,11 @@ describe('api/users Routes', function() {
     beforeEach(function(done) {
       loadUsers(done);
       authStub = {
-        requiresApiLogin: function(req, res, next) {
-          called = true;
-          next();
+        requiresRoleOrIsCurrentUser: function(role) {
+          return function(req, res, next) {
+            calledWith = role;
+            next();
+          }
         }
       };
       proxyquire('../../../server/config/routes', {
@@ -316,13 +336,13 @@ describe('api/users Routes', function() {
       });
     });
 
-    it('Requires logged in user', function(done) {
+    it('Requires admin or matching current user', function(done) {
       request(app)
         .put('/api/users/' + testUser._id)
         .send(testUser)
         .end(function(err, res) {
           expect(res.status).to.equal(200);
-          expect(called).to.be.true;
+          expect(calledWith).to.equal('admin');
           done();
         });
     });
