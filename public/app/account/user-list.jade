@@ -16,7 +16,7 @@ div.container
 .modal.fade(role='dialog', trigger='user', data-keyboard="false", data-backdrop="static")
 	.modal-dialog
 		.modal-content
-			form(name="userEditor")
+			form.form-horizontal(name="userEditor")
 				.modal-header
 					button.close(type='button', ng-click="cancel()", aria-hidden='true') &times;
 					h4.modal-title {{editorTitle}}
@@ -36,4 +36,4 @@ div.container
 								input.form-control(name='lastName', type='text', ng-model='user.lastName', required)
 				.modal-footer
 					button.btn.btn-default(type='button', ng-click="cancel()") Close
-					button.btn.btn-primary(type='button', ng-click='save()', ng-disabled="userEditor.$invalid") Save
+					button.btn.btn-primary(type='submit', ng-click='save()', ng-disabled="userEditor.$invalid") Save

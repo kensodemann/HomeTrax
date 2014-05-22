@@ -18,4 +18,29 @@ div.container
 			.col-md-offset-2.col-md-10
 				button.btn.btn-default(type='button', ng-click="reset()") Reset
 				button.btn.btn-primary(type='submit', ng-click='save()', ng-disabled="userEditor.$invalid") Save
-				button.btn.btn-default(type='button', ng-click='getNewPassword()') Set Password
+				button.btn.btn-default(type='button', ng-click='setPassword()') Set Password
+
+.modal.fade(role='dialog', trigger='passwordData', data-keyboard="false", data-backdrop="static")
+	.modal-dialog
+		.modal-content
+			form.form-horizontal(name="passwordEditor")
+				.modal-header
+					button.close(type='button', ng-click="cancelPasswordChange()", aria-hidden='true') &times;
+					h4.modal-title Change Password
+				.modal-body
+					fieldset
+						.form-group
+							label.col-md-4.control-label(for='username') Current Password
+							.col-md-8
+								input.form-control(name='current', type='password', ng-model='passwordData.current', required)
+						.form-group
+							label.col-md-4.control-label(for='firstName') New Password
+							.col-md-8
+								input.form-control(name='newPassword', type='password', ng-model='passwordData.newPassword', required)
+						.form-group
+							label.col-md-4.control-label(for='lastName') Verify New Password
+							.col-md-8
+								input.form-control(name='verifyPassword', type='password', ng-model='passwordData.verifyPassword', required)
+				.modal-footer
+					button.btn.btn-default(type='button', ng-click="cancelPasswordChange()") Close
+					button.btn.btn-primary(type='submit', ng-click='changePassword()', ng-disabled="passwordEditor.$invalid") Set Password
