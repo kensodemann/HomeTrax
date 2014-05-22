@@ -2,7 +2,10 @@ var db = require('../config/database');
 var ObjectId = require("mongojs").ObjectId;
 
 module.exports.getUsers = function(req, res) {
-  db.users.find({}, function(err, users) {
+  db.users.find({}, {
+    salt: 0,
+    hashedPassword: 0
+  }, function(err, users) {
     res.send(users);
   });
 };
