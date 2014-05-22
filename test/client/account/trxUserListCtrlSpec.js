@@ -14,7 +14,7 @@ describe('trxUserListCtrl', function() {
   }));
 
 
-  describe('users', function() {
+  describe('Initialization', function() {
     var mockUser;
 
     beforeEach(function() {
@@ -34,7 +34,7 @@ describe('trxUserListCtrl', function() {
     });
   });
 
-  describe('editing existing user', function() {
+  describe('Editing Existing User', function() {
     var mockUser;
     var mockNotifier;
     var dfd;
@@ -42,7 +42,7 @@ describe('trxUserListCtrl', function() {
     beforeEach(function() {
       mockNotifier = sinon.stub({
         error: function() {},
-        notify: function(){}
+        notify: function() {}
       });
       mockUser = sinon.stub({
         query: function() {},
@@ -50,6 +50,7 @@ describe('trxUserListCtrl', function() {
       });
       dfd = q.defer();
       mockUser.$update.returns(dfd.promise);
+      mockUser.username = 'fred';
       createController();
     });
 
@@ -66,6 +67,11 @@ describe('trxUserListCtrl', function() {
       expect(scope.user).to.equal(mockUser);
     });
 
+    it('Set the editor title', function() {
+      scope.edit(mockUser);
+      expect(scope.editorTitle).to.equal('Edit fred');
+    });
+
     it('calls the user service to save changes to a user', function() {
       scope.edit(mockUser);
       scope.save();
@@ -76,6 +82,7 @@ describe('trxUserListCtrl', function() {
       scope.edit(mockUser);
       scope.save().then(function() {
         expect(scope.user).to.be.undefined;
+        expect(scope.editorTitle).to.be.undefined;
         done();
       });
       dfd.resolve();
@@ -86,6 +93,7 @@ describe('trxUserListCtrl', function() {
       scope.edit(mockUser);
       scope.save().then(function() {
         expect(scope.user).to.equal(mockUser);
+        expect(scope.editorTitle).to.equal('Edit fred');
         done();
       });
       dfd.reject({
@@ -127,7 +135,93 @@ describe('trxUserListCtrl', function() {
       scope.cancel();
       expect(mockUser.$update.called).to.be.false;
       expect(scope.user).to.be.undefined;
+      expect(scope.editorTitle).to.be.undefined;
     });
   });
 
+  describe('Creating New User', function() {
+    var mockNotifier;
+    var $httpBackend;
+
+    beforeEach(inject(function($injector) {
+      $httpBackend = $injector.get('$httpBackend');
+      $httpBackend.when('GET', '/api/users').respond([{
+        username: 'userX'
+      }, {
+        username: 'xxx'
+      }]);
+    }));
+
+    beforeEach(function() {
+      mockNotifier = sinon.stub({
+        error: function() {},
+        notify: function() {}
+      });
+      createController();
+    });
+
+    function createController() {
+      var ctrl = $controllerConstructor('trxUserListCtrl', {
+        $scope: scope,
+        trxNotifier: mockNotifier
+      });
+    }
+
+    it('Sets the user to a new user', function() {
+      scope.create();
+      expect(scope.user).to.be.a('object');
+    });
+
+    it('Set the editor title', function() {
+      scope.create();
+      expect(scope.editorTitle).to.equal('New User');
+    });
+
+    it('clears the user on the scope if the save is successful', function() {
+      $httpBackend.expectPOST('/api/users', {}).respond(201, {});
+      scope.create();
+      scope.save();
+      $httpBackend.flush();
+      expect(scope.user).to.be.undefined;
+      expect(scope.editorTitle).to.be.undefined;
+    });
+
+    it('does not clear the user on the scope if the save is not successful', function() {
+      $httpBackend.expectPOST('/api/users', {}).respond(400, {
+        reason: 'you are a failure'
+      });
+      scope.create();
+      scope.save();
+      $httpBackend.flush();
+      expect(scope.user).to.be.a('Object');
+      expect(scope.editorTitle).to.equal('New User');
+    });
+
+    it('does not show a notification if the save was successful', function() {
+      $httpBackend.expectPOST('/api/users', {}).respond(201, {});
+      scope.create();
+      scope.save();
+      $httpBackend.flush();
+      expect(mockNotifier.error.called).to.be.false;
+      expect(mockNotifier.notify.called).to.be.false;
+    });
+
+    it('shows an error notification if the update failed', function() {
+      $httpBackend.expectPOST('/api/users', {}).respond(400, {
+        reason: 'you are a failure'
+      });
+      scope.create();
+      scope.save();
+      $httpBackend.flush();
+      expect(mockNotifier.error.calledWith('Create New User Failed: you are a failure')).to.be.true;
+      expect(mockNotifier.notify.called).to.be.false;
+    });
+
+    it('clears the user on the scope if the edit is cancelled', function() {
+      scope.create();
+      scope.cancel();
+      expect(scope.user).to.be.undefined;
+      expect(scope.editorTitle).to.be.undefined;
+    });
+  });
 })

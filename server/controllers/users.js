@@ -70,7 +70,7 @@ function insert(user, res) {
     if (err) {
       return sendError(err, res);
     }
-    res.status(200);
+    res.status(200); // NOTE: 201 may be more appropriate.
     return res.send(user);
   });
 }
