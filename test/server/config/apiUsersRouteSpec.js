@@ -17,7 +17,7 @@ describe('api/users Routes', function() {
     app.use(bodyParser());
   });
 
-  describe('api/users GET', function() {
+  describe('GET', function() {
     var authStub;
     var calledWith = '';
 
@@ -100,9 +100,39 @@ describe('api/users Routes', function() {
           done();
         });
     });
+
+    describe('by Id', function() {
+      it('Gets the specified user if it exists', function(done) {
+        db.users.findOne({
+          firstName: 'Lisa'
+        }, function(err, user) {
+          request(app)
+            .get('/api/users/' + user._id.toString())
+            .end(function(err, res) {
+              expect(res.status).to.equal(200);
+              expect(res.body.lastName).to.equal('Buerger');
+              expect(res.body.firstName).to.equal('Lisa');
+              expect(res.body.salt).to.be.undefined;
+              expect(res.body.hashedPassword).to.be.undefined;
+              done();
+            });
+        });
+      });
+
+      it('Returns 404 if specified user does not exist', function(done) {
+        db.users.remove({}, function(err) {
+          request(app)
+            .get('/api/users/123456789012345678901234')
+            .end(function(err, res) {
+              expect(res.status).to.equal(404);
+              done();
+            });
+        });
+      });
+    });
   });
 
-  describe('api/users POST', function() {
+  describe('POST', function() {
     var authStub;
     var calledWith = '';
 
@@ -237,7 +267,7 @@ describe('api/users Routes', function() {
     });
   });
 
-  describe('api/users PUT', function() {
+  describe('PUT', function() {
     var called = false;;
     var testUser;
 

@@ -10,6 +10,22 @@ module.exports.getUsers = function(req, res) {
   });
 };
 
+module.exports.getUserById = function(req, res) {
+  db.users.findOne({
+    _id: ObjectId(req.params.id)
+  }, {
+    salt: 0,
+    hashedPassword: 0
+  }, function(err, user) {
+    if (user) {
+      res.send(user);
+    } else {
+      res.status(404);
+      res.send();
+    }
+  });
+};
+
 module.exports.addUser = function(req, res, next) {
   validate(req, function(err, user) {
     if (err) {
