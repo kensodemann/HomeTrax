@@ -17,10 +17,10 @@ angular.module('app')
       };
 
       function createNewUser() {
-        var newUser = trxUser.save($scope.user, function() {
+        $scope.user.$save().then(function(user) {
           $scope.user = undefined;
           $scope.editorTitle = undefined;
-          $scope.users.push(newUser);
+          $scope.users.push(user);
         }, function(response) {
           trxNotifier.error('Create New User Failed: ' + response.data.reason);
         });
@@ -41,7 +41,7 @@ angular.module('app')
       };
 
       $scope.create = function() {
-        $scope.user = new Object();
+        $scope.user = new trxUser();
         $scope.editorTitle = 'New User';
       };
     }
