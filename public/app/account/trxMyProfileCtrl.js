@@ -5,6 +5,12 @@ angular.module('app')
         id: trxIdentity.currentUser._id
       });
 
+      $scope.reset = function() {
+        $scope.user = trxUser.get({
+          id: trxIdentity.currentUser._id
+        });
+      }
+
       $scope.setPassword = function() {
         $scope.passwordData = new Object();
         $scope.passwordData._id = trxIdentity.currentUser._id;

@@ -43,6 +43,13 @@ describe('trxMyProfileCtrl', function() {
     });
   });
 
+  describe('Reset', function() {
+    it('Gets the data for the currently logged in user', function() {
+      scope.reset();
+      expect(mockUser.get.calledTwice).to.be.true;
+    });
+  });
+
   describe('Changing the password', function() {
     it('sets the user data', function() {
       scope.setPassword();
