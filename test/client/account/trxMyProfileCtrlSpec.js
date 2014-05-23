@@ -7,22 +7,22 @@ describe('trxMyProfileCtrl', function() {
   var $controllerConstructor;
   var $httpBackend;
   var mockIdentiy;
+  var mockUser;
+  var userResource;
 
-  beforeEach(inject(function($injector) {
-    $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.when('GET', '/api/users/123456789009876543211234').respond({
-      _id: '123456789009876543211234',
-      firstName: 'Jimmy',
-      lastName: 'Smith'
-    });
-  }));
-
-  beforeEach(inject(function($controller, $rootScope) {
+  beforeEach(inject(function($controller, $rootScope, trxUser) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
+    userResource = trxUser;
 
     createMocks();
     createController();
+  }));
+
+  beforeEach(inject(function($injector) {
+    $httpBackend = $injector.get('$httpBackend');
+    $httpBackend.when('GET', '/api/users/123456789009876543211234').respond(mockUser);
+    $httpBackend.flush();
   }));
 
   function createMocks() {
@@ -31,6 +31,11 @@ describe('trxMyProfileCtrl', function() {
         _id: '123456789009876543211234'
       }
     });
+
+    mockUser = new userResource();
+    mockUser._id = '123456789009876543211234';
+    mockUser.firstName = 'Jimmy';
+    mockUser.lastName = 'Smith';
   }
 
   function createController() {
@@ -42,7 +47,6 @@ describe('trxMyProfileCtrl', function() {
 
   describe('Initialization', function() {
     it('Gets the currently logged in user', function() {
-      $httpBackend.flush();
       expect(scope.user.firstName).to.equal('Jimmy');
       expect(scope.user.lastName).to.equal('Smith');
     });
@@ -58,6 +62,14 @@ describe('trxMyProfileCtrl', function() {
 
       expect(scope.user.firstName).to.equal('Jimmy');
       expect(scope.user.lastName).to.equal('Smith');
+    });
+  });
+
+  describe('Save', function() {
+    it('puts the data', function() {
+      $httpBackend.expectPUT('/api/users/' + mockUser._id, mockUser).respond(201, mockUser);
+      scope.save();
+      $httpBackend.flush();
     });
   });
 
