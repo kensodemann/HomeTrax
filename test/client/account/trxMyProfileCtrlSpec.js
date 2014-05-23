@@ -5,8 +5,17 @@ describe('trxMyProfileCtrl', function() {
 
   var scope;
   var $controllerConstructor;
-  var mockUser;
+  var $httpBackend;
   var mockIdentiy;
+
+  beforeEach(inject(function($injector) {
+    $httpBackend = $injector.get('$httpBackend');
+    $httpBackend.when('GET', '/api/users/123456789009876543211234').respond({
+      _id: '123456789009876543211234',
+      firstName: 'Jimmy',
+      lastName: 'Smith'
+    });
+  }));
 
   beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
@@ -17,9 +26,6 @@ describe('trxMyProfileCtrl', function() {
   }));
 
   function createMocks() {
-    mockUser = sinon.stub({
-      get: function() {}
-    });
     mockIdentiy = sinon.stub({
       currentUser: {
         _id: '123456789009876543211234'
@@ -30,23 +36,28 @@ describe('trxMyProfileCtrl', function() {
   function createController() {
     var ctrl = $controllerConstructor('trxMyProfileCtrl', {
       $scope: scope,
-      trxUser: mockUser,
       trxIdentity: mockIdentiy
     });
   }
 
   describe('Initialization', function() {
     it('Gets the currently logged in user', function() {
-      expect(mockUser.get.calledWith({
-        id: mockIdentiy.currentUser._id
-      })).to.be.true;
+      $httpBackend.flush();
+      expect(scope.user.firstName).to.equal('Jimmy');
+      expect(scope.user.lastName).to.equal('Smith');
     });
   });
 
   describe('Reset', function() {
     it('Gets the data for the currently logged in user', function() {
+      scope.user.firstName = 'Bengie';
+      scope.user.lastName = 'Frankfurter';
+
       scope.reset();
-      expect(mockUser.get.calledTwice).to.be.true;
+      $httpBackend.flush();
+
+      expect(scope.user.firstName).to.equal('Jimmy');
+      expect(scope.user.lastName).to.equal('Smith');
     });
   });
 
