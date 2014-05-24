@@ -22,7 +22,6 @@ angular.module('app')
       };
 
       $scope.passwordEntryChanged = function() {
-        console.log('there has been a change')
         if (!$scope.passwordData.newPassword || $scope.passwordData.newPassword.length < 8) {
           $scope.newPasswordIsValid = false;
           $scope.newPasswordErrorMessage = 'New password must be at least 8 characters long';

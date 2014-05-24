@@ -15,6 +15,8 @@ module.exports = function(app) {
   app.post('/api/users', authentication.requiresRole('admin'), usersController.addUser);
   app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'), usersController.updateUser);
 
+  app.put('/api/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'), usersController.changePassword);
+
   app.post('/login', redirectSec, authentication.authenticate);
   app.post('/logout', function(req, res) {
     req.logout();

@@ -1,4 +1,6 @@
+var authentication = require('../services/authentication');
 var db = require('../config/database');
+var encryption = require('../services/encryption');
 var ObjectId = require("mongojs").ObjectId;
 
 module.exports.getUsers = function(req, res) {
@@ -27,7 +29,7 @@ module.exports.getUserById = function(req, res) {
 };
 
 module.exports.addUser = function(req, res, next) {
-  validate(req, function(err, user) {
+  validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
     } else {
@@ -37,7 +39,7 @@ module.exports.addUser = function(req, res, next) {
 };
 
 module.exports.updateUser = function(req, res, next) {
-  validate(req, function(err, user) {
+  validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
     } else {
@@ -46,8 +48,35 @@ module.exports.updateUser = function(req, res, next) {
   });
 };
 
+module.exports.changePassword = function(req, res, next) {
+  db.users.findOne({
+    _id: ObjectId(req.params.id)
+  }, function(err, user) {
+    if (!user) {
+      res.status(404);
+      return res.send();
+    }
 
-function validate(req, callback) {
+    if (!authentication.passwordIsValid(user, req.body.password)) {
+      res.status(403);
+      return res.send({
+        reason: 'Invalid Password'
+      });
+    }
+
+    if (!req.body.newPassword || req.body.newPassword.length < 8) {
+      res.status(400);
+      return res.send({
+        reason: 'New Password must be at least 8 characters long'
+      })
+    }
+
+    updatePassword(req.params.id, req.body, res);
+  });
+};
+
+
+function validateUser(req, callback) {
   var user = req.body;
 
   var err = validateRequiredFields(user);
@@ -109,6 +138,26 @@ function update(id, userData, res) {
     }
     res.status(200);
     return res.send(userData);
+  });
+}
+
+function updatePassword(id, passwordData, res) {
+  var salt = encryption.createSalt();
+  var hash = encryption.hash(salt, passwordData.newPassword);
+
+  db.users.update({
+    _id: ObjectId(id)
+  }, {
+    $set: {
+      salt: salt,
+      hashedPassword: hash
+    }
+  }, {}, function(err) {
+    if (err) {
+      return sendError(err, res);
+    }
+    res.status(200);
+    res.send();
   });
 }
 
