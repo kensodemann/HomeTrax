@@ -73,14 +73,42 @@ describe('trxMyProfileCtrl', function() {
     });
   });
 
+  describe('Password Change Handler', function() {
+    it('sets flag true if passwords match and are valid', function() {
+      scope.getNewPassword();
+      scope.passwordData.newPassword = 'firebird';
+      scope.passwordData.verifyPassword = 'firebird';
+      scope.passwordEntryChanged();
+
+      expect(scope.newPasswordIsValid).to.be.true;
+      expect(scope.newPasswordErrorMessage).to.equal('');
+    });
+
+    it('sets flag false if passwords do not match', function() {
+      scope.getNewPassword();
+      scope.passwordData.newPassword = 'firebird';
+      scope.passwordData.verifyPassword = 'pheonix';
+      scope.passwordEntryChanged();
+
+      expect(scope.newPasswordIsValid).to.be.false;
+      expect(scope.newPasswordErrorMessage).to.equal('Passwords do not match');
+    });
+  });
+
   describe('Changing the password', function() {
+    it('Initializes password validity flag and message', function() {
+      scope.getNewPassword();
+      expect(scope.newPasswordIsValid).to.be.false;
+      expect(scope.newPasswordErrorMessage).to.equal('New password must be at least 8 characters long');
+    });
+
     it('sets the user data', function() {
-      scope.setPassword();
+      scope.getNewPassword();
       expect(scope.passwordData._id).to.equal('123456789009876543211234');
     });
 
     it('clears the user data on cancel', function() {
-      scope.setPassword();
+      scope.getNewPassword();
       scope.cancelPasswordChange();
       expect(scope.passwordData).to.be.undefined;
     });
