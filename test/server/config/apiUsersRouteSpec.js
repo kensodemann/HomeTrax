@@ -196,7 +196,7 @@ describe('api/users Routes', function() {
           username: 'lls@email.com'
         })
         .end(function(err, res) {
-          expect(res.status).to.equal(200);
+          expect(res.status).to.equal(201);
           expect(calledWith).to.equal('admin');
           done();
         });
@@ -271,7 +271,7 @@ describe('api/users Routes', function() {
           username: 'lls@email.com'
         })
         .end(function(err, res) {
-          expect(res.status).to.equal(200);
+          expect(res.status).to.equal(201);
           db.users.findOne({
               username: 'lls@email.com'
             },
