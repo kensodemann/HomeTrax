@@ -1,6 +1,6 @@
 angular.module('app')
-  .controller('trxMyProfileCtrl', ['$scope', 'trxUser', 'trxIdentity',
-    function($scope, trxUser, trxIdentity) {
+  .controller('trxMyProfileCtrl', ['$scope', 'trxUser', 'trxUserPassword', 'trxIdentity',
+    function($scope, trxUser, trxUserPassword, trxIdentity) {
       $scope.user = trxUser.get({
         id: trxIdentity.currentUser._id
       });
@@ -16,7 +16,7 @@ angular.module('app')
       };
 
       $scope.getNewPassword = function() {
-        $scope.passwordData = new trxUser();
+        $scope.passwordData = new trxUserPassword();
         $scope.passwordData._id = trxIdentity.currentUser._id;
         $scope.passwordEntryChanged();
       };
@@ -42,7 +42,7 @@ angular.module('app')
       };
 
       $scope.changePassword = function() {
-
+        $scope.passwordData.$update();
       };
     }
   ]);

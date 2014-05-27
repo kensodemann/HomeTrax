@@ -67,7 +67,7 @@ describe('trxMyProfileCtrl', function() {
 
   describe('Save', function() {
     it('puts the data', function() {
-      $httpBackend.expectPUT('/api/users/' + mockUser._id, mockUser).respond(201, mockUser);
+      $httpBackend.expectPUT('/api/users/' + mockUser._id, mockUser).respond(200, mockUser);
       scope.save();
       $httpBackend.flush();
     });
@@ -111,6 +111,13 @@ describe('trxMyProfileCtrl', function() {
       scope.getNewPassword();
       scope.cancelPasswordChange();
       expect(scope.passwordData).to.be.undefined;
+    });
+
+    it('puts the data', function() {
+      scope.getNewPassword();
+      $httpBackend.expectPUT('/api/changepassword/' + mockUser._id, scope.passwordData).respond(200, mockUser);
+      scope.changePassword();
+      $httpBackend.flush();
     });
   });
 })
