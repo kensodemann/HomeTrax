@@ -1,6 +1,6 @@
 angular.module('app')
-  .controller('trxMyProfileCtrl', ['$scope', 'trxUser', 'trxUserPassword', 'trxIdentity',
-    function($scope, trxUser, trxUserPassword, trxIdentity) {
+  .controller('trxMyProfileCtrl', ['$scope', 'trxUser', 'trxUserPassword', 'trxIdentity', 'trxNotifier',
+    function($scope, trxUser, trxUserPassword, trxIdentity, trxNotifier) {
       $scope.user = trxUser.get({
         id: trxIdentity.currentUser._id
       });
@@ -44,7 +44,10 @@ angular.module('app')
       $scope.changePassword = function() {
         $scope.passwordData.$update()
           .then(function() {
+            trxNotifier.notify('Password Changed Successfully')
             $scope.passwordData = undefined;
+          }, function(response) {
+            trxNotifier.error('Password Change Failed: ' + response.data.reason);
           });
       };
     }

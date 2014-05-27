@@ -7,6 +7,7 @@ describe('trxMyProfileCtrl', function() {
   var $controllerConstructor;
   var $httpBackend;
   var mockIdentiy;
+  var mockNotifier;
   var mockUser;
   var userResource;
 
@@ -32,6 +33,11 @@ describe('trxMyProfileCtrl', function() {
       }
     });
 
+    mockNotifier = sinon.stub({
+      error: function() {},
+      notify: function() {}
+    });
+
     mockUser = new userResource();
     mockUser._id = '123456789009876543211234';
     mockUser.firstName = 'Jimmy';
@@ -41,7 +47,8 @@ describe('trxMyProfileCtrl', function() {
   function createController() {
     var ctrl = $controllerConstructor('trxMyProfileCtrl', {
       $scope: scope,
-      trxIdentity: mockIdentiy
+      trxIdentity: mockIdentiy,
+      trxNotifier: mockNotifier
     });
   }
 
@@ -96,6 +103,11 @@ describe('trxMyProfileCtrl', function() {
   });
 
   describe('Changing the password', function() {
+    beforeEach(function() {
+
+    });
+
+
     it('Initializes password validity flag and message', function() {
       scope.getNewPassword();
       expect(scope.newPasswordIsValid).to.be.false;
@@ -126,6 +138,18 @@ describe('trxMyProfileCtrl', function() {
       scope.changePassword();
       $httpBackend.flush();
       expect(scope.passwordData).to.be.undefined;
+      expect(mockNotifier.notify.calledOnce).to.be.true;
+      expect(mockNotifier.error.called).to.be.false;
+    });
+
+    it('shows an error on failure', function() {
+      scope.getNewPassword();
+      $httpBackend.expectPUT('/api/changepassword/' + mockUser._id, scope.passwordData).respond(400, 'you are a failure');
+      scope.changePassword();
+      $httpBackend.flush();
+      expect(scope.passwordData).to.not.be.undefined;
+      expect(mockNotifier.notify.called).to.be.false;
+      expect(mockNotifier.error.calledOnce).to.be.true;
     });
   });
 })
