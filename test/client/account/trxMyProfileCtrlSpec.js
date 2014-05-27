@@ -102,12 +102,12 @@ describe('trxMyProfileCtrl', function() {
       expect(scope.newPasswordErrorMessage).to.equal('New password must be at least 8 characters long');
     });
 
-    it('sets the user data', function() {
+    it('sets the password data', function() {
       scope.getNewPassword();
       expect(scope.passwordData._id).to.equal('123456789009876543211234');
     });
 
-    it('clears the user data on cancel', function() {
+    it('clears the password data on cancel', function() {
       scope.getNewPassword();
       scope.cancelPasswordChange();
       expect(scope.passwordData).to.be.undefined;
@@ -118,6 +118,14 @@ describe('trxMyProfileCtrl', function() {
       $httpBackend.expectPUT('/api/changepassword/' + mockUser._id, scope.passwordData).respond(200, mockUser);
       scope.changePassword();
       $httpBackend.flush();
+    });
+
+    it('clears the password data on success', function() {
+      scope.getNewPassword();
+      $httpBackend.expectPUT('/api/changepassword/' + mockUser._id, scope.passwordData).respond(200, mockUser);
+      scope.changePassword();
+      $httpBackend.flush();
+      expect(scope.passwordData).to.be.undefined;
     });
   });
 })

@@ -42,7 +42,10 @@ angular.module('app')
       };
 
       $scope.changePassword = function() {
-        $scope.passwordData.$update();
+        $scope.passwordData.$update()
+          .then(function() {
+            $scope.passwordData = undefined;
+          });
       };
     }
   ]);
