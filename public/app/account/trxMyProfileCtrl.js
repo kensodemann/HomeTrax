@@ -46,7 +46,9 @@ angular.module('app')
           .then(function() {
             trxNotifier.notify('Password Changed Successfully')
             $scope.passwordData = undefined;
+            $scope.newPasswordErrorMessage = '';
           }, function(response) {
+            $scope.newPasswordErrorMessage = 'ERROR: ' + response.data.reason;
             trxNotifier.error('Password Change Failed: ' + response.data.reason);
           });
       };

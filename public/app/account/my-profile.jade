@@ -42,7 +42,7 @@ div.container
 							.col-md-8
 								input.form-control(name='verifyPassword', type='password', ng-change='passwordEntryChanged()', ng-model='passwordData.verifyPassword', required)
 						.form-group
-							.col-md-offset-4.col-md-8.text-danger(ng-hide="newPasswordIsValid") {{newPasswordErrorMessage}}
+							.col-md-offset-4.col-md-8.text-danger {{newPasswordErrorMessage}}
 				.modal-footer
 					button.btn.btn-default(type='button', ng-click="cancelPasswordChange()") Close
 					button.btn.btn-primary(type='submit', ng-click='changePassword()', ng-disabled="passwordEditor.$invalid || !newPasswordIsValid") Set Password

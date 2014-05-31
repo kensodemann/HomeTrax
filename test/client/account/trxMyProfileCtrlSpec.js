@@ -138,16 +138,20 @@ describe('trxMyProfileCtrl', function() {
       scope.changePassword();
       $httpBackend.flush();
       expect(scope.passwordData).to.be.undefined;
+      expect(scope.newPasswordErrorMessage).to.equal('');
       expect(mockNotifier.notify.calledOnce).to.be.true;
       expect(mockNotifier.error.called).to.be.false;
     });
 
     it('shows an error on failure', function() {
       scope.getNewPassword();
-      $httpBackend.expectPUT('/api/changepassword/' + mockUser._id, scope.passwordData).respond(400, 'you are a failure');
+      $httpBackend.expectPUT('/api/changepassword/' + mockUser._id, scope.passwordData).respond(400, {
+        reason: 'you are a failure'
+      });
       scope.changePassword();
       $httpBackend.flush();
       expect(scope.passwordData).to.not.be.undefined;
+      expect(scope.newPasswordErrorMessage).to.equal('ERROR: you are a failure');
       expect(mockNotifier.notify.called).to.be.false;
       expect(mockNotifier.error.calledOnce).to.be.true;
     });
