@@ -1,2 +1,29 @@
 .container
-	h2 {{about}}
+	h1.text-center HomeTrax
+	h2.text-center Current Version: {{currentVersion}}
+	p.
+		HomeTrax is a program for tracking various things about life.  I got tired of going to one app for my
+		calendar, another app for todo lists, and yet another app for keeping track of the money in my
+		checking account.  This application combines all of that, plus any other common personal item.
+	p.
+		I was also interested in learning more about writing SPAs with AngularJS, writing server side code
+		in JavaScript using NodeJS, and storing data in MongoDB.  This application was written to allow me
+		to explore those technologies.
+	h2 Version History
+	.panel-group(id="accordion")
+		.panel.panel-default(ng-repeat="version in versions")
+			.panel-heading
+				h3.panel-title
+					a(data-toggle="collapse", data-parent="#accordion" href="#collapse{{version.id}}") {{version.name}}
+			.panel-collapse.collapse(id='collapse{{version.id}}')
+				.panel-body
+					h4(ng-show="{{version.releaseDate}}") Release Date: {{version.releaseDate}}
+					p {{version.description}}
+					div(ng-show="{{version.features}}")
+						h4 New Features
+						ul
+							li(ng-repeat="feature in version.features") {{feature}}
+					div(ng-show="{{version.bugFixes}}")
+						h4 Bugs Fixed
+						ul
+							li(ng-repeat="fix in version.bugFixes") {{fix}}
