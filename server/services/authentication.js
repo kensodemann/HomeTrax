@@ -41,7 +41,7 @@ exports.requiresApiLogin = function(req, res, next) {
 
 exports.requiresRole = function(role) {
   return function(req, res, next) {
-    if (req.isAuthenticated() && req.user.roles.indexOf(role) !== -1) {
+    if (req.isAuthenticated() && userInRole(req, role)) {
       next();
     } else {
       res.status(403);
@@ -49,3 +49,18 @@ exports.requiresRole = function(role) {
     }
   };
 };
+
+exports.requiresRoleOrIsCurrentUser = function(role) {
+  return function(req, res, next) {
+    if (req.isAuthenticated() && (userInRole(req, role) || req.user._id == req.params.id)) {
+      next();
+    } else {
+      res.status(403);
+      res.end();
+    }
+  };
+};
+
+function userInRole(req, role) {
+  return req.user.roles.indexOf(role) !== -1;
+}

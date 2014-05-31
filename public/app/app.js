@@ -50,6 +50,12 @@ angular.module('app')
       controller: 'trxUserListCtrl',
       resolve: routeRoleChecks.admin
     });
+
+    $routeProvider.when('/account/myprofile', {
+      templateUrl: '/partials/account/my-profile',
+      controller: 'trxMyProfileCtrl',
+      resolve: routeRoleChecks.user
+    });
   });
 
 angular.module('app').directive('modal', function() {
