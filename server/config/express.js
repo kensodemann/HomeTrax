@@ -1,5 +1,10 @@
 var express = require('express');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var morgan = require('morgan');
 var passport = require('passport');
+var serveStatic = require('serve-static');
+var session = require('express-session');
 var stylus = require('stylus');
 
 function compile(str, path) {
@@ -7,27 +12,24 @@ function compile(str, path) {
 }
 
 module.exports = function(app, config) {
-  app.configure(function() {
-    app.set('view engine', 'jade');
-    app.set('views', config.rootPath + '/server/views');
+  app.set('view engine', 'jade');
+  app.set('views', config.rootPath + '/server/views');
 
-    app.use(stylus.middleware({
-      src: config.rootPath + '/public',
-      compile: compile
-    }));
+  app.use(stylus.middleware({
+    src: config.rootPath + '/public',
+    compile: compile
+  }));
 
-    app.use(express.logger('dev'));
-    app.use(express.cookieParser());
-    app.use(express.json());
-    app.use(express.urlencoded());
-    
-    app.use(express.session({
-      secret: 'HomeTraxer Secret PopCorn'
-    }));
-    
-    app.use(passport.initialize());
-    app.use(passport.session());
+  app.use(morgan('dev'));
+  app.use(bodyParser());
+  app.use(cookieParser());
 
-    app.use(express.static(config.rootPath + '/public'));
-  });
+  app.use(session({
+    secret: 'HomeTraxer Secret PopCorn'
+  }));
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  app.use(serveStatic(config.rootPath + '/public'));
 }

@@ -29,3 +29,38 @@ exports.authenticate = function(req, res, next) {
   });
   auth(req, res, next);
 };
+
+exports.requiresApiLogin = function(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.status(403);
+    res.end();
+  }
+};
+
+exports.requiresRole = function(role) {
+  return function(req, res, next) {
+    if (req.isAuthenticated() && userInRole(req, role)) {
+      next();
+    } else {
+      res.status(403);
+      res.end();
+    }
+  };
+};
+
+exports.requiresRoleOrIsCurrentUser = function(role) {
+  return function(req, res, next) {
+    if (req.isAuthenticated() && (userInRole(req, role) || req.user._id == req.params.id)) {
+      next();
+    } else {
+      res.status(403);
+      res.end();
+    }
+  };
+};
+
+function userInRole(req, role) {
+  return req.user.roles.indexOf(role) !== -1;
+}

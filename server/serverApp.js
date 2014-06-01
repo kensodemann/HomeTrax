@@ -1,13 +1,13 @@
 var express = require('express');
 var fs = require('fs');
 var config = require('./config/config');
-var db = require('./config/database');
 
 var ServerApp = function() {
   var self = this;
 
   self.setupVariables = function() {
     //  Set the environment variables we need.
+    process.env.NODE_ENV = process.env.NODE_ENV || 'development';
     self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
     self.port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
@@ -61,6 +61,7 @@ var ServerApp = function() {
   self.initializeServer = function() {
     self.app = express();
 
+    debugger;
     require('./config/express')(self.app, config);
     require('./config/routes')(self.app);
   };

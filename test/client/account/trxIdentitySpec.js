@@ -1,3 +1,5 @@
+'use strict'
+
 describe('trxIdentity', function() {
   beforeEach(module('app'));
 

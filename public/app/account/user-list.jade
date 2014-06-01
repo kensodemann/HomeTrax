@@ -1,0 +1,39 @@
+div.container
+	table.table
+		thead
+			tr
+				th First Name
+				th Last Name
+				th Username
+		tbody(ng-repeat="user in users")
+			tr
+				td {{user.firstName}}
+				td {{user.lastName}}
+				td
+					a(href = "", ng-click="edit(user)") {{user.username}}
+	button.btn.btn-default(ng-click="create()") Add New Dude
+
+.modal.fade(role='dialog', trigger='user', data-keyboard="false", data-backdrop="static")
+	.modal-dialog
+		.modal-content
+			form.form-horizontal(name="userEditor")
+				.modal-header
+					button.close(type='button', ng-click="cancel()", aria-hidden='true') &times;
+					h4.modal-title {{editorTitle}}
+				.modal-body
+					fieldset
+						.form-group
+							label.col-md-3.control-label(for='username') Username
+							.col-md-9
+								input.form-control(name='username', type='text', ng-model='user.username', required)
+						.form-group
+							label.col-md-3.control-label(for='firstName') First Name
+							.col-md-9
+								input.form-control(name='firstName', type='text', ng-model='user.firstName', required)
+						.form-group
+							label.col-md-3.control-label(for='lastName') Last Name
+							.col-md-9
+								input.form-control(name='lastName', type='text', ng-model='user.lastName', required)
+				.modal-footer
+					button.btn.btn-default(type='button', ng-click="cancel()") Close
+					button.btn.btn-primary(type='submit', ng-click='save()', ng-disabled="userEditor.$invalid") Save
