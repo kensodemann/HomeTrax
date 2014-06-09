@@ -193,7 +193,8 @@ describe('api/users Routes', function() {
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
-          username: 'lls@email.com'
+          username: 'lls@email.com',
+          password: 'wilmabettyswap'
         })
         .end(function(err, res) {
           expect(res.status).to.equal(201);
@@ -208,7 +209,8 @@ describe('api/users Routes', function() {
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
-          username: 'kws@email.com'
+          username: 'kws@email.com',
+          password: 'wilmabettyswap'
         })
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -223,7 +225,8 @@ describe('api/users Routes', function() {
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
-          username: ''
+          username: '',
+          password: 'wilmabettyswap'
         })
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -238,7 +241,8 @@ describe('api/users Routes', function() {
         .send({
           firstName: '',
           lastName: 'Flintstone',
-          username: 'lls@email.com'
+          username: 'lls@email.com',
+          password: 'wilmabettyswap'
         })
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -253,7 +257,8 @@ describe('api/users Routes', function() {
         .send({
           firstName: 'Fred',
           lastName: '',
-          username: 'lls@email.com'
+          username: 'lls@email.com',
+          password: 'wilmabettyswap'
         })
         .end(function(err, res) {
           expect(res.status).to.equal(400);
@@ -268,7 +273,8 @@ describe('api/users Routes', function() {
         .send({
           firstName: 'Fred',
           lastName: 'Flintstone',
-          username: 'lls@email.com'
+          username: 'lls@email.com',
+          password: 'wilmabettyswap'
         })
         .end(function(err, res) {
           expect(res.status).to.equal(201);
@@ -278,6 +284,9 @@ describe('api/users Routes', function() {
             function(err, user) {
               expect(user.firstName).to.equal('Fred');
               expect(user.lastName).to.equal('Flintstone');
+              expect(user.username).to.equal('lls@email.com');
+              expect(user.salt).to.not.be.undefined;
+              expect(user.hashedPassword).to.not.be.undefined;
               expect(user._id.toString()).to.equal(res.body._id);
               done();
             });

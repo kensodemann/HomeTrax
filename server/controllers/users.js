@@ -114,6 +114,10 @@ function validateRequiredFields(user) {
 
 
 function insert(user, res) {
+  user.salt = encryption.createSalt();
+  user.hashedPassword = encryption.hash(user.salt, user.password);
+  user.password = undefined;
+
   db.users.insert(user, function(err, user) {
     if (err) {
       return sendError(err, res);
