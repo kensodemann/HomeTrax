@@ -64,16 +64,24 @@ module.exports.changePassword = function(req, res, next) {
       });
     }
 
-    if (!req.body.newPassword || req.body.newPassword.length < 8) {
-      res.status(400);
-      return res.send({
-        reason: 'New Password must be at least 8 characters long'
-      })
+    if (newPasswordIsValid(req.body.newPassword, res)) {
+      updatePassword(req.params.id, req.body, res);
     }
-
-    updatePassword(req.params.id, req.body, res);
   });
 };
+
+
+function newPasswordIsValid(password, res) {
+  if (!password || password.length < 8) {
+    res.status(400);
+    res.send({
+      reason: 'New Password must be at least 8 characters long'
+    });
+    return false;
+  }
+
+  return true;
+}
 
 
 function validateUser(req, callback) {
