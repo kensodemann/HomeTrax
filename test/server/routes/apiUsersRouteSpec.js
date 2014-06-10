@@ -267,6 +267,38 @@ describe('api/users Routes', function() {
         });
     });
 
+    it('Does not allow password to be empty', function(done) {
+      request(app)
+        .post('/api/users')
+        .send({
+          firstName: 'Fred',
+          lastName: 'Flintstone',
+          username: 'lls@email.com',
+          password: ''
+        })
+        .end(function(err, res) {
+          expect(res.status).to.equal(400);
+          expect(res.body.reason).to.equal('New Password must be at least 8 characters long');
+          done();
+        });
+    });
+
+    it('Does not allow password to be too short', function(done) {
+      request(app)
+        .post('/api/users')
+        .send({
+          firstName: 'Fred',
+          lastName: 'Flintstone',
+          username: 'lls@email.com',
+          password: 'short'
+        })
+        .end(function(err, res) {
+          expect(res.status).to.equal(400);
+          expect(res.body.reason).to.equal('New Password must be at least 8 characters long');
+          done();
+        });
+    });
+
     it('Saves a new user if valid', function(done) {
       request(app)
         .post('/api/users')

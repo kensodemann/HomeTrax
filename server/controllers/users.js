@@ -33,7 +33,9 @@ module.exports.addUser = function(req, res, next) {
     if (err) {
       return sendError(err, res);
     } else {
-      insert(user, res);
+      if (newPasswordIsValid(user.password, res)) {
+        insert(user, res);
+      }
     }
   });
 };
