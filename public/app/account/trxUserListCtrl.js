@@ -6,6 +6,7 @@ angular.module('app')
       $scope.edit = function(user) {
         $scope.user = user;
         $scope.editorTitle = 'Edit ' + user.username;
+        $scope.mode = 'edit';
       }
 
       $scope.save = function() {

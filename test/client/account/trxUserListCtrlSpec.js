@@ -62,6 +62,11 @@ describe('trxUserListCtrl', function() {
       });
     }
 
+    it('Sets the mode to edit', function() {
+      scope.edit(mockUser);
+      expect(scope.mode).to.equal('edit');
+    });
+
     it('Sets the user in the scope', function() {
       scope.edit(mockUser);
       expect(scope.user).to.equal(mockUser);
