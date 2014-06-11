@@ -44,6 +44,7 @@ angular.module('app')
       $scope.create = function() {
         $scope.user = new trxUser();
         $scope.editorTitle = 'New User';
+        $scope.mode = 'create';
       };
     }
   ])

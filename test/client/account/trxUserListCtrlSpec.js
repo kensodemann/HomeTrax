@@ -172,6 +172,11 @@ describe('trxUserListCtrl', function() {
       });
     }
 
+    it('Sets the mode to create', function() {
+      scope.create();
+      expect(scope.mode).to.equal('create');
+    });
+
     it('Sets the user to a new user', function() {
       scope.create();
       expect(scope.user).to.be.a('object');
