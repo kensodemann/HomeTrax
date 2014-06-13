@@ -37,11 +37,11 @@ div.container
 						.form-group(ng-hide='mode==="edit"')
 							label.col-md-3.control-label(for='password') Password
 							.col-md-9
-								input.form-control(name='password', type='password', ng-model='user.password', required)
+								input.form-control(name='password', type='password', ng-model='user.password')
 						.form-group(ng-hide='mode==="edit"')
 							label.col-md-3.control-label(for='verifyPassword') Verify Password
 							.col-md-9
-								input.form-control(name='verifyPassword', type='password', ng-model='user.verifyPassword', required)
+								input.form-control(name='verifyPassword', type='password', ng-model='user.verifyPassword')
 				.modal-footer
 					button.btn.btn-default(type='button', ng-click="cancel()") Close
 					button.btn.btn-primary(type='submit', ng-click='save()', ng-disabled="userEditor.$invalid") Save
