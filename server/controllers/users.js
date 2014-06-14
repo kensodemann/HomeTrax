@@ -33,7 +33,9 @@ module.exports.addUser = function(req, res, next) {
     if (err) {
       return sendError(err, res);
     } else {
-      insert(user, res);
+      if (newPasswordIsValid(user.password, res)) {
+        insert(user, res);
+      }
     }
   });
 };
@@ -64,16 +66,24 @@ module.exports.changePassword = function(req, res, next) {
       });
     }
 
-    if (!req.body.newPassword || req.body.newPassword.length < 8) {
-      res.status(400);
-      return res.send({
-        reason: 'New Password must be at least 8 characters long'
-      })
+    if (newPasswordIsValid(req.body.newPassword, res)) {
+      updatePassword(req.params.id, req.body, res);
     }
-
-    updatePassword(req.params.id, req.body, res);
   });
 };
+
+
+function newPasswordIsValid(password, res) {
+  if (!password || password.length < 8) {
+    res.status(400);
+    res.send({
+      reason: 'New Password must be at least 8 characters long'
+    });
+    return false;
+  }
+
+  return true;
+}
 
 
 function validateUser(req, callback) {
@@ -114,6 +124,10 @@ function validateRequiredFields(user) {
 
 
 function insert(user, res) {
+  user.salt = encryption.createSalt();
+  user.hashedPassword = encryption.hash(user.salt, user.password);
+  user.password = undefined;
+
   db.users.insert(user, function(err, user) {
     if (err) {
       return sendError(err, res);
