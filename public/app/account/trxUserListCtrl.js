@@ -6,6 +6,7 @@ angular.module('app')
       $scope.edit = function(user) {
         $scope.user = user;
         $scope.editorTitle = 'Edit ' + user.username;
+        $scope.mode = 'edit';
       }
 
       $scope.save = function() {
@@ -17,6 +18,7 @@ angular.module('app')
       };
 
       function createNewUser() {
+        $scope.user.verifyPassword = undefined;
         $scope.user.$save().then(function(user) {
           $scope.user = undefined;
           $scope.editorTitle = undefined;
@@ -43,6 +45,24 @@ angular.module('app')
       $scope.create = function() {
         $scope.user = new trxUser();
         $scope.editorTitle = 'New User';
+        $scope.mode = 'create';
+        $scope.passwordEntryChanged();
       };
+
+      $scope.passwordEntryChanged = function() {
+        if (!$scope.user.password || $scope.user.password.length < 8) {
+          $scope.passwordIsValid = false;
+          $scope.passwordErrorMessage = 'New password must be at least 8 characters long';
+          return;
+        }
+        if ($scope.user.password !== $scope.user.verifyPassword) {
+          $scope.passwordIsValid = false;
+          $scope.passwordErrorMessage = 'Passwords do not match';
+          return;
+        }
+
+        $scope.passwordIsValid = true;
+        $scope.passwordErrorMessage = '';
+      }
     }
   ])

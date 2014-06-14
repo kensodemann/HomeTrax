@@ -62,6 +62,11 @@ describe('trxUserListCtrl', function() {
       });
     }
 
+    it('Sets the mode to edit', function() {
+      scope.edit(mockUser);
+      expect(scope.mode).to.equal('edit');
+    });
+
     it('Sets the user in the scope', function() {
       scope.edit(mockUser);
       expect(scope.user).to.equal(mockUser);
@@ -167,6 +172,11 @@ describe('trxUserListCtrl', function() {
       });
     }
 
+    it('Sets the mode to create', function() {
+      scope.create();
+      expect(scope.mode).to.equal('create');
+    });
+
     it('Sets the user to a new user', function() {
       scope.create();
       expect(scope.user).to.be.a('object');
@@ -222,6 +232,36 @@ describe('trxUserListCtrl', function() {
       scope.cancel();
       expect(scope.user).to.be.undefined;
       expect(scope.editorTitle).to.be.undefined;
+    });
+
+    it('sets flag true if passwords match and are valid', function() {
+      scope.create();
+      scope.user.password = 'firebird';
+      scope.user.verifyPassword = 'firebird';
+      scope.passwordEntryChanged();
+
+      expect(scope.passwordIsValid).to.be.true;
+      expect(scope.passwordErrorMessage).to.equal('');
+    });
+
+    it('sets flag false if passwords too short', function() {
+      scope.create();
+      scope.user.password = 'firebir';
+      scope.user.verifyPassword = 'firebir';
+      scope.passwordEntryChanged();
+
+      expect(scope.passwordIsValid).to.be.false;
+      expect(scope.passwordErrorMessage).to.equal('New password must be at least 8 characters long');
+    });
+
+    it('sets flag false if passwords do not match', function() {
+      scope.create();
+      scope.user.password = 'firebird';
+      scope.user.verifyPassword = 'pheonix';
+      scope.passwordEntryChanged();
+
+      expect(scope.passwordIsValid).to.be.false;
+      expect(scope.passwordErrorMessage).to.equal('Passwords do not match');
     });
   });
 })
