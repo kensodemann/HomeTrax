@@ -1,6 +1,6 @@
 'use strict'
 
-describe('trxLoginMenuCtrl', function() {
+describe('loginMenuCtrl', function() {
   var scope;
   var $controllerConstructor;
 
@@ -16,10 +16,10 @@ describe('trxLoginMenuCtrl', function() {
     it('Should set the identity to the injected identity object', function() {
       var mockIdentity = {};
 
-      var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
+      var ctrl = $controllerConstructor('loginMenuCtrl', {
         $scope: scope,
-        trxIdentity: mockIdentity,
-        trxAuthService: {},
+        identity: mockIdentity,
+        authService: {},
         $location: {}
       });
 
@@ -40,11 +40,11 @@ describe('trxLoginMenuCtrl', function() {
       mockAuthService.logoutUser.returns(dfd.promise);
     }));
 
-    it('Should call trxAuthService.logoutUser()', function() {
-      var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
+    it('Should call authService.logoutUser()', function() {
+      var ctrl = $controllerConstructor('loginMenuCtrl', {
         $scope: scope,
-        trxIdentity: {},
-        trxAuthService: mockAuthService,
+        identity: {},
+        authService: mockAuthService,
         $location: {}
       });
       scope.logout();
@@ -57,10 +57,10 @@ describe('trxLoginMenuCtrl', function() {
         path: function() {}
       });
 
-      var ctrl = $controllerConstructor('trxLoginMenuCtrl', {
+      var ctrl = $controllerConstructor('loginMenuCtrl', {
         $scope: scope,
-        trxIdentity: {},
-        trxAuthService: mockAuthService,
+        identity: {},
+        authService: mockAuthService,
         $location: mockLocation
       });
       scope.logout();

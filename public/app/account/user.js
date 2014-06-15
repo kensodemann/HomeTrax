@@ -1,4 +1,4 @@
-angular.module('app').factory('trxUser', function($resource) {
+angular.module('app').factory('user', function($resource) {
   var UserResource = $resource('/api/users/:id', {
     id: "@_id"
   }, {

@@ -1,6 +1,6 @@
 'use strict'
 
-describe('trxUserAdminMenuCtrl', function() {
+describe('userAdminMenuCtrl', function() {
   var scope;
   var $controllerConstructor;
 
@@ -16,9 +16,9 @@ describe('trxUserAdminMenuCtrl', function() {
     it('Should set the identity to the injected identity object', function() {
       var mockIdentity = {};
 
-      var ctrl = $controllerConstructor('trxUserAdminMenuCtrl', {
+      var ctrl = $controllerConstructor('userAdminMenuCtrl', {
         $scope: scope,
-        trxIdentity: mockIdentity
+        identity: mockIdentity
       });
 
       expect(scope.identity).to.equal(mockIdentity);

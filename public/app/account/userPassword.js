@@ -1,4 +1,4 @@
-angular.module('app').factory('trxUserPassword', function($resource) {
+angular.module('app').factory('userPassword', function($resource) {
   var UserResource = $resource('/api/changepassword/:id', {
     id: "@_id"
   }, {

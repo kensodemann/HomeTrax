@@ -1,8 +1,8 @@
 angular.module('app')
-  .controller('trxMainCtrl', function($scope, trxIdentity) {
+  .controller('mainCtrl', function($scope, identity) {
   	var message = "Hello World from Angular!!";
 
-  	if (trxIdentity.isAuthenticated()){
+  	if (identity.isAuthenticated()){
   		message += "  I am logged in!"
   	}
 

@@ -1,9 +1,9 @@
-angular.module('app').value('trxToastr', toastr);
+angular.module('app').value('myToastr', toastr);
 
-angular.module('app').factory('trxNotifier', function(trxToastr) {
+angular.module('app').factory('notifier', function(myToastr) {
   return {
     notify: function(msg) {
-      trxToastr.success(msg, null, {
+      myToastr.success(msg, null, {
         showMethod: "slideDown",
         positionClass: "toast-bottom-right"
       });
@@ -11,7 +11,7 @@ angular.module('app').factory('trxNotifier', function(trxToastr) {
     },
 
     error: function(msg) {
-      trxToastr.error(msg, null, {
+      myToastr.error(msg, null, {
         showMethod: "slideDown",
         positionClass: "toast-bottom-right"
       });

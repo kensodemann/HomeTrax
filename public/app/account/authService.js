@@ -1,4 +1,4 @@
-angular.module('app').factory('trxAuthService', function($http, trxIdentity, $q, trxUser) {
+angular.module('app').factory('authService', function($http, identity, $q, user) {
   return {
     authenticateUser: function(username, password) {
       var dfd = $q.defer();
@@ -7,9 +7,9 @@ angular.module('app').factory('trxAuthService', function($http, trxIdentity, $q,
         password: password
       }).then(function(response) {
         if (response.data.success) {
-          var user = new trxUser();
-          angular.extend(user, response.data.user);
-          trxIdentity.currentUser = user;
+          var u = new user();
+          angular.extend(u, response.data.user);
+          identity.currentUser = u;
           dfd.resolve(true);
         } else {
           dfd.resolve(false);
@@ -23,16 +23,16 @@ angular.module('app').factory('trxAuthService', function($http, trxIdentity, $q,
       $http.post('/logout', {
         logout: true
       }).then(function() {
-        trxIdentity.currentUser = undefined;
+        identity.currentUser = undefined;
         dfd.resolve();
       });
       return dfd.promise;
     },
 
     currentUserAuthorizedForRoute: function(role) {
-      if (!trxIdentity.isAuthenticated()) {
+      if (!identity.isAuthenticated()) {
         return $q.reject('Not Logged In');
-      } else if (role !== '' && !trxIdentity.isAuthorized(role)) {
+      } else if (role !== '' && !identity.isAuthorized(role)) {
         return $q.reject('Not Authorized');
       } else {
         return true;

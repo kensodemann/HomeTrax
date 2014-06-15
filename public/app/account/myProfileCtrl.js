@@ -1,13 +1,13 @@
 angular.module('app')
-  .controller('trxMyProfileCtrl', ['$scope', 'trxUser', 'trxUserPassword', 'trxIdentity', 'trxNotifier',
-    function($scope, trxUser, trxUserPassword, trxIdentity, trxNotifier) {
-      $scope.user = trxUser.get({
-        id: trxIdentity.currentUser._id
+  .controller('myProfileCtrl', ['$scope', 'user', 'userPassword', 'identity', 'notifier',
+    function($scope, user, userPassword, identity, notifier) {
+      $scope.user = user.get({
+        id: identity.currentUser._id
       });
 
       $scope.reset = function() {
-        $scope.user = trxUser.get({
-          id: trxIdentity.currentUser._id
+        $scope.user = user.get({
+          id: identity.currentUser._id
         });
       };
 
@@ -16,8 +16,8 @@ angular.module('app')
       };
 
       $scope.getNewPassword = function() {
-        $scope.passwordData = new trxUserPassword();
-        $scope.passwordData._id = trxIdentity.currentUser._id;
+        $scope.passwordData = new userPassword();
+        $scope.passwordData._id = identity.currentUser._id;
         $scope.passwordEntryChanged();
       };
 
@@ -44,12 +44,12 @@ angular.module('app')
       $scope.changePassword = function() {
         $scope.passwordData.$update()
           .then(function() {
-            trxNotifier.notify('Password Changed Successfully')
+            notifier.notify('Password Changed Successfully')
             $scope.passwordData = undefined;
             $scope.newPasswordErrorMessage = '';
           }, function(response) {
             $scope.newPasswordErrorMessage = 'ERROR: ' + response.data.reason;
-            trxNotifier.error('Password Change Failed: ' + response.data.reason);
+            notifier.error('Password Change Failed: ' + response.data.reason);
           });
       };
     }

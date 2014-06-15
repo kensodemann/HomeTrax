@@ -1,6 +1,6 @@
 'use strict'
 
-describe('trxAuthService', function() {
+describe('authService', function() {
   var mockHttp;
   var mockIdentity;
   var dfd;
@@ -20,15 +20,15 @@ describe('trxAuthService', function() {
 
     module(function($provide) {
       $provide.value('$http', mockHttp);
-      $provide.value('trxIdentity', mockIdentity);
+      $provide.value('identity', mockIdentity);
     });
   });
 
-  beforeEach(inject(function($rootScope, $q, trxAuthService) {
+  beforeEach(inject(function($rootScope, $q, authService) {
     scope = $rootScope;
     dfd = $q.defer();
     mockHttp.post.returns(dfd.promise);
-    serviceUnderTest = trxAuthService;
+    serviceUnderTest = authService;
   }));
 
   describe('authenticateUser', function() {

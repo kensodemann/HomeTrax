@@ -1,8 +1,8 @@
-angular.module('app').factory('trxIdentity', function($window, trxUser) {
+angular.module('app').factory('identity', function($window, user) {
   var currentUser;
   
   if(!!$window.bootstrappedUserObject) {
-    currentUser = new trxUser();
+    currentUser = new user();
     angular.extend(currentUser, $window.bootstrappedUserObject);
   }
 

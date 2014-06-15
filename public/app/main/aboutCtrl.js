@@ -1,5 +1,5 @@
 angular.module('app')
-  .controller('trxAboutCtrl', function($scope) {
+  .controller('aboutCtrl', function($scope) {
   	$scope.currentVersion = 'pre-0.5';
   	
     $scope.versions = [{

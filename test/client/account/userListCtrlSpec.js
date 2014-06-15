@@ -1,6 +1,6 @@
 'use strict'
 
-describe('trxUserListCtrl', function() {
+describe('userListCtrl', function() {
   beforeEach(module('app'));
 
   var scope;
@@ -24,9 +24,9 @@ describe('trxUserListCtrl', function() {
     });
 
     it('calls the user service to get a list of users', function() {
-      var ctrl = $controllerConstructor('trxUserListCtrl', {
+      var ctrl = $controllerConstructor('userListCtrl', {
         $scope: scope,
-        trxUser: mockUser
+        user: mockUser
       });
       var users = scope.users;
 
@@ -55,10 +55,10 @@ describe('trxUserListCtrl', function() {
     });
 
     function createController() {
-      var ctrl = $controllerConstructor('trxUserListCtrl', {
+      var ctrl = $controllerConstructor('userListCtrl', {
         $scope: scope,
-        trxUser: mockUser,
-        trxNotifier: mockNotifier
+        user: mockUser,
+        notifier: mockNotifier
       });
     }
 
@@ -166,9 +166,9 @@ describe('trxUserListCtrl', function() {
     });
 
     function createController() {
-      var ctrl = $controllerConstructor('trxUserListCtrl', {
+      var ctrl = $controllerConstructor('userListCtrl', {
         $scope: scope,
-        trxNotifier: mockNotifier
+        notifier: mockNotifier
       });
     }
 

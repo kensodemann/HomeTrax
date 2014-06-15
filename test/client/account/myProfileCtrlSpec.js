@@ -1,6 +1,6 @@
 'use strict'
 
-describe('trxMyProfileCtrl', function() {
+describe('myProfileCtrl', function() {
   beforeEach(module('app'));
 
   var scope;
@@ -11,10 +11,10 @@ describe('trxMyProfileCtrl', function() {
   var mockUser;
   var userResource;
 
-  beforeEach(inject(function($controller, $rootScope, trxUser) {
+  beforeEach(inject(function($controller, $rootScope, user) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
-    userResource = trxUser;
+    userResource = user;
 
     createMocks();
     createController();
@@ -45,10 +45,10 @@ describe('trxMyProfileCtrl', function() {
   }
 
   function createController() {
-    var ctrl = $controllerConstructor('trxMyProfileCtrl', {
+    var ctrl = $controllerConstructor('myProfileCtrl', {
       $scope: scope,
-      trxIdentity: mockIdentiy,
-      trxNotifier: mockNotifier
+      identity: mockIdentiy,
+      notifier: mockNotifier
     });
   }
 

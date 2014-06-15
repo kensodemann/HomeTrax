@@ -1,6 +1,6 @@
 'use strict'
 
-describe('trxLoginCtrl', function() {
+describe('loginCtrl', function() {
   beforeEach(module('app'));
 
   var scope;
@@ -35,11 +35,11 @@ describe('trxLoginCtrl', function() {
     }));
 
     it('Should call authenticateUser', function() {
-      var ctrl = $controllerConstructor('trxLoginCtrl', {
+      var ctrl = $controllerConstructor('loginCtrl', {
         $scope: scope,
         $location: mockLocation,
-        trxAuthService: mockAuthService,
-        trxNotifier: mockNotifier
+        authService: mockAuthService,
+        notifier: mockNotifier
       });
       scope.signin('jeff', 'FireW00d');
 
@@ -64,11 +64,11 @@ describe('trxLoginCtrl', function() {
     });
 
     function callSigninWithSuccess() {
-      var ctrl = $controllerConstructor('trxLoginCtrl', {
+      var ctrl = $controllerConstructor('loginCtrl', {
         $scope: scope,
         $location: mockLocation,
-        trxAuthService: mockAuthService,
-        trxNotifier: mockNotifier
+        authService: mockAuthService,
+        notifier: mockNotifier
       });
       scope.signin('jeff', 'FireW00d');
       dfd.resolve(true);
@@ -76,11 +76,11 @@ describe('trxLoginCtrl', function() {
     }
 
     function callSigninWithFailure() {
-      var ctrl = $controllerConstructor('trxLoginCtrl', {
+      var ctrl = $controllerConstructor('loginCtrl', {
         $scope: scope,
         $location: mockLocation,
-        trxAuthService: mockAuthService,
-        trxNotifier: mockNotifier
+        authService: mockAuthService,
+        notifier: mockNotifier
       });
       scope.signin('jeff', 'FireW00d');
       dfd.resolve(false);

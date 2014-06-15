@@ -1,7 +1,7 @@
 angular.module('app')
-  .controller('trxUserListCtrl', ['$scope', 'trxUser', 'trxNotifier',
-    function($scope, trxUser, trxNotifier) {
-      $scope.users = trxUser.query();
+  .controller('userListCtrl', ['$scope', 'user', 'notifier',
+    function($scope, user, notifier) {
+      $scope.users = user.query();
 
       $scope.edit = function(user) {
         $scope.user = user;
@@ -24,7 +24,7 @@ angular.module('app')
           $scope.editorTitle = undefined;
           $scope.users.push(user);
         }, function(response) {
-          trxNotifier.error('Create New User Failed: ' + response.data.reason);
+          notifier.error('Create New User Failed: ' + response.data.reason);
         });
       }
 
@@ -33,7 +33,7 @@ angular.module('app')
           $scope.user = undefined;
           $scope.editorTitle = undefined;
         }, function(response) {
-          trxNotifier.error('Update Failed: ' + response.data.reason);
+          notifier.error('Update Failed: ' + response.data.reason);
         });
       }
 
@@ -43,7 +43,7 @@ angular.module('app')
       };
 
       $scope.create = function() {
-        $scope.user = new trxUser();
+        $scope.user = new user();
         $scope.editorTitle = 'New User';
         $scope.mode = 'create';
         $scope.passwordEntryChanged();
