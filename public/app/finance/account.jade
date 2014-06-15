@@ -1,3 +1,6 @@
 .container
-	h2 {{message}}
-	h3 Account: {{accountName}}
+	h2(ng-hide="editMode === 'message'", ng-click="messageClicked()") {{message}}
+	input.form-control(ng-show="editMode === 'message'", ng-model="message", ng-blur="handleChange()")
+	h3(ng-hide="editMode === 'subtext'", ng-click="subtextClicked()") {{subtext}}
+	input.form-control(ng-show="editMode === 'subtext'", ng-model="subtext", ng-blur="handleChange()")
+	h4 Account: {{accountName}}
