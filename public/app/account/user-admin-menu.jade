@@ -1,4 +1,4 @@
-ul.nav.navbar-nav.navbar-right(ng-controller="trxUserAdminMenuCtrl")
+ul.nav.navbar-nav.navbar-right(ng-controller="userAdminMenuCtrl")
 	li(ng-show="identity.isAuthenticated() && !identity.isAuthorized('admin')")
 		a(href="/account/myprofile") My Profile
 	li.dropdown(ng-show="identity.isAuthorized('admin')")
