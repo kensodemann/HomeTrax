@@ -29,20 +29,23 @@ describe('api/users Routes', function() {
           lastName: 'Sodemann',
           salt: 'NaCl',
           hashedPassword: 'GoldenCrisp'
+        }, function() {
+          db.users.save({
+            firstName: 'Lisa',
+            lastName: 'Buerger',
+            salt: 'CaCl2',
+            hashedPassword: 'BlackGold'
+          }, function() {
+            db.users.save({
+              firstName: 'Geoff',
+              lastName: 'Jones',
+              salt: 'CH3COONa',
+              hashedPassword: 'BlackStickyTar'
+            }, function() {
+              done();
+            });
+          });
         });
-        db.users.save({
-          firstName: 'Lisa',
-          lastName: 'Buerger',
-          salt: 'CaCl2',
-          hashedPassword: 'BlackGold'
-        });
-        db.users.save({
-          firstName: 'Geoff',
-          lastName: 'Jones',
-          salt: 'CH3COONa',
-          hashedPassword: 'BlackStickyTar'
-        });
-        done();
       });
     }
 
