@@ -29,13 +29,19 @@ describe('events controller', function() {
     });
 
     it('returns events for user and non-private events for other users', function(done) {
-      eventsController.get(req, {
-        send: function(events) {
-          expect(events.length).to.equal(3);
-          done();
-        }
+        eventsController.get(req, {
+          send: function(events) {
+            expect(events.length).to.equal(3);
+            events.forEach(function(e, idx) {
+              expect(e.private).to.be.a('Boolean');
+              if (e.private) {
+                expect(e.userId.toString()).to.equal('53a4dd887c6dc30000bee3af');
+              }
+            });
+            done();
+          }
+        });
       });
-    });
   });
 });
 
