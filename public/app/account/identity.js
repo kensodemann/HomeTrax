@@ -1,7 +1,7 @@
 angular.module('app').factory('identity', function($window, user) {
   var currentUser;
-  
-  if(!!$window.bootstrappedUserObject) {
+
+  if ( !! $window.bootstrappedUserObject) {
     currentUser = new user();
     angular.extend(currentUser, $window.bootstrappedUserObject);
   }
@@ -12,7 +12,7 @@ angular.module('app').factory('identity', function($window, user) {
       return !!this.currentUser;
     },
     isAuthorized: function(role) {
-      return !!this.currentUser && this.currentUser.roles.indexOf(role) > -1;
+      return this.isAuthenticated() && (!role || ( !! this.currentUser.roles && this.currentUser.roles.indexOf(role) > -1));
     }
   }
 })

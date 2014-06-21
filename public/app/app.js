@@ -42,7 +42,7 @@ angular.module('app')
     $routeProvider.when('/finance/account', {
       templateUrl: '/partials/finance/account',
       controller: 'financialAccountCtrl',
-      resolve: routeRoleChecks.admin
+      resolve: routeRoleChecks.user
     });
 
     $routeProvider.when('/account/userlist', {
