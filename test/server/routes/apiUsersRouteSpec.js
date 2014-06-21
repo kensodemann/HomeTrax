@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
-var path = require('path');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
 var db = require('../../../server/config/database');
@@ -11,9 +10,6 @@ describe('api/users Routes', function() {
 
   beforeEach(function() {
     app = express();
-    var fakeViewPath = path.normalize(__dirname + '/../mockViews/server/views');
-    app.set('view engine', 'jade');
-    app.set('views', fakeViewPath);
     app.use(bodyParser());
   });
 
