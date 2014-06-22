@@ -100,7 +100,7 @@ describe('events controller', function() {
       var status;
       req.params.id = otherUserPrivateEvent._id.toString();
       eventsController.getById(req, {
-        status: function(s){
+        status: function(s) {
           status = s;
         },
         send: function(e) {
@@ -110,7 +110,89 @@ describe('events controller', function() {
         }
       });
     });
+  });
 
+  describe('save', function() {
+    var req;
+
+    beforeEach(function() {
+      req = sinon.stub({
+        user: {
+          _id: '53a4dd887c6dc30000bee3af'
+        },
+        params: {}
+      });
+    });
+
+
+    it('Adds new data to the events collection', function(done) {
+      req.body = {
+        title: 'This is a new one',
+        allDay: true,
+        start: '2014-06-22',
+        private: true,
+        color: 'blue',
+        category: 'whatever'
+      };
+      eventsController.save(req, {
+        send: function(e) {
+          expect(e._id).to.not.be.undefined;
+          db.events.count(function(err, cnt) {
+            expect(cnt).to.equal(5);
+            done();
+          });
+        }
+      });
+    });
+
+    it('Saves changes to existing items', function(done) {
+      req.body = myPrivateEvent;
+      myPrivateEvent.private = false;
+      myPrivateEvent.title = 'some other title';
+      eventsController.save(req, {
+        send: function(e) {
+          db.events.findOne({
+            _id: myPrivateEvent._id
+          }, function(err, ev) {
+            expect(ev.private).to.be.false;
+            expect(ev.title).to.equal('some other title');
+            done();
+          });
+        }
+      })
+    });
+
+    it('Sets userId to logged in user when saving new data', function(done) {
+      req.body = {
+        title: 'This is a new one',
+        allDay: true,
+        start: '2014-06-22',
+        private: true,
+        color: 'blue',
+        category: 'whatever'
+      };
+      eventsController.save(req, {
+        send: function(e) {
+          expect(e.userId.toString()).to.equal(req.user._id.toString());
+          done();
+        }
+      });
+    });
+
+    it('forbids users from modifying other users events', function(done) {
+      var status;
+      req.body = otherUserPublicEvent;
+      eventsController.save(req, {
+        status: function(s) {
+          status = s;
+        },
+        send: function(e) {
+          expect(status).to.equal(403);
+          expect(e).to.be.undefined;
+          done();
+        }
+      });
+    });
   });
 
   function loadEvents(done) {

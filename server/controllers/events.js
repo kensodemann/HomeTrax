@@ -20,14 +20,30 @@ module.exports.getById = function(req, res) {
     _id: ObjectId(req.params.id)
   }, function(err, ev) {
     if (ev) {
-    	if (ev.private && ev.userId.toString() !== req.user._id.toString()){
-    	 	res.status(403);
-    	 	return res.send();
-    	}
+      if (ev.private && ev.userId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        return res.send();
+      }
       res.send(ev);
     } else {
       res.status(404);
       res.send();
     }
+  });
+};
+
+module.exports.save = function(req, res) {
+  var e = req.body;
+
+  if (!e.userId) {
+    e.userId = ObjectId(req.user._id);
+  }
+  if (e.userId.toString() !== req.user._id.toString()) {
+    res.status(403);
+    return res.send();
+  }
+
+  db.events.save(e, function(err, ev) {
+    res.send(ev);
   });
 };
