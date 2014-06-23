@@ -47,3 +47,25 @@ module.exports.save = function(req, res) {
     res.send(ev);
   });
 };
+
+module.exports.remove = function(req, res) {
+  db.events.findOne({
+    _id: ObjectId(req.body._id)
+  }, function(err, e) {
+    if (!e) {
+      res.status(404);
+      return res.send();
+    }
+
+    if (e.userId.toString() !== req.user._id.toString()) {
+      res.status(403);
+      return res.send();
+    }
+
+    db.events.remove({
+      _id: req.body._id
+    }, true, function(err, e) {
+      res.send(e);
+    });
+  });
+}

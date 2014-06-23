@@ -195,6 +195,76 @@ describe('events controller', function() {
     });
   });
 
+  describe('remove', function() {
+    var req;
+
+    beforeEach(function() {
+      req = sinon.stub({
+        user: {
+          _id: '53a4dd887c6dc30000bee3af'
+        },
+        params: {}
+      });
+    });
+
+    it('removes the specified item', function(done) {
+      req.body = myPrivateEvent;
+      eventsController.remove(req, {
+        send: function(e) {
+          db.events.count(function(err, cnt) {
+            expect(cnt).to.equal(3);
+            db.events.count({
+              _id: myPrivateEvent._id
+            }, function(err, cnt) {
+              expect(cnt).to.equal(0);
+              done();
+            });
+          });
+        }
+      });
+    });
+
+    it('retuns 404 if item does not exist', function(done) {
+      var status;
+      req.body = {
+        _id: ObjectId('53a4dd887c6dc30000bee3a1'),
+        title: 'I do not exist',
+        userId: ObjectId(req.user._id)
+      };
+      eventsController.remove(req, {
+        status: function(s) {
+          status = s;
+        },
+        send: function(e) {
+          expect(status).to.equal(404);
+          expect(e).to.be.undefined;
+          db.events.count(function(err, cnt) {
+            expect(cnt).to.equal(4);
+            done();
+          });
+        }
+      });
+    });
+
+    it('returns 403 if item belongs to some3one else', function(done) {
+      var status;
+      req.body = otherUserPublicEvent;
+      eventsController.remove(req, {
+        status: function(s) {
+          status = s;
+        },
+        send: function(e) {
+          expect(status).to.equal(403);
+          expect(e).to.be.undefined;
+          db.events.count(function(err, cnt) {
+            expect(cnt).to.equal(4);
+            done();
+          });
+        }
+      });
+    });
+  });
+
   function loadEvents(done) {
     db.events.remove({}, function() {
       db.events.save({
