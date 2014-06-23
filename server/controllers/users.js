@@ -3,7 +3,7 @@ var db = require('../config/database');
 var encryption = require('../services/encryption');
 var ObjectId = require("mongojs").ObjectId;
 
-module.exports.getUsers = function(req, res) {
+module.exports.get = function(req, res) {
   db.users.find({}, {
     salt: 0,
     hashedPassword: 0
@@ -12,7 +12,7 @@ module.exports.getUsers = function(req, res) {
   });
 };
 
-module.exports.getUserById = function(req, res) {
+module.exports.getById = function(req, res) {
   db.users.findOne({
     _id: ObjectId(req.params.id)
   }, {
@@ -28,7 +28,7 @@ module.exports.getUserById = function(req, res) {
   });
 };
 
-module.exports.addUser = function(req, res, next) {
+module.exports.add = function(req, res, next) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
@@ -40,7 +40,7 @@ module.exports.addUser = function(req, res, next) {
   });
 };
 
-module.exports.updateUser = function(req, res, next) {
+module.exports.update = function(req, res, next) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);

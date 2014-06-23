@@ -1,6 +1,8 @@
+'use strict'
+
 var mongojs = require('mongojs');
 
-var collections = ['message', 'users'];
+var collections = ['events', 'users'];
 
 function openShiftConnectString() {
   return process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +

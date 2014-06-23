@@ -31,21 +31,22 @@ describe('api/changepassword Route', function() {
           username: 'kws@email.com',
           salt: salt,
           hashedPassword: hash
-        });
-        salt = encryption.createSalt();
-        hash = encryption.hash(salt, 'IAmSexyBee');
-        db.users.save({
-          firstName: 'Lisa',
-          lastName: 'Buerger',
-          username: 'llb@email.com',
-          salt: salt,
-          hashedPassword: hash
         }, function() {
-          db.users.findOne({
-            username: 'kws@email.com'
-          }, function(err, user) {
-            testUser = user;
-            done();
+          salt = encryption.createSalt();
+          hash = encryption.hash(salt, 'IAmSexyBee');
+          db.users.save({
+            firstName: 'Lisa',
+            lastName: 'Buerger',
+            username: 'llb@email.com',
+            salt: salt,
+            hashedPassword: hash
+          }, function() {
+            db.users.findOne({
+              username: 'kws@email.com'
+            }, function(err, user) {
+              testUser = user;
+              done();
+            });
           });
         });
       });
@@ -157,7 +158,7 @@ describe('api/changepassword Route', function() {
           db.users.findOne({
             _id: testUser._id
           }, function(err, user) {
-          	var hash = encryption.hash(user.salt, 'SomethingValid');
+            var hash = encryption.hash(user.salt, 'SomethingValid');
             expect(user.hashedPassword).to.equal(hash);
             done();
           });
