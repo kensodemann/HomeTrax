@@ -9,9 +9,7 @@
 			span.glyphicon.glyphicon-home
 			span &nbsp;HomeTrax
 	.navbar-collapse.collapse
-		ul.nav.navbar-nav
-			li
-				a(href="/calendar") Calendar
+		span(ng-include="'/partials/calendar/calendarMenu'")
 		span(ng-include="'/partials/finance/finance-menu'")
 		span(ng-include="'/partials/account/login-menu'")
 		span(ng-include="'/partials/account/user-admin-menu'")
