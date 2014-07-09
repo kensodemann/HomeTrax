@@ -46,13 +46,13 @@ angular.module('app')
     });
 
     $routeProvider.when('/account/userlist', {
-      templateUrl: '/partials/account/user-list',
+      templateUrl: '/partials/account/userList',
       controller: 'userListCtrl',
       resolve: routeRoleChecks.admin
     });
 
     $routeProvider.when('/account/myprofile', {
-      templateUrl: '/partials/account/my-profile',
+      templateUrl: '/partials/account/myProfile',
       controller: 'myProfileCtrl',
       resolve: routeRoleChecks.user
     });
