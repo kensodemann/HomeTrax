@@ -1,6 +1,6 @@
 ul.nav.navbar-nav(ng-controller="financeMenuCtrl")
 	li.dropdown(ng-show="identity.isAuthenticated()")
-		a.dropdown-toggle(href="#", data-toggle="dropdown") Finance <b class="caret"></b>
+		a.dropdown-toggle(href="#") Finance <b class="caret"></b>
 		ul.dropdown-menu
 			li
 				a(href="/finance/account?acct=bank1") Checking
