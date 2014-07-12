@@ -1,31 +1,31 @@
 form.form-horizontal(name="userEditor")
 	.modal-header
 		button.close(type='button', ng-click="cancel()", aria-hidden='true') &times;
-		h4.modal-title {{editorTitle}}
+		h4.modal-title {{title}}
 	.modal-body
 		fieldset
 			.form-group
 				label.col-md-3.control-label(for='username') Username
 				.col-md-9
-					input.form-control(name='username', type='text', ng-model='user.username', required)
+					input.form-control(name='username', type='text', ng-model='model.username', required)
 			.form-group
 				label.col-md-3.control-label(for='firstName') First Name
 				.col-md-9
-					input.form-control(name='firstName', type='text', ng-model='user.firstName', required)
+					input.form-control(name='firstName', type='text', ng-model='model.firstName', required)
 			.form-group
 				label.col-md-3.control-label(for='lastName') Last Name
 				.col-md-9
-					input.form-control(name='lastName', type='text', ng-model='user.lastName', required)
+					input.form-control(name='lastName', type='text', ng-model='model.lastName', required)
 			.form-group(ng-hide='mode==="edit"')
 				label.col-md-3.control-label(for='password') Password
 				.col-md-9
-					input.form-control(name='password', type='password', ng-change='passwordEntryChanged()', ng-model='user.password')
+					input.form-control(name='password', type='password', ng-change='validatePassword()', ng-model='model.password')
 			.form-group(ng-hide='mode==="edit"')
 				label.col-md-3.control-label(for='verifyPassword') Verify Password
 				.col-md-9
-					input.form-control(name='verifyPassword', type='password', ng-change='passwordEntryChanged()', ng-model='user.verifyPassword')
+					input.form-control(name='verifyPassword', type='password', ng-change='validatePassword()', ng-model='model.verifyPassword')
 			.form-group
 				.col-md-offset-4.col-md-8.text-danger {{errorMessage}}
 	.modal-footer
 		button.btn.btn-default(type='button', ng-click="cancel()") Close
-		button.btn.btn-primary(type='submit', ng-click='save()', ng-disabled="userEditor.$invalid || !passwordIsValid") Save
+		button.btn.btn-primary(type='submit', ng-click='ok()', ng-disabled="userEditor.$invalid || !passwordIsValid") Save

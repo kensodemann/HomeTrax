@@ -15,13 +15,28 @@ angular.module('app')
       };
 
       $scope.ok = function() {
-        var action = ($scope.mode === 'edit') ? $scope.model.$update : $scope.model.$save;
-        action(function(u, responseHeaders) {
+        if ($scope.mode === 'edit') {
+          updateUser();
+        } else {
+          createNewUser();
+        }
+      };
+
+      function createNewUser() {
+        $scope.model.$save(function(u, responseHeaders) {
           $modalInstance.close(u);
         }, function(response) {
           $scope.errorMessage = response.statusText;
         });
-      };
+      }
+
+      function updateUser() {
+        $scope.model.$update(function(u, responseHeaders) {
+          $modalInstance.close(u);
+        }, function(response) {
+          $scope.errorMessage = response.statusText;
+        });
+      }
 
       $scope.validatePassword = function() {
         if (!$scope.model.password || $scope.model.password.length < 8) {
