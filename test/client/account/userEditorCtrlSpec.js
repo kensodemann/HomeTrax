@@ -6,7 +6,7 @@ describe('userEditorCtrl', function() {
 
   beforeEach(module('app'));
 
-  beforeEach(inject(function($controller, $rootScope, $q) {
+  beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
   }));
@@ -62,7 +62,7 @@ describe('userEditorCtrl', function() {
       expect(scope.title).to.equal('Create New User');
     });
 
-    it('sets the title and mode to create if model _id is null', function() {
+    it('sets the title to create if model _id is null', function() {
       model._id = null;
       var ctrl = $controllerConstructor('userEditorCtrl', {
         $scope: scope,

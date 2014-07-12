@@ -8,11 +8,14 @@ angular.module('app')
       }
 
       $scope.create = function() {
-        openModal(new user());
+        var m = openModal(new user());
+        m.result.then(function(newUser) {
+          $scope.users.push(newUser);
+        });
       };
 
       function openModal(model) {
-        var m = $modal.open({
+        return $modal.open({
           templateUrl: '/partials/account/userEditor',
           controller: 'userEditorCtrl',
           backdrop: 'static',

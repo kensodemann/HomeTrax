@@ -7,6 +7,7 @@ describe('myProfileCtrl', function() {
   var $controllerConstructor;
   var $httpBackend;
   var mockIdentiy;
+  var mockModal;
   var mockNotifier;
   var mockUser;
   var userResource;
@@ -33,6 +34,10 @@ describe('myProfileCtrl', function() {
       }
     });
 
+    mockModal = sinon.stub({
+      open: function() {}
+    });
+
     mockNotifier = sinon.stub({
       error: function() {},
       notify: function() {}
@@ -48,7 +53,8 @@ describe('myProfileCtrl', function() {
     var ctrl = $controllerConstructor('myProfileCtrl', {
       $scope: scope,
       identity: mockIdentiy,
-      notifier: mockNotifier
+      notifier: mockNotifier,
+      $modal: mockModal
     });
   }
 
@@ -80,80 +86,18 @@ describe('myProfileCtrl', function() {
     });
   });
 
-  describe('Password Change Handler', function() {
-    it('sets flag true if passwords match and are valid', function() {
-      scope.getNewPassword();
-      scope.passwordData.newPassword = 'firebird';
-      scope.passwordData.verifyPassword = 'firebird';
-      scope.passwordEntryChanged();
-
-      expect(scope.newPasswordIsValid).to.be.true;
-      expect(scope.newPasswordErrorMessage).to.equal('');
-    });
-
-    it('sets flag false if passwords do not match', function() {
-      scope.getNewPassword();
-      scope.passwordData.newPassword = 'firebird';
-      scope.passwordData.verifyPassword = 'pheonix';
-      scope.passwordEntryChanged();
-
-      expect(scope.newPasswordIsValid).to.be.false;
-      expect(scope.newPasswordErrorMessage).to.equal('Passwords do not match');
-    });
-  });
-
   describe('Changing the password', function() {
-    beforeEach(function() {
-
+    it('opens the modal dialog', function() {
+      scope.getNewPassword();
+      expect(mockModal.open.calledOnce).to.be.true;
+      expect(mockModal.open.getCall(0).args[0].controller).to.equal('passwordEditorCtrl');
+      expect(mockModal.open.getCall(0).args[0].templateUrl).to.equal('/partials/account/passwordEditor');
     });
 
-
-    it('Initializes password validity flag and message', function() {
+    it('injects a model with the same Id as the user model', function() {
       scope.getNewPassword();
-      expect(scope.newPasswordIsValid).to.be.false;
-      expect(scope.newPasswordErrorMessage).to.equal('New password must be at least 8 characters long');
-    });
-
-    it('sets the password data', function() {
-      scope.getNewPassword();
-      expect(scope.passwordData._id).to.equal('123456789009876543211234');
-    });
-
-    it('clears the password data on cancel', function() {
-      scope.getNewPassword();
-      scope.cancelPasswordChange();
-      expect(scope.passwordData).to.be.undefined;
-    });
-
-    it('puts the data', function() {
-      scope.getNewPassword();
-      $httpBackend.expectPUT('/api/changepassword/' + mockUser._id, scope.passwordData).respond(200, mockUser);
-      scope.changePassword();
-      $httpBackend.flush();
-    });
-
-    it('clears the password data on success', function() {
-      scope.getNewPassword();
-      $httpBackend.expectPUT('/api/changepassword/' + mockUser._id, scope.passwordData).respond(200, mockUser);
-      scope.changePassword();
-      $httpBackend.flush();
-      expect(scope.passwordData).to.be.undefined;
-      expect(scope.newPasswordErrorMessage).to.equal('');
-      expect(mockNotifier.notify.calledOnce).to.be.true;
-      expect(mockNotifier.error.called).to.be.false;
-    });
-
-    it('shows an error on failure', function() {
-      scope.getNewPassword();
-      $httpBackend.expectPUT('/api/changepassword/' + mockUser._id, scope.passwordData).respond(400, {
-        reason: 'you are a failure'
-      });
-      scope.changePassword();
-      $httpBackend.flush();
-      expect(scope.passwordData).to.not.be.undefined;
-      expect(scope.newPasswordErrorMessage).to.equal('ERROR: you are a failure');
-      expect(mockNotifier.notify.called).to.be.false;
-      expect(mockNotifier.error.calledOnce).to.be.true;
+      var model = mockModal.open.getCall(0).args[0].resolve.passwordModel();
+      expect(model._id).to.equal('123456789009876543211234');
     });
   });
 })
