@@ -11,11 +11,13 @@ describe('myProfileCtrl', function() {
   var mockNotifier;
   var mockUser;
   var userResource;
+  var q;
 
-  beforeEach(inject(function($controller, $rootScope, user) {
+  beforeEach(inject(function($controller, $rootScope, user, $q) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
     userResource = user;
+    q = $q;
 
     createMocks();
     createController();
@@ -39,7 +41,6 @@ describe('myProfileCtrl', function() {
     });
 
     mockNotifier = sinon.stub({
-      error: function() {},
       notify: function() {}
     });
 
@@ -87,6 +88,17 @@ describe('myProfileCtrl', function() {
   });
 
   describe('Changing the password', function() {
+    var dfd;
+    var mockModalInstance;
+
+    beforeEach(function() {
+      dfd = q.defer();
+      mockModalInstance = sinon.stub({
+        result: dfd.promise
+      });
+      mockModal.open.returns(mockModalInstance);
+    });
+
     it('opens the modal dialog', function() {
       scope.getNewPassword();
       expect(mockModal.open.calledOnce).to.be.true;
@@ -98,6 +110,15 @@ describe('myProfileCtrl', function() {
       scope.getNewPassword();
       var model = mockModal.open.getCall(0).args[0].resolve.passwordModel();
       expect(model._id).to.equal('123456789009876543211234');
+    });
+
+    it('notifies user on password chnage success', function() {
+      scope.getNewPassword();
+      dfd.resolve({});
+      scope.$apply();
+
+      expect(mockNotifier.notify.calledOnce).to.be.true;
+      expect(mockNotifier.notify.calledWith('Password changed successfully')).to.be.true;
     });
   });
 })

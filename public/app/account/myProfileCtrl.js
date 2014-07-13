@@ -1,6 +1,6 @@
 angular.module('app')
-  .controller('myProfileCtrl', ['$scope', 'user', 'userPassword', 'identity', '$modal',
-    function($scope, user, userPassword, identity, $modal) {
+  .controller('myProfileCtrl', ['$scope', 'user', 'userPassword', 'identity', '$modal', 'notifier',
+    function($scope, user, userPassword, identity, $modal, notifier) {
       $scope.user = user.get({
         id: identity.currentUser._id
       });
@@ -16,7 +16,7 @@ angular.module('app')
       };
 
       $scope.getNewPassword = function() {
-        $modal.open({
+        var m = $modal.open({
           templateUrl: '/partials/account/passwordEditor',
           controller: 'passwordEditorCtrl',
           backdrop: 'static',
@@ -27,6 +27,10 @@ angular.module('app')
               return model;
             }
           }
+        });
+
+        m.result.then(function() {
+          notifier.notify('Password changed successfully')
         });
       };
     }
