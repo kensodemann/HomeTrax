@@ -26,7 +26,7 @@ angular.module('app')
         $scope.model.$save(function(u, responseHeaders) {
           $modalInstance.close(u);
         }, function(response) {
-          $scope.errorMessage = response.statusText;
+          $scope.errorMessage = response.data.reason;
         });
       }
 
@@ -34,7 +34,7 @@ angular.module('app')
         $scope.model.$update(function(u, responseHeaders) {
           $modalInstance.close(u);
         }, function(response) {
-          $scope.errorMessage = response.statusText;
+          $scope.errorMessage = response.data.reason;
         });
       }
 

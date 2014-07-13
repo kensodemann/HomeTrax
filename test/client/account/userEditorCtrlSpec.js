@@ -256,10 +256,13 @@ describe('userEditorCtrl', function() {
       scope.ok();
       mockModel.$save.callArgWith(1, {
         status: 400,
-        statusText: 'something went wrong'
+        statusText: 'something went wrong',
+        data: {
+          reason: 'flying monkey butts'
+        }
       });
 
-      expect(scope.errorMessage).to.equal('something went wrong');
+      expect(scope.errorMessage).to.equal('flying monkey butts');
       expect(mockModalInstance.close.called).to.be.false;
     });
   });
