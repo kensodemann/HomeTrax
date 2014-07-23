@@ -1,12 +1,17 @@
 angular.module('app')
-  .controller('calendarCtrl', ['$scope',
-    function($scope) {
-      $scope.dayClicked = function() {
-        console.log('A day has been clicked');
+  .controller('calendarCtrl', ['$scope', '$modal', 'calendarEvent',
+    function($scope, $modal, calendarEvent) {
+      $scope.dayClicked = function(day) {
+        console.log(day);
+        var event = new calendarEvent();
+        event.start = day;
+        event.end = day;
+        openModal(event);
       };
 
-      $scope.eventClicked = function() {
+      $scope.eventClicked = function(event) {
         console.log('An event has been clicked');
+        openModal(event);
       };
 
       $scope.eventDropped = function(event) {
@@ -48,5 +53,19 @@ angular.module('app')
           user: 'KWS'
         }]
       }];
+
+
+      function openModal(model) {
+        return $modal.open({
+          templateUrl: '/partials/calendar/eventEditor',
+          controller: 'eventEditorCtrl',
+          backdrop: 'static',
+          resolve: {
+            eventModel: function() {
+              return model;
+            }
+          }
+        });
+      }
     }
   ]);

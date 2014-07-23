@@ -1,0 +1,51 @@
+form.form-horizontal(name="eventEditor")
+	.modal-header
+		button.close(type='button', ng-click="cancel()", aria-hidden='true') &times;
+		h4.modal-title {{title}}
+	.modal-body
+		fieldset
+			.form-group
+				label.col-md-2.control-label(for='title') Title
+				.col-md-10
+					input.form-control(name='title', type='text', ng-model='model.title', required)
+			.form-group
+				label.col-md-2.control-label(for='category') Category
+				.col-md-10
+					input.form-control(name='category', type='text', ng-model='model.category', required)
+			.form-group
+					label.col.md-10.col-md-offset-2
+						input(type='checkbox', ng-model='model.allDay')
+						span &nbsp;All day event
+			.form-group
+				label.col-md-2.control-label(for='startDate') Start
+				.col-md-10
+					a.dropdown-toggle.my-toggle-select(id="startDateLabel" role="button" data-toggle="dropdown" data-target="#" href="")
+						.input-group.date
+							input.form-control(name='startDate', type='text', ng-change='validate()', ng-model='model.start', required)
+							span.input-group-btn
+								button.btn.btn-default
+									i.glyphicon.glyphicon-calendar
+					ul.dropdown-menu(role="menu" aria-labelledby="startDateLabel")
+						datetimepicker(ng-hide='model.allDay', data-ng-model="model.start", data-datetimepicker-config='{ dropdownSelector: "#startDateLabel", minView: "minute" }')
+						datetimepicker(ng-show='model.allDay', data-ng-model="model.start", data-datetimepicker-config='{ dropdownSelector: "#startDateLabel", minView: "day" }')
+			.form-group
+				label.col-md-2.control-label(for='endDate') End
+				.col-md-10
+					a.dropdown-toggle.my-toggle-select(id="endDateLabel" role="button" data-toggle="dropdown" data-target="#" href="")
+						.input-group.date
+							input.form-control(name='endDate', type='text', ng-change='validate()', ng-model='model.end', required)
+							span.input-group-btn
+								button.btn.btn-default
+									i.glyphicon.glyphicon-calendar
+					ul.dropdown-menu(role="menu" aria-labelledby="endDateLabel")
+						datetimepicker(ng-hide='model.allDay', data-ng-model="model.end", data-datetimepicker-config='{ dropdownSelector: "#endDateLabel", minView: "minute" }')
+						datetimepicker(ng-show='model.allDay', data-ng-model="model.end", data-datetimepicker-config='{ dropdownSelector: "#endDateLabel", minView: "day" }')
+			.form-group
+					label.col.md-10.col-md-offset-2
+						input(type='checkbox', ng-model='model.private')
+						span &nbsp;Private event
+			.form-group
+				.col-md-offset-4.col-md-8.text-danger {{errorMessage}}
+	.modal-footer
+		button.btn.btn-default(type='button', ng-click="cancel()") Cancel
+		button.btn.btn-primary(type='submit', ng-click='ok()', ng-disabled="eventEditor.$invalid || errorMessage") Save Event

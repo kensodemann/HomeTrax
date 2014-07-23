@@ -24,7 +24,8 @@
     "angular-resource": "~1.2.16",
     "angular-ui-calendar": "~0.8.1",
     "angular-bootstrap": "~0.11.0",
-    "moment": "~2.7.0"
+    "moment": "~2.7.0",
+    "angular-bootstrap-datetimepicker": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.16"
