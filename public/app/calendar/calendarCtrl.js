@@ -6,6 +6,7 @@ angular.module('app')
         var event = new calendarEvent();
         event.start = day;
         event.end = day;
+        event.allDay = false;
         openModal(event);
       };
 
@@ -33,25 +34,8 @@ angular.module('app')
       };
 
 
-
       $scope.eventSources = [{
-        events: [{
-          title: 'Eat Something',
-          allDay: false,
-          start: '2014-06-20T12:00:00',
-          end: '2014-06-20T13:00:00',
-          category: 'Health & Fitness',
-          private: false,
-          user: 'KWS'
-        }, {
-          title: 'Get Brats and Drink',
-          allDay: false,
-          start: '2014-06-21T14:00:00',
-          end: '2014-06-21T18:00:00',
-          category: 'Recreation',
-          private: true,
-          user: 'KWS'
-        }]
+        events: calendarEvent.query()
       }];
 
 
