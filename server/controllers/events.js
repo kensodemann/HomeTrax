@@ -35,8 +35,13 @@ module.exports.getById = function(req, res) {
 module.exports.save = function(req, res) {
   var e = req.body;
 
+  if (req.params && req.params.id) {
+    e._id = ObjectId(req.params.id);
+  }
   if (!e.userId) {
     e.userId = ObjectId(req.user._id);
+  } else {
+    e.userId = ObjectId(e.userId);
   }
   if (e.userId.toString() !== req.user._id.toString()) {
     res.status(403);

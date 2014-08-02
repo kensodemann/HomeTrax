@@ -1,0 +1,35 @@
+form.form-horizontal(name="eventEditor")
+	.modal-header
+		button.close(type='button', ng-click="cancel()", aria-hidden='true') &times;
+		h4.modal-title {{title}}
+	.modal-body
+		fieldset
+			.form-group
+				label.col-md-2.control-label(for='title') Title
+				.col-md-10
+					input.form-control(name='title', type='text', ng-model='model.title', required)
+			.form-group
+				label.col-md-2.control-label(for='category') Category
+				.col-md-10
+					input.form-control(name='category', type='text', ng-model='model.category', required)
+			.form-group
+					label.col.md-10.col-md-offset-2
+						input(type='checkbox', ng-model='model.allDay')
+						span &nbsp;All day event
+			.form-group
+				label.col-md-2.control-label(for='startDate') Start
+				.col-md-10
+					input.form-control(name='startDate', type='text', ng-model='model.startDate', required)
+			.form-group
+				label.col-md-2.control-label(for='endDate') End
+				.col-md-10
+					input.form-control(name='endDate', type='text', ng-model='model.endDate', required)
+			.form-group
+					label.col.md-10.col-md-offset-2
+						input(type='checkbox', ng-model='model.private')
+						span &nbsp;Private event
+			.form-group
+				.col-md-offset-4.col-md-8.text-danger {{errorMessage}}
+	.modal-footer
+		button.btn.btn-default(type='button', ng-click="cancel()") Cancel
+		button.btn.btn-primary(type='submit', ng-click='ok()', ng-disabled="eventEditor.$invalid || errorMessage") Save Event
