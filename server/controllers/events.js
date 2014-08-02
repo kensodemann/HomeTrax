@@ -40,6 +40,8 @@ module.exports.save = function(req, res) {
   }
   if (!e.userId) {
     e.userId = ObjectId(req.user._id);
+  } else {
+    e.userId = ObjectId(e.userId);
   }
   if (e.userId.toString() !== req.user._id.toString()) {
     res.status(403);
