@@ -25,7 +25,6 @@
     "angular-ui-calendar": "~0.8.1",
     "angular-bootstrap": "~0.11.0",
     "moment": "~2.7.0",
-    "angular-bootstrap-datetimepicker": "latest",
     "fullcalendar": "~2.0.2"
   },
   "devDependencies": {

@@ -19,27 +19,11 @@ form.form-horizontal(name="eventEditor")
 			.form-group
 				label.col-md-2.control-label(for='startDate') Start
 				.col-md-10
-					a.dropdown-toggle.my-toggle-select(id="startDateLabel" role="button" data-toggle="dropdown" data-target="#" href="")
-						.input-group.date
-							input.form-control(name='startDate', type='text', ng-change='validate()', ng-model='model.start', required)
-							span.input-group-btn
-								button.btn.btn-default
-									i.glyphicon.glyphicon-calendar
-					ul.dropdown-menu(role="menu" aria-labelledby="startDateLabel")
-						datetimepicker(ng-hide='model.allDay', data-ng-model="model.start", data-datetimepicker-config='{ dropdownSelector: "#startDateLabel", minView: "minute" }')
-						datetimepicker(ng-show='model.allDay', data-ng-model="model.start", data-datetimepicker-config='{ dropdownSelector: "#startDateLabel", minView: "day" }')
+					input.form-control(name='startDate', type='text', ng-model='model.startDate', required)
 			.form-group
 				label.col-md-2.control-label(for='endDate') End
 				.col-md-10
-					a.dropdown-toggle.my-toggle-select(id="endDateLabel" role="button" data-toggle="dropdown" data-target="#" href="")
-						.input-group.date
-							input.form-control(name='endDate', type='text', ng-change='validate()', ng-model='model.end', required)
-							span.input-group-btn
-								button.btn.btn-default
-									i.glyphicon.glyphicon-calendar
-					ul.dropdown-menu(role="menu" aria-labelledby="endDateLabel")
-						datetimepicker(ng-hide='model.allDay', data-ng-model="model.end", data-datetimepicker-config='{ dropdownSelector: "#endDateLabel", minView: "minute" }')
-						datetimepicker(ng-show='model.allDay', data-ng-model="model.end", data-datetimepicker-config='{ dropdownSelector: "#endDateLabel", minView: "day" }')
+					input.form-control(name='endDate', type='text', ng-model='model.endDate', required)
 			.form-group
 					label.col.md-10.col-md-offset-2
 						input(type='checkbox', ng-model='model.private')
