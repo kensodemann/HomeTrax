@@ -19,11 +19,11 @@ form.form-horizontal(name="eventEditor")
 			.form-group
 				label.col-md-2.control-label(for='startDate') Start
 				.col-md-10
-					input.form-control(name='startDate', type='text', ng-model='model.start', date-time-picker, data-default-date='{{model.start.format("MM/DD/YYYY hh:mm A")}}', required)
+					input.form-control(name='startDate', type='text', ng-model='model.start', date-time-picker='{{dateFormat}}', data-default-date='{{model.start.format(dateFormat)}}', required)
 			.form-group
 				label.col-md-2.control-label(for='endDate') End
 				.col-md-10
-					input.form-control(name='endDate', type='text', ng-model='model.end', date-time-picker, data-default-date='{{model.start.format("MM/DD/YYYY hh:mm A")}}', required)
+					input.form-control(name='endDate', type='text', ng-model='model.end', date-time-picker='{{dateFormat}}', data-default-date='{{model.end.format(dateFormat)}}', required)
 			.form-group
 					label.col.md-10.col-md-offset-2
 						input(type='checkbox', ng-model='model.private')

@@ -31,6 +31,7 @@ angular.module('app')
         $scope.model = eventModel;
         $scope.title = (eventModel._id) ? 'Edit Event' : 'New Event';
         $scope.errorMessage = '';
+        $scope.dateFormat = 'MM/DD/YYYY h:mm A';
       }
 
       function validateRequiredFields() {

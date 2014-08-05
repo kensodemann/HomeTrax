@@ -1,7 +1,8 @@
 angular.module('app')
   .directive('dateTimePicker', ['$rootScope',
     function($rootScope) {
-      // This directive was taken directly from: https://gist.github.com/eugenekgn/f00c4d764430642dca4b
+      // This directive was taken from: https://gist.github.com/eugenekgn/f00c4d764430642dca4b
+      // and then modified to actually work
       return {
         require: '?ngModel',
         restrict: 'AE',
@@ -21,9 +22,10 @@ angular.module('app')
           });
 
           ctrl.$formatters.unshift(function(modelValue) {
+            var dateFormat = attrs.dateTimePicker || 'YYYY/MM/DD';
             scope = scope;
             if (!modelValue) return "";
-            var retVal = moment(modelValue).format('MM/DD/YYYY h:mm A');
+            var retVal = moment(modelValue).format(dateFormat);
             return retVal;
           });
         }
