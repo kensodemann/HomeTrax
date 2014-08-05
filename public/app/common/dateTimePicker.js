@@ -12,32 +12,20 @@ angular.module('app')
           location: '@',
           defaultDate: '@'
         },
-        link: function(scope, elem, attrs) {
+        link: function(scope, elem, attrs, ctrl) {
           elem.datetimepicker({
             pick12HourFormat: scope.pick12HourFormat,
             language: scope.language,
             useCurrent: scope.useCurrent,
             defaultDate: scope.defaultDate
-          })
+          });
 
-          //Local event change
-          elem.on('blur', function() {
-            console.info('this', this);
-            console.info('scope', scope);
-            console.info('attrs', attrs);
-
-            /*// returns moments.js format object
-                    scope.dateTime = new Date(elem.data("DateTimePicker").getDate().format());
-                    // Global change propagation
- 
-                    $rootScope.$broadcast("emit:dateTimePicker", {
-                        location: scope.location,
-                        action: 'changed',
-                        dateTime: scope.dateTime,
-                        example: scope.useCurrent
-                    });
-                    scope.$apply();*/
-          })
+          ctrl.$formatters.unshift(function(modelValue) {
+            scope = scope;
+            if (!modelValue) return "";
+            var retVal = moment(modelValue).format('MM/DD/YYYY h:mm A');
+            return retVal;
+          });
         }
       };
     }
