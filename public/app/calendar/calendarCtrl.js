@@ -22,6 +22,7 @@ angular.module('app')
       $scope.uiConfig = {
         calendar: {
           editable: true,
+          timezone: 'local',
           header: {
             left: 'month agendaWeek agendaDay',
             center: 'title',
