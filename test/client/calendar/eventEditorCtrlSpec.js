@@ -69,9 +69,11 @@ describe('eventEditorCtrl', function() {
       model.start = undefined;
       model.end = undefined;
       createController();
-      var today = moment().startOf('day');
-      expect(scope.model.start.format()).to.equal(today.format());
-      expect(scope.model.end.format()).to.equal(today.format());
+      var expectedStart = moment(moment().format('YYYY-MM-DD')).hour(8);
+      var expectedEnd = moment(moment().format('YYYY-MM-DD')).hour(9);
+
+      expect(scope.model.start.format()).to.equal(expectedStart.format());
+      expect(scope.model.end.format()).to.equal(expectedEnd.format());
     });
   });
 

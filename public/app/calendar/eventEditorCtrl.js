@@ -23,8 +23,8 @@ angular.module('app')
       }
 
       function inintializeDates() {
-        eventModel.start = (eventModel.start) ? eventModel.start : moment().startOf('Day');
-        eventModel.end = (eventModel.end) ? eventModel.end : moment().startOf('Day');
+        eventModel.start = (eventModel.start) ? eventModel.start : moment(moment().format('YYYY-MM-DD')).hour(8);
+        eventModel.end = (eventModel.end) ? eventModel.end : moment(moment().format('YYYY-MM-DD')).hour(9);
       }
 
       function initializeData() {
