@@ -72,8 +72,132 @@ describe('eventEditorCtrl', function() {
       var expectedStart = moment(moment().format('YYYY-MM-DD')).hour(8);
       var expectedEnd = moment(moment().format('YYYY-MM-DD')).hour(9);
 
-      expect(scope.model.start.format()).to.equal(expectedStart.format());
-      expect(scope.model.end.format()).to.equal(expectedEnd.format());
+      expect(scope.model.start).to.equal(expectedStart.format(scope.dateTimeFormat));
+      expect(scope.model.end).to.equal(expectedEnd.format(scope.dateTimeFormat));
+    });
+  });
+
+  describe('begin date', function() {
+    var model;
+
+    beforeEach(function() {
+      model = {
+        title: 'Eat Something',
+        allDay: false,
+        start: new moment('2014-06-20T12:00:00'),
+        end: new moment('2014-06-20T13:00:00'),
+        category: 'Health & Fitness',
+        private: false,
+        user: 'KWS'
+      };
+    });
+
+    function createController() {
+      var ctrl = $controllerConstructor('eventEditorCtrl', {
+        $scope: scope,
+        $modalInstance: {},
+        eventModel: model
+      });
+      scope.$digest();
+
+      return ctrl;
+    }
+
+
+    it('does not change if the end date changes', function() {
+      createController();
+
+      scope.model.end = '08/02/2014 8:00 AM';
+      scope.$digest();
+
+      expect(scope.model.start).to.equal('06/20/2014 12:00 PM');
+    });
+
+    it('is truncated to hour zero if event becomes all day event', function() {
+      createController();
+
+      scope.model.allDay = true;
+      scope.$digest();
+
+      expect(scope.model.start).to.equal('06/20/2014');
+    });
+
+    it('defaults to 8:00am if event becomes not an all day edvent', function() {
+      createController();
+
+      scope.model.allDay = true;
+      scope.$digest();
+      scope.model.allDay = false;
+      scope.$digest();
+
+      expect(scope.model.start).to.equal('06/20/2014 8:00 AM');
+    });
+  });
+
+  describe('end date', function() {
+    var model;
+
+    beforeEach(function() {
+      model = {
+        title: 'Eat Something',
+        allDay: false,
+        start: '08/02/2014 6:30 AM',
+        end: '08/02/2014 8:00 AM',
+        category: 'Health & Fitness',
+        private: false,
+        user: 'KWS'
+      };
+    });
+
+    function createController() {
+      var ctrl = $controllerConstructor('eventEditorCtrl', {
+        $scope: scope,
+        $modalInstance: {},
+        eventModel: model
+      });
+      scope.$digest();
+
+      return ctrl;
+    }
+
+
+    it('maintains hours difference when begin date changes', function() {
+      createController();
+
+      scope.model.start = '08/02/2014 8:00 AM';
+      scope.$digest();
+
+      expect(scope.model.end).to.equal('08/02/2014 9:30 AM');
+    });
+
+    it('maintains new hours different if end date changes then begin date changes', function() {
+      createController();
+
+      scope.model.end = '08/02/2014 8:30 AM';
+      scope.model.start = '08/02/2014 8:00 AM';
+      scope.$digest();
+
+      expect(scope.model.end).to.equal('08/02/2014 10:00 AM');
+    });
+
+    it('is truncated to hour zero when event becomes all day event', function() {
+      createController();
+
+      scope.model.allDay = true;
+      scope.$digest();
+
+      expect(scope.model.end).to.equal('08/02/2014');
+    });
+
+    it('defaults to 9:00am when event becomes not an all day edvent', function() {
+      createController();
+
+      scope.model.allDay = true;
+      scope.$digest();
+      scope.model.allDay = false;
+      scope.$digest();
+
+      expect(scope.model.end).to.equal('08/02/2014 9:00 AM');
     });
   });
 
