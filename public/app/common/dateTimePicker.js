@@ -11,21 +11,23 @@ angular.module('app')
           language: '@',
           useCurrent: '@',
           location: '@',
-          defaultDate: '@'
+          defaultDate: '@',
+          pickTime: '@'
         },
         link: function(scope, elem, attrs, ctrl) {
           elem.datetimepicker({
             pick12HourFormat: scope.pick12HourFormat,
             language: scope.language,
             useCurrent: scope.useCurrent,
-            defaultDate: scope.defaultDate
+            defaultDate: scope.defaultDate,
+            pickTime: scope.pickTime !== 'false'
           });
 
           ctrl.$formatters.unshift(function(modelValue) {
             var dateFormat = attrs.dateTimePicker || 'YYYY/MM/DD';
             scope = scope;
             if (!modelValue) return "";
-            var retVal = moment(modelValue).format(dateFormat);
+            var retVal = moment(modelValue, dateFormat).format(dateFormat);
             return retVal;
           });
         }
