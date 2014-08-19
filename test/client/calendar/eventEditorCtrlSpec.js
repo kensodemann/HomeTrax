@@ -28,8 +28,8 @@ describe('eventEditorCtrl', function() {
       model = {
         title: 'Eat Something',
         allDay: false,
-        start: '2014-06-20T12:00:00',
-        end: '2014-06-20T13:00:00',
+        start: moment('2014-06-20T12:00:00'),
+        end: moment('2014-06-20T13:00:00'),
         category: 'Health & Fitness',
         private: false,
         user: 'KWS'
@@ -84,8 +84,8 @@ describe('eventEditorCtrl', function() {
       model = {
         title: 'Eat Something',
         allDay: false,
-        start: new moment('2014-06-20T12:00:00'),
-        end: new moment('2014-06-20T13:00:00'),
+        start: moment('2014-06-20T12:00:00'),
+        end: moment('2014-06-20T13:00:00'),
         category: 'Health & Fitness',
         private: false,
         user: 'KWS'
@@ -141,8 +141,8 @@ describe('eventEditorCtrl', function() {
       model = {
         title: 'Eat Something',
         allDay: false,
-        start: '08/02/2014 6:30 AM',
-        end: '08/02/2014 8:00 AM',
+        start: moment('2014-08-02T06:30:00'),
+        end: moment('2014-08-02T08:00:00'),
         category: 'Health & Fitness',
         private: false,
         user: 'KWS'
@@ -283,8 +283,8 @@ describe('eventEditorCtrl', function() {
       model = {
         title: 'Eat Something',
         allDay: false,
-        start: '2014-06-20T12:00:00',
-        end: '2014-06-20T13:00:00',
+        start: moment('2014-06-20T12:00:00'),
+        end: moment('2014-06-20T13:00:00'),
         category: 'Health & Fitness',
         private: false,
         user: 'KWS'
