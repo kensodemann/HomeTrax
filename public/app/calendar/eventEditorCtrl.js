@@ -12,6 +12,7 @@ angular.module('app')
       }
 
       $scope.ok = function() {
+        copyScopeModelToDataModel();
         eventModel.$save(function(event, response) {
           $modalInstance.close(event);
         }, function(response) {
@@ -28,11 +29,43 @@ angular.module('app')
         eventModel.end = stringifyDate((eventModel.end) ? eventModel.end : moment(moment().format('YYYY-MM-DD')).hour(9));
       }
 
+      function initializeData() {
+        $scope.editorTitle = (eventModel._id) ? 'Edit Event' : 'New Event';
+        $scope.errorMessage = '';
+        $scope.dateTimeFormat = 'MM/DD/YYYY h:mm A';
+        $scope.dateFormat = 'MM/DD/YYYY';
+
+        copyDataModelToScopeModel();
+      }
+
+      function copyDataModelToScopeModel() {
+        $scope.model = {
+          title: eventModel.title,
+          category: eventModel.category,
+          isAllDayEvent: eventModel.allDay,
+          isPrivate: eventModel.private,
+          user: eventModel.user
+        };
+
+        $scope.model.startDate = stringifyDate((eventModel.start) ? eventModel.start : moment(moment().format('YYYY-MM-DD')).hour(8));
+        $scope.model.endDate = stringifyDate((eventModel.end) ? eventModel.end : moment(moment().format('YYYY-MM-DD')).hour(9));
+      }
+
+      function copyScopeModelToDataModel() {
+        eventModel.title = $scope.model.title;
+        eventModel.category = $scope.model.category;
+        eventModel.allDay = $scope.model.isAllDayEvent;
+        eventModel.start = moment($scope.model.startDate, $scope.dateTimeFormat);
+        eventModel.end = moment($scope.model.endDate, $scope.dateTimeFormat);
+        eventModel.private = $scope.model.isPrivate;
+        eventModel.user = $scope.model.user;
+      }
+
       function stringifyDate(d) {
         if (typeof d === 'string') {
           return d;
         }
-        return d.format(($scope.model.allDay ? $scope.dateFormat : $scope.dateTimeFormat));
+        return d.format(($scope.model.isAllDayEvent ? $scope.dateFormat : $scope.dateTimeFormat));
       }
 
       function datifyString(s) {
@@ -40,35 +73,27 @@ angular.module('app')
           return s;
         }
 
-        return moment(s, ($scope.model.allDay ? $scope.dateFormat : $scope.dateTimeFormat));
-      }
-
-      function initializeData() {
-        $scope.model = eventModel;
-        $scope.title = (eventModel._id) ? 'Edit Event' : 'New Event';
-        $scope.errorMessage = '';
-        $scope.dateTimeFormat = 'MM/DD/YYYY h:mm A';
-        $scope.dateFormat = 'MM/DD/YYYY';
+        return moment(s, ($scope.model.isAllDayEvent ? $scope.dateFormat : $scope.dateTimeFormat));
       }
 
       function initializeDataWatchers() {
-        $scope.$watch('model.start', function(newValue, oldValue, scope) {
+        $scope.$watch('model.startDate', function(newValue, oldValue, scope) {
           if (newValue !== oldValue) {
             var n = datifyString(newValue);
             var o = datifyString(oldValue);
-            var newEnd = datifyString(scope.model.end);
+            var newEnd = datifyString(scope.model.endDate);
             newEnd.add(n - o);
-            scope.model.end = stringifyDate(newEnd);
+            scope.model.endDate = stringifyDate(newEnd);
           }
         });
 
-        $scope.$watch('model.allDay', function(newValue, oldValue, scope) {
+        $scope.$watch('model.isAllDayEvent', function(newValue, oldValue, scope) {
           if (newValue && !oldValue) {
-            scope.model.start = convertFormat(scope.model.start);
-            scope.model.end = convertFormat(scope.model.end);
+            scope.model.startDate = convertFormat(scope.model.startDate);
+            scope.model.endDate = convertFormat(scope.model.endDate);
           } else if (!newValue && oldValue) {
-            scope.model.start = setHour(scope.model.start, 8);
-            scope.model.end = setHour(scope.model.end, 1);
+            scope.model.startDate = setHour(scope.model.startDate, 8);
+            scope.model.endDate = setHour(scope.model.endDate, 1);
           }
         });
 
@@ -89,11 +114,11 @@ angular.module('app')
           return $scope.errorMessage = 'Event Title is required';
         }
 
-        if (!$scope.model.start) {
+        if (!$scope.model.startDate) {
           return $scope.errorMessage = 'Start Date is required';
         }
 
-        if (!$scope.model.end) {
+        if (!$scope.model.endDate) {
           return $scope.errorMessage = 'End Date is required';
         }
       }
