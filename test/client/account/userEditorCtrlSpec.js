@@ -27,18 +27,22 @@ describe('userEditorCtrl', function() {
     beforeEach(function() {
       model = {
         firstName: 'Fred',
-        lastName: 'Flintstone'
+        lastName: 'Flintstone',
+        username: 'wilmas_man@stoneage.net'
       };
     });
 
-    it('sets the model', function() {
+    it('sets the data model', function() {
       var ctrl = $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
       });
 
-      expect(scope.model).to.deep.equal(model);
+      expect(scope.model.firstName).to.equal('Fred');
+      expect(scope.model.lastName).to.equal('Flintstone');
+      expect(scope.model.username).to.equal('wilmas_man@stoneage.net');
+      expect(scope.model).to.not.equal(model);
     });
 
     it('sets the title to edit if model has _id', function() {
@@ -140,11 +144,15 @@ describe('userEditorCtrl', function() {
 
   describe('password validation', function() {
     function createController(model) {
-      return $controllerConstructor('userEditorCtrl', {
+      var ctrl = $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
       });
+      scope.model.password = model.password;
+      scope.model.verifyPassword = model.verifyPassword;
+
+      return ctrl;
     }
 
     it('sets password invalid if it is too short', function() {
@@ -240,6 +248,38 @@ describe('userEditorCtrl', function() {
 
       expect(mockModel.$save.called).to.be.false;
       expect(mockModel.$update.calledOnce).to.be.true;
+    });
+
+    it('copies editor model data to data model for new user', function() {
+      createController(mockModel);
+      scope.model.firstName = 'Barney';
+      scope.model.lastName = 'Rubble';
+      scope.model.username = 'wilmas_secret_lover@hotmail.com';
+      scope.model.password = 'Fr$dCann0tKnow';
+
+      scope.ok();
+
+      expect(mockModel.firstName).to.equal('Barney');
+      expect(mockModel.lastName).to.equal('Rubble');
+      expect(mockModel.username).to.equal('wilmas_secret_lover@hotmail.com');
+      expect(mockModel.password).to.equal('Fr$dCann0tKnow');
+    });
+
+    it('copies editor model data to data model for existing user', function() {
+      mockModel._id = 1;
+      mockModel.firstName = 'Barney';
+      mockModel.lastName = 'Rubble';
+      mockModel.username = 'wilmas_secret_lover@hotmail.com';
+      createController(mockModel);
+      scope.model.firstName = 'Betty';
+      scope.model.lastName = 'Boop';
+      scope.model.username = 'wilmas_other_secret_lover@hotmail.com';
+
+      scope.ok();
+
+      expect(mockModel.firstName).to.equal('Betty');
+      expect(mockModel.lastName).to.equal('Boop');
+      expect(mockModel.username).to.equal('wilmas_other_secret_lover@hotmail.com');
     });
 
     it('closes the modal if http request successful', function() {
