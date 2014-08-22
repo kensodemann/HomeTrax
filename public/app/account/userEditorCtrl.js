@@ -3,7 +3,11 @@
 angular.module('app')
   .controller('userEditorCtrl', ['$scope', '$modalInstance', 'userModel',
     function($scope, $modalInstance, userModel) {
-      $scope.model = userModel;
+      $scope.model = {
+        firstName: userModel.firstName,
+        lastName: userModel.lastName,
+        username: userModel.username
+      };
 
       $scope.title = userModel._id ? 'Edit User' : 'Create New User';
       $scope.mode = userModel._id ? 'edit' : 'create';
@@ -23,7 +27,9 @@ angular.module('app')
       };
 
       function createNewUser() {
-        $scope.model.$save(function(u, responseHeaders) {
+        copyEditorModelToDataModel();
+        userModel.password = $scope.model.password;
+        userModel.$save(function(u, responseHeaders) {
           $modalInstance.close(u);
         }, function(response) {
           $scope.errorMessage = response.data.reason;
@@ -31,11 +37,18 @@ angular.module('app')
       }
 
       function updateUser() {
-        $scope.model.$update(function(u, responseHeaders) {
+        copyEditorModelToDataModel();
+        userModel.$update(function(u, responseHeaders) {
           $modalInstance.close(u);
         }, function(response) {
           $scope.errorMessage = response.data.reason;
         });
+      }
+
+      function copyEditorModelToDataModel(){
+        userModel.firstName = $scope.model.firstName;
+        userModel.lastName = $scope.model.lastName;
+        userModel.username = $scope.model.username;
       }
 
       $scope.validatePassword = function() {

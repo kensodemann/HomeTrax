@@ -1,7 +1,7 @@
 form.form-horizontal(name="eventEditor")
 	.modal-header
 		button.close(type='button', ng-click="cancel()", aria-hidden='true') &times;
-		h4.modal-title {{title}}
+		h4.modal-title {{editorTitle}}
 	.modal-body
 		fieldset
 			.form-group
@@ -14,21 +14,21 @@ form.form-horizontal(name="eventEditor")
 					input.form-control(name='category', type='text', ng-model='model.category', required)
 			.form-group
 					label.col.md-10.col-md-offset-2
-						input(type='checkbox', ng-model='model.allDay')
+						input(type='checkbox', ng-model='model.isAllDayEvent')
 						span &nbsp;All day event
 			.form-group
 				label.col-md-2.control-label(for='startDate') Start
 				.col-md-10
-					input.form-control(name='startDate', type='text', ng-model='model.start', date-time-picker='{{dateTimeFormat}}', data-default-date='{{model.start}}',  ng-hide='model.allDay', required)
-					input.form-control(name='startDate', type='text', ng-model='model.start', date-time-picker='{{dateFormat}}', data-default-date='{{model.start}}', data-pick-time='false', ng-show='model.allDay', required)
+					input.form-control(name='startDate', type='text', ng-model='model.startDate', date-time-picker='{{dateTimeFormat}}', data-default-date='{{model.startDate}}',  ng-hide='model.isAllDayEvent', required)
+					input.form-control(name='startDate', type='text', ng-model='model.startDate', date-time-picker='{{dateFormat}}', data-default-date='{{model.startDate}}', data-pick-time='false', ng-show='model.isAllDayEvent', required)
 			.form-group
 				label.col-md-2.control-label(for='endDate') End
 				.col-md-10
-					input.form-control(name='endDate', type='text', ng-model='model.end', date-time-picker='{{dateTimeFormat}}', data-default-date='{{model.end}}', ng-hide='model.allDay', required)
-					input.form-control(name='endDate', type='text', ng-model='model.end', date-time-picker='{{dateFormat}}', data-default-date='{{model.end}}', data-pick-time='false', ng-show='model.allDay', required)
+					input.form-control(name='endDate', type='text', ng-model='model.endDate', date-time-picker='{{dateTimeFormat}}', data-default-date='{{model.endDate}}', ng-hide='model.isAllDayEvent', required)
+					input.form-control(name='endDate', type='text', ng-model='model.endDate', date-time-picker='{{dateFormat}}', data-default-date='{{model.endDate}}', data-pick-time='false', ng-show='model.isAllDayEvent', required)
 			.form-group
 					label.col.md-10.col-md-offset-2
-						input(type='checkbox', ng-model='model.private')
+						input(type='checkbox', ng-model='model.isPrivate')
 						span &nbsp;Private event
 			.form-group
 				.col-md-offset-4.col-md-8.text-danger {{errorMessage}}
