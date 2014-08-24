@@ -3,6 +3,7 @@
 var authentication = require('../services/authentication');
 var users = require('../controllers/users');
 var events = require('../controllers/events');
+var eventCategories = require('../controllers/eventCategories');
 
 function redirectToHttps(req, res, next) {
   if (req.headers['x-forwarded-proto'] == 'http') {
@@ -15,6 +16,9 @@ function redirectToHttps(req, res, next) {
 module.exports = function(app) {
   app.get('/api/events', redirectToHttps, authentication.requiresApiLogin, events.get);
   app.post('/api/events/:id?', redirectToHttps, authentication.requiresApiLogin, events.save);
+
+  app.get('/api/eventCategories', redirectToHttps, authentication.requiresApiLogin, eventCategories.get);
+  app.post('/api/eventCategories/:id?', redirectToHttps, authentication.requiresApiLogin, eventCategories.save);
 
   app.get('/api/users', redirectToHttps, authentication.requiresRole('admin'), users.get);
   app.get('/api/users/:id', redirectToHttps, authentication.requiresRoleOrIsCurrentUser('admin'), users.getById);
