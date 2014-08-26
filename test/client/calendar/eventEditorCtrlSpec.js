@@ -60,19 +60,19 @@ describe('eventEditorCtrl', function() {
       expect(scope.errorMessage).to.equal('');
     });
 
-    it('sets editable fields in the editor model based on the data model', function(){
+    it('sets editable fields in the editor model based on the data model', function() {
       createController();
 
-     expect(scope.model.title).to.equal('Eat Something');
-     expect(scope.model.isAllDayEvent).to.be.false;
-     expect(scope.model.startDate).to.equal('06/20/2014 12:00 PM');
-     expect(scope.model.endDate).to.equal('06/20/2014 1:00 PM');
-     expect(scope.model.category).to.equal('Health & Fitness');
-     expect(scope.model.isPrivate).to.be.false;
-     expect(scope.model.user).to.equal('KWS');
+      expect(scope.model.title).to.equal('Eat Something');
+      expect(scope.model.isAllDayEvent).to.be.false;
+      expect(scope.model.startDate).to.equal('06/20/2014 12:00 PM');
+      expect(scope.model.endDate).to.equal('06/20/2014 1:00 PM');
+      expect(scope.model.category).to.equal('Health & Fitness');
+      expect(scope.model.isPrivate).to.be.false;
+      expect(scope.model.user).to.equal('KWS');
     });
 
-    it('uses the date only format to set start and end date strings for all day events', function(){
+    it('uses the date only format to set start and end date strings for all day events', function() {
       model.allDay = true;
       createController();
 
@@ -239,7 +239,7 @@ describe('eventEditorCtrl', function() {
       });
     }
 
-    it('copies editable data from the scope to the model', function(){
+    it('copies editable data from the scope to the model', function() {
       createController(mockModel);
       scope.model.title = 'Bite Me!';
       scope.model.category = 'Appointments';
@@ -258,6 +258,19 @@ describe('eventEditorCtrl', function() {
       expect(mockModel.end.format()).to.equal(moment('07/16/2014 6:00 AM', 'MM/DD/YYYY h:mm A').format());
       expect(mockModel.private).to.be.true;
       expect(mockModel.user).to.equal('Fred');
+    });
+
+    it('copies just the name if the category is an object', function() {
+      createController(mockModel);
+      scope.model.category = {
+        _id: '1234',
+        name: 'Sax and Violins',
+        description: 'this is the load, man'
+      };
+
+      scope.ok();
+
+      expect(mockModel.category).to.equal('Sax and Violins');
     });
 
     it('saves the event', function() {

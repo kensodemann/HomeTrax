@@ -81,7 +81,7 @@ angular.module('app')
 
       function copyScopeModelToDataModel() {
         eventModel.title = $scope.model.title;
-        eventModel.category = $scope.model.category;
+        eventModel.category = (typeof $scope.model.category === 'object') ? $scope.model.category.name : $scope.model.category;
         eventModel.allDay = $scope.model.isAllDayEvent;
         eventModel.start = moment($scope.model.startDate, $scope.dateTimeFormat);
         eventModel.end = moment($scope.model.endDate, $scope.dateTimeFormat);
