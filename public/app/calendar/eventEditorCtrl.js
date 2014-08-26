@@ -61,7 +61,8 @@ angular.module('app')
         };
 
         $scope.categoryOptions = {
-          highlight: true
+          highlight: true,
+          hint: true
         };
       }
 

@@ -1,4 +1,5 @@
 node_modules/*
 *.sublime-workspace
-public/css/site.css
+public/css/*.css
+!public/css/theme.css
 *.log
