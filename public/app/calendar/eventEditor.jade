@@ -11,7 +11,7 @@ form.form-horizontal(name="eventEditor")
 			.form-group
 				label.col-md-2.control-label(for='category') Category
 				.col-md-10
-					input.form-control(name='category', type='text', ng-model='model.category', required)
+					input.form-control(name='category', type='text', ng-model='model.category', options='categoryOptions', datasets='categories', sf-typeahead, required)
 			.form-group
 					label.col.md-10.col-md-offset-2
 						input(type='checkbox', ng-model='model.isAllDayEvent')
