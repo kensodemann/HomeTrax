@@ -91,6 +91,10 @@ angular.module('app')
 
           if (matching.length > 0) {
             return matching[0].name;
+          } else {
+            eventCategory.save({
+              name: category
+            });
           }
         }
 

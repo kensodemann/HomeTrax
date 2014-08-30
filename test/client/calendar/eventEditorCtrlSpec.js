@@ -11,7 +11,8 @@ describe('eventEditorCtrl', function() {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
     mockEventCategory = sinon.stub({
-      query: function() {}
+      query: function() {},
+      save: function() {}
     });
     mockEventCategory.query.returns([{
       _id: 1,
@@ -297,17 +298,6 @@ describe('eventEditorCtrl', function() {
     it('uses the name of the selected object if selected', function() {
       createController(mockModel);
       scope.model.category = {
-        _id: 1234,
-        name: 'Relaxation'
-      };
-      scope.ok();
-
-      expect(mockModel.category).to.equal('Relaxation');
-    })
-
-    it('copies just the name if the category is an object', function() {
-      createController(mockModel);
-      scope.model.category = {
         _id: '1234',
         name: 'Sax and Violins',
         description: 'this is the load, man'
@@ -316,6 +306,40 @@ describe('eventEditorCtrl', function() {
       scope.ok();
 
       expect(mockModel.category).to.equal('Sax and Violins');
+    });
+
+    it('adds event category if it does not exist', function() {
+      mockEventCategory.query.returns([{
+        _id: 1,
+        name: 'Relax'
+      }, {
+        _id: 2,
+        name: "don't do it"
+      }]);
+      createController(mockModel);
+      scope.model.category = 'get to it';
+
+      scope.ok();
+
+      expect(mockEventCategory.save.calledWithMatch({
+        name: 'get to it'
+      })).to.be.true;
+    });
+
+    it('does not add event category if it exists', function() {
+      mockEventCategory.query.returns([{
+        _id: 1,
+        name: 'Relax'
+      }, {
+        _id: 2,
+        name: "don't do it"
+      }]);
+      createController(mockModel);
+      scope.model.category = 'Relax';
+
+      scope.ok();
+
+      expect(mockEventCategory.save.called).to.be.false;
     });
 
     it('saves the event', function() {
