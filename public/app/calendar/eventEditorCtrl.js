@@ -1,8 +1,10 @@
 'use strict'
 
 angular.module('app')
-  .controller('eventEditorCtrl', ['$scope', '$modalInstance', 'eventModel', 'eventCategory', 
+  .controller('eventEditorCtrl', ['$scope', '$modalInstance', 'eventModel', 'eventCategory',
     function($scope, $modalInstance, eventModel, eventCategory) {
+      var eventCategories;
+
       initializeData();
       inintializeDates();
       initializeDataWatchers();
@@ -25,6 +27,8 @@ angular.module('app')
       }
 
       function initializeData() {
+        eventCategories = eventCategory.query();
+
         $scope.editorTitle = (eventModel._id) ? 'Edit Event' : 'New Event';
         $scope.errorMessage = '';
         $scope.dateTimeFormat = 'MM/DD/YYYY h:mm A';
@@ -41,7 +45,7 @@ angular.module('app')
             return Bloodhound.tokenizers.whitespace(d.name);
           },
           queryTokenizer: Bloodhound.tokenizers.whitespace,
-          local: eventCategory.query()
+          local: eventCategories
         });
         cats.initialize();
 
@@ -71,12 +75,26 @@ angular.module('app')
 
       function copyScopeModelToDataModel() {
         eventModel.title = $scope.model.title;
-        eventModel.category = (typeof $scope.model.category === 'object') ? $scope.model.category.name : $scope.model.category;
+        eventModel.category = (typeof $scope.model.category === 'object') ? $scope.model.category.name : lookupCategory($scope.model.category);
         eventModel.allDay = $scope.model.isAllDayEvent;
         eventModel.start = moment($scope.model.startDate, $scope.dateTimeFormat);
         eventModel.end = moment($scope.model.endDate, $scope.dateTimeFormat);
         eventModel.private = $scope.model.isPrivate;
         eventModel.user = $scope.model.user;
+      }
+
+      function lookupCategory(category) {
+        if (category) {
+          var matching = $.grep(eventCategories, function(c) {
+            return c.name.toUpperCase() === category.toUpperCase();
+          });
+
+          if (matching.length > 0) {
+            return matching[0].name;
+          }
+        }
+
+        return category;
       }
 
       function inintializeDates() {

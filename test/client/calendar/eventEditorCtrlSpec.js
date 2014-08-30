@@ -281,6 +281,30 @@ describe('eventEditorCtrl', function() {
       expect(mockModel.user).to.equal('Fred');
     });
 
+    it('uses existing category with same name but different case', function() {
+      mockEventCategory.query.returns([{
+        _id: 1,
+        name: 'Test'
+      }]);
+      createController(mockModel);
+      scope.model.category = 'teSt';
+
+      scope.ok();
+
+      expect(mockModel.category).to.equal('Test');
+    });
+
+    it('uses the name of the selected object if selected', function() {
+      createController(mockModel);
+      scope.model.category = {
+        _id: 1234,
+        name: 'Relaxation'
+      };
+      scope.ok();
+
+      expect(mockModel.category).to.equal('Relaxation');
+    })
+
     it('copies just the name if the category is an object', function() {
       createController(mockModel);
       scope.model.category = {
