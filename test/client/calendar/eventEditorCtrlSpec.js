@@ -3,19 +3,31 @@
 describe('eventEditorCtrl', function() {
   var scope;
   var $controllerConstructor;
+  var mockEventCategory;
 
   beforeEach(module('app'));
 
   beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
+    mockEventCategory = sinon.stub({
+      query: function() {}
+    });
+    mockEventCategory.query.returns([{
+      _id: 1,
+      name: 'cat1'
+    }, {
+      _id: 2,
+      name: 'cat2'
+    }]);
   }));
 
   it('exists', function() {
     var ctrl = $controllerConstructor('eventEditorCtrl', {
       $scope: scope,
       $modalInstance: {},
-      eventModel: {}
+      eventModel: {},
+      eventCategory: mockEventCategory
     });
 
     expect(ctrl).to.not.be.undefined;
@@ -40,7 +52,8 @@ describe('eventEditorCtrl', function() {
       return $controllerConstructor('eventEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
-        eventModel: model
+        eventModel: model,
+        eventCategory: mockEventCategory
       });
     }
 
@@ -91,6 +104,11 @@ describe('eventEditorCtrl', function() {
       expect(scope.model.startDate).to.equal(expectedStart.format(scope.dateTimeFormat));
       expect(scope.model.endDate).to.equal(expectedEnd.format(scope.dateTimeFormat));
     });
+
+    it('gets the category list', function() {
+      createController();
+      expect(mockEventCategory.query.calledOnce).to.be.true;
+    });
   });
 
   describe('begin date', function() {
@@ -112,7 +130,8 @@ describe('eventEditorCtrl', function() {
       var ctrl = $controllerConstructor('eventEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
-        eventModel: model
+        eventModel: model,
+        eventCategory: mockEventCategory
       });
       scope.$digest();
 
@@ -169,7 +188,8 @@ describe('eventEditorCtrl', function() {
       var ctrl = $controllerConstructor('eventEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
-        eventModel: model
+        eventModel: model,
+        eventCategory: mockEventCategory
       });
       scope.$digest();
 
@@ -235,7 +255,8 @@ describe('eventEditorCtrl', function() {
       return $controllerConstructor('eventEditorCtrl', {
         $scope: scope,
         $modalInstance: mockModalInstance,
-        eventModel: mockModel
+        eventModel: mockModel,
+        eventCategory: mockEventCategory
       });
     }
 

@@ -1,8 +1,8 @@
 'use strict'
 
 angular.module('app')
-  .controller('eventEditorCtrl', ['$scope', '$modalInstance', 'eventModel',
-    function($scope, $modalInstance, eventModel) {
+  .controller('eventEditorCtrl', ['$scope', '$modalInstance', 'eventModel', 'eventCategory', 
+    function($scope, $modalInstance, eventModel, eventCategory) {
       initializeData();
       inintializeDates();
       initializeDataWatchers();
@@ -41,17 +41,7 @@ angular.module('app')
             return Bloodhound.tokenizers.whitespace(d.name);
           },
           queryTokenizer: Bloodhound.tokenizers.whitespace,
-          local: [{
-            name: 'Test'
-          }, {
-            name: 'Health & Fitness'
-          }, {
-            name: 'Sexual Relations'
-          }, {
-            name: 'Recreation'
-          }, {
-            name: 'Work'
-          }]
+          local: eventCategory.query()
         });
         cats.initialize();
 
