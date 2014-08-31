@@ -2,16 +2,14 @@ angular.module('app')
   .controller('calendarCtrl', ['$scope', '$modal', 'calendarEvent', 'eventCategory',
     function($scope, $modal, calendarEvent, eventCategory) {
       $scope.dayClicked = function(day) {
-        console.log(day);
         var event = new calendarEvent();
-        event.start = day;
-        event.end = day;
+        event.start = new moment(day.hour(8));
+        event.end = new moment(day.hour(9));
         event.allDay = false;
         openModal(event);
       };
 
       $scope.eventClicked = function(event) {
-        console.log('An event has been clicked');
         openModal(event);
       };
 
