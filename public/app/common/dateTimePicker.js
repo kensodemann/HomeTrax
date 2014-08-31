@@ -22,6 +22,14 @@ angular.module('app')
             defaultDate: scope.defaultDate,
             pickTime: scope.pickTime !== 'false'
           });
+
+          scope.$watch('$parent.' + attrs.ngModel, function(value){
+            var picker = elem.data('DateTimePicker');
+            var pickerDateTime = picker.getDate().format(picker.format);
+            if (pickerDateTime !== value){
+              picker.setDate(value);
+            }
+          });
         }
       };
     }
