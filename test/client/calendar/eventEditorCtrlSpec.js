@@ -3,19 +3,32 @@
 describe('eventEditorCtrl', function() {
   var scope;
   var $controllerConstructor;
+  var mockEventCategory;
 
   beforeEach(module('app'));
 
   beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
+    mockEventCategory = sinon.stub({
+      query: function() {},
+      save: function() {}
+    });
+    mockEventCategory.query.returns([{
+      _id: 1,
+      name: 'cat1'
+    }, {
+      _id: 2,
+      name: 'cat2'
+    }]);
   }));
 
   it('exists', function() {
     var ctrl = $controllerConstructor('eventEditorCtrl', {
       $scope: scope,
       $modalInstance: {},
-      eventModel: {}
+      eventModel: {},
+      eventCategory: mockEventCategory
     });
 
     expect(ctrl).to.not.be.undefined;
@@ -40,7 +53,8 @@ describe('eventEditorCtrl', function() {
       return $controllerConstructor('eventEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
-        eventModel: model
+        eventModel: model,
+        eventCategory: mockEventCategory
       });
     }
 
@@ -91,6 +105,11 @@ describe('eventEditorCtrl', function() {
       expect(scope.model.startDate).to.equal(expectedStart.format(scope.dateTimeFormat));
       expect(scope.model.endDate).to.equal(expectedEnd.format(scope.dateTimeFormat));
     });
+
+    it('gets the category list', function() {
+      createController();
+      expect(mockEventCategory.query.calledOnce).to.be.true;
+    });
   });
 
   describe('begin date', function() {
@@ -112,7 +131,8 @@ describe('eventEditorCtrl', function() {
       var ctrl = $controllerConstructor('eventEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
-        eventModel: model
+        eventModel: model,
+        eventCategory: mockEventCategory
       });
       scope.$digest();
 
@@ -169,7 +189,8 @@ describe('eventEditorCtrl', function() {
       var ctrl = $controllerConstructor('eventEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
-        eventModel: model
+        eventModel: model,
+        eventCategory: mockEventCategory
       });
       scope.$digest();
 
@@ -235,7 +256,8 @@ describe('eventEditorCtrl', function() {
       return $controllerConstructor('eventEditorCtrl', {
         $scope: scope,
         $modalInstance: mockModalInstance,
-        eventModel: mockModel
+        eventModel: mockModel,
+        eventCategory: mockEventCategory
       });
     }
 
@@ -260,7 +282,20 @@ describe('eventEditorCtrl', function() {
       expect(mockModel.user).to.equal('Fred');
     });
 
-    it('copies just the name if the category is an object', function() {
+    it('uses existing category with same name but different case', function() {
+      mockEventCategory.query.returns([{
+        _id: 1,
+        name: 'Test'
+      }]);
+      createController(mockModel);
+      scope.model.category = 'teSt';
+
+      scope.ok();
+
+      expect(mockModel.category).to.equal('Test');
+    });
+
+    it('uses the name of the selected object if selected', function() {
       createController(mockModel);
       scope.model.category = {
         _id: '1234',
@@ -271,6 +306,40 @@ describe('eventEditorCtrl', function() {
       scope.ok();
 
       expect(mockModel.category).to.equal('Sax and Violins');
+    });
+
+    it('adds event category if it does not exist', function() {
+      mockEventCategory.query.returns([{
+        _id: 1,
+        name: 'Relax'
+      }, {
+        _id: 2,
+        name: "don't do it"
+      }]);
+      createController(mockModel);
+      scope.model.category = 'get to it';
+
+      scope.ok();
+
+      expect(mockEventCategory.save.calledWithMatch({
+        name: 'get to it'
+      })).to.be.true;
+    });
+
+    it('does not add event category if it exists', function() {
+      mockEventCategory.query.returns([{
+        _id: 1,
+        name: 'Relax'
+      }, {
+        _id: 2,
+        name: "don't do it"
+      }]);
+      createController(mockModel);
+      scope.model.category = 'Relax';
+
+      scope.ok();
+
+      expect(mockEventCategory.save.called).to.be.false;
     });
 
     it('saves the event', function() {

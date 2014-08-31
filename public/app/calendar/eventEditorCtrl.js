@@ -1,11 +1,15 @@
 'use strict'
 
 angular.module('app')
-  .controller('eventEditorCtrl', ['$scope', '$modalInstance', 'eventModel',
-    function($scope, $modalInstance, eventModel) {
+  .controller('eventEditorCtrl', ['$scope', '$modalInstance', 'eventModel', 'eventCategory',
+    function($scope, $modalInstance, eventModel, eventCategory) {
+      var eventCategories;
+      var eventCategorySuggestions;
+
       initializeData();
       inintializeDates();
       initializeDataWatchers();
+      buildSuggestionEngine();
 
       $scope.cancel = function() {
         $modalInstance.dismiss();
@@ -25,45 +29,16 @@ angular.module('app')
       }
 
       function initializeData() {
+        eventCategories = eventCategory.query(function() {
+          eventCategorySuggestions.initialize();
+        });
+
         $scope.editorTitle = (eventModel._id) ? 'Edit Event' : 'New Event';
         $scope.errorMessage = '';
         $scope.dateTimeFormat = 'MM/DD/YYYY h:mm A';
         $scope.dateFormat = 'MM/DD/YYYY';
 
         copyDataModelToScopeModel();
-        getCategories();
-      }
-
-      function getCategories() {
-        // instantiate the bloodhound suggestion engine
-        var cats = new Bloodhound({
-          datumTokenizer: function(d) {
-            return Bloodhound.tokenizers.whitespace(d.name);
-          },
-          queryTokenizer: Bloodhound.tokenizers.whitespace,
-          local: [{
-            name: 'Test'
-          }, {
-            name: 'Health & Fitness'
-          }, {
-            name: 'Sexual Relations'
-          }, {
-            name: 'Recreation'
-          }, {
-            name: 'Work'
-          }]
-        });
-        cats.initialize();
-
-        $scope.categories = {
-          displayKey: 'name',
-          source: cats.ttAdapter()
-        };
-
-        $scope.categoryOptions = {
-          highlight: true,
-          hint: true
-        };
       }
 
       function copyDataModelToScopeModel() {
@@ -81,12 +56,30 @@ angular.module('app')
 
       function copyScopeModelToDataModel() {
         eventModel.title = $scope.model.title;
-        eventModel.category = (typeof $scope.model.category === 'object') ? $scope.model.category.name : $scope.model.category;
+        eventModel.category = (typeof $scope.model.category === 'object') ? $scope.model.category.name : lookupCategory($scope.model.category);
         eventModel.allDay = $scope.model.isAllDayEvent;
         eventModel.start = moment($scope.model.startDate, $scope.dateTimeFormat);
         eventModel.end = moment($scope.model.endDate, $scope.dateTimeFormat);
         eventModel.private = $scope.model.isPrivate;
         eventModel.user = $scope.model.user;
+      }
+
+      function lookupCategory(category) {
+        if (category) {
+          var matching = $.grep(eventCategories, function(c) {
+            return c.name.toUpperCase() === category.toUpperCase();
+          });
+
+          if (matching.length > 0) {
+            return matching[0].name;
+          } else {
+            eventCategory.save({
+              name: category
+            });
+          }
+        }
+
+        return category;
       }
 
       function inintializeDates() {
@@ -140,6 +133,26 @@ angular.module('app')
           newD.hour(h);
           return stringifyDate(newD);
         }
+      }
+
+       function buildSuggestionEngine() {
+        eventCategorySuggestions = new Bloodhound({
+          datumTokenizer: function(d) {
+            return Bloodhound.tokenizers.whitespace(d.name);
+          },
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          local: eventCategories
+        });
+
+        $scope.categories = {
+          displayKey: 'name',
+          source: eventCategorySuggestions.ttAdapter()
+        };
+
+        $scope.categoryOptions = {
+          highlight: true,
+          hint: true
+        };
       }
 
       function validateRequiredFields() {

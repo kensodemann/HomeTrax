@@ -1,6 +1,6 @@
 angular.module('app')
-  .controller('calendarCtrl', ['$scope', '$modal', 'calendarEvent',
-    function($scope, $modal, calendarEvent) {
+  .controller('calendarCtrl', ['$scope', '$modal', 'calendarEvent', 'eventCategory',
+    function($scope, $modal, calendarEvent, eventCategory) {
       $scope.dayClicked = function(day) {
         console.log(day);
         var event = new calendarEvent();
