@@ -7,7 +7,6 @@ angular.module('app')
       var eventCategorySuggestions;
 
       initializeData();
-      inintializeDates();
       initializeDataWatchers();
       buildSuggestionEngine();
 
@@ -82,11 +81,6 @@ angular.module('app')
         return category;
       }
 
-      function inintializeDates() {
-        eventModel.start = stringifyDate((eventModel.start) ? eventModel.start : moment(moment().format('YYYY-MM-DD')).hour(8));
-        eventModel.end = stringifyDate((eventModel.end) ? eventModel.end : moment(moment().format('YYYY-MM-DD')).hour(9));
-      }
-
       function stringifyDate(d) {
         if (typeof d === 'string') {
           return d;
@@ -135,7 +129,7 @@ angular.module('app')
         }
       }
 
-       function buildSuggestionEngine() {
+      function buildSuggestionEngine() {
         eventCategorySuggestions = new Bloodhound({
           datumTokenizer: function(d) {
             return Bloodhound.tokenizers.whitespace(d.name);

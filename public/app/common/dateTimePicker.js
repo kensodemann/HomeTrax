@@ -22,14 +22,6 @@ angular.module('app')
             defaultDate: scope.defaultDate,
             pickTime: scope.pickTime !== 'false'
           });
-
-          ctrl.$formatters.unshift(function(modelValue) {
-            var dateFormat = attrs.dateTimePicker || 'YYYY/MM/DD';
-            scope = scope;
-            if (!modelValue) return "";
-            var retVal = moment(modelValue, dateFormat).format(dateFormat);
-            return retVal;
-          });
         }
       };
     }
