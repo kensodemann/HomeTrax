@@ -4,10 +4,12 @@ angular.module('app')
   .controller('eventEditorCtrl', ['$scope', '$modalInstance', 'eventModel', 'eventCategory',
     function($scope, $modalInstance, eventModel, eventCategory) {
       var eventCategories;
+      var eventCategorySuggestions;
 
       initializeData();
       inintializeDates();
       initializeDataWatchers();
+      buildSuggestionEngine();
 
       $scope.cancel = function() {
         $modalInstance.dismiss();
@@ -27,7 +29,9 @@ angular.module('app')
       }
 
       function initializeData() {
-        eventCategories = eventCategory.query();
+        eventCategories = eventCategory.query(function() {
+          eventCategorySuggestions.initialize();
+        });
 
         $scope.editorTitle = (eventModel._id) ? 'Edit Event' : 'New Event';
         $scope.errorMessage = '';
@@ -35,29 +39,6 @@ angular.module('app')
         $scope.dateFormat = 'MM/DD/YYYY';
 
         copyDataModelToScopeModel();
-        getCategories();
-      }
-
-      function getCategories() {
-        // instantiate the bloodhound suggestion engine
-        var cats = new Bloodhound({
-          datumTokenizer: function(d) {
-            return Bloodhound.tokenizers.whitespace(d.name);
-          },
-          queryTokenizer: Bloodhound.tokenizers.whitespace,
-          local: eventCategories
-        });
-        cats.initialize();
-
-        $scope.categories = {
-          displayKey: 'name',
-          source: cats.ttAdapter()
-        };
-
-        $scope.categoryOptions = {
-          highlight: true,
-          hint: true
-        };
       }
 
       function copyDataModelToScopeModel() {
@@ -152,6 +133,26 @@ angular.module('app')
           newD.hour(h);
           return stringifyDate(newD);
         }
+      }
+
+       function buildSuggestionEngine() {
+        eventCategorySuggestions = new Bloodhound({
+          datumTokenizer: function(d) {
+            return Bloodhound.tokenizers.whitespace(d.name);
+          },
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          local: eventCategories
+        });
+
+        $scope.categories = {
+          displayKey: 'name',
+          source: eventCategorySuggestions.ttAdapter()
+        };
+
+        $scope.categoryOptions = {
+          highlight: true,
+          hint: true
+        };
       }
 
       function validateRequiredFields() {
