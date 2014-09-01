@@ -1,7 +1,11 @@
-var authentication = require('../services/authentication');
-var usersController = require('../controllers/users');
+'use strict'
 
-function redirectSec(req, res, next) {
+var authentication = require('../services/authentication');
+var users = require('../controllers/users');
+var events = require('../controllers/events');
+var eventCategories = require('../controllers/eventCategories');
+
+function redirectToHttps(req, res, next) {
   if (req.headers['x-forwarded-proto'] == 'http') {
     res.redirect('https://' + req.headers.host + req.path);
   } else {
@@ -10,24 +14,30 @@ function redirectSec(req, res, next) {
 }
 
 module.exports = function(app) {
-  app.get('/api/users', redirectSec, authentication.requiresRole('admin'), usersController.getUsers);
-  app.get('/api/users/:id', redirectSec, authentication.requiresRoleOrIsCurrentUser('admin'), usersController.getUserById);
-  app.post('/api/users', authentication.requiresRole('admin'), usersController.addUser);
-  app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'), usersController.updateUser);
+  app.get('/api/events', redirectToHttps, authentication.requiresApiLogin, events.get);
+  app.post('/api/events/:id?', redirectToHttps, authentication.requiresApiLogin, events.save);
 
-  app.put('/api/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'), usersController.changePassword);
+  app.get('/api/eventCategories', redirectToHttps, authentication.requiresApiLogin, eventCategories.get);
+  app.post('/api/eventCategories/:id?', redirectToHttps, authentication.requiresApiLogin, eventCategories.save);
 
-  app.post('/login', redirectSec, authentication.authenticate);
+  app.get('/api/users', redirectToHttps, authentication.requiresRole('admin'), users.get);
+  app.get('/api/users/:id', redirectToHttps, authentication.requiresRoleOrIsCurrentUser('admin'), users.getById);
+  app.post('/api/users', authentication.requiresRole('admin'), users.add);
+  app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'), users.update);
+
+  app.put('/api/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'), users.changePassword);
+
+  app.post('/login', redirectToHttps, authentication.authenticate);
   app.post('/logout', function(req, res) {
     req.logout();
     res.end();
   });
 
-  app.get('/partials/*', redirectSec, function(req, res) {
+  app.get('/partials/*', redirectToHttps, function(req, res) {
     res.render('../../public/app/' + req.params[0]);
   });
 
-  app.get('*', redirectSec, function(req, res) {
+  app.get('*', redirectToHttps, function(req, res) {
     res.render('index', {
       bootstrappedUser: req.user
     });

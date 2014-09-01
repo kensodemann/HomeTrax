@@ -15,9 +15,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'public/vendor/jquery/dist/jquery.js',
       'public/vendor/angular/angular.js',
       'public/vendor/angular-resource/angular-resource.js',
       'public/vendor/angular-mocks/angular-mocks.js',
+      'public/vendor/moment/moment.js',
+      'public/vendor/typeahead.js/dist/bloodhound.js',
       'test/client/test-app.js',
       'public/app/**/*.js',
       'test/client/**/*Spec.js'

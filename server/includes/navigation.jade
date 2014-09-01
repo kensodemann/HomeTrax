@@ -9,14 +9,10 @@
 			span.glyphicon.glyphicon-home
 			span &nbsp;HomeTrax
 	.navbar-collapse.collapse
-		ul.nav.navbar-nav
-			li
-				a(href="/calendar") Calendar
-			li.dropdown
-				a.dropdown-toggle(href="#", data-toggle="dropdown") Finance
-				ul.dropdown-menu(ng-controller="trxFinanceMenuCtrl", ng-include="'/partials/finance/finance-menu'")
-		span(ng-include="'/partials/account/login-menu'")
-		span(ng-include="'/partials/account/user-admin-menu'")
+		span(ng-include="'/partials/calendar/calendarMenu'")
+		span(ng-include="'/partials/finance/financeMenu'")
+		span(ng-include="'/partials/account/loginMenu'")
+		span(ng-include="'/partials/account/userAdminMenu'")
 		ul.nav.navbar-nav.navbar-right
 			li
 				a(href="/about") About

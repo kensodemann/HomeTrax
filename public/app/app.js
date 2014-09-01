@@ -1,16 +1,16 @@
-angular.module('app', ['ngRoute', 'ngResource']);
+angular.module('app', ['ngRoute', 'ngResource', 'siyfion.sfTypeahead', 'ui.calendar', 'ui.bootstrap']);
 
 angular.module('app')
   .config(function($routeProvider, $locationProvider) {
     var routeRoleChecks = {
       admin: {
-        auth: function(trxAuthService) {
-          return trxAuthService.currentUserAuthorizedForRoute('admin')
+        auth: function(authService) {
+          return authService.currentUserAuthorizedForRoute('admin')
         }
       },
       user: {
-        auth: function(trxAuthService) {
-          return trxAuthService.currentUserAuthorizedForRoute('')
+        auth: function(authService) {
+          return authService.currentUserAuthorizedForRoute('')
         }
       },
     }
@@ -19,41 +19,41 @@ angular.module('app')
 
     $routeProvider.when('/', {
       templateUrl: '/partials/main/main',
-      controller: 'trxMainCtrl',
+      controller: 'mainCtrl',
       resolve: routeRoleChecks.user
     });
 
     $routeProvider.when('/about', {
       templateUrl: '/partials/main/about',
-      controller: 'trxAboutCtrl'
+      controller: 'aboutCtrl'
     });
 
     $routeProvider.when('/calendar', {
-      templateUrl: '/partials/calendar/main',
-      controller: 'trxCalendarCtrl',
+      templateUrl: '/partials/calendar/calendar',
+      controller: 'calendarCtrl',
       resolve: routeRoleChecks.user
     });
 
     $routeProvider.when('/login', {
       templateUrl: '/partials/account/login',
-      controller: 'trxLoginCtrl'
+      controller: 'loginCtrl'
     });
 
     $routeProvider.when('/finance/account', {
       templateUrl: '/partials/finance/account',
-      controller: 'trxFinancialAccountCtrl',
-      resolve: routeRoleChecks.admin
+      controller: 'financialAccountCtrl',
+      resolve: routeRoleChecks.user
     });
 
     $routeProvider.when('/account/userlist', {
-      templateUrl: '/partials/account/user-list',
-      controller: 'trxUserListCtrl',
+      templateUrl: '/partials/account/userList',
+      controller: 'userListCtrl',
       resolve: routeRoleChecks.admin
     });
 
     $routeProvider.when('/account/myprofile', {
-      templateUrl: '/partials/account/my-profile',
-      controller: 'trxMyProfileCtrl',
+      templateUrl: '/partials/account/myProfile',
+      controller: 'myProfileCtrl',
       resolve: routeRoleChecks.user
     });
   });

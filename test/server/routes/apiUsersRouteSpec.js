@@ -1,7 +1,8 @@
+'use strict'
+
 var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
-var path = require('path');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
 var db = require('../../../server/config/database');
@@ -11,9 +12,6 @@ describe('api/users Routes', function() {
 
   beforeEach(function() {
     app = express();
-    var fakeViewPath = path.normalize(__dirname + '/../mockViews/server/views');
-    app.set('view engine', 'jade');
-    app.set('views', fakeViewPath);
     app.use(bodyParser());
   });
 
@@ -29,20 +27,23 @@ describe('api/users Routes', function() {
           lastName: 'Sodemann',
           salt: 'NaCl',
           hashedPassword: 'GoldenCrisp'
+        }, function() {
+          db.users.save({
+            firstName: 'Lisa',
+            lastName: 'Buerger',
+            salt: 'CaCl2',
+            hashedPassword: 'BlackGold'
+          }, function() {
+            db.users.save({
+              firstName: 'Geoff',
+              lastName: 'Jones',
+              salt: 'CH3COONa',
+              hashedPassword: 'BlackStickyTar'
+            }, function() {
+              done();
+            });
+          });
         });
-        db.users.save({
-          firstName: 'Lisa',
-          lastName: 'Buerger',
-          salt: 'CaCl2',
-          hashedPassword: 'BlackGold'
-        });
-        db.users.save({
-          firstName: 'Geoff',
-          lastName: 'Jones',
-          salt: 'CH3COONa',
-          hashedPassword: 'BlackStickyTar'
-        });
-        done();
       });
     }
 
@@ -327,6 +328,7 @@ describe('api/users Routes', function() {
   });
 
   describe('PUT', function() {
+    var authStub;
     var calledWith = '';
     var testUser;
 
@@ -338,19 +340,20 @@ describe('api/users Routes', function() {
           username: 'kws@email.com',
           salt: 'NH4Cl',
           password: 'ThisIsFreaky'
-        });
-        db.users.save({
-          firstName: 'Lisa',
-          lastName: 'Buerger',
-          username: 'llb@email.com',
-          salt: 'CaCl2',
-          password: 'IAmSexyBee'
         }, function() {
-          db.users.findOne({
-            username: 'kws@email.com'
-          }, function(err, user) {
-            testUser = user;
-            done();
+          db.users.save({
+            firstName: 'Lisa',
+            lastName: 'Buerger',
+            username: 'llb@email.com',
+            salt: 'CaCl2',
+            password: 'IAmSexyBee'
+          }, function() {
+            db.users.findOne({
+              username: 'kws@email.com'
+            }, function(err, user) {
+              testUser = user;
+              done();
+            });
           });
         });
       });
