@@ -24,9 +24,6 @@ angular.module('app')
           }
           $scope.events.splice(idx, 1);
           $scope.events.push(evt);
-          var es = $scope.eventSources = [{
-            events: $scope.events
-          }];
 
           $scope.calendar.fullCalendar('render');
         });
