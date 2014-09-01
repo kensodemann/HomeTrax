@@ -19,17 +19,20 @@ angular.module('app')
             return e._id === evt._id;
           });
           var idx = $.inArray(matchingEvts[0], $scope.events);
-          if (evt.allDay || matchingEvts[0].allDay) {
+          if (shouldRemoveFromCalendar(matchingEvts[0], evt)) {
             $scope.calendar.fullCalendar('removeEvents', evt._id);
           }
           $scope.events.splice(idx, 1);
           $scope.events.push(evt);
-          var es = $scope.eventSources = [{
-            events: $scope.events
-          }];
 
           $scope.calendar.fullCalendar('render');
         });
+
+        function shouldRemoveFromCalendar(originalEvent, editedEvent) {
+          return (originalEvent.allDay && !editedEvent.allDay) ||
+            (!originalEvent.allDay && editedEvent.allDay) ||
+            (originalEvent.title !== editedEvent.title);
+        }
       };
 
       $scope.eventDropped = function(event) {
