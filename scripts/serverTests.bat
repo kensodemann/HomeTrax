@@ -1,1 +1,0 @@
-mocha -R min -w --recursive test\server

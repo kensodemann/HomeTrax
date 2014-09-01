@@ -23,12 +23,12 @@ angular.module('app')
             pickTime: scope.pickTime !== 'false'
           });
 
-          ctrl.$formatters.unshift(function(modelValue) {
-            var dateFormat = attrs.dateTimePicker || 'YYYY/MM/DD';
-            scope = scope;
-            if (!modelValue) return "";
-            var retVal = moment(modelValue, dateFormat).format(dateFormat);
-            return retVal;
+          scope.$watch('$parent.' + attrs.ngModel, function(value){
+            var picker = elem.data('DateTimePicker');
+            var pickerDateTime = picker.getDate().format(picker.format);
+            if (pickerDateTime !== value){
+              picker.setDate(value);
+            }
           });
         }
       };
