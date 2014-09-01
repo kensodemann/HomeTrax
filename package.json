@@ -48,5 +48,14 @@
   },
   "bundleDependencies": [],
   "private": true,
-  "main": "server.js"
+  "main": "server.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "nodemon -w server -w server.js server.js",
+    "pretest": "npm install",
+    "test": "karma start",
+    "test-single-run": "karma start --single-run",
+    "servertest": "mocha -R min -w --recursive test/server",
+    "preupdate-webdriver": "npm install"
+  }
 }
