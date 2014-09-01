@@ -6,11 +6,30 @@ angular.module('app')
         event.start = new moment(day.hour(8));
         event.end = new moment(day.hour(9));
         event.allDay = false;
-        openModal(event);
+        var m = openModal(event);
+        m.result.then(function(e) {
+          $scope.events.push(e);
+        })
       };
 
       $scope.eventClicked = function(event) {
-        openModal(event);
+        var m = openModal(event);
+        m.result.then(function(evt) {
+          var matchingEvts = $.grep($scope.events, function(e) {
+            return e._id === evt._id;
+          });
+          var idx = $.inArray(matchingEvts[0], $scope.events);
+          if (evt.allDay || matchingEvts[0].allDay) {
+            $scope.calendar.fullCalendar('removeEvents', evt._id);
+          }
+          $scope.events.splice(idx, 1);
+          $scope.events.push(evt);
+          var es = $scope.eventSources = [{
+            events: $scope.events
+          }];
+
+          $scope.calendar.fullCalendar('render');
+        });
       };
 
       $scope.eventDropped = function(event) {
@@ -32,9 +51,10 @@ angular.module('app')
         }
       };
 
+      $scope.events = calendarEvent.query();
 
       $scope.eventSources = [{
-        events: calendarEvent.query()
+        events: $scope.events
       }];
 
 

@@ -20,6 +20,7 @@ module.exports = function(config) {
       'public/vendor/angular-resource/angular-resource.js',
       'public/vendor/angular-mocks/angular-mocks.js',
       'public/vendor/moment/moment.js',
+      'public/vendor/fullcalendar/dist/fullcalendar.js',
       'public/vendor/typeahead.js/dist/bloodhound.js',
       'test/client/test-app.js',
       'public/app/**/*.js',

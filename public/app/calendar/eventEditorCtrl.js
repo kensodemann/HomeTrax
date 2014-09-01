@@ -60,11 +60,11 @@ angular.module('app')
         eventModel.category = (typeof $scope.model.category === 'object') ? $scope.model.category.name : lookupCategory($scope.model.category);
         eventModel.allDay = $scope.model.isAllDayEvent;
         if ($scope.model.isAllDayEvent) {
-          eventModel.start = moment($scope.model.startDate, $scope.dateFormat);
-          eventModel.end = moment($scope.model.endDate, $scope.dateFormat);
+           eventModel.start = $.fullCalendar.moment($scope.model.startDate, $scope.dateFormat);
+           eventModel.end = $.fullCalendar.moment($scope.model.endDate, $scope.dateFormat);
         } else {
-          eventModel.start = moment($scope.model.startDateTime, $scope.dateTimeFormat);
-          eventModel.end = moment($scope.model.endDateTime, $scope.dateTimeFormat);
+          eventModel.start = $.fullCalendar.moment($scope.model.startDateTime, $scope.dateTimeFormat);
+          eventModel.end = $.fullCalendar.moment($scope.model.endDateTime, $scope.dateTimeFormat);
         }
         eventModel.private = $scope.model.isPrivate;
         eventModel.user = $scope.model.user;
