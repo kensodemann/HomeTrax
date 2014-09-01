@@ -17,7 +17,7 @@
 					a(data-toggle="collapse", data-parent="#accordion" href="#collapse{{version.id}}") {{version.name}}
 			.panel-collapse.collapse(id='collapse{{version.id}}')
 				.panel-body
-					h4(ng-show="{{version.releaseDate}}") Release Date: {{version.releaseDate}}
+					h4(ng-show="{{version.releaseDate}}") Release Date: {{version.releaseDate.format('LL')}}
 					p {{version.description}}
 					div(ng-show="{{version.features}}")
 						h4 New Features
