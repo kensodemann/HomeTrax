@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 describe('eventEditorCtrl', function() {
   var scope;
@@ -11,16 +11,21 @@ describe('eventEditorCtrl', function() {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
     mockEventCategory = sinon.stub({
-      query: function() {},
-      save: function() {}
+      query: function() {
+      },
+      save: function() {
+      }
     });
-    mockEventCategory.query.returns([{
-      _id: 1,
-      name: 'cat1'
-    }, {
-      _id: 2,
-      name: 'cat2'
-    }]);
+    mockEventCategory.query.returns([
+      {
+        _id: 1,
+        name: 'cat1'
+      },
+      {
+        _id: 2,
+        name: 'cat2'
+      }
+    ]);
   }));
 
   it('exists', function() {
@@ -256,7 +261,7 @@ describe('eventEditorCtrl', function() {
     });
   });
 
-describe('end date', function() {
+  describe('end date', function() {
     var model;
 
     beforeEach(function() {
@@ -299,15 +304,18 @@ describe('end date', function() {
 
     beforeEach(function() {
       mockModalInstance = sinon.stub({
-        dismiss: function() {},
-        close: function() {}
+        dismiss: function() {
+        },
+        close: function() {
+        }
       });
       mockModel = sinon.stub({
-        $save: function() {}
+        $save: function() {
+        }
       });
     });
 
-    function createController(model) {
+    function createController() {
       return $controllerConstructor('eventEditorCtrl', {
         $scope: scope,
         $modalInstance: mockModalInstance,
@@ -317,7 +325,7 @@ describe('end date', function() {
     }
 
     it('copies editable data from the scope to the model', function() {
-      createController(mockModel);
+      createController();
       scope.model.title = 'Bite Me!';
       scope.model.category = 'Appointments';
       scope.model.isAllDayEvent = false;
@@ -338,7 +346,7 @@ describe('end date', function() {
     });
 
     it('copies the correct dates back for all day events', function() {
-      createController(mockModel);
+      createController();
       scope.model.title = 'Bite Me!';
       scope.model.category = 'Appointments';
       scope.model.isAllDayEvent = true;
@@ -357,11 +365,13 @@ describe('end date', function() {
     });
 
     it('uses existing category with same name but different case', function() {
-      mockEventCategory.query.returns([{
-        _id: 1,
-        name: 'Test'
-      }]);
-      createController(mockModel);
+      mockEventCategory.query.returns([
+        {
+          _id: 1,
+          name: 'Test'
+        }
+      ]);
+      createController();
       scope.model.category = 'teSt';
 
       scope.ok();
@@ -370,7 +380,7 @@ describe('end date', function() {
     });
 
     it('uses the name of the selected object if selected', function() {
-      createController(mockModel);
+      createController();
       scope.model.category = {
         _id: '1234',
         name: 'Sax and Violins',
@@ -383,14 +393,17 @@ describe('end date', function() {
     });
 
     it('adds event category if it does not exist', function() {
-      mockEventCategory.query.returns([{
-        _id: 1,
-        name: 'Relax'
-      }, {
-        _id: 2,
-        name: "don't do it"
-      }]);
-      createController(mockModel);
+      mockEventCategory.query.returns([
+        {
+          _id: 1,
+          name: 'Relax'
+        },
+        {
+          _id: 2,
+          name: "don't do it"
+        }
+      ]);
+      createController();
       scope.model.category = 'get to it';
 
       scope.ok();
@@ -401,14 +414,17 @@ describe('end date', function() {
     });
 
     it('does not add event category if it exists', function() {
-      mockEventCategory.query.returns([{
-        _id: 1,
-        name: 'Relax'
-      }, {
-        _id: 2,
-        name: "don't do it"
-      }]);
-      createController(mockModel);
+      mockEventCategory.query.returns([
+        {
+          _id: 1,
+          name: 'Relax'
+        },
+        {
+          _id: 2,
+          name: "don't do it"
+        }
+      ]);
+      createController();
       scope.model.category = 'Relax';
 
       scope.ok();
@@ -417,14 +433,14 @@ describe('end date', function() {
     });
 
     it('saves the event', function() {
-      createController(mockModel);
+      createController();
       scope.ok();
 
       expect(mockModel.$save.calledOnce).to.be.true;
     });
 
     it('closes the modal if http request successful', function() {
-      createController(mockModel);
+      createController();
       scope.ok();
       mockModel.$save.callArgWith(0, mockModel);
 
@@ -432,7 +448,7 @@ describe('end date', function() {
     });
 
     it('notifies user if http request fails', function() {
-      createController(mockModel);
+      createController();
       scope.ok();
       mockModel.$save.callArgWith(1, {
         status: 400,
@@ -452,7 +468,8 @@ describe('end date', function() {
 
     beforeEach(function() {
       modalInstance = sinon.stub({
-        dismiss: function() {}
+        dismiss: function() {
+        }
       });
     });
 
@@ -467,6 +484,38 @@ describe('end date', function() {
 
       expect(modalInstance.dismiss.calledOnce).to.be.true;
     });
+  });
+
+  describe('removal', function() {
+    var mockModalInstance;
+
+    beforeEach(function() {
+      mockModalInstance = sinon.stub({
+        dismiss: function() {
+        },
+        close: function() {
+        }
+      });
+    });
+
+    function createController(model) {
+      return $controllerConstructor('eventEditorCtrl', {
+        $scope: scope,
+        $modalInstance: mockModalInstance,
+        eventModel: model,
+        eventCategory: mockEventCategory
+      });
+    }
+
+    it('should display the remove button if editing an existing event', function() {
+      createController({_id: 42, title: 'This is a title'});
+      expect(scope.displayRemoveButton).to.be.true;
+    });
+
+    it('should not display the remove button when adding a new event', function(){
+      createController({});
+      expect(scope.displayRemoveButton).to.be.false;
+    })
   });
 
   describe('validation', function() {

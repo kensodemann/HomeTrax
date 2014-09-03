@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 angular.module('app')
   .controller('eventEditorCtrl', ['$scope', '$modalInstance', 'eventModel', 'eventCategory',
@@ -12,20 +12,20 @@ angular.module('app')
 
       $scope.cancel = function() {
         $modalInstance.dismiss();
-      }
+      };
 
       $scope.ok = function() {
         copyScopeModelToDataModel();
-        eventModel.$save(function(event, response) {
+        eventModel.$save(function(event) {
           $modalInstance.close(event);
         }, function(response) {
           $scope.errorMessage = response.data.reason;
         });
-      }
+      };
 
       $scope.validate = function() {
         validateRequiredFields();
-      }
+      };
 
       function initializeData() {
         eventCategories = eventCategory.query(function() {
@@ -36,6 +36,7 @@ angular.module('app')
         $scope.errorMessage = '';
         $scope.dateTimeFormat = 'MM/DD/YYYY h:mm A';
         $scope.dateFormat = 'MM/DD/YYYY';
+        $scope.displayRemoveButton = (eventModel._id) ? true : false;
 
         copyDataModelToScopeModel();
       }
@@ -60,8 +61,8 @@ angular.module('app')
         eventModel.category = (typeof $scope.model.category === 'object') ? $scope.model.category.name : lookupCategory($scope.model.category);
         eventModel.allDay = $scope.model.isAllDayEvent;
         if ($scope.model.isAllDayEvent) {
-           eventModel.start = $.fullCalendar.moment($scope.model.startDate, $scope.dateFormat);
-           eventModel.end = $.fullCalendar.moment($scope.model.endDate, $scope.dateFormat);
+          eventModel.start = $.fullCalendar.moment($scope.model.startDate, $scope.dateFormat);
+          eventModel.end = $.fullCalendar.moment($scope.model.endDate, $scope.dateFormat);
         } else {
           eventModel.start = $.fullCalendar.moment($scope.model.startDateTime, $scope.dateTimeFormat);
           eventModel.end = $.fullCalendar.moment($scope.model.endDateTime, $scope.dateTimeFormat);
