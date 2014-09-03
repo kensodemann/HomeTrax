@@ -3,3 +3,5 @@ node_modules/*
 public/css/*.css
 !public/css/theme.css
 *.log
+.idea/*
+!.idea/codeStyleSettings.xml
