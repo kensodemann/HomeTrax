@@ -36,7 +36,7 @@ angular.module('app')
       };
 
       $scope.eventDropped = function(event) {
-        console.log('You dopped the bomb on me');
+        console.log('You dropped the bomb on me');
       };
 
       $scope.uiConfig = {
