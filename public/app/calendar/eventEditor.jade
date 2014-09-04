@@ -33,6 +33,6 @@ form.form-horizontal(name="eventEditor")
 			.form-group
 				.col-md-offset-4.col-md-8.text-danger {{errorMessage}}
 	.modal-footer
-		button.btn.btn-default(type='button', ng-click="remove()", ng-show="displayRemoveButton") Remove
+		button.btn.btn-default.pull-left(type='button', ng-click="remove()", ng-show="displayRemoveButton") Remove
 		button.btn.btn-default(type='button', ng-click="cancel()") Cancel
 		button.btn.btn-primary(type='submit', ng-click='ok()', ng-disabled="eventEditor.$invalid || errorMessage") Save Event
