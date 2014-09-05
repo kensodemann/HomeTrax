@@ -37,6 +37,13 @@ angular.module('app')
             }
           }
         });
+        m.result.then(function(){
+          eventModel.$remove().then(function(){
+            $modalInstance.close(true);
+          }, function(reason){
+            $scope.errorMessage = reason;
+          });
+        });
       };
 
       $scope.validate = function (){

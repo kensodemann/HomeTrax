@@ -499,19 +499,38 @@ describe('eventEditorCtrl', function (){
 
   describe('removal', function (){
     var mockModal;
+    var mockModel;
     var mockModalInstance;
+    var dfd;
+    var delDfd;
+
+    beforeEach(inject(function ($q){
+      dfd = $q.defer();
+      delDfd = $q.defer();
+    }));
 
     beforeEach(function (){
       mockModal = sinon.stub({
         open: function (){
         }
       });
+      var msgModalInstance = {
+        result: dfd.promise
+      };
+      mockModal.open.returns(msgModalInstance);
+
       mockModalInstance = sinon.stub({
         dismiss: function (){
         },
         close: function (){
         }
       });
+
+      mockModel = sinon.stub({
+        $remove: function (){
+        }
+      });
+      mockModel.$remove.returns(delDfd.promise);
     });
 
     function createController(model){
@@ -539,6 +558,58 @@ describe('eventEditorCtrl', function (){
       scope.remove();
       expect(mockModal.open.calledOnce).to.be.true;
     });
+
+    it('deletes the event if the user answers yes', function (){
+      createController(mockModel);
+      scope.remove();
+      answerYes();
+      expect(mockModel.$remove.calledOnce).to.be.true;
+    });
+
+    it('does not delete the event if the user answers no', function(){
+      createController(mockModel);
+      scope.remove();
+      answerNo();
+      expect(mockModel.$remove.called).to.be.false;
+    });
+
+    it('closes the editor dialog if the user answers yes and the delete succeeds', function (){
+      createController(mockModel);
+      scope.remove();
+      answerYes();
+      completeRemoval();
+      expect(mockModalInstance.close.calledOnce).to.be.true;
+    });
+
+    it('displays error message if user answers yes and the delete fails', function(){
+      createController(mockModel);
+      scope.remove();
+      answerYes();
+      failRemoval();
+      expect(mockModalInstance.close.called).to.be.false;
+      expect(mockModalInstance.dismiss.called).to.be.false;
+      expect(scope.errorMessage).to.equal('removal, you are a failure');
+    });
+
+    function answerYes(){
+      dfd.resolve(true);
+      scope.$apply();
+    }
+
+    function answerNo(){
+      dfd.reject();
+      scope.$apply();
+    }
+
+    function completeRemoval(){
+      delDfd.resolve();
+      scope.$apply();
+    }
+
+    function failRemoval(){
+      delDfd.reject('removal, you are a failure');
+      scope.$apply();
+    }
   });
 
   describe('validation', function (){
