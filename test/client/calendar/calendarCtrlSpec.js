@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 describe('calendarCtrl', function() {
   beforeEach(module('app'));
@@ -65,7 +65,7 @@ describe('calendarCtrl', function() {
       mockModal.open.returns(mockModalInstance);
 
       mockEvent = sinon.stub({
-        query: function() {},
+        query: function() {}
       });
       mockEvent.query.returns([{
         _id: 1,
