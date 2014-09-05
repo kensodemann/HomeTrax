@@ -29,7 +29,7 @@ angular.module('app')
           controller: 'messageDialogCtrl',
           backdrop: 'static',
           resolve: {
-            eventModel: function (){
+            messageModel: function (){
               return {
                 title: 'Delete Event?',
                 message: 'Are you sure you want to remove this event?'
