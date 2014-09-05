@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 describe('userEditorCtrl', function() {
   var scope;
@@ -33,7 +33,7 @@ describe('userEditorCtrl', function() {
     });
 
     it('sets the data model', function() {
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -47,7 +47,7 @@ describe('userEditorCtrl', function() {
 
     it('sets the title to edit if model has _id', function() {
       model._id = 1;
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+     $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -57,7 +57,7 @@ describe('userEditorCtrl', function() {
     });
 
     it('sets the title to create if model does not have an _id', function() {
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -68,7 +68,7 @@ describe('userEditorCtrl', function() {
 
     it('sets the title to create if model _id is null', function() {
       model._id = null;
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -79,7 +79,7 @@ describe('userEditorCtrl', function() {
 
     it('sets the mode to edit if model has _id', function() {
       model._id = 1;
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -89,7 +89,7 @@ describe('userEditorCtrl', function() {
     });
 
     it('sets the mode to create if model does not have an _id', function() {
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -100,7 +100,7 @@ describe('userEditorCtrl', function() {
 
     it('sets the mode to create if model _id is null', function() {
       model._id = null;
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -111,7 +111,7 @@ describe('userEditorCtrl', function() {
 
     it('sets passwordIsValid to true if model has _id', function() {
       model._id = 1;
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -121,7 +121,7 @@ describe('userEditorCtrl', function() {
     });
 
     it('sets passwordIsValid to false if model does not have an _id', function() {
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -132,7 +132,7 @@ describe('userEditorCtrl', function() {
 
     it('sets passwordIsValid to false if model _id is null', function() {
       model._id = null;
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: {},
         userModel: model
@@ -199,7 +199,7 @@ describe('userEditorCtrl', function() {
     });
 
     it('should dismiss the modal', function() {
-      var ctrl = $controllerConstructor('userEditorCtrl', {
+      $controllerConstructor('userEditorCtrl', {
         $scope: scope,
         $modalInstance: mockModalInstance,
         userModel: {}
@@ -234,7 +234,7 @@ describe('userEditorCtrl', function() {
     }
 
     it('saves new user', function() {
-      var ctrl = createController(mockModel);
+      createController(mockModel);
       scope.ok();
 
       expect(mockModel.$save.calledOnce).to.be.true;
@@ -243,7 +243,7 @@ describe('userEditorCtrl', function() {
 
     it('updates existing user', function() {
       mockModel._id = 1;
-      var ctrl = createController(mockModel);
+      createController(mockModel);
       scope.ok();
 
       expect(mockModel.$save.called).to.be.false;
@@ -283,7 +283,7 @@ describe('userEditorCtrl', function() {
     });
 
     it('closes the modal if http request successful', function() {
-      var ctrl = createController(mockModel);
+      createController(mockModel);
       scope.ok();
       mockModel.$save.callArgWith(0, mockModel);
 
@@ -292,7 +292,7 @@ describe('userEditorCtrl', function() {
     });
 
     it('notifies user if http request fails', function() {
-      var ctrl = createController(mockModel);
+      createController(mockModel);
       scope.ok();
       mockModel.$save.callArgWith(1, {
         status: 400,
