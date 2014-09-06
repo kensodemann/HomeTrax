@@ -101,7 +101,7 @@ describe('calendarCtrl', function() {
       expect(mockModal.open.calledOnce).to.be.true;
     });
 
-    it('replaces the modified event', function() {
+    it('replaces the modified event when closed with save', function() {
       createController();
 
       scope.eventClicked({
@@ -117,6 +117,22 @@ describe('calendarCtrl', function() {
 
       expect(scope.events.length).to.equal(4);
       expect($.inArray(modifiedEvent, scope.events)).to.not.equal(-1);
+    });
+
+    it('removes the event when closed with remove', function() {
+      createController();
+
+      scope.eventClicked({
+        _id: 2,
+        title: 'event 2'
+      });
+      dfd.resolve(true);
+      scope.$digest();
+
+      expect(scope.events.length).to.equal(3);
+      expect($.grep(scope.events, function(e){
+        return e._id === 2;
+      }).length).to.equal(0);
     });
 
     it('renders te calendar', function() {

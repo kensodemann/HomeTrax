@@ -55,7 +55,7 @@ module.exports.save = function(req, res) {
 
 module.exports.remove = function(req, res) {
   db.events.findOne({
-    _id: ObjectId(req.body._id)
+    _id: ObjectId(req.params.id)
   }, function(err, e) {
     if (!e) {
       res.status(404);
@@ -68,7 +68,7 @@ module.exports.remove = function(req, res) {
     }
 
     db.events.remove({
-      _id: req.body._id
+      _id: ObjectId(req.params.id)
     }, true, function(err, e) {
       res.send(e);
     });
