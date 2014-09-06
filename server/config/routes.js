@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var authentication = require('../services/authentication');
 var users = require('../controllers/users');
@@ -16,6 +16,7 @@ function redirectToHttps(req, res, next) {
 module.exports = function(app) {
   app.get('/api/events', redirectToHttps, authentication.requiresApiLogin, events.get);
   app.post('/api/events/:id?', redirectToHttps, authentication.requiresApiLogin, events.save);
+  app.delete('/api/events/:id', redirectToHttps, authentication.requiresApiLogin, events.remove);
 
   app.get('/api/eventCategories', redirectToHttps, authentication.requiresApiLogin, eventCategories.get);
   app.post('/api/eventCategories/:id?', redirectToHttps, authentication.requiresApiLogin, eventCategories.save);
@@ -42,4 +43,4 @@ module.exports = function(app) {
       bootstrappedUser: req.user
     });
   });
-}
+};
