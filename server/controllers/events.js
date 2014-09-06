@@ -1,24 +1,27 @@
-'use strict'
+'use strict';
 
 var db = require('../config/database');
 var ObjectId = require("mongojs").ObjectId;
 
-module.exports.get = function(req, res) {
+module.exports.get = function (req, res){
   db.events.find({
-    $or: [{
-      userId: ObjectId(req.user._id)
-    }, {
-      private: false
-    }]
-  }, function(err, events) {
+    $or: [
+      {
+        userId: ObjectId(req.user._id)
+      },
+      {
+        private: false
+      }
+    ]
+  }, function (err, events){
     res.send(events);
   });
 };
 
-module.exports.getById = function(req, res) {
+module.exports.getById = function (req, res){
   db.events.findOne({
     _id: ObjectId(req.params.id)
-  }, function(err, ev) {
+  }, function (err, ev){
     if (ev) {
       if (ev.private && ev.userId.toString() !== req.user._id.toString()) {
         res.status(403);
@@ -32,45 +35,55 @@ module.exports.getById = function(req, res) {
   });
 };
 
-module.exports.save = function(req, res) {
+module.exports.save = function (req, res){
   var e = req.body;
-
-  if (req.params && req.params.id) {
-    e._id = ObjectId(req.params.id);
+  assignIdFromRequest(req, e);
+  assignUserId(e, req);
+  if (userIsAuthorized(e.userId, req, res)) {
+    db.events.save(e, function (err, ev){
+      res.send(ev);
+    });
   }
-  if (!e.userId) {
-    e.userId = ObjectId(req.user._id);
-  } else {
-    e.userId = ObjectId(e.userId);
-  }
-  if (e.userId.toString() !== req.user._id.toString()) {
-    res.status(403);
-    return res.send();
-  }
-
-  db.events.save(e, function(err, ev) {
-    res.send(ev);
-  });
 };
 
-module.exports.remove = function(req, res) {
+module.exports.remove = function (req, res){
   db.events.findOne({
     _id: ObjectId(req.params.id)
-  }, function(err, e) {
+  }, function (err, e){
     if (!e) {
       res.status(404);
       return res.send();
     }
 
-    if (e.userId.toString() !== req.user._id.toString()) {
-      res.status(403);
-      return res.send();
+    if (userIsAuthorized(e.userId, req, res)) {
+      db.events.remove({
+        _id: ObjectId(req.params.id)
+      }, true, function (err, e){
+        res.send(e);
+      });
     }
-
-    db.events.remove({
-      _id: ObjectId(req.params.id)
-    }, true, function(err, e) {
-      res.send(e);
-    });
   });
+};
+
+function assignIdFromRequest(req, e){
+  if (req.params && req.params.id) {
+    e._id = ObjectId(req.params.id);
+  }
+}
+
+function assignUserId(e, req){
+  if (!e.userId) {
+    e.userId = ObjectId(req.user._id);
+  } else {
+    e.userId = ObjectId(e.userId);
+  }
+}
+
+function userIsAuthorized(userId, req, res){
+  if (userId.toString() !== req.user._id.toString()) {
+    res.status(403);
+    res.send();
+    return false;
+  }
+  return true;
 }
