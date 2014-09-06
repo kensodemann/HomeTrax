@@ -39,7 +39,7 @@ module.exports.save = function (req, res){
   var e = req.body;
   assignIdFromRequest(req, e);
   assignUserId(e, req);
-  if (userIsAuthorized(e.userId, req, res)) {
+  if (userIsAuthorized(e.userId, req, res) && isValid(e, res)) {
     db.events.save(e, function (err, ev){
       res.send(ev);
     });
@@ -86,4 +86,27 @@ function userIsAuthorized(userId, req, res){
     return false;
   }
   return true;
+}
+
+function isValid(evt, res){
+  if(!evt.title){
+    sendError(new Error('Events must have a title.'), res);
+    return false;
+  }
+  if(!evt.start){
+    sendError(new Error('Events must have a start date.'), res);
+    return false;
+  }
+  if(evt.end && evt.end < evt.start){
+    sendError(new Error('Start date must be on or before the end date.'), res);
+    return false;
+  }
+  return true;
+}
+
+function sendError(err, res){
+  res.status(400);
+  res.send({
+    reason: err.toString()
+  });
 }
