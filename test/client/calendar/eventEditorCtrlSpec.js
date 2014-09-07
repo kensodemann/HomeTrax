@@ -630,32 +630,43 @@ describe('eventEditorCtrl', function (){
         $scope: scope,
         $modal: {},
         $modalInstance: {},
-        eventModel: model
+        eventModel: model,
+        eventCategory: mockEventCategory
       });
+
+      scope.$digest();
     });
 
     it('sets an error if there is no title', function (){
       scope.model.title = "";
-      scope.validate();
+      scope.$digest();
       expect(scope.errorMessage).to.equal('Event Title is required');
+    });
+
+    it('clears the error message when the condition is fixed', function (){
+      scope.model.title = "";
+      scope.$digest();
+      scope.model.title = "Some valid title";
+      scope.$digest();
+      expect(scope.errorMessage).to.be.null;
     });
 
     it('sets an error if there is no category', function (){
       scope.model.category = "";
-      scope.validate();
+      scope.$digest();
       expect(scope.errorMessage).to.equal('Event Category is required');
     });
 
-    it('sets an error if there is no begin date', function (){
-      scope.model.startDate = null;
-      scope.validate();
-      expect(scope.errorMessage).to.equal('Start Date is required');
+    it('sets an error if the end datetime is less than the start datetime', function(){
+      scope.model.endDateTime = '06/20/2014 11:59 AM';
+      scope.$digest();
+      expect(scope.errorMessage).to.equal('The end date must be on or after the start date');
     });
 
-    it('sets an error if there is no end date', function (){
-      scope.model.endDate = null;
-      scope.validate();
-      expect(scope.errorMessage).to.equal('End Date is required');
+    it('sets an error if the end datetime is less than the start datetime', function(){
+      scope.model.endDate = '06/19/2014';
+      scope.$digest();
+      expect(scope.errorMessage).to.equal('The end date must be on or after the start date');
     });
   });
 });
