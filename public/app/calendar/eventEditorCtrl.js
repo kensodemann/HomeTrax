@@ -117,19 +117,14 @@ angular.module('app')
           if (newValue !== oldValue) {
             var n = moment(newValue, scope.dateTimeFormat);
             var o = moment(oldValue, scope.dateTimeFormat);
-            var newEnd = moment(scope.model.endDateTime, scope.dateTimeFormat);
-            newEnd.add(n - o);
-            scope.model.endDateTime = newEnd.format(scope.dateTimeFormat);
+            adjustEndDateTime(n, o, scope);
             scope.model.startDate = n.format(scope.dateFormat);
           }
         });
 
         $scope.$watch('model.startDate', function (newValue, oldValue, scope){
           if (newValue !== oldValue) {
-            var n = moment(newValue, scope.dateFormat);
-            var newStart = moment(scope.model.startDateTime, scope.dateTimeFormat);
-            copyDate(n, newStart);
-            scope.model.startDateTime = newStart.format(scope.dateTimeFormat);
+            scope.model.startDateTime = adjustDateTimeDate(scope.model.startDateTime, newValue, scope);
           }
         });
 
@@ -142,12 +137,22 @@ angular.module('app')
 
         $scope.$watch('model.endDate', function (newValue, oldValue, scope){
           if (newValue !== oldValue) {
-            var n = moment(newValue, scope.dateFormat);
-            var newEnd = moment(scope.model.endDateTime, scope.dateTimeFormat);
-            copyDate(n, newEnd);
-            scope.model.endDateTime = newEnd.format(scope.dateTimeFormat);
+            scope.model.endDateTime = adjustDateTimeDate(scope.model.endDateTime, newValue, scope);
           }
         });
+
+        function adjustEndDateTime(newMoment, oldMoment, scope){
+          var newEnd = moment(scope.model.endDateTime, scope.dateTimeFormat);
+          newEnd.add(newMoment - oldMoment);
+          scope.model.endDateTime = newEnd.format(scope.dateTimeFormat);
+        }
+
+        function adjustDateTimeDate(dateTime, newValue, scope){
+          var n = moment(newValue, scope.dateFormat);
+          var newDateTime = moment(dateTime, scope.dateTimeFormat);
+          copyDate(n, newDateTime);
+          return newDateTime.format(scope.dateTimeFormat);
+        }
 
         function copyDate(fromDate, toDate){
           toDate.month(fromDate.month());
@@ -179,6 +184,10 @@ angular.module('app')
       function validateRequiredFields(){
         if (!$scope.model.title) {
           return $scope.errorMessage = 'Event Title is required';
+        }
+
+        if (!$scope.model.category) {
+          return $scope.errorMessage = 'Event Category is required';
         }
 
         if (!$scope.model.startDate) {

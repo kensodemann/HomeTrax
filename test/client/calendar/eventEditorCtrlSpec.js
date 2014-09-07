@@ -566,7 +566,7 @@ describe('eventEditorCtrl', function (){
       expect(mockModel.$remove.calledOnce).to.be.true;
     });
 
-    it('does not delete the event if the user answers no', function(){
+    it('does not delete the event if the user answers no', function (){
       createController(mockModel);
       scope.remove();
       answerNo();
@@ -581,7 +581,7 @@ describe('eventEditorCtrl', function (){
       expect(mockModalInstance.close.calledOnce).to.be.true;
     });
 
-    it('displays error message if user answers yes and the delete fails', function(){
+    it('displays error message if user answers yes and the delete fails', function (){
       createController(mockModel);
       scope.remove();
       answerYes();
@@ -593,22 +593,22 @@ describe('eventEditorCtrl', function (){
 
     function answerYes(){
       dfd.resolve(true);
-      scope.$apply();
+      scope.$digest();
     }
 
     function answerNo(){
       dfd.reject();
-      scope.$apply();
+      scope.$digest();
     }
 
     function completeRemoval(){
       delDfd.resolve();
-      scope.$apply();
+      scope.$digest();
     }
 
     function failRemoval(){
       delDfd.reject('removal, you are a failure');
-      scope.$apply();
+      scope.$digest();
     }
   });
 
@@ -640,6 +640,12 @@ describe('eventEditorCtrl', function (){
       expect(scope.errorMessage).to.equal('Event Title is required');
     });
 
+    it('sets an error if there is no category', function (){
+      scope.model.category = "";
+      scope.validate();
+      expect(scope.errorMessage).to.equal('Event Category is required');
+    });
+
     it('sets an error if there is no begin date', function (){
       scope.model.startDate = null;
       scope.validate();
@@ -650,12 +656,6 @@ describe('eventEditorCtrl', function (){
       scope.model.endDate = null;
       scope.validate();
       expect(scope.errorMessage).to.equal('End Date is required');
-    });
-  });
-
-  describe('remove', function (){
-    it('asks the user if they really want to remove the event', function (){
-
     });
   });
 });
