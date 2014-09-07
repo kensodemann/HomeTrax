@@ -259,6 +259,22 @@ describe('events controller', function (){
         }
       });
     });
+
+    it('does not allow saving an event without a category', function(done){
+      var status;
+      myPublicEvent.category = '';
+      req.body = myPublicEvent;
+      eventsController.save(req, {
+        status: function (s){
+          status = s;
+        },
+        send: function (e){
+          expect(status).to.equal(400);
+          expect(e.reason).to.equal('Error: Events must have a category.');
+          done();
+        }
+      });
+    });
   });
 
   describe('remove', function (){

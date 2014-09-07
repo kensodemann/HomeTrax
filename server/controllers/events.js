@@ -93,6 +93,10 @@ function isValid(evt, res){
     sendError(new Error('Events must have a title.'), res);
     return false;
   }
+  if(!evt.category){
+    sendError(new Error('Events must have a category.'), res);
+    return false;
+  }
   if(!evt.start){
     sendError(new Error('Events must have a start date.'), res);
     return false;
