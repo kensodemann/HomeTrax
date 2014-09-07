@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
@@ -37,7 +37,7 @@ describe('events controller', function (){
       eventsController.get(req, {
         send: function (events){
           expect(events.length).to.equal(3);
-          events.forEach(function (e, idx){
+          events.forEach(function (e){
             expect(e.private).to.be.a('Boolean');
             if (e.private) {
               expect(e.userId.toString()).to.equal('53a4dd887c6dc30000bee3af');
@@ -150,7 +150,7 @@ describe('events controller', function (){
       myPrivateEvent.private = false;
       myPrivateEvent.title = 'some other title';
       eventsController.save(req, {
-        send: function (e){
+        send: function (){
           db.events.findOne({
             _id: myPrivateEvent._id
           }, function (err, ev){
@@ -193,6 +193,72 @@ describe('events controller', function (){
         }
       });
     });
+
+    it('does not allow the start date to be greater than the end date', function(done){
+      var status;
+      myPublicEvent.start = '2014-09-03T12:00:00.000Z';
+      myPrivateEvent.end = '2014-09-02T12:00:00.000Z';
+      req.body = myPublicEvent;
+      eventsController.save(req, {
+        status: function (s){
+          status = s;
+        },
+        send: function (e){
+          expect(status).to.equal(400);
+          expect(e.reason).to.equal('Error: Start date must be on or before the end date.');
+          done();
+        }
+      });
+    });
+
+    it('does not allow the start time to be greater than the end date', function(done){
+      var status;
+      myPublicEvent.start = '2014-09-03T12:00:01.000Z';
+      myPrivateEvent.end = '2014-09-03T12:00:00.000Z';
+      req.body = myPublicEvent;
+      eventsController.save(req, {
+        status: function (s){
+          status = s;
+        },
+        send: function (e){
+          expect(status).to.equal(400);
+          expect(e.reason).to.equal('Error: Start date must be on or before the end date.');
+          done();
+        }
+      });
+    });
+
+    it('does not allow saving an event without a title', function(done){
+      var status;
+      myPublicEvent.title = '';
+      req.body = myPublicEvent;
+      eventsController.save(req, {
+        status: function (s){
+          status = s;
+        },
+        send: function (e){
+          expect(status).to.equal(400);
+          expect(e.reason).to.equal('Error: Events must have a title.');
+          done();
+        }
+      });
+    });
+
+    it('does not allow saving an event without a start date', function(done){
+      var status;
+      myPublicEvent.start = '';
+      req.body = myPublicEvent;
+      eventsController.save(req, {
+        status: function (s){
+          status = s;
+        },
+        send: function (e){
+          expect(status).to.equal(400);
+          expect(e.reason).to.equal('Error: Events must have a start date.');
+          done();
+        }
+      });
+    });
   });
 
   describe('remove', function (){
@@ -210,7 +276,7 @@ describe('events controller', function (){
     it('removes the specified item', function (done){
       req.params.id = myPrivateEvent._id.toString();
       eventsController.remove(req, {
-        send: function (e){
+        send: function (){
           db.events.count(function (err, cnt){
             expect(cnt).to.equal(3);
             db.events.count({
@@ -298,7 +364,7 @@ describe('events controller', function (){
             private: false,
             userId: ObjectId('53a4dd887c6dc30000bee3ae')
           }, function (error, value){
-            otherUserPublicEvent = value
+            otherUserPublicEvent = value;
             db.events.save({
               title: 'Sleep',
               allDay: false,
