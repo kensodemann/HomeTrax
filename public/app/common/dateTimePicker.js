@@ -15,7 +15,6 @@ angular.module('app')
           pickTime: '@'
         },
         link: function(scope, elem, attrs, ctrl) {
-          var picker = elem.data('DateTimePicker');
           elem.datetimepicker({
             pick12HourFormat: scope.pick12HourFormat,
             language: scope.language,
