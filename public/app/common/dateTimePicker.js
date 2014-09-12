@@ -23,11 +23,18 @@ angular.module('app')
             pickTime: scope.pickTime !== 'false'
           });
 
-          scope.$watch('$parent.' + attrs.ngModel, function(value){
+          scope.$watch('$parent.' + attrs.ngModel, function(value) {
             var picker = elem.data('DateTimePicker');
             var pickerDateTime = picker.getDate().format(picker.format);
-            if (pickerDateTime !== value){
+            if (pickerDateTime !== value) {
               picker.setDate(value);
+            }
+          });
+
+          scope.$on('$destroy', function() {
+            var picker = elem.data('DateTimePicker');
+            if (picker) {
+              picker.destroy();
             }
           });
         }
