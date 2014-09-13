@@ -109,21 +109,8 @@ angular.module('app')
       }
 
       function initializeDataWatchers() {
-        $scope.$watch('model.title', function(newValue, oldValue) {
-          if (newValue != oldValue) {
-            validate();
-          }
-        });
-
-        $scope.$watch('model.category', function(newValue, oldValue) {
-          if (newValue != oldValue) {
-            validate();
-          }
-        });
-
         $scope.$watch('model.startDateTime', function(newValue, oldValue, scope) {
           if (newValue !== oldValue) {
-            validate();
             var n = moment(newValue, scope.dateTimeFormat);
             var o = moment(oldValue, scope.dateTimeFormat);
             adjustEndDateTime(n, o, scope);
@@ -133,14 +120,12 @@ angular.module('app')
 
         $scope.$watch('model.startDate', function(newValue, oldValue, scope) {
           if (newValue !== oldValue) {
-            validate();
             scope.model.startDateTime = adjustDateTimeDate(scope.model.startDateTime, newValue, scope);
           }
         });
 
         $scope.$watch('model.endDateTime', function(newValue, oldValue, scope) {
           if (newValue !== oldValue) {
-            validate();
             var n = moment(newValue, scope.dateTimeFormat);
             scope.model.endDate = n.format(scope.dateFormat);
           }
@@ -148,7 +133,6 @@ angular.module('app')
 
         $scope.$watch('model.endDate', function(newValue, oldValue, scope) {
           if (newValue !== oldValue) {
-            validate();
             scope.model.endDateTime = adjustDateTimeDate(scope.model.endDateTime, newValue, scope);
           }
         });
@@ -191,31 +175,6 @@ angular.module('app')
           highlight: true,
           hint: true
         };
-      }
-
-      function validate() {
-        $scope.errorMessage = null;
-        validateRequiredFields();
-        validateDates();
-      }
-
-      function validateRequiredFields() {
-        if (!$scope.model.title) {
-          return $scope.errorMessage = 'Event Title is required';
-        }
-
-        if (!$scope.model.category) {
-          return $scope.errorMessage = 'Event Category is required';
-        }
-      }
-
-      function validateDates() {
-        var start = moment($scope.model.startDateTime, $scope.dateTimeFormat);
-        var end = moment($scope.model.endDateTime, $scope.dateTimeFormat);
-
-        if (end.isBefore(start)) {
-          return $scope.errorMessage = 'The end date must be on or after the start date';
-        }
       }
     }
   ]);
