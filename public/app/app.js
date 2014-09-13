@@ -12,8 +12,8 @@ angular.module('app')
         auth: function(authService) {
           return authService.currentUserAuthorizedForRoute('')
         }
-      },
-    }
+      }
+    };
 
     $locationProvider.html5Mode(true);
 

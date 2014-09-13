@@ -23,13 +23,19 @@ form.form-horizontal(name="eventEditor")
 			.form-group
 				label.col-md-2.control-label(for='startDate') Start
 				.col-md-10
-					input.form-control(name='startDate', type='text', ng-model='model.startDateTime', date-time-picker, data-default-date='{{model.startDateTime}}',  ng-hide='model.isAllDayEvent', required, readonly)
+					input.form-control(name='startDateTime', type='text', ng-model='model.startDateTime', date-time-picker, data-default-date='{{model.startDateTime}}',  ng-hide='model.isAllDayEvent', required, readonly)
 					input.form-control(name='startDate', type='text', ng-model='model.startDate', date-time-picker, data-default-date='{{model.startDate}}', data-pick-time='false', ng-show='model.isAllDayEvent', required, readonly)
 			.form-group
 				label.col-md-2.control-label(for='endDate') End
 				.col-md-10
-					input.form-control(name='endDate', type='text', ng-model='model.endDateTime', date-time-picker, data-default-date='{{model.endDateTime}}', ng-hide='model.isAllDayEvent', required, readonly)
-					input.form-control(name='endDate', type='text', ng-model='model.endDate', date-time-picker, data-default-date='{{model.endDate}}', data-pick-time='false', ng-show='model.isAllDayEvent', required, readonly)
+					div(ng-hide='model.isAllDayEvent')
+						input.form-control(name='endDateTime', type='text', ng-model='model.endDateTime', date-time-picker, data-default-date='{{model.endDateTime}}', required, is-on-or-after-date='{{model.startDateTime}}', readonly)
+						.error-container(ng-show='eventEditor.endDateTime.$invalid')
+							small.text-danger(ng-show='eventEditor.endDateTime.$error.isOnOrAfterDate') Must be on or after start
+					div(ng-show='model.isAllDayEvent')
+						input.form-control(name='endDate', type='text', ng-model='model.endDate', date-time-picker, data-default-date='{{model.endDate}}', data-pick-time='false', required, is-on-or-after-date='{{model.startDate}}', readonly)
+						.error-container(ng-show='eventEditor.endDate.$invalid')
+							small.text-danger(ng-show='eventEditor.endDate.$error.isOnOrAfterDate') Must be on or after start
 			.form-group
 					label.col.md-10.col-md-offset-2
 						input(type='checkbox', ng-model='model.isPrivate')

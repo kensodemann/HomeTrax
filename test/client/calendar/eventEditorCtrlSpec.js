@@ -611,42 +611,4 @@ describe('eventEditorCtrl', function (){
       scope.$digest();
     }
   });
-
-  describe('validation', function (){
-    var model;
-
-    beforeEach(function (){
-      model = {
-        title: 'Eat Something',
-        allDay: false,
-        start: moment('2014-06-20T12:00:00'),
-        end: moment('2014-06-20T13:00:00'),
-        category: 'Health & Fitness',
-        private: false,
-        user: 'KWS'
-      };
-
-      $controllerConstructor('eventEditorCtrl', {
-        $scope: scope,
-        $modal: {},
-        $modalInstance: {},
-        eventModel: model,
-        eventCategory: mockEventCategory
-      });
-
-      scope.$digest();
-    });
-
-    it('sets an error if the end datetime is less than the start datetime', function(){
-      scope.model.endDateTime = '06/20/2014 11:59 AM';
-      scope.$digest();
-      expect(scope.errorMessage).to.equal('The end date must be on or after the start date');
-    });
-
-    it('sets an error if the end datetime is less than the start datetime', function(){
-      scope.model.endDate = '06/19/2014';
-      scope.$digest();
-      expect(scope.errorMessage).to.equal('The end date must be on or after the start date');
-    });
-  });
 });
