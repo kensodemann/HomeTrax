@@ -32,9 +32,10 @@ form.form-horizontal(name="userEditor")
 			.form-group(ng-show='mode==="create"')
 				label.col-md-3.control-label(for='verifyPassword') Verify Password
 				.col-md-9
-					input.form-control(name='verifyPassword', type='password', ng-change='validatePassword()', ng-model='model.verifyPassword', ng-required='mode==="create"')
+					input.form-control(name='verifyPassword', type='password', ng-change='validatePassword()', ng-model='model.verifyPassword', ng-required='mode==="create"', matches-value='{{model.password}}')
 					.error-container(ng-show='userEditor.verifyPassword.$invalid')
 						small.text-danger(ng-show='userEditor.verifyPassword.$error.required') Required
+						small.text-danger(ng-show='!userEditor.verifyPassword.$error.required && userEditor.verifyPassword.$error.matchesValue') Must match password
 			.form-group
 				.col-md-offset-4.col-md-8.text-danger {{errorMessage}}
 	.modal-footer
