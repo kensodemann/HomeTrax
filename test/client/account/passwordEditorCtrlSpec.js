@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 describe('passwordEditorCtrl', function() {
   var scope;
@@ -43,62 +43,6 @@ describe('passwordEditorCtrl', function() {
       createController(model);
       expect(scope.model).to.deep.equal(model);
     });
-
-    it('sets newPasswordIsValid to false', function() {
-      createController(model);
-      expect(scope.newPasswordIsValid).to.be.false;
-    });
-
-    it('sets the error message', function() {
-      createController(model);
-      expect(scope.errorMessage).to.equal('New password must be at least 8 characters long');
-    });
-  });
-
-  describe('password validation', function() {
-    function createController(model) {
-      return $controllerConstructor('passwordEditorCtrl', {
-        $scope: scope,
-        $modalInstance: {},
-        passwordModel: model
-      });
-    }
-
-    it('sets password invalid if it is too short', function() {
-      createController({
-        password: 'MyCurrentPassword',
-        newPassword: 'xsevenx',
-        verifyPassword: 'xsevenx'
-      });
-      scope.validatePassword();
-
-      expect(scope.errorMessage).to.equal('New password must be at least 8 characters long');
-      expect(scope.newPasswordIsValid).to.be.false;
-    });
-
-    it('sets password invalid if passwords do not match', function() {
-      createController({
-        password: 'MyCurrentPassword',
-        newPassword: 'xeightxx',
-        verifyPassword: 'xeightx'
-      });
-      scope.validatePassword();
-
-      expect(scope.errorMessage).to.equal('Passwords do not match');
-      expect(scope.newPasswordIsValid).to.be.false;
-    });
-
-    it('sets password valid if it long enough and matches', function() {
-      createController({
-        password: 'MyCurrentPassword',
-        newPassword: 'xeightxx',
-        verifyPassword: 'xeightxx'
-      });
-      scope.validatePassword();
-
-      expect(scope.errorMessage).to.equal('');
-      expect(scope.newPasswordIsValid).to.be.true;
-    });
   });
 
   describe('cancel', function() {
@@ -111,7 +55,7 @@ describe('passwordEditorCtrl', function() {
     });
 
     it('should dismiss the modal', function() {
-      var ctrl = $controllerConstructor('passwordEditorCtrl', {
+      $controllerConstructor('passwordEditorCtrl', {
         $scope: scope,
         $modalInstance: mockModalInstance,
         passwordModel: {}

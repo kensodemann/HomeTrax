@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 angular.module('app')
   .controller('userEditorCtrl', ['$scope', '$modalInstance', 'userModel',
@@ -12,7 +12,6 @@ angular.module('app')
       $scope.title = userModel._id ? 'Edit User' : 'Create New User';
       $scope.mode = userModel._id ? 'edit' : 'create';
       $scope.errorMessage = '';
-      $scope.passwordIsValid = false;
 
       $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
@@ -29,7 +28,7 @@ angular.module('app')
       function createNewUser() {
         copyEditorModelToDataModel();
         userModel.password = $scope.model.password;
-        userModel.$save(function(u, responseHeaders) {
+        userModel.$save(function(u) {
           $modalInstance.close(u);
         }, function(response) {
           $scope.errorMessage = response.data.reason;
@@ -38,7 +37,7 @@ angular.module('app')
 
       function updateUser() {
         copyEditorModelToDataModel();
-        userModel.$update(function(u, responseHeaders) {
+        userModel.$update(function(u) {
           $modalInstance.close(u);
         }, function(response) {
           $scope.errorMessage = response.data.reason;
@@ -49,28 +48,6 @@ angular.module('app')
         userModel.firstName = $scope.model.firstName;
         userModel.lastName = $scope.model.lastName;
         userModel.username = $scope.model.username;
-      }
-
-      $scope.validatePassword = function() {
-        if (!$scope.model.password || $scope.model.password.length < 8) {
-          $scope.passwordIsValid = false;
-          $scope.errorMessage = 'New password must be at least 8 characters long';
-          return;
-        }
-        if ($scope.model.password !== $scope.model.verifyPassword) {
-          $scope.passwordIsValid = false;
-          $scope.errorMessage = 'Passwords do not match';
-          return;
-        }
-
-        $scope.passwordIsValid = true;
-        $scope.errorMessage = '';
-      };
-
-      if (userModel._id) {
-        $scope.passwordIsValid = true;
-      } else {
-        $scope.validatePassword();
       }
     }
   ]);
