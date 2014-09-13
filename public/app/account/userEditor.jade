@@ -8,14 +8,20 @@ form.form-horizontal(name="userEditor")
 				label.col-md-3.control-label(for='username') Username
 				.col-md-9
 					input.form-control(name='username', type='text', ng-model='model.username', required)
+					.error-container(ng-show='userEditor.username.$invalid')
+						small.text-danger(ng-show='userEditor.username.$error.required') Required
 			.form-group
 				label.col-md-3.control-label(for='firstName') First Name
 				.col-md-9
 					input.form-control(name='firstName', type='text', ng-model='model.firstName', required)
+					.error-container(ng-show='userEditor.firstName.$invalid')
+						small.text-danger(ng-show='userEditor.firstName.$error.required') Required
 			.form-group
 				label.col-md-3.control-label(for='lastName') Last Name
 				.col-md-9
 					input.form-control(name='lastName', type='text', ng-model='model.lastName', required)
+					.error-container(ng-show='userEditor.lastName.$invalid')
+						small.text-danger(ng-show='userEditor.lastName.$error.required') Required
 			.form-group(ng-hide='mode==="edit"')
 				label.col-md-3.control-label(for='password') Password
 				.col-md-9
