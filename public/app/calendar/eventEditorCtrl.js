@@ -195,18 +195,7 @@ angular.module('app')
 
       function validate() {
         $scope.errorMessage = null;
-        validateRequiredFields();
         validateDates();
-      }
-
-      function validateRequiredFields() {
-        if (!$scope.model.title) {
-          return $scope.errorMessage = 'Event Title is required';
-        }
-
-        if (!$scope.model.category) {
-          return $scope.errorMessage = 'Event Category is required';
-        }
       }
 
       function validateDates() {

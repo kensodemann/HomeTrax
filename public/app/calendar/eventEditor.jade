@@ -8,10 +8,14 @@ form.form-horizontal(name="eventEditor")
 				label.col-md-2.control-label(for='title') Title
 				.col-md-10
 					input.form-control(name='title', type='text', ng-model='model.title', required)
+					.error-container(ng-show='eventEditor.title.$invalid')
+						small.text-danger(ng-show='eventEditor.title.$error.required') Required
 			.form-group
 				label.col-md-2.control-label(for='category') Category
 				.col-md-10
 					input.form-control(name='category', type='text', ng-model='model.category', options='categoryOptions', datasets='categories', sf-typeahead, required)
+					.error-container(ng-show='eventEditor.category.$invalid')
+						small.text-danger(ng-show='eventEditor.category.$error.required') Required
 			.form-group
 					label.col.md-10.col-md-offset-2
 						input(type='checkbox', ng-model='model.isAllDayEvent')

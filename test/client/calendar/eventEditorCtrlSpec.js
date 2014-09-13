@@ -637,26 +637,6 @@ describe('eventEditorCtrl', function (){
       scope.$digest();
     });
 
-    it('sets an error if there is no title', function (){
-      scope.model.title = "";
-      scope.$digest();
-      expect(scope.errorMessage).to.equal('Event Title is required');
-    });
-
-    it('clears the error message when the condition is fixed', function (){
-      scope.model.title = "";
-      scope.$digest();
-      scope.model.title = "Some valid title";
-      scope.$digest();
-      expect(scope.errorMessage).to.be.null;
-    });
-
-    it('sets an error if there is no category', function (){
-      scope.model.category = "";
-      scope.$digest();
-      expect(scope.errorMessage).to.equal('Event Category is required');
-    });
-
     it('sets an error if the end datetime is less than the start datetime', function(){
       scope.model.endDateTime = '06/20/2014 11:59 AM';
       scope.$digest();
