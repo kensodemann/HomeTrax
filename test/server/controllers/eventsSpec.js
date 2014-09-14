@@ -38,7 +38,6 @@ describe('events controller', function (){
         send: function (events){
           expect(events.length).to.equal(3);
           events.forEach(function (e){
-            expect(e.private).to.be.a('Boolean');
             if (e.private) {
               expect(e.userId.toString()).to.equal('53a4dd887c6dc30000bee3af');
             }
@@ -377,7 +376,6 @@ describe('events controller', function (){
             start: '2014-06-22T16:00:00',
             end: '2014-06-22T18:45:00',
             category: 'Recreation',
-            private: false,
             userId: ObjectId('53a4dd887c6dc30000bee3ae')
           }, function (error, value){
             otherUserPublicEvent = value;

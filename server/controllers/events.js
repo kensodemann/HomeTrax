@@ -3,25 +3,22 @@
 var db = require('../config/database');
 var ObjectId = require("mongojs").ObjectId;
 
-module.exports.get = function (req, res){
+module.exports.get = function(req, res) {
   db.events.find({
     $or: [
-      {
-        userId: ObjectId(req.user._id)
-      },
-      {
-        private: false
-      }
+      {userId: ObjectId(req.user._id)},
+      {private: false},
+      {private: null}
     ]
-  }, function (err, events){
+  }, function(err, events) {
     res.send(events);
   });
 };
 
-module.exports.getById = function (req, res){
+module.exports.getById = function(req, res) {
   db.events.findOne({
     _id: ObjectId(req.params.id)
-  }, function (err, ev){
+  }, function(err, ev) {
     if (ev) {
       if (ev.private && ev.userId.toString() !== req.user._id.toString()) {
         res.status(403);
@@ -35,21 +32,21 @@ module.exports.getById = function (req, res){
   });
 };
 
-module.exports.save = function (req, res){
+module.exports.save = function(req, res) {
   var e = req.body;
   assignIdFromRequest(req, e);
   assignUserId(e, req);
   if (userIsAuthorized(e.userId, req, res) && isValid(e, res)) {
-    db.events.save(e, function (err, ev){
+    db.events.save(e, function(err, ev) {
       res.send(ev);
     });
   }
 };
 
-module.exports.remove = function (req, res){
+module.exports.remove = function(req, res) {
   db.events.findOne({
     _id: ObjectId(req.params.id)
-  }, function (err, e){
+  }, function(err, e) {
     if (!e) {
       res.status(404);
       return res.send();
@@ -58,20 +55,20 @@ module.exports.remove = function (req, res){
     if (userIsAuthorized(e.userId, req, res)) {
       db.events.remove({
         _id: ObjectId(req.params.id)
-      }, true, function (err, e){
+      }, true, function(err, e) {
         res.send(e);
       });
     }
   });
 };
 
-function assignIdFromRequest(req, e){
+function assignIdFromRequest(req, e) {
   if (req.params && req.params.id) {
     e._id = ObjectId(req.params.id);
   }
 }
 
-function assignUserId(e, req){
+function assignUserId(e, req) {
   if (!e.userId) {
     e.userId = ObjectId(req.user._id);
   } else {
@@ -79,7 +76,7 @@ function assignUserId(e, req){
   }
 }
 
-function userIsAuthorized(userId, req, res){
+function userIsAuthorized(userId, req, res) {
   if (userId.toString() !== req.user._id.toString()) {
     res.status(403);
     res.send();
@@ -88,27 +85,27 @@ function userIsAuthorized(userId, req, res){
   return true;
 }
 
-function isValid(evt, res){
-  if(!evt.title){
+function isValid(evt, res) {
+  if (!evt.title) {
     sendError(new Error('Events must have a title.'), res);
     return false;
   }
-  if(!evt.category){
+  if (!evt.category) {
     sendError(new Error('Events must have a category.'), res);
     return false;
   }
-  if(!evt.start){
+  if (!evt.start) {
     sendError(new Error('Events must have a start date.'), res);
     return false;
   }
-  if(evt.end && evt.end < evt.start){
+  if (evt.end && evt.end < evt.start) {
     sendError(new Error('Start date must be on or before the end date.'), res);
     return false;
   }
   return true;
 }
 
-function sendError(err, res){
+function sendError(err, res) {
   res.status(400);
   res.send({
     reason: err.toString()
