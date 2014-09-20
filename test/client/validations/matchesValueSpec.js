@@ -31,4 +31,24 @@ describe('matchesValue', function() {
     scope.$digest();
     expect(scope.myForm.myElement.$invalid).to.be.true;
   });
+
+  it('observes changes in the model', function(){
+    scope.value = 'Foo';
+    scope.targetValue = 'Foo';
+    scope.$digest();
+    expect(scope.myForm.myElement.$invalid).to.be.false;
+    scope.value = 'Fool';
+    scope.$digest();
+    expect(scope.myForm.myElement.$invalid).to.be.true;
+  });
+
+  it('observes changes in the target', function(){
+    scope.value = 'Foo';
+    scope.targetValue = 'Foo';
+    scope.$digest();
+    expect(scope.myForm.myElement.$invalid).to.be.false;
+    scope.targetValue = 'Fool';
+    scope.$digest();
+    expect(scope.myForm.myElement.$invalid).to.be.true;
+  });
 });

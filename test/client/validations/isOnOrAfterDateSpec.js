@@ -117,4 +117,26 @@ describe('isOnOrAfterDateSpec', function() {
       expect(scope.myForm.myDate.$invalid).to.be.false;
     });
   });
+
+  describe('the trigger', function(){
+    it('detects a change in the model', function(){
+      scope.theDate = '09/16/2014 9:01 AM';
+      scope.targetDate = '09/16/2014 9:01 AM';
+      scope.$digest();
+      expect(scope.myForm.myDate.$invalid).to.be.false;
+      scope.theDate = '09/16/2014 9:00 AM';
+      scope.$digest();
+      expect(scope.myForm.myDate.$invalid).to.be.true;
+    });
+
+    it('detects a change in the target', function(){
+      scope.theDate = '09/16/2014 9:01 AM';
+      scope.targetDate = '09/16/2014 9:01 AM';
+      scope.$digest();
+      expect(scope.myForm.myDate.$invalid).to.be.false;
+      scope.targetDate = '09/16/2014 9:02 AM';
+      scope.$digest();
+      expect(scope.myForm.myDate.$invalid).to.be.true;
+    });
+  });
 });
