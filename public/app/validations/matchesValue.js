@@ -6,7 +6,7 @@ angular.module('app').directive('matchesValue', function() {
     restrict: 'A',
     link: function(scope, elem, attrs, ctrl) {
       scope.$watch(attrs.ngModel, function(newValue) {
-        ctrl.$setValidity('matchesValue', newValue === attrs.matchesValue)
+        ctrl.$setValidity('matchesValue', (newValue || "") === attrs.matchesValue)
       });
     }
   };

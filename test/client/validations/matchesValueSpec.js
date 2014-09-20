@@ -13,6 +13,11 @@ describe('matchesValue', function() {
     scope.$digest();
   }));
 
+  it('marks input valid if values both undefined', function(){
+    scope.$digest();
+    expect(scope.myForm.myElement.$invalid).to.be.false;
+  });
+
   it('marks input valid if values match', function(){
     scope.value = 'Foo';
     scope.targetValue = 'Foo';
