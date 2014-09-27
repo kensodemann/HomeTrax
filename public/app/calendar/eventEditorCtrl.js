@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('app')
-  .controller('eventEditorCtrl', ['$scope', '$modal', '$modalInstance', 'eventModel', 'eventCategory',
-    function($scope, $modal, $modalInstance, eventModel, eventCategory) {
+  .controller('eventEditorCtrl', ['$scope', '$modal', '$modalInstance', 'eventModel', 'EventCategory',
+    function($scope, $modal, $modalInstance, eventModel, EventCategory) {
       var eventCategories;
       var eventCategorySuggestions;
 
@@ -47,7 +47,7 @@ angular.module('app')
       };
 
       function initializeData() {
-        eventCategories = eventCategory.query(function() {
+        eventCategories = EventCategory.query(function() {
           eventCategorySuggestions.initialize();
         });
 
@@ -99,7 +99,7 @@ angular.module('app')
           if (matching.length > 0) {
             return matching[0].name;
           } else {
-            eventCategory.save({
+            EventCategory.save({
               name: category
             });
           }

@@ -1,12 +1,12 @@
 angular.module('app')
-  .controller('myProfileCtrl', ['$scope', 'user', 'userPassword', 'identity', '$modal', 'notifier',
-    function($scope, user, userPassword, identity, $modal, notifier) {
-      $scope.user = user.get({
+  .controller('myProfileCtrl', ['$scope', 'User', 'UserPassword', 'identity', '$modal', 'notifier',
+    function($scope, User, UserPassword, identity, $modal, notifier) {
+      $scope.user = User.get({
         id: identity.currentUser._id
       });
 
       $scope.reset = function() {
-        $scope.user = user.get({
+        $scope.user = User.get({
           id: identity.currentUser._id
         });
       };
@@ -22,7 +22,7 @@ angular.module('app')
           backdrop: 'static',
           resolve: {
             passwordModel: function() {
-              var model = new userPassword();
+              var model = new UserPassword();
               model._id = identity.currentUser._id;
               return model;
             }

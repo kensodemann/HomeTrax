@@ -37,7 +37,7 @@ describe('eventEditorCtrl', function (){
       $modal: {},
       $modalInstance: {},
       eventModel: {},
-      eventCategory: mockEventCategory
+      EventCategory: mockEventCategory
     });
 
     expect(ctrl).to.not.be.undefined;
@@ -64,7 +64,7 @@ describe('eventEditorCtrl', function (){
         $modal: {},
         $modalInstance: {},
         eventModel: model,
-        eventCategory: mockEventCategory
+        EventCategory: mockEventCategory
       });
     }
 
@@ -125,7 +125,7 @@ describe('eventEditorCtrl', function (){
         $modal: {},
         $modalInstance: {},
         eventModel: model,
-        eventCategory: mockEventCategory
+        EventCategory: mockEventCategory
       });
       scope.$digest();
 
@@ -183,7 +183,7 @@ describe('eventEditorCtrl', function (){
         $modal: {},
         $modalInstance: {},
         eventModel: model,
-        eventCategory: mockEventCategory
+        EventCategory: mockEventCategory
       });
       scope.$digest();
 
@@ -221,7 +221,7 @@ describe('eventEditorCtrl', function (){
         $modal: {},
         $modalInstance: {},
         eventModel: model,
-        eventCategory: mockEventCategory
+        EventCategory: mockEventCategory
       });
       scope.$digest();
 
@@ -290,7 +290,7 @@ describe('eventEditorCtrl', function (){
         $modal: {},
         $modalInstance: {},
         eventModel: model,
-        eventCategory: mockEventCategory
+        EventCategory: mockEventCategory
       });
       scope.$digest();
 
@@ -330,7 +330,7 @@ describe('eventEditorCtrl', function (){
         $modal: {},
         $modalInstance: mockModalInstance,
         eventModel: mockModel,
-        eventCategory: mockEventCategory
+        EventCategory: mockEventCategory
       });
     }
 
@@ -539,7 +539,7 @@ describe('eventEditorCtrl', function (){
         $modal: mockModal,
         $modalInstance: mockModalInstance,
         eventModel: model,
-        eventCategory: mockEventCategory
+        EventCategory: mockEventCategory
       });
     }
 

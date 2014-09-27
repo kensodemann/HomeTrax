@@ -26,7 +26,7 @@ describe('userListCtrl', function() {
     it('calls the user service to get a list of users', function() {
       var ctrl = $controllerConstructor('userListCtrl', {
         $scope: scope,
-        user: mockUser,
+        User: mockUser,
         $modal: {}
       });
       var users = scope.users;
@@ -52,7 +52,7 @@ describe('userListCtrl', function() {
     function createController() {
       $controllerConstructor('userListCtrl', {
         $scope: scope,
-        user: mockUser,
+        User: mockUser,
         $modal: mockModal
       });
     }

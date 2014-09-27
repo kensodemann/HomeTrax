@@ -1,4 +1,4 @@
-angular.module('app').factory('eventCategory', ['$resource',
+angular.module('app').factory('EventCategory', ['$resource',
   function($resource) {
     var resource = $resource('/api/eventCategories/:id', {
       id: "@_id"

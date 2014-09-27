@@ -1,12 +1,12 @@
 angular.module('app')
-  .controller('calendarCtrl', ['$scope', '$modal', 'calendarEvent', 'eventCategory',
-    function($scope, $modal, calendarEvent, eventCategory) {
-      $scope.events = calendarEvent.query(function(events) {
+  .controller('calendarCtrl', ['$scope', '$modal', 'CalendarEvent', 'EventCategory',
+    function($scope, $modal, CalendarEvent, EventCategory) {
+      $scope.events = CalendarEvent.query(function(events) {
         $scope.eventSources[0].events = events.slice(0);
       });
 
       $scope.dayClicked = function(day) {
-        var event = new calendarEvent();
+        var event = new CalendarEvent();
         event.start = moment(day.hour(8));
         event.end = moment(day.hour(9));
         event.allDay = false;

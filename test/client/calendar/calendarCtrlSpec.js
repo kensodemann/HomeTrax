@@ -35,7 +35,7 @@ describe('calendarCtrl', function() {
       $controllerConstructor('calendarCtrl', {
         $scope: scope,
         $modal: {},
-        calendarEvent: mockEvent
+        CalendarEvent: mockEvent
       });
 
       expect(mockEvent.query.calledOnce).to.be.true;
@@ -86,7 +86,7 @@ describe('calendarCtrl', function() {
       $controllerConstructor('calendarCtrl', {
         $scope: scope,
         $modal: mockModal,
-        calendarEvent: mockEvent
+        CalendarEvent: mockEvent
       });
     }
 
