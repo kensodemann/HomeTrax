@@ -99,13 +99,17 @@ angular.module('app')
         if (onlyMine) {
           angular.forEach(otherEvents, function(evt) {
             $scope.calendar.fullCalendar('removeEvents', evt._id);
-            var idx = $.inArray(evt, $scope.eventSources[0].events);
-            $scope.eventSources[0].events.splice(idx, 1);
+            //var idx = $.inArray(evt, $scope.eventSources[0].events);
+            //$scope.eventSources[0].events.splice(idx, 1);
+          });
+          $scope.eventSources[0].events = $.grep($scope.events, function(e) {
+            return e.title === 'New All Day Event' || e.title === 'Sad Day';
           });
         } else {
-         angular.forEach(otherEvents, function(evt){
-           $scope.eventSources[0].events.push(evt);
-         });
+          $scope.eventSources[0].events = $scope.events.slice(0);
+//         angular.forEach(otherEvents, function(evt){
+//           $scope.eventSources[0].events.push(evt);
+//         });
         }
       });
 
