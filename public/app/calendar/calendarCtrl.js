@@ -1,19 +1,20 @@
 angular.module('app')
   .controller('calendarCtrl', ['$scope', '$modal', 'calendarData',
     function($scope, $modal, calendarData) {
-      calendarData.load().then(function() {
-        $scope.events = calendarData.events();
-        $scope.eventSources[0].events = $scope.events;
-      });
+      function loadData() {
+        calendarData.load().then(function() {
+          $scope.eventSources[0].events = calendarData.events();
+        });
+      }
 
+      loadData();
+
+      // TODO: Test this
       $scope.dayClicked = function(day) {
-        var event = new CalendarEvent();
-        event.start = moment(day.hour(8));
-        event.end = moment(day.hour(9));
-        event.allDay = false;
+        var event = new calendarData.newEvent(day);
         var m = openModal(event);
-        m.result.then(function(e) {
-          $scope.events.push(e);
+        m.result.then(function() {
+          loadData();
         })
       };
 
@@ -24,31 +25,24 @@ angular.module('app')
           if (typeof evt === 'object') {
             replaceEvent(evt);
           } else {
-            removeEvent(event);
+            loadData();
           }
           $scope.calendar.fullCalendar('render');
         });
 
         function replaceEvent(evt) {
           var idx = firstMatchingIndex(evt);
-          if (shouldRemoveFromCalendar($scope.events[idx], evt)) {
+          if (shouldRemoveFromCalendar($scope.eventSources[0].events[idx], evt)) {
             $scope.calendar.fullCalendar('removeEvents', evt._id);
           }
-          $scope.events.splice(idx, 1);
-          $scope.events.push(evt);
-        }
-
-        function removeEvent(evt) {
-          var idx = firstMatchingIndex(evt);
-          $scope.events.splice(idx, 1);
-          $scope.calendar.fullCalendar('removeEvents', evt._id);
+          loadData();
         }
 
         function firstMatchingIndex(evt) {
-          var matchingEvts = $.grep($scope.events, function(e) {
+          var matchingEvts = $.grep($scope.eventSources[0].events, function(e) {
             return e._id === evt._id;
           });
-          return $.inArray(matchingEvts[0], $scope.events);
+          return $.inArray(matchingEvts[0], $scope.eventSources[0].events);
         }
 
         function shouldRemoveFromCalendar(originalEvent, editedEvent) {
@@ -88,14 +82,13 @@ angular.module('app')
       $scope.$watch('showOnlyMine', function(onlyMine, previousValue) {
         if (onlyMine !== previousValue) {
           calendarData.limitToMine(onlyMine);
-          if (onlyMine){
+          if (onlyMine) {
             var excludedEvts = calendarData.excludedEvents();
             angular.forEach(excludedEvts, function(evt) {
               $scope.calendar.fullCalendar('removeEvents', evt._id);
             });
           }
-          $scope.events = calendarData.events();
-          $scope.eventSources[0].events = $scope.events;
+          $scope.eventSources[0].events = calendarData.events();
         }
       });
 

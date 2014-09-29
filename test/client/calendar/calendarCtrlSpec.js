@@ -127,8 +127,11 @@ describe('calendarCtrl', function() {
       expect(mockModal.open.calledOnce).to.be.true;
     });
 
-    it('replaces the modified event when closed with save', function() {
+    it('reloads the data on save', function() {
       createController();
+
+      var loadDfd = q.defer();
+      mockCalendarData.load.returns(loadDfd.promise);
 
       scope.eventClicked({
         _id: 2,
@@ -141,12 +144,17 @@ describe('calendarCtrl', function() {
       dfd.resolve(modifiedEvent);
       scope.$digest();
 
-      expect(scope.events.length).to.equal(4);
-      expect($.inArray(modifiedEvent, scope.events)).to.not.equal(-1);
+      expect(mockCalendarData.load.calledTwice).to.be.true;
+      loadDfd.resolve(true);
+      scope.$digest();
+      expect(mockCalendarData.events.calledTwice).to.be.true;
     });
 
-    it('removes the event when closed with remove', function() {
+    it('reloads the data after event is removed', function() {
       createController();
+
+      var loadDfd = q.defer();
+      mockCalendarData.load.returns(loadDfd.promise);
 
       scope.eventClicked({
         _id: 2,
@@ -155,13 +163,13 @@ describe('calendarCtrl', function() {
       dfd.resolve(true);
       scope.$digest();
 
-      expect(scope.events.length).to.equal(3);
-      expect($.grep(scope.events, function(e) {
-        return e._id === 2;
-      }).length).to.equal(0);
+      expect(mockCalendarData.load.calledTwice).to.be.true;
+      loadDfd.resolve(true);
+      scope.$digest();
+      expect(mockCalendarData.events.calledTwice).to.be.true;
     });
 
-    it('renders te calendar', function() {
+    it('renders the calendar', function() {
       createController();
 
       scope.eventClicked({
