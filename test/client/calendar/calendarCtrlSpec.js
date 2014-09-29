@@ -23,27 +23,37 @@ describe('calendarCtrl', function() {
   });
 
   describe('initialization', function() {
-    var mockEvent;
+    var mockCalendarData;
+    var dfd;
 
     beforeEach(function() {
-      mockEvent = sinon.stub({
-        query: function() {}
+      mockCalendarData = sinon.stub({
+        load: function() {
+        },
+        events: function() {
+        }
       });
+      dfd = q.defer();
+      mockCalendarData.load.returns(dfd.promise);
+      mockCalendarData.events.returns([]);
     });
 
-    it('gets the events', function() {
+    it('loads the events', function() {
       $controllerConstructor('calendarCtrl', {
         $scope: scope,
         $modal: {},
-        CalendarEvent: mockEvent
+        calendarData: mockCalendarData
       });
 
-      expect(mockEvent.query.calledOnce).to.be.true;
+      expect(mockCalendarData.load.calledOnce).to.be.true;
+      dfd.resolve(true);
+      scope.$digest();
+      expect(mockCalendarData.events.calledOnce).to.be.true;
     });
   });
 
   describe('Editing an Event', function() {
-    var mockEvent;
+    var mockCalendarData;
     var mockModal;
     var mockModalInstance;
     var mockCalendar;
@@ -51,43 +61,59 @@ describe('calendarCtrl', function() {
 
     beforeEach(function() {
       mockCalendar = sinon.stub({
-        fullCalendar: function() {}
+        fullCalendar: function() {
+        }
       });
       scope.calendar = mockCalendar;
 
       dfd = q.defer();
       mockModal = sinon.stub({
-        open: function() {}
+        open: function() {
+        }
       });
       mockModalInstance = sinon.stub({
         result: dfd.promise
       });
       mockModal.open.returns(mockModalInstance);
 
-      mockEvent = sinon.stub({
-        query: function() {}
+      mockCalendarData = sinon.stub({
+        load: function() {
+        },
+        events: function() {
+        }
       });
-      mockEvent.query.returns([{
-        _id: 1,
-        title: 'event 1'
-      }, {
-        _id: 2,
-        title: 'event 2'
-      }, {
-        _id: 3,
-        title: 'event 3'
-      }, {
-        _id: 4,
-        title: 'event 4'
-      }]);
+      mockCalendarData.events.returns([
+        {
+          _id: 1,
+          title: 'event 1'
+        },
+        {
+          _id: 2,
+          title: 'event 2'
+        },
+        {
+          _id: 3,
+          title: 'event 3'
+        },
+        {
+          _id: 4,
+          title: 'event 4'
+        }
+      ]);
     });
 
     function createController() {
+      var queryDfd = q.defer();
+      mockCalendarData.load.returns(queryDfd.promise);
+
       $controllerConstructor('calendarCtrl', {
         $scope: scope,
         $modal: mockModal,
-        CalendarEvent: mockEvent
+        calendarData: mockCalendarData
       });
+
+      queryDfd.resolve(true);
+      scope.$digest();
     }
 
     it('Opens the modal', function() {
@@ -130,7 +156,7 @@ describe('calendarCtrl', function() {
       scope.$digest();
 
       expect(scope.events.length).to.equal(3);
-      expect($.grep(scope.events, function(e){
+      expect($.grep(scope.events, function(e) {
         return e._id === 2;
       }).length).to.equal(0);
     });
@@ -156,21 +182,26 @@ describe('calendarCtrl', function() {
     // changed, then the event needs to be removed from the calendar first to
     // prevent doubling up.
     it('does not remove the event from the calendar if allDay not changed and title not changed', function() {
-      mockEvent.query.returns([{
-        _id: 1,
-        title: 'event 1'
-      }, {
-        _id: 2,
-        title: 'event 2',
-        category: 'Test',
-        allDay: true
-      }, {
-        _id: 3,
-        title: 'event 3'
-      }, {
-        _id: 4,
-        title: 'event 4'
-      }]);
+      mockCalendarData.events.returns([
+        {
+          _id: 1,
+          title: 'event 1'
+        },
+        {
+          _id: 2,
+          title: 'event 2',
+          category: 'Test',
+          allDay: true
+        },
+        {
+          _id: 3,
+          title: 'event 3'
+        },
+        {
+          _id: 4,
+          title: 'event 4'
+        }
+      ]);
 
       var eventToModify = {
         _id: 2,
@@ -190,21 +221,26 @@ describe('calendarCtrl', function() {
     });
 
     it('removes the event from the calendar if allDay changed to not allDay', function() {
-      mockEvent.query.returns([{
-        _id: 1,
-        title: 'event 1'
-      }, {
-        _id: 2,
-        title: 'event 2',
-        category: 'Test',
-        allDay: true
-      }, {
-        _id: 3,
-        title: 'event 3'
-      }, {
-        _id: 4,
-        title: 'event 4'
-      }]);
+      mockCalendarData.events.returns([
+        {
+          _id: 1,
+          title: 'event 1'
+        },
+        {
+          _id: 2,
+          title: 'event 2',
+          category: 'Test',
+          allDay: true
+        },
+        {
+          _id: 3,
+          title: 'event 3'
+        },
+        {
+          _id: 4,
+          title: 'event 4'
+        }
+      ]);
 
       var eventToModify = {
         _id: 2,
@@ -224,21 +260,26 @@ describe('calendarCtrl', function() {
     });
 
     it('removes the event from the calendar if not allDay changed to allDay', function() {
-      mockEvent.query.returns([{
-        _id: 1,
-        title: 'event 1'
-      }, {
-        _id: 2,
-        title: 'event 2',
-        category: 'Test',
-        allDay: false
-      }, {
-        _id: 3,
-        title: 'event 3'
-      }, {
-        _id: 4,
-        title: 'event 4'
-      }]);
+      mockCalendarData.events.returns([
+        {
+          _id: 1,
+          title: 'event 1'
+        },
+        {
+          _id: 2,
+          title: 'event 2',
+          category: 'Test',
+          allDay: false
+        },
+        {
+          _id: 3,
+          title: 'event 3'
+        },
+        {
+          _id: 4,
+          title: 'event 4'
+        }
+      ]);
 
       var eventToModify = {
         _id: 2,
@@ -258,21 +299,26 @@ describe('calendarCtrl', function() {
     });
 
     it('removes the event from the calendar if the title changes', function() {
-      mockEvent.query.returns([{
-        _id: 1,
-        title: 'event 1'
-      }, {
-        _id: 2,
-        title: 'event 2',
-        category: 'Test',
-        allDay: true
-      }, {
-        _id: 3,
-        title: 'event 3'
-      }, {
-        _id: 4,
-        title: 'event 4'
-      }]);
+      mockCalendarData.events.returns([
+        {
+          _id: 1,
+          title: 'event 1'
+        },
+        {
+          _id: 2,
+          title: 'event 2',
+          category: 'Test',
+          allDay: true
+        },
+        {
+          _id: 3,
+          title: 'event 3'
+        },
+        {
+          _id: 4,
+          title: 'event 4'
+        }
+      ]);
 
       var eventToModify = {
         _id: 2,
@@ -289,6 +335,97 @@ describe('calendarCtrl', function() {
       scope.$digest();
 
       expect(mockCalendar.fullCalendar.calledWith('removeEvents', 2)).to.be.true;
+    });
+  });
+
+  describe('limiting to my events', function() {
+    var mockCalendarData;
+    var mockCalendar;
+
+    beforeEach(function() {
+      mockCalendar = sinon.stub({
+        fullCalendar: function() {
+        }
+      });
+      scope.calendar = mockCalendar;
+
+      mockCalendarData = sinon.stub({
+        load: function() {
+        },
+        events: function() {
+        },
+        excludedEvents: function() {
+        },
+        limitToMine:function(){
+        }
+      });
+      mockCalendarData.events.returns([]);
+      mockCalendarData.excludedEvents.returns([
+        {
+          _id: 1,
+          title: 'event 1'
+        },
+        {
+          _id: 2,
+          title: 'event 2'
+        },
+        {
+          _id: 3,
+          title: 'event 3'
+        },
+        {
+          _id: 4,
+          title: 'event 4'
+        }
+      ]);
+    });
+
+    function createController() {
+      var queryDfd = q.defer();
+      mockCalendarData.load.returns(queryDfd.promise);
+
+      $controllerConstructor('calendarCtrl', {
+        $scope: scope,
+        $modal: {},
+        calendarData: mockCalendarData
+      });
+
+      queryDfd.resolve(true);
+      scope.$digest();
+    }
+
+    it('calls limitToMine when checked', function(){
+      createController();
+      scope.showOnlyMine = true;
+      scope.$digest();
+      expect(mockCalendarData.limitToMine.calledOnce).to.be.true;
+      expect(mockCalendarData.limitToMine.calledWith(true)).to.be.true;
+    });
+
+    it('calls limitToMine when unchecked', function(){
+      createController();
+      scope.showOnlyMine = false;
+      scope.$digest();
+      expect(mockCalendarData.limitToMine.calledOnce).to.be.true;
+      expect(mockCalendarData.limitToMine.calledWith(false)).to.be.true;
+    });
+
+    it('gets events to exclude if checked', function(){
+      createController();
+      scope.showOnlyMine = true;
+      scope.$digest();
+      expect(mockCalendarData.excludedEvents.calledOnce).to.be.true;
+      expect(mockCalendarData.events.calledTwice).to.be.true;
+      expect(mockCalendar.fullCalendar.called).to.be.true;
+    });
+
+    it('gets all events if unchecked', function(){
+      createController();
+      scope.showOnlyMine = false;
+      scope.$digest();
+      expect(mockCalendarData.excludedEvents.called).to.be.false;
+      expect(mockCalendarData.events.calledTwice).to.be.true;
+      expect(mockCalendar.fullCalendar.called).to.be.false;
     });
   });
 });

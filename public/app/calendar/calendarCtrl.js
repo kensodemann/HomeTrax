@@ -1,8 +1,9 @@
 angular.module('app')
-  .controller('calendarCtrl', ['$scope', '$modal', 'CalendarEvent', 'EventCategory',
-    function($scope, $modal, CalendarEvent, EventCategory) {
-      $scope.events = CalendarEvent.query(function(events) {
-        $scope.eventSources[0].events = events.slice(0);
+  .controller('calendarCtrl', ['$scope', '$modal', 'calendarData',
+    function($scope, $modal, calendarData) {
+      calendarData.load().then(function() {
+        $scope.events = calendarData.events();
+        $scope.eventSources[0].events = $scope.events;
       });
 
       $scope.dayClicked = function(day) {
@@ -57,7 +58,7 @@ angular.module('app')
         }
       };
 
-      $scope.eventDropped = function(event) {
+      $scope.eventDropped = function() {
         console.log('You dropped the bomb on me');
       };
 
@@ -78,38 +79,23 @@ angular.module('app')
 
       $scope.eventSources = [
         {
-          events: []//$scope.events.slice(0)
+          events: []
         }
       ];
 
-      $scope.showOnlyMine = false;
+      $scope.showOnlyMine;
 
-      $scope.$watch('showOnlyMine', function(onlyMine) {
-        // So, here is what I think needs to be done:
-        //   On show:
-        //      Create list of items that are not mine
-        //      Push those items
-        //   On hide:
-        //      Create list of items that are not mine
-        //      Remove those items
-        var otherEvents = $.grep($scope.events, function(e) {
-          return e.title !== 'New All Day Event' && e.title !== 'Sad Day';
-        });
-
-        if (onlyMine) {
-          angular.forEach(otherEvents, function(evt) {
-            $scope.calendar.fullCalendar('removeEvents', evt._id);
-            //var idx = $.inArray(evt, $scope.eventSources[0].events);
-            //$scope.eventSources[0].events.splice(idx, 1);
-          });
-          $scope.eventSources[0].events = $.grep($scope.events, function(e) {
-            return e.title === 'New All Day Event' || e.title === 'Sad Day';
-          });
-        } else {
-          $scope.eventSources[0].events = $scope.events.slice(0);
-//         angular.forEach(otherEvents, function(evt){
-//           $scope.eventSources[0].events.push(evt);
-//         });
+      $scope.$watch('showOnlyMine', function(onlyMine, previousValue) {
+        if (onlyMine !== previousValue) {
+          calendarData.limitToMine(onlyMine);
+          if (onlyMine){
+            var excludedEvts = calendarData.excludedEvents();
+            angular.forEach(excludedEvts, function(evt) {
+              $scope.calendar.fullCalendar('removeEvents', evt._id);
+            });
+          }
+          $scope.events = calendarData.events();
+          $scope.eventSources[0].events = $scope.events;
         }
       });
 
