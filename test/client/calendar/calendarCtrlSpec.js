@@ -67,6 +67,71 @@ describe('calendarCtrl', function() {
     });
   });
 
+  describe('Adding a new event', function() {
+    var mockCalendarData;
+    var mockModal;
+    var mockModalInstance;
+    var dfd;
+
+    beforeEach(function() {
+      mockCalendarData = sinon.stub({
+        newEvent: function() {
+        }
+      });
+
+      dfd = q.defer();
+      mockModal = sinon.stub({
+        open: function() {
+        }
+      });
+      mockModalInstance = sinon.stub({
+        result: dfd.promise
+      });
+      mockModal.open.returns(mockModalInstance);
+    });
+
+    function createController() {
+      $controllerConstructor('calendarCtrl', {
+        $scope: scope,
+        $modal: mockModal,
+        calendarData: mockCalendarData
+      });
+    }
+
+    it('creates a new event for the day', function(){
+      var day = moment();
+      createController();
+
+      scope.dayClicked(day);
+
+      expect(mockCalendarData.newEvent.calledOnce).to.be.true;
+      expect(mockCalendarData.newEvent.calledWith(day)).to.be.true;
+    });
+
+    it('Opens the modal', function() {
+      createController();
+
+      scope.dayClicked(moment());
+
+      expect(mockModal.open.calledOnce).to.be.true;
+    });
+
+    it('reloads the events on save', function() {
+      createController();
+
+      scope.dayClicked(moment());
+      var newEvent = {
+        _id: 2,
+        title: 'event 2 is new'
+      };
+      dfd.resolve(newEvent);
+      scope.$digest();
+
+      expect(mockCalendar.fullCalendar.calledOnce).to.be.true;
+      expect(mockCalendar.fullCalendar.calledWith('refetchEvents')).to.be.true;
+    });
+  });
+
   describe('Editing an Event', function() {
     var mockModal;
     var mockModalInstance;
