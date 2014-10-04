@@ -1,55 +1,32 @@
 angular.module('app')
   .controller('calendarCtrl', ['$scope', '$modal', 'calendarData',
     function($scope, $modal, calendarData) {
-      function loadData() {
-        calendarData.load().then(function() {
-          $scope.eventSources[0].events = calendarData.events();
-        });
-      }
 
-      loadData();
+      $scope.eventSources = [
+        {
+          events: function(start, end, timezone, callback) {
+            calendarData.load().then(function() {
+              callback(calendarData.events());
+            });
+          }
+        }
+      ];
 
       // TODO: Test this
       $scope.dayClicked = function(day) {
         var event = new calendarData.newEvent(day);
         var m = openModal(event);
         m.result.then(function() {
-          loadData();
+          $scope.calendar.fullCalendar('refetchEvents');
         })
       };
 
       $scope.eventClicked = function(event) {
         var m = openModal(event);
 
-        m.result.then(function(evt) {
-          if (typeof evt === 'object') {
-            replaceEvent(evt);
-          } else {
-            loadData();
-          }
-          $scope.calendar.fullCalendar('render');
+        m.result.then(function() {
+          $scope.calendar.fullCalendar('refetchEvents');
         });
-
-        function replaceEvent(evt) {
-          var idx = firstMatchingIndex(evt);
-          if (shouldRemoveFromCalendar($scope.eventSources[0].events[idx], evt)) {
-            $scope.calendar.fullCalendar('removeEvents', evt._id);
-          }
-          loadData();
-        }
-
-        function firstMatchingIndex(evt) {
-          var matchingEvts = $.grep($scope.eventSources[0].events, function(e) {
-            return e._id === evt._id;
-          });
-          return $.inArray(matchingEvts[0], $scope.eventSources[0].events);
-        }
-
-        function shouldRemoveFromCalendar(originalEvent, editedEvent) {
-          return (originalEvent.allDay && !editedEvent.allDay) ||
-            (!originalEvent.allDay && editedEvent.allDay) ||
-            (originalEvent.title !== editedEvent.title);
-        }
       };
 
       $scope.eventDropped = function() {
@@ -71,27 +48,14 @@ angular.module('app')
         }
       };
 
-      $scope.eventSources = [
-        {
-          events: []
-        }
-      ];
-
       $scope.showOnlyMine;
 
       $scope.$watch('showOnlyMine', function(onlyMine, previousValue) {
         if (onlyMine !== previousValue) {
           calendarData.limitToMine(onlyMine);
-          if (onlyMine) {
-            var excludedEvts = calendarData.excludedEvents();
-            angular.forEach(excludedEvts, function(evt) {
-              $scope.calendar.fullCalendar('removeEvents', evt._id);
-            });
-          }
-          $scope.eventSources[0].events = calendarData.events();
+          $scope.calendar.fullCalendar('refetchEvents');
         }
       });
-
 
       function openModal(model) {
         return $modal.open({
