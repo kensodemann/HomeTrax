@@ -1,2 +1,7 @@
 .container
-	div(ui-calendar="uiConfig.calendar", ng-model="eventSources", calendar="calendar")
+	div.col-md-10(ui-calendar="uiConfig.calendar", ng-model="eventSources", calendar="calendar")
+	div.col-md-2
+		div.checkbox
+			label Show only my events
+				input(type='checkbox', ng-model='showOnlyMine')
+		h4 Categories

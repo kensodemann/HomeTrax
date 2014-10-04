@@ -13,10 +13,10 @@ describe('myProfileCtrl', function() {
   var userResource;
   var q;
 
-  beforeEach(inject(function($controller, $rootScope, user, $q) {
+  beforeEach(inject(function($controller, $rootScope, User, $q) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
-    userResource = user;
+    userResource = User;
     q = $q;
 
     createMocks();
