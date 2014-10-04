@@ -29,13 +29,6 @@ angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'identity'
         excludedCategories[category] = false;
       },
 
-      excludedEvents: function() {
-        return $.grep(data, function(evt) {
-          return (mineOnly && evt.userId !== identity.currentUser._id) ||
-            excludedCategories[evt.category];
-        });
-      },
-
       events: function() {
         return $.grep(data, function(evt) {
           return (!mineOnly || evt.userId === identity.currentUser._id) && !excludedCategories[evt.category];
