@@ -36,7 +36,6 @@ angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'identity'
       },
 
       newEvent: function(day) {
-        // TODO: Lookup how to mock a constructor (I have done this for work) and test this
         var event = new CalendarEvent();
         event.start = moment(day.hour(8));
         event.end = moment(day.hour(9));
