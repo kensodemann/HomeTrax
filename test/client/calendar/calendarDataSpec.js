@@ -35,9 +35,14 @@ describe('calendarData', function() {
   });
 
   describe('Loading the data', function() {
-    it('queries the calendarEvent resource', function() {
+    it('queries the CalendarEvent resource', function() {
       serviceUnderTest.load();
       expect(mockCalendarEvent.query.calledOnce).to.be.true;
+    });
+
+    it('queries the EventCategory resource', function(){
+      serviceUnderTest.load();
+      expect(mockEventCategory.query.calledOnce).to.be.true;
     });
 
     it('resolves true if the query returns successfully', function(done) {
@@ -49,7 +54,7 @@ describe('calendarData', function() {
       scope.$digest();
     });
 
-    it('resolves true if the query returns successfully', function(done) {
+    it('resolves false if the query returns unsuccessfully', function(done) {
       serviceUnderTest.load().then(function(res) {
         expect(res).to.be.false;
         done();
