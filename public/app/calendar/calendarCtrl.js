@@ -6,6 +6,7 @@ angular.module('app')
         {
           events: function(start, end, timezone, callback) {
             calendarData.load().then(function() {
+              $scope.eventCategories = calendarData.eventCategories();
               callback(calendarData.events());
             });
           }

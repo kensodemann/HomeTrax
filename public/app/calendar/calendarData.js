@@ -17,14 +17,30 @@ angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'EventCate
       return dfd.promise;
     }
 
-    function loadEventCategories(){
-      evtCats = EventCategory.query();
+    function loadEventCategories() {
+      var dfd = $q.defer();
+      evtCats = EventCategory.query({}, function() {
+        angular.forEach(evtCats, function(cat) {
+          cat.include = true;
+        });
+        dfd.resolve(true);
+      }, function() {
+        dfd.resolve(false);
+      });
+      return dfd.promise;
     }
 
     return {
       load: function() {
-        loadEventCategories();
-        return loadEvents();
+        var dfd = $q.defer();
+
+        $q.all([
+          loadEventCategories(),
+          loadEvents()
+        ]).then(function(data) {
+          dfd.resolve(data[0] && data[1]);
+        });
+        return dfd.promise;
       },
 
       limitToMine: function(bool) {
@@ -53,6 +69,8 @@ angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'EventCate
         return event;
       },
 
-      eventCategories: evtCats
+      eventCategories: function() {
+        return evtCats;
+      }
     };
   }]);

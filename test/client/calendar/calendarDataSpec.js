@@ -40,37 +40,91 @@ describe('calendarData', function() {
       expect(mockCalendarEvent.query.calledOnce).to.be.true;
     });
 
-    it('queries the EventCategory resource', function(){
+    it('queries the EventCategory resource', function() {
       serviceUnderTest.load();
       expect(mockEventCategory.query.calledOnce).to.be.true;
     });
 
-    it('resolves true if the query returns successfully', function(done) {
+    it('resolves true if all queries return successfully', function(done) {
       serviceUnderTest.load().then(function(res) {
         expect(res).to.be.true;
         done();
       });
       mockCalendarEvent.query.callArg(1);
+      mockEventCategory.query.callArg(1);
       scope.$digest();
     });
 
-    it('resolves false if the query returns unsuccessfully', function(done) {
+    it('resolves false if the events query returns unsuccessfully', function(done) {
       serviceUnderTest.load().then(function(res) {
         expect(res).to.be.false;
         done();
       });
       mockCalendarEvent.query.callArg(2);
+      mockEventCategory.query.callArg(1);
+      scope.$digest();
+    });
+
+    it('resolves false if the event category query returns unsuccessfully', function(done) {
+      serviceUnderTest.load().then(function(res) {
+        expect(res).to.be.false;
+        done();
+      });
+      mockCalendarEvent.query.callArg(1);
+      mockEventCategory.query.callArg(2);
       scope.$digest();
     });
   });
 
-  describe('Creating a new event', function(){
-    it('creates an object', function(){
+  describe('Event Categories', function() {
+    var cats;
+
+    beforeEach(function() {
+      cats = [
+        {
+          name: 'Test',
+          _id: 1
+        },
+        {
+          name: 'Appointments',
+          _id: 2
+        },
+        {
+          name: 'Health & Fitness',
+          _id: 3
+        }
+      ];
+      mockEventCategory.query.returns(cats);
+    });
+
+    it('returns the event categories', function() {
+      loadCategories();
+      var items = serviceUnderTest.eventCategories();
+      expect(items.length).to.equal(3);
+    });
+
+    it('initializes include flag to true', function() {
+      loadCategories();
+      var items = serviceUnderTest.eventCategories();
+      angular.forEach(items, function(item) {
+        expect(item.include).to.be.true;
+      });
+    });
+
+    function loadCategories() {
+      serviceUnderTest.load();
+      mockCalendarEvent.query.callArg(1);
+      mockEventCategory.query.callArgWith(1, cats);
+    }
+  });
+
+  describe('Creating a new event', function() {
+    it('creates an object', function() {
       var e = serviceUnderTest.newEvent(moment());
       expect(e).to.be.an('object');
     });
 
-    it('sets the start time to 8:00am', function(){
+    it('sets the start time to 8:00am', function() {
       var now = moment();
       var expected = moment(now);
       expected.hour(8);
@@ -80,7 +134,7 @@ describe('calendarData', function() {
       expect(e.start).to.deep.equal(expected);
     });
 
-    it('sets the end time to 9:00am', function(){
+    it('sets the end time to 9:00am', function() {
       var now = moment();
       var expected = moment(now);
       expected.hour(9);
@@ -90,7 +144,7 @@ describe('calendarData', function() {
       expect(e.end).to.deep.equal(expected);
     });
 
-    it('sets allDay to false', function(){
+    it('sets allDay to false', function() {
       var now = moment();
       var expected = moment(now);
       expected.hour(9);
