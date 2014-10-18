@@ -111,6 +111,15 @@ describe('calendarData', function() {
       });
     });
 
+    it('sets the include flag based on excluded events', function() {
+      serviceUnderTest.excludeCategory('Appointments');
+      loadCategories();
+      var items = serviceUnderTest.eventCategories();
+      expect(items[0].include).to.be.true;
+      expect(items[1].include).to.be.false;
+      expect(items[2].include).to.be.true;
+    });
+
     function loadCategories() {
       serviceUnderTest.load();
       mockCalendarEvent.query.callArg(1);

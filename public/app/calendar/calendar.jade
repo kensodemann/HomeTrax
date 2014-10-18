@@ -6,7 +6,7 @@
 				input(type='checkbox', ng-model='showOnlyMine')
 		h4 Categories
 		ul
-			li(ng-repeat='evt in eventCategories')
+			li(ng-repeat='cat in eventCategories')
 				span.checkbox
-					label {{evt.name}}
-						input(type='checkbox', ng-model='evt.include')
+					label {{cat.name}}
+						input(type='checkbox', ng-model='cat.include', ng-change='categoryChanged(cat)')

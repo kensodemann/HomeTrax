@@ -30,6 +30,15 @@ angular.module('app')
         });
       };
 
+      $scope.categoryChanged = function(cat) {
+        if (cat.include) {
+          calendarData.includeCategory(cat.name);
+        } else {
+          calendarData.excludeCategory(cat.name);
+        }
+        $scope.calendar.fullCalendar('refetchEvents');
+      };
+
       $scope.eventDropped = function() {
         console.log('You dropped the bomb on me');
       };

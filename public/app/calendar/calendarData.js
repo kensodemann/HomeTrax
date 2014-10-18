@@ -21,7 +21,7 @@ angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'EventCate
       var dfd = $q.defer();
       evtCats = EventCategory.query({}, function() {
         angular.forEach(evtCats, function(cat) {
-          cat.include = true;
+          cat.include = !(excludedCategories[cat.name]);
         });
         dfd.resolve(true);
       }, function() {
