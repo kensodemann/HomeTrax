@@ -41,11 +41,16 @@ describe('calendarCtrl', function() {
         load: function() {
         },
         events: function() {
+        },
+        eventCategories: function() {
         }
       });
       dfd = q.defer();
       mockCalendarData.load.returns(dfd.promise);
       mockCalendarData.events.returns([]);
+      mockCalendarData.eventCategories.returns([
+        1, 2, 3, 4, 5, 6, 7
+      ]);
     });
 
     it('loads the events', function() {
@@ -64,6 +69,24 @@ describe('calendarCtrl', function() {
       dfd.resolve(true);
       scope.$digest();
       expect(mockCalendarData.events.calledOnce).to.be.true;
+    });
+
+    it('loads the event categories', function() {
+      $controllerConstructor('calendarCtrl', {
+        $scope: scope,
+        $modal: {},
+        calendarData: mockCalendarData
+      });
+      var loadedEvents;
+
+      scope.eventSources[0].events(moment(), moment(), 'local', function(evts) {
+        loadedEvents = evts;
+      });
+
+      dfd.resolve(true);
+      scope.$digest();
+      expect(mockCalendarData.eventCategories.calledOnce).to.be.true;
+      expect(scope.eventCategories.length).to.equal(7);
     });
   });
 
@@ -98,7 +121,7 @@ describe('calendarCtrl', function() {
       });
     }
 
-    it('creates a new event for the day', function(){
+    it('creates a new event for the day', function() {
       var day = moment();
       createController();
 
@@ -263,6 +286,65 @@ describe('calendarCtrl', function() {
       scope.showOnlyMine = false;
       scope.$digest();
       expect(mockCalendar.fullCalendar.calledOnce).to.be.true;
+      expect(mockCalendar.fullCalendar.calledWith('refetchEvents')).to.be.true;
+    });
+  });
+
+  describe('Event Category Clicked', function() {
+    var mockCalendarData;
+
+    beforeEach(function() {
+      mockCalendarData = sinon.stub({
+        excludeCategory: function() {
+        },
+        includeCategory: function() {
+        }
+      });
+    });
+
+    it('includes category if include is true', function() {
+      $controllerConstructor('calendarCtrl', {
+        $scope: scope,
+        $modal: {},
+        calendarData: mockCalendarData
+      });
+
+      scope.categoryChanged({
+        name: 'test category',
+        include: true
+      });
+      expect(mockCalendarData.includeCategory.calledOnce).to.be.true;
+      expect(mockCalendarData.excludeCategory.called).to.be.false;
+      expect(mockCalendarData.includeCategory.calledWith('test category')).to.be.true;
+    });
+
+    it('excludes category if include is false', function() {
+      $controllerConstructor('calendarCtrl', {
+        $scope: scope,
+        $modal: {},
+        calendarData: mockCalendarData
+      });
+
+      scope.categoryChanged({
+        name: 'test category',
+        include: false
+      });
+      expect(mockCalendarData.includeCategory.called).to.be.false;
+      expect(mockCalendarData.excludeCategory.calledOnce).to.be.true;
+      expect(mockCalendarData.excludeCategory.calledWith('test category')).to.be.true;
+    });
+
+    it('calls refetchEvents', function() {
+      $controllerConstructor('calendarCtrl', {
+        $scope: scope,
+        $modal: {},
+        calendarData: mockCalendarData
+      });
+
+      scope.categoryChanged({
+        name: 'test category',
+        include: false
+      });
       expect(mockCalendar.fullCalendar.calledWith('refetchEvents')).to.be.true;
     });
   });

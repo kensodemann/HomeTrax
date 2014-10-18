@@ -2,6 +2,7 @@
 
 describe('calendarData', function() {
   var mockCalendarEvent;
+  var mockEventCategory;
   var mockIdentity;
   var scope;
   var serviceUnderTest;
@@ -9,7 +10,9 @@ describe('calendarData', function() {
   beforeEach(module('app'));
 
   beforeEach(function() {
-    mockCalendarEvent = sinon.stub({
+    mockCalendarEvent = sinon.stub().returns(Object);
+    mockCalendarEvent.query = sinon.stub();
+    mockEventCategory = sinon.stub({
       query: function() {
       }
     });
@@ -17,6 +20,7 @@ describe('calendarData', function() {
 
     module(function($provide) {
       $provide.value('CalendarEvent', mockCalendarEvent);
+      $provide.value('EventCategory', mockEventCategory);
       $provide.value('identity', mockIdentity);
     });
   });
@@ -31,27 +35,132 @@ describe('calendarData', function() {
   });
 
   describe('Loading the data', function() {
-    it('queries the calendarEvent resource', function() {
+    it('queries the CalendarEvent resource', function() {
       serviceUnderTest.load();
       expect(mockCalendarEvent.query.calledOnce).to.be.true;
     });
 
-    it('resolves true if the query returns successfully', function(done) {
+    it('queries the EventCategory resource', function() {
+      serviceUnderTest.load();
+      expect(mockEventCategory.query.calledOnce).to.be.true;
+    });
+
+    it('resolves true if all queries return successfully', function(done) {
       serviceUnderTest.load().then(function(res) {
         expect(res).to.be.true;
         done();
       });
       mockCalendarEvent.query.callArg(1);
+      mockEventCategory.query.callArg(1);
       scope.$digest();
     });
 
-    it('resolves true if the query returns successfully', function(done) {
+    it('resolves false if the events query returns unsuccessfully', function(done) {
       serviceUnderTest.load().then(function(res) {
         expect(res).to.be.false;
         done();
       });
       mockCalendarEvent.query.callArg(2);
+      mockEventCategory.query.callArg(1);
       scope.$digest();
+    });
+
+    it('resolves false if the event category query returns unsuccessfully', function(done) {
+      serviceUnderTest.load().then(function(res) {
+        expect(res).to.be.false;
+        done();
+      });
+      mockCalendarEvent.query.callArg(1);
+      mockEventCategory.query.callArg(2);
+      scope.$digest();
+    });
+  });
+
+  describe('Event Categories', function() {
+    var cats;
+
+    beforeEach(function() {
+      cats = [
+        {
+          name: 'Test',
+          _id: 1
+        },
+        {
+          name: 'Appointments',
+          _id: 2
+        },
+        {
+          name: 'Health & Fitness',
+          _id: 3
+        }
+      ];
+      mockEventCategory.query.returns(cats);
+    });
+
+    it('returns the event categories', function() {
+      loadCategories();
+      var items = serviceUnderTest.eventCategories();
+      expect(items.length).to.equal(3);
+    });
+
+    it('initializes include flag to true', function() {
+      loadCategories();
+      var items = serviceUnderTest.eventCategories();
+      angular.forEach(items, function(item) {
+        expect(item.include).to.be.true;
+      });
+    });
+
+    it('sets the include flag based on excluded events', function() {
+      serviceUnderTest.excludeCategory('Appointments');
+      loadCategories();
+      var items = serviceUnderTest.eventCategories();
+      expect(items[0].include).to.be.true;
+      expect(items[1].include).to.be.false;
+      expect(items[2].include).to.be.true;
+    });
+
+    function loadCategories() {
+      serviceUnderTest.load();
+      mockCalendarEvent.query.callArg(1);
+      mockEventCategory.query.callArgWith(1, cats);
+    }
+  });
+
+  describe('Creating a new event', function() {
+    it('creates an object', function() {
+      var e = serviceUnderTest.newEvent(moment());
+      expect(e).to.be.an('object');
+    });
+
+    it('sets the start time to 8:00am', function() {
+      var now = moment();
+      var expected = moment(now);
+      expected.hour(8);
+
+      var e = serviceUnderTest.newEvent(now);
+
+      expect(e.start).to.deep.equal(expected);
+    });
+
+    it('sets the end time to 9:00am', function() {
+      var now = moment();
+      var expected = moment(now);
+      expected.hour(9);
+
+      var e = serviceUnderTest.newEvent(now);
+
+      expect(e.end).to.deep.equal(expected);
+    });
+
+    it('sets allDay to false', function() {
+      var now = moment();
+      var expected = moment(now);
+      expected.hour(9);
+
+      var e = serviceUnderTest.newEvent(now);
+
+      expect(e.allDay).to.be.false;
     });
   });
 

@@ -6,6 +6,7 @@ angular.module('app')
         {
           events: function(start, end, timezone, callback) {
             calendarData.load().then(function() {
+              $scope.eventCategories = calendarData.eventCategories();
               callback(calendarData.events());
             });
           }
@@ -27,6 +28,15 @@ angular.module('app')
         m.result.then(function() {
           $scope.calendar.fullCalendar('refetchEvents');
         });
+      };
+
+      $scope.categoryChanged = function(cat) {
+        if (cat.include) {
+          calendarData.includeCategory(cat.name);
+        } else {
+          calendarData.excludeCategory(cat.name);
+        }
+        $scope.calendar.fullCalendar('refetchEvents');
       };
 
       $scope.eventDropped = function() {
