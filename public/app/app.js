@@ -1,4 +1,4 @@
-angular.module('app', ['ngRoute', 'ngResource', 'siyfion.sfTypeahead', 'ui.calendar']);
+angular.module('app', ['ngRoute', 'ngResource', 'siyfion.sfTypeahead', 'ui.calendar', 'mgcrea.ngStrap']);
 
 angular.module('app')
   .config(function($routeProvider, $locationProvider) {
