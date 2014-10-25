@@ -9,7 +9,6 @@ describe('myProfileCtrl', function() {
   var mockModal;
   var mockModalConstructor;
   var mockNotifier;
-  var mockPromise;
   var mockUserResource;
   var mockUser;
   var mockUserPassword;
@@ -30,7 +29,7 @@ describe('myProfileCtrl', function() {
       }
     });
 
-    mockPromise = sinon.stub({
+    var mockPromise = sinon.stub({
       then: function() {
       }
     });
