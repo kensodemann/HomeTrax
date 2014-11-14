@@ -9,19 +9,21 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        expand:true,
+        expand: true,
         cwd: 'public',
         src: 'app/**/*.js',
         dest: 'build/js'
       }
-    }
+    },
+    clean: ["build/js/**/*.js"]
   });
 
   // Load the plugins
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+
 
   // Tasks
-  grunt.registerTask('default', ['uglify:build']);
-
+  grunt.registerTask('default', ['clean', 'uglify']);
 };
