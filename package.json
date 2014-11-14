@@ -44,7 +44,8 @@
     "mocha": "~1.19.0",
     "proxyquire": "~1.0.0",
     "sinon": "~1.10.0",
-    "supertest": "~0.12.1"
+    "supertest": "~0.12.1",
+    "grunt": "~0.4.5"
   },
   "bundleDependencies": [],
   "private": true,
