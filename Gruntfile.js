@@ -15,12 +15,20 @@ module.exports = function(grunt) {
         dest: 'build/js'
       }
     },
-    clean: ["build/js/**/*.js"]
+    clean: ["build/js/**/*.js"],
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+      }
+    }
   });
 
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
 
