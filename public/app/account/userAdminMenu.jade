@@ -2,7 +2,7 @@ ul.nav.navbar-nav.navbar-right(ng-controller="userAdminMenuCtrl")
 	li(ng-show="identity.isAuthenticated() && !identity.isAuthorized('admin')")
 		a(href="/account/myprofile") My Profile
 	li.dropdown(ng-show="identity.isAuthorized('admin')")
-		a.dropdown-toggle(href="#") User Admin <b class="caret"></b>
+		a.dropdown-toggle(href="#" data-toggle="dropdown") User Admin <b class="caret"></b>
 		ul.dropdown-menu
 			li
 				a(href="/account/myprofile") My Profile

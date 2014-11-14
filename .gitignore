@@ -6,3 +6,4 @@ public/css/*.css
 .idea/*
 !.idea/codeStyleSettings.xml
 *.html
+build/

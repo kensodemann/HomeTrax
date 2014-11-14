@@ -21,7 +21,7 @@ div.container
 					.error-container(ng-show='profileForm.lastName.$invalid')
 						small.text-danger(ng-show='profileForm.lastName.$error.required') Required
 		.form-group
-			.col-md-offset-2.col-md-10
+			.col-md-offset-2.col-md-10.btn-area
 				button.btn.btn-default(type='button', ng-click="reset()") Reset
 				button.btn.btn-primary(type='submit', ng-click='save()', ng-disabled="profileForm.$invalid") Save
 				button.btn.btn-default(type='button', ng-click='getNewPassword()') Set Password

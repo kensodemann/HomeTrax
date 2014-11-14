@@ -1,32 +1,25 @@
-'use strict'
+'use strict';
 
 describe('myProfileCtrl', function() {
   beforeEach(module('app'));
 
   var scope;
   var $controllerConstructor;
-  var $httpBackend;
   var mockIdentiy;
   var mockModal;
+  var mockModalConstructor;
   var mockNotifier;
+  var mockUserResource;
   var mockUser;
-  var userResource;
-  var q;
+  var mockUserPassword;
+  var mockUserPasswordResource;
 
-  beforeEach(inject(function($controller, $rootScope, User, $q) {
+  beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
     $controllerConstructor = $controller;
-    userResource = User;
-    q = $q;
 
     createMocks();
     createController();
-  }));
-
-  beforeEach(inject(function($injector) {
-    $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.when('GET', '/api/users/123456789009876543211234').respond(mockUser);
-    $httpBackend.flush();
   }));
 
   function createMocks() {
@@ -36,89 +29,155 @@ describe('myProfileCtrl', function() {
       }
     });
 
-    mockModal = sinon.stub({
-      open: function() {}
+    var mockPromise = sinon.stub({
+      then: function() {
+      }
     });
+
+    mockModal = sinon.stub({
+      $promise: mockPromise,
+      show: function() {
+      },
+      hide: function() {
+      }
+    });
+    mockModalConstructor = sinon.stub().returns(mockModal);
 
     mockNotifier = sinon.stub({
-      notify: function() {}
+      notify: function() {
+      },
+      error: function() {
+      }
     });
 
-    mockUser = new userResource();
-    mockUser._id = '123456789009876543211234';
-    mockUser.firstName = 'Jimmy';
-    mockUser.lastName = 'Smith';
+    mockUser = sinon.stub({
+      $update: function() {
+      }
+    });
+
+    mockUserResource = sinon.stub({
+      get: function() {
+      }
+    });
+    mockUserResource.get.returns(mockUser);
+
+    mockUserPassword = sinon.stub({
+      $update: function() {
+      }
+    });
+    mockUserPasswordResource = sinon.stub().returns(mockUserPassword);
   }
 
   function createController() {
-    var ctrl = $controllerConstructor('myProfileCtrl', {
+    return $controllerConstructor('myProfileCtrl', {
       $scope: scope,
+      User: mockUserResource,
+      UserPassword: mockUserPasswordResource,
       identity: mockIdentiy,
       notifier: mockNotifier,
-      $modal: mockModal
+      $modal: mockModalConstructor
     });
   }
 
   describe('Initialization', function() {
     it('Gets the currently logged in user', function() {
-      expect(scope.user.firstName).to.equal('Jimmy');
-      expect(scope.user.lastName).to.equal('Smith');
+      expect(mockUserResource.get.calledOnce).to.be.true;
+      expect(mockUserResource.get.calledWith({
+        id: '123456789009876543211234'
+      })).to.be.true;
+      expect(scope.user).to.equal(mockUser);
     });
   });
 
   describe('Reset', function() {
     it('Gets the data for the currently logged in user', function() {
-      scope.user.firstName = 'Bengie';
-      scope.user.lastName = 'Frankfurter';
+      scope.user = undefined;
 
       scope.reset();
-      $httpBackend.flush();
 
-      expect(scope.user.firstName).to.equal('Jimmy');
-      expect(scope.user.lastName).to.equal('Smith');
+      expect(mockUserResource.get.calledTwice).to.be.true;
+      expect(mockUserResource.get.calledWith({
+        id: '123456789009876543211234'
+      })).to.be.true;
+      expect(scope.user).to.equal(mockUser);
     });
   });
 
   describe('Save', function() {
-    it('puts the data', function() {
-      $httpBackend.expectPUT('/api/users/' + mockUser._id, mockUser).respond(200, mockUser);
+    it('updates the data', function() {
       scope.save();
-      $httpBackend.flush();
+      expect(mockUser.$update.calledOnce).to.be.true;
     });
   });
 
   describe('Changing the password', function() {
-    var dfd;
-    var mockModalInstance;
+    it('sets the password model in the $scope', function() {
+      scope.getNewPassword();
+      expect(scope.passwordModel).to.not.be.undefined;
+      expect(scope.passwordModel).to.equal(mockUserPassword);
+    });
 
-    beforeEach(function() {
-      dfd = q.defer();
-      mockModalInstance = sinon.stub({
-        result: dfd.promise
-      });
-      mockModal.open.returns(mockModalInstance);
+    it('initializes the _id to the _id of the user', function() {
+      scope.getNewPassword();
+      expect(scope.passwordModel._id).to.equal('123456789009876543211234');
     });
 
     it('opens the modal dialog', function() {
       scope.getNewPassword();
-      expect(mockModal.open.calledOnce).to.be.true;
-      expect(mockModal.open.getCall(0).args[0].controller).to.equal('passwordEditorCtrl');
-      expect(mockModal.open.getCall(0).args[0].templateUrl).to.equal('/partials/account/passwordEditor');
+      mockModal.$promise.then.yield();
+      expect(mockModal.show.calledOnce).to.be.true;
     });
 
-    it('injects a model with the same Id as the user model', function() {
-      scope.getNewPassword();
-      var model = mockModal.open.getCall(0).args[0].resolve.passwordModel();
-      expect(model._id).to.equal('123456789009876543211234');
-    });
+    describe('setting new password', function() {
+      beforeEach(function() {
+        scope.getNewPassword();
+      });
 
-    it('notifies user on password chnage success', function() {
-      scope.getNewPassword();
-      dfd.resolve({});
-      scope.$apply();
+      it('updates password', function() {
+        createController();
+        scope.setPassword();
 
-      expect(mockNotifier.notify.calledOnce).to.be.true;
-      expect(mockNotifier.notify.calledWith('Password changed successfully')).to.be.true;
+        expect(scope.passwordModel.$update.calledOnce).to.be.true;
+      });
+
+      it('notifies user on password change success', function() {
+        scope.setPassword();
+        resolvePasswordUpdate();
+
+        expect(mockNotifier.notify.calledOnce).to.be.true;
+        expect(mockNotifier.notify.calledWith('Password changed successfully')).to.be.true;
+      });
+
+      it('closes the modal if http request successful', function() {
+        scope.setPassword();
+        resolvePasswordUpdate();
+
+        expect(mockModal.hide.calledOnce).to.be.true;
+      });
+
+      it('notifies user if http request fails', function() {
+        scope.setPassword();
+        rejectPasswordUpdate();
+
+        expect(scope.errorMessage).to.equal('because you suck eggs');
+        expect(mockNotifier.error.calledOnce).to.be.true;
+        expect(mockNotifier.error.calledWith('because you suck eggs')).to.be.true;
+        expect(mockModal.hide.called).to.be.false;
+      });
+
+      function resolvePasswordUpdate() {
+        scope.passwordModel.$update.callArgWith(0, scope.passwordModel);
+      }
+
+      function rejectPasswordUpdate() {
+        scope.passwordModel.$update.callArgWith(1, {
+          status: 400,
+          statusText: 'something went wrong',
+          data: {
+            reason: 'because you suck eggs'
+          }
+        });
+      }
     });
   });
-})
+});
