@@ -13,6 +13,8 @@ describe('calendarCtrl', function() {
   var mockCalendarEvent;
   var mockEventCategory;
   var mockMessageDialogService;
+  var mockAside;
+  var mockAsideConstructor;
   var mockModal;
   var mockModalConstructor;
   var mockPromise;
@@ -31,6 +33,7 @@ describe('calendarCtrl', function() {
     buildMockCalendarEvent();
     buildMockPromise();
     buildMockEventCategory();
+    buildMockAside();
     buildMockModal();
     buildMockMessageDialogService();
 
@@ -97,6 +100,19 @@ describe('calendarCtrl', function() {
       }]);
     }
 
+    function buildMockAside() {
+      mockAside = sinon.stub({
+        hide: function() {
+        },
+        show: function() {
+        },
+        $promise: mockPromise
+      });
+
+      mockAsideConstructor = sinon.stub().returns(mockAside);
+      mockAsideConstructor.open = sinon.stub();
+    }
+
     function buildMockModal() {
       mockModal = sinon.stub({
         hide: function() {
@@ -129,6 +145,7 @@ describe('calendarCtrl', function() {
   function createController() {
     return $controllerConstructor('calendarCtrl', {
       $scope: scope,
+      $aside: mockAsideConstructor,
       $modal: mockModalConstructor,
       calendarData: mockCalendarData,
       EventCategory: mockEventCategory,
@@ -158,6 +175,7 @@ describe('calendarCtrl', function() {
 
     it('loads the event categories', function() {
       createController();
+      var aside = getAside();
       var loadedEvents;
 
       scope.eventSources[0].events(moment(), moment(), 'local', function(evts) {
@@ -167,7 +185,7 @@ describe('calendarCtrl', function() {
       loadDfd.resolve(true);
       scope.$digest();
       expect(mockCalendarData.eventCategories.calledOnce).to.be.true;
-      expect(scope.eventCategories.length).to.equal(7);
+      expect(aside.eventCategories.length).to.equal(7);
     });
   });
 
@@ -538,38 +556,47 @@ describe('calendarCtrl', function() {
     });
 
     it('calls limitToMine when checked', function() {
-      scope.showOnlyMine = true;
-      scope.$digest();
+      var aside = getAside();
+      aside.showOnlyMine = true;
+      aside.$digest();
       expect(mockCalendarData.limitToMine.called).to.be.true;
       expect(mockCalendarData.limitToMine.calledWith(true)).to.be.true;
     });
 
     it('calls limitToMine when unchecked', function() {
-      scope.showOnlyMine = false;
-      scope.$digest();
+      var aside = getAside();
+      aside.showOnlyMine = false;
+      aside.$digest();
       expect(mockCalendarData.limitToMine.calledOnce).to.be.true;
       expect(mockCalendarData.limitToMine.calledWith(false)).to.be.true;
     });
 
     it('refetches events if checked', function() {
-      scope.showOnlyMine = true;
-      scope.$digest();
+      var aside = getAside();
+      aside.showOnlyMine = true;
+      aside.$digest();
       expect(mockCalendar.fullCalendar.calledOnce).to.be.true;
       expect(mockCalendar.fullCalendar.calledWith('refetchEvents')).to.be.true;
     });
 
     it('refetches events if unchecked', function() {
-      scope.showOnlyMine = false;
-      scope.$digest();
+      var aside = getAside();
+      aside.showOnlyMine = false;
+      aside.$digest();
       expect(mockCalendar.fullCalendar.calledOnce).to.be.true;
       expect(mockCalendar.fullCalendar.calledWith('refetchEvents')).to.be.true;
     });
   });
 
   describe('Event Category Clicked', function() {
-    it('includes category if include is true', function() {
+    var aside;
+    beforeEach(function(){
       createController();
-      scope.categoryChanged({
+      aside = getAside();
+    });
+
+    it('includes category if include is true', function() {
+      aside.categoryChanged({
         name: 'test category',
         include: true
       });
@@ -579,8 +606,7 @@ describe('calendarCtrl', function() {
     });
 
     it('excludes category if include is false', function() {
-      createController();
-      scope.categoryChanged({
+      aside.categoryChanged({
         name: 'test category',
         include: false
       });
@@ -590,8 +616,7 @@ describe('calendarCtrl', function() {
     });
 
     it('calls refetchEvents', function() {
-      createController();
-      scope.categoryChanged({
+      aside.categoryChanged({
         name: 'test category',
         include: false
       });
@@ -601,5 +626,9 @@ describe('calendarCtrl', function() {
 
   function getEventEditor() {
     return mockModalConstructor.getCall(0).args[0].scope;
+  }
+
+  function getAside() {
+    return mockAsideConstructor.getCall(0).args[0].scope;
   }
 });

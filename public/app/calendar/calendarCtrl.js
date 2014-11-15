@@ -1,17 +1,50 @@
 angular.module('app')
-  .controller('calendarCtrl', ['$scope', '$log', '$modal', 'calendarData', 'EventCategory', 'messageDialogService',
-    function($scope, $log, $modal, calendarData, EventCategory, messageDialogService) {
+  .controller('calendarCtrl',
+  ['$scope', '$log', '$aside', '$modal', 'calendarData', 'EventCategory', 'messageDialogService',
+    function($scope, $log, $aside, $modal, calendarData, EventCategory, messageDialogService) {
       var dateTimeFormat = 'MM/DD/YYYY h:mm A';
       var dateFormat = 'MM/DD/YYYY';
 
       $scope.eventSources = [{
         events: function(start, end, timezone, callback) {
           calendarData.load().then(function() {
-            $scope.eventCategories = calendarData.eventCategories();
+            asideScope.eventCategories = calendarData.eventCategories();
             callback(calendarData.events());
           });
         }
       }];
+
+      var asideScope = $scope.$new(true);
+      var aside = $aside({
+        template: '/partials/calendar/templates/options',
+        backdrop: 'static',
+        show: false,
+        scope: asideScope
+      });
+      asideScope.title = 'Calendar Options';
+
+      asideScope.$watch('showOnlyMine', function(onlyMine, previousValue) {
+        if (onlyMine !== previousValue) {
+          calendarData.limitToMine(onlyMine);
+          $scope.calendar.fullCalendar('refetchEvents');
+        }
+      });
+
+      asideScope.categoryChanged = function(cat) {
+        if (cat.include) {
+          calendarData.includeCategory(cat.name);
+        } else {
+          calendarData.excludeCategory(cat.name);
+        }
+        $scope.calendar.fullCalendar('refetchEvents');
+      };
+
+      $scope.showOptions = function() {
+        aside.$promise.then(function() {
+          aside.show();
+        });
+      };
+
 
       var editorScope = $scope.$new(true);
       editorScope.dateTimeFormat = dateTimeFormat;
@@ -36,7 +69,7 @@ angular.module('app')
       editorScope.remove = function() {
         return messageDialogService.ask('Are you sure you would like to remove this event?', 'Remove Event')
           .then(function(answer) {
-            function success(){
+            function success() {
               $scope.calendar.fullCalendar('refetchEvents');
               eventEditor.hide();
             }
@@ -160,15 +193,6 @@ angular.module('app')
         };
       }
 
-      $scope.categoryChanged = function(cat) {
-        if (cat.include) {
-          calendarData.includeCategory(cat.name);
-        } else {
-          calendarData.excludeCategory(cat.name);
-        }
-        $scope.calendar.fullCalendar('refetchEvents');
-      };
-
       $scope.eventDropped = function() {
         $log.log('You dropped the bomb on me');
       };
@@ -187,16 +211,5 @@ angular.module('app')
           eventDrop: $scope.eventDropped
         }
       };
-
-      $scope.showOnlyMine;
-
-      $scope.$watch('showOnlyMine', function(onlyMine, previousValue) {
-        if (onlyMine !== previousValue) {
-          calendarData.limitToMine(onlyMine);
-          $scope.calendar.fullCalendar('refetchEvents');
-        }
-      });
     }
-
-  ])
-;
+  ]);

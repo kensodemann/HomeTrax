@@ -1,0 +1,20 @@
+.aside(tabindex="-1", role="dialog")
+	.aside-dialog
+		.aside-content
+			.aside-header(ng-show="title")
+				button.close(type="button", ng-click="$hide()") &times;
+				h4.aside-title(ng-bind="title")
+			.aside-body
+				.checkbox
+					label
+						input(type='checkbox', ng-model='$parent.showOnlyMine', ng-click='showOnlyMineClicked()')
+						span Show only my events
+				h4 Categories
+				ul.list-unstyled
+					li(ng-repeat='cat in eventCategories')
+						span.checkbox
+							label
+								input(type='checkbox', ng-model='cat.include', ng-change='categoryChanged(cat)')
+								span {{cat.name}}
+			.aside-footer
+				button.btn.btn-default(type="button", ng-click="$hide()") Close
