@@ -15,7 +15,7 @@ module.exports = function(grunt) {
         dest: 'build/js'
       }
     },
-    clean: ["build/js/**/*.js"],
+    clean: ["build/js/**/*.js", "public/app/**/*.html"],
     karma: {
       unit: {
         configFile: 'karma.conf.js',
