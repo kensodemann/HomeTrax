@@ -21,6 +21,11 @@ module.exports = function(grunt) {
         configFile: 'karma.conf.js',
         singleRun: true,
         browsers: ['PhantomJS']
+      },
+      devl:{
+        configFile: 'karma.conf.js',
+        singleRun: false,
+        browsers: ['PhantomJS']
       }
     }
   });
@@ -33,4 +38,5 @@ module.exports = function(grunt) {
 
   // Tasks
   grunt.registerTask('default', ['clean', 'uglify']);
+  grunt.registerTask('dev', ['clean', 'karma:devl']);
 };
