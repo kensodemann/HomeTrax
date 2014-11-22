@@ -1,19 +1,30 @@
 angular.module('app')
   .controller('aboutCtrl', function($scope) {
-    $scope.currentVersion = 'pre-0.6';
+    $scope.currentVersion = 'pre-0.7';
 
     $scope.versions = [{
+      id: "Pre_0_7",
+      name: "Pre-Release 0.7",
+      releaseDate: moment("2014/11/22", "YYYY/MM/DD"),
+      description: "This version added configurability to what is displayed in the calendar and involves a lot of under the hood changes.",
+      features: [
+        "Configure which items are displayed on the calendar (configuration not saved at this time)",
+        "Allow removal of events",
+        "Validate the data when entering an event",
+        "Switched the library used for most UI widgets to AngularStrap"
+      ]
+    }, {
       id: "Pre_0_6",
       name: "Pre-Release 0.6",
       releaseDate: moment("2014/08/31", "YYYY/MM/DD"),
-      description: "This version adds the calendar and improves general interaction and editting.",
+      description: "This version adds the calendar and improves general interaction and editing.",
       features: [
         "Editor Coding Improvements",
         "Calendar of Events"
       ],
       bugFixes: [
         "No longer displaying stale changes in master data when editing is cancelled",
-        "Allow entry of initial password when creation new users",
+        "Allow entry of initial password when creation new users"
       ]
     }, {
       id: "Pre_0_5",
