@@ -2,6 +2,7 @@ node_modules/*
 *.sublime-workspace
 public/css/*.css
 !public/css/theme.css
+!public/css/bootstrap-addins*.css
 *.log
 .idea/*
 !.idea/codeStyleSettings.xml
