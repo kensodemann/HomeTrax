@@ -1725,6 +1725,12 @@ textarea.input-lg, select[multiple].input-lg {
     background-color: #aea79f;
     border-color: #aea79f;
 }
+.datepicker.dropdown-menu button:hover,
+.datepicker.dropdown-menu button:focus,
+.datepicker.dropdown-menu button:active,
+.timepicker.dropdown-menu button:hover,
+.timepicker.dropdown-menu button:focus,
+.timepicker.dropdown-menu button:active,
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
     color: #ffffff;
     background-color: #9b9389;
@@ -1741,11 +1747,19 @@ textarea.input-lg, select[multiple].input-lg {
     color: #aea79f;
     background-color: #ffffff;
 }
+.datepicker.dropdown-menu tbody button.btn-primary,
+.timepicker.dropdown-menu tbody button.btn-primary,
 .btn-primary {
     color: #ffffff;
     background-color: #dd4814;
     border-color: #dd4814;
 }
+.datepicker.dropdown-menu tbody button.btn-primary:hover,
+.datepicker.dropdown-menu tbody button.btn-primary:focus,
+.datepicker.dropdown-menu tbody button.btn-primary:active,
+.timepicker.dropdown-menu tbody button.btn-primary:hover,
+.timepicker.dropdown-menu tbody button.btn-primary:focus,
+.timepicker.dropdown-menu tbody button.btn-primary:active,
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
     color: #ffffff;
     background-color: #b83c11;
@@ -1783,11 +1797,20 @@ textarea.input-lg, select[multiple].input-lg {
     color: #38b44a;
     background-color: #ffffff;
 }
+
+.datepicker.dropdown-menu tbody button.btn-info,
+.timepicker.dropdown-menu tbody button.btn-info,
 .btn-info {
     color: #ffffff;
     background-color: #772953;
     border-color: #772953;
 }
+.datepicker.dropdown-menu tbody button.btn-info:hover,
+.datepicker.dropdown-menu tbody button.btn-info:focus,
+.datepicker.dropdown-menu tbody button.btn-info:active,
+.timepicker.dropdown-menu tbody button.btn-info:hover,
+.timepicker.dropdown-menu tbody button.btn-info:focus,
+.timepicker.dropdown-menu tbody button.btn-info:active,
 .btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open .dropdown-toggle.btn-info {
     color: #ffffff;
     background-color: #591f3e;

@@ -1,12 +1,12 @@
 angular.module('app')
-  .controller('myProfileCtrl', ['$scope', 'user', 'userPassword', 'identity', '$modal', 'notifier',
-    function($scope, user, userPassword, identity, $modal, notifier) {
-      $scope.user = user.get({
+  .controller('myProfileCtrl', ['$scope', 'User', 'UserPassword', 'identity', '$modal', 'notifier',
+    function($scope, User, UserPassword, identity, $modal, notifier) {
+      $scope.user = User.get({
         id: identity.currentUser._id
       });
 
       $scope.reset = function() {
-        $scope.user = user.get({
+        $scope.user = User.get({
           id: identity.currentUser._id
         });
       };
@@ -16,22 +16,29 @@ angular.module('app')
       };
 
       $scope.getNewPassword = function() {
-        var m = $modal.open({
-          templateUrl: '/partials/account/passwordEditor',
-          controller: 'passwordEditorCtrl',
-          backdrop: 'static',
-          resolve: {
-            passwordModel: function() {
-              var model = new userPassword();
-              model._id = identity.currentUser._id;
-              return model;
-            }
-          }
-        });
+        $scope.passwordModel = new UserPassword();
+        $scope.passwordModel._id = identity.currentUser._id;
 
-        m.result.then(function() {
-          notifier.notify('Password changed successfully')
+        passwordEditor.$promise.then(function() {
+          passwordEditor.show();
         });
       };
+
+      $scope.setPassword = function() {
+        $scope.passwordModel.$update(function(){
+          notifier.notify('Password changed successfully');
+          passwordEditor.hide();
+        }, function(reason){
+          $scope.errorMessage = reason.data.reason;
+          notifier.error(reason.data.reason);
+        });
+      };
+
+      var passwordEditor = $modal({
+        template: '/partials/account/templates/passwordEditor',
+        backdrop: 'static',
+        show: false,
+        scope: $scope
+      });
     }
   ]);

@@ -1,0 +1,47 @@
+.modal(tabindex="-1" role="dialog")
+	.modal-dialog
+		.modal-content
+			form.form-horizontal(name="eventEditor")
+				.modal-header
+					button.close(type='button', ng-click="$hide()", aria-hidden='true') &times;
+					h4.modal-title {{title}}
+				.modal-body
+					fieldset
+						.form-group
+							label.col-md-2.control-label(for='title') Title
+							.col-md-10
+								input.form-control(name='title', type='text', ng-model='model.title', required)
+								.error-container(ng-show='eventEditor.title.$invalid')
+									small.text-danger(ng-show='eventEditor.title.$error.required') Required
+						.form-group
+							label.col-md-2.control-label(for='category') Category
+							.col-md-10
+								input.form-control(name='category', type='text', ng-model='model.category', options='categoryOptions', datasets='categories', sf-typeahead, required)
+								.error-container(ng-show='eventEditor.category.$invalid')
+									small.text-danger(ng-show='eventEditor.category.$error.required') Required
+						.form-group
+							label.col.md-10.col-md-offset-2
+								input(type='checkbox', ng-model='model.isAllDayEvent')
+								span &nbsp;All day event
+						.form-group
+							label.col-md-2.control-label(for='startDate') Start
+							.col-md-5
+								input.form-control(type="text", ng-model="model.start", name="startDate", bs-datepicker, data-date-type="number", required)
+							.col-md-5
+								input.form-control(type="text", ng-model="model.start", name="startTime", ng-hide="model.isAllDayEvent", bs-timepicker, data-time-type="number", required)
+						.form-group
+							label.col-md-2.control-label(for='endDate') End
+							.col-md-5
+								input.form-control(type="text", ng-model="model.end", name="endDate", bs-datepicker, data-date-type="number", required)
+							.col-md-5
+								input.form-control(type="text", ng-model="model.end", name="endTime", ng-hide="model.isAllDayEvent", bs-timepicker, data-time-type="number", required)
+						.form-group
+							label.col.md-10.col-md-offset-2
+								input(type='checkbox', ng-model='model.isPrivate')
+								span &nbsp;Private event
+						.form-group
+							.col-md-offset-4.col-md-8.text-danger {{errorMessage}}
+				.modal-footer
+					button.btn.btn-default.pull-left(type='button', ng-click="remove()", ng-show="displayRemoveButton") Remove
+					button.btn.btn-default(type='button', ng-click="$hide()") Cancel
+					button.btn.btn-primary(type='submit', ng-click='ok()', ng-disabled="eventEditor.$invalid || errorMessage") Save Event

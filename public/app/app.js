@@ -1,4 +1,4 @@
-angular.module('app', ['ngRoute', 'ngResource', 'siyfion.sfTypeahead', 'ui.calendar', 'ui.bootstrap']);
+angular.module('app', ['ngAnimate', 'ngRoute', 'ngResource', 'siyfion.sfTypeahead', 'ui.calendar', 'mgcrea.ngStrap']);
 
 angular.module('app')
   .config(function($routeProvider, $locationProvider) {
@@ -12,8 +12,8 @@ angular.module('app')
         auth: function(authService) {
           return authService.currentUserAuthorizedForRoute('')
         }
-      },
-    }
+      }
+    };
 
     $locationProvider.html5Mode(true);
 
@@ -57,22 +57,6 @@ angular.module('app')
       resolve: routeRoleChecks.user
     });
   });
-
-angular.module('app').directive('modal', function() {
-  return {
-    restrict: 'C',
-    controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
-      $scope.$watch($attrs.trigger, function(newValue, oldValue) {
-        if (!!newValue && !oldValue) {
-          $element.modal('show');
-        }
-        if (!!oldValue && !newValue) {
-          $element.modal('hide');
-        }
-      });
-    }]
-  };
-});
 
 angular.module('app').run(function($rootScope, $location) {
   $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
