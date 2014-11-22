@@ -1,7 +1,11 @@
+(function() {
+  'use strict';
+
 // In combination with this: http://www.bennadel.com/blog/2450-using-ngcontroller-with-ngrepeat-in-angularjs.htm
-// This could be used to do an editable table (I am thinking aobut for the account transactions, etc.)
-angular.module('app')
-  .controller('financialAccountCtrl', function($scope, $location) {
+// This could be used to do an editable table (I am thinking about for the account transactions, etc.)
+  angular.module('app').controller('financialAccountCtrl', FinancialAccountCtrl);
+
+  function FinancialAccountCtrl($scope, $location) {
     $scope.message = "Hello World from the Angular Financial Account Controller!!";
     $scope.subtext = "This is some more text.";
     $scope.accountName = ($location.search()).acct;
@@ -16,5 +20,6 @@ angular.module('app')
 
     $scope.handleChange = function() {
       $scope.editMode = '';
-    }
-  });
+    };
+  }
+}());

@@ -1,6 +1,9 @@
-angular.module('app')
-  .controller('userAdminMenuCtrl', ['$scope', 'identity',
-    function($scope, identity) {
-      $scope.identity = identity;
-    }
-  ])
+(function() {
+  'use strict';
+
+  angular.module('app').controller('userAdminMenuCtrl', UserAdminMenuCtrl);
+
+  function UserAdminMenuCtrl($scope, identity) {
+    $scope.identity = identity;
+  }
+}());

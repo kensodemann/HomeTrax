@@ -1,9 +1,12 @@
-angular.module('app').factory('EventCategory', ['$resource',
-  function($resource) {
-    var resource = $resource('/api/eventCategories/:id', {
+(function() {
+  'use strict';
+
+  angular.module('app').factory('EventCategory', EventCategory);
+
+  function EventCategory($resource) {
+    return $resource('/api/eventCategories/:id', {
       id: "@_id"
     });
-
-    return resource;
   }
-]);
+}());
+

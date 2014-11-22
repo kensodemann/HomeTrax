@@ -1,16 +1,22 @@
-angular.module('app', ['ngAnimate', 'ngRoute', 'ngResource', 'siyfion.sfTypeahead', 'ui.calendar', 'mgcrea.ngStrap']);
+(function() {
+  'use strict';
 
-angular.module('app')
-  .config(function($routeProvider, $locationProvider) {
+  angular.module('app', ['ngAnimate', 'ngRoute', 'ngResource', 'siyfion.sfTypeahead', 'ui.calendar', 'mgcrea.ngStrap']);
+
+  angular.module('app')
+    .config(configure)
+    .run(runApplication);
+
+  function configure($routeProvider, $locationProvider) {
     var routeRoleChecks = {
       admin: {
         auth: function(authService) {
-          return authService.currentUserAuthorizedForRoute('admin')
+          return authService.currentUserAuthorizedForRoute('admin');
         }
       },
       user: {
         auth: function(authService) {
-          return authService.currentUserAuthorizedForRoute('')
+          return authService.currentUserAuthorizedForRoute('');
         }
       }
     };
@@ -56,14 +62,15 @@ angular.module('app')
       controller: 'myProfileCtrl',
       resolve: routeRoleChecks.user
     });
-  });
+  }
 
-angular.module('app').run(function($rootScope, $location) {
-  $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
-    if (rejection === 'Not Authorized') {
-      $location.path('/');
-    } else if (rejection === 'Not Logged In') {
-      $location.path('/login');
-    }
-  });
-});
+  function runApplication($rootScope, $location) {
+    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
+      if (rejection === 'Not Authorized') {
+        $location.path('/');
+      } else if (rejection === 'Not Logged In') {
+        $location.path('/login');
+      }
+    });
+  }
+}());

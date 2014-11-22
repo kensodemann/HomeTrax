@@ -1,5 +1,9 @@
-angular.module('app').factory('identity', ['$window', 'User',
-  function($window, User) {
+(function() {
+  'use strict';
+
+  angular.module('app').factory('identity', Identity);
+
+  function Identity($window, User) {
     var currentUser;
 
     if (!!$window.bootstrappedUserObject) {
@@ -15,5 +19,6 @@ angular.module('app').factory('identity', ['$window', 'User',
       isAuthorized: function(role) {
         return this.isAuthenticated() && (!role || ( !!this.currentUser.roles && this.currentUser.roles.indexOf(role) > -1));
       }
-    }
-  }]);
+    };
+  }
+}());

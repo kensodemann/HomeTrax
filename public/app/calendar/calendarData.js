@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'EventCategory', 'identity',
-  function($q, CalendarEvent, EventCategory, identity) {
+  angular.module('app').factory('calendarData', CalendarData);
+
+  function CalendarData($q, CalendarEvent, EventCategory, identity) {
     var evts;
     var evtCats = [];
     var mineOnly;
@@ -73,4 +75,5 @@ angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'EventCate
         return evtCats;
       }
     };
-  }]);
+  }
+}());

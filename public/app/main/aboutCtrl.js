@@ -1,5 +1,9 @@
-angular.module('app')
-  .controller('aboutCtrl', function($scope) {
+(function() {
+  'use strict';
+
+  angular.module('app').controller('aboutCtrl', AboutCtrl);
+
+  function AboutCtrl($scope) {
     $scope.currentVersion = 'pre-0.7';
 
     $scope.versions = [{
@@ -31,7 +35,7 @@ angular.module('app')
       name: "Pre-Release 0.5",
       releaseDate: moment("2014/06/14", "YYYY/MM/DD"),
       description: "This is the first version to include any type of meaningful user interaction.  " +
-        "This version also includes the start of some styling.",
+      "This version also includes the start of some styling.",
       features: [
         "Styling",
         "Default admin user",
@@ -40,4 +44,5 @@ angular.module('app')
         "This About page"
       ]
     }];
-  });
+  }
+}());

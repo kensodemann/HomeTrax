@@ -1,5 +1,9 @@
-angular.module('app').factory('authService', ['$http', 'identity', '$q', 'User',
-  function($http, identity, $q, User) {
+(function() {
+  'use strict';
+
+  angular.module('app').factory('authService', AuthService);
+
+  function AuthService($http, identity, $q, User) {
     return {
       authenticateUser: function(username, password) {
         var dfd = $q.defer();
@@ -39,5 +43,6 @@ angular.module('app').factory('authService', ['$http', 'identity', '$q', 'User',
           return true;
         }
       }
-    }
-  }]);
+    };
+  }
+}());

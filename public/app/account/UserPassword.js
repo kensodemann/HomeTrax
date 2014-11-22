@@ -1,12 +1,16 @@
-angular.module('app').factory('UserPassword', function($resource) {
-  var UserResource = $resource('/api/changepassword/:id', {
-    id: "@_id"
-  }, {
-    update: {
-      method: 'PUT',
-      isArray: false
-    }
-  });
+(function() {
+  'use strict';
 
-  return UserResource;
-});
+  angular.module('app').factory('UserPassword', UserPassword);
+
+  function UserPassword($resource) {
+    return $resource('/api/changepassword/:id', {
+      id: "@_id"
+    }, {
+      update: {
+        method: 'PUT',
+        isArray: false
+      }
+    });
+  }
+}());
