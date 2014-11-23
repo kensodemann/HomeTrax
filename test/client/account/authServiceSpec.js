@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 describe('authService', function() {
   var mockHttp;

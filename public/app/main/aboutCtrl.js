@@ -3,10 +3,10 @@
 
   angular.module('app').controller('aboutCtrl', AboutCtrl);
 
-  function AboutCtrl($scope) {
-    $scope.currentVersion = 'pre-0.7';
+  function AboutCtrl() {
+    this.currentVersion = 'pre-0.7';
 
-    $scope.versions = [{
+    this.versions = [{
       id: "Pre_0_7",
       name: "Pre-Release 0.7",
       releaseDate: moment("2014/11/22", "YYYY/MM/DD"),

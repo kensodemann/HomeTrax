@@ -1,35 +1,39 @@
 'use strict'
 
 describe('financeMenuCtrl', function() {
-  var scope;
   var $controllerConstructor;
+
+  var mockIdentity;
 
   beforeEach(module('app'));
 
+  beforeEach(function(){
+    buildMockIdentity();
+
+    function buildMockIdentity(){
+      mockIdentity = sinon.stub();
+    }
+  });
+
   beforeEach(inject(function($controller, $rootScope) {
-    scope = $rootScope.$new();
     $controllerConstructor = $controller;
   }));
 
+  function createController() {
+    return $controllerConstructor('financeMenuCtrl', {
+      identity: mockIdentity
+    });
+  }
 
-  it('should exist', function(){
-      var ctrl = $controllerConstructor('financeMenuCtrl', {
-        $scope: scope
-      });
-
-      expect(ctrl).to.not.be.undefined;
+  it('should exist', function() {
+    var ctrl = createController();
+    expect(ctrl).to.not.be.undefined;
   });
 
   describe('identity', function() {
     it('Should set the identity to the injected identity object', function() {
-      var mockIdentity = {};
-
-      var ctrl = $controllerConstructor('financeMenuCtrl', {
-        $scope: scope,
-        identity: mockIdentity
-      });
-
-      expect(scope.identity).to.equal(mockIdentity);
+      var ctrl = createController();
+      expect(ctrl.identity).to.equal(mockIdentity);
     });
   });
-})
+});

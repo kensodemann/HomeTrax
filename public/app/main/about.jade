@@ -1,6 +1,6 @@
 .container
 	h1.text-center HomeTrax
-	h2.text-center Current Version: {{currentVersion}}
+	h2.text-center Current Version: {{ctrl.currentVersion}}
 	p.
 		HomeTrax is a program for tracking various things about life.  I got tired of going to one app for my
 		calendar, another app for todo lists, and yet another app for keeping track of the money in my
@@ -11,7 +11,7 @@
 		to explore those technologies.
 	h2 Version History
 	.panel-group(id="accordion")
-		.panel.panel-default(ng-repeat="version in versions")
+		.panel.panel-default(ng-repeat="version in ctrl.versions")
 			.panel-heading
 				h3.panel-title
 					a(data-toggle="collapse", data-parent="#accordion" href="#collapse{{version.id}}") {{version.name}}

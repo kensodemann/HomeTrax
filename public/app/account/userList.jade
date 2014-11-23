@@ -5,10 +5,10 @@ div.container
 				th First Name
 				th Last Name
 				th Username
-		tbody(ng-repeat="user in users")
+		tbody(ng-repeat="user in ctrl.users")
 			tr
 				td {{user.firstName}}
 				td {{user.lastName}}
 				td
-					a(href = "", ng-click="edit(user)") {{user.username}}
-	button.btn.btn-default(ng-click="create()") New User
+					a(href = "", ng-click="ctrl.edit(user)") {{user.username}}
+	button.btn.btn-default(ng-click="ctrl.create()") New User

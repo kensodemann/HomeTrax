@@ -3,8 +3,9 @@
 
   angular.module('app').controller('loginCtrl', LoginCtrl);
 
-  function LoginCtrl($scope, $location, authService, notifier) {
-    $scope.signin = function(username, password) {
+  function LoginCtrl($location, authService, notifier) {
+    var self = this;
+    self.signin = function(username, password) {
       authService.authenticateUser(username, password).then(handleResult);
 
       function handleResult(success){

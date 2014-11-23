@@ -3,7 +3,9 @@
 
   angular.module('app').controller('userAdminMenuCtrl', UserAdminMenuCtrl);
 
-  function UserAdminMenuCtrl($scope, identity) {
-    $scope.identity = identity;
+  function UserAdminMenuCtrl(identity) {
+    var self = this;
+
+    self.identity = identity;
   }
 }());

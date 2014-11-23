@@ -5,21 +5,23 @@
 // This could be used to do an editable table (I am thinking about for the account transactions, etc.)
   angular.module('app').controller('financialAccountCtrl', FinancialAccountCtrl);
 
-  function FinancialAccountCtrl($scope, $location) {
-    $scope.message = "Hello World from the Angular Financial Account Controller!!";
-    $scope.subtext = "This is some more text.";
-    $scope.accountName = ($location.search()).acct;
+  function FinancialAccountCtrl($location) {
+    var self = this;
 
-    $scope.messageClicked = function() {
-      $scope.editMode = 'message';
+    self.message = "Hello World from the Angular Financial Account Controller!!";
+    self.subtext = "This is some more text.";
+    self.accountName = ($location.search()).acct;
+
+    self.messageClicked = function() {
+      self.editMode = 'message';
     };
 
-    $scope.subtextClicked = function() {
-      $scope.editMode = 'subtext';
+    self.subtextClicked = function() {
+      self.editMode = 'subtext';
     };
 
-    $scope.handleChange = function() {
-      $scope.editMode = '';
+    self.handleChange = function() {
+      self.editMode = '';
     };
   }
 }());

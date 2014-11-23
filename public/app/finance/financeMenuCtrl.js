@@ -3,8 +3,8 @@
 
   angular.module('app').controller('financeMenuCtrl', FinanceMenuCtrl);
 
-  function FinanceMenuCtrl($scope, identity) {
-    $scope.identity = identity;
+  function FinanceMenuCtrl(identity) {
+    this.identity = identity;
   }
 }());
 

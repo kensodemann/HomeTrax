@@ -3,15 +3,18 @@
 
   angular.module('app').controller('loginMenuCtrl', LoginMenuCtrl);
 
-  function LoginMenuCtrl($scope, identity, authService, $location) {
-    $scope.identity = identity;
+  function LoginMenuCtrl(identity, authService, $location) {
+    var self = this;
 
-    $scope.logout = function() {
+    self.identity = identity;
+    self.logout = logout;
+
+    function logout() {
       authService.logoutUser().then(navigateToLogin);
 
       function navigateToLogin(){
         $location.path('/login');
       }
-    };
+    }
   }
 }());

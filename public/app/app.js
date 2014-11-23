@@ -26,40 +26,47 @@
     $routeProvider.when('/', {
       templateUrl: '/partials/main/main',
       controller: 'mainCtrl',
+      controllerAs: 'ctrl',
       resolve: routeRoleChecks.user
     });
 
     $routeProvider.when('/about', {
       templateUrl: '/partials/main/about',
-      controller: 'aboutCtrl'
+      controller: 'aboutCtrl',
+      controllerAs: 'ctrl'
     });
 
     $routeProvider.when('/calendar', {
       templateUrl: '/partials/calendar/calendar',
       controller: 'calendarCtrl',
+      controllerAs: 'ctrl',
       resolve: routeRoleChecks.user
     });
 
     $routeProvider.when('/login', {
       templateUrl: '/partials/account/login',
-      controller: 'loginCtrl'
+      controller: 'loginCtrl',
+      controllerAs: 'ctrl'
     });
 
     $routeProvider.when('/finance/account', {
       templateUrl: '/partials/finance/account',
       controller: 'financialAccountCtrl',
+      controllerAs: 'ctrl',
       resolve: routeRoleChecks.user
     });
 
     $routeProvider.when('/account/userlist', {
       templateUrl: '/partials/account/userList',
       controller: 'userListCtrl',
+      controllerAs: 'ctrl',
       resolve: routeRoleChecks.admin
     });
 
     $routeProvider.when('/account/myprofile', {
       templateUrl: '/partials/account/myProfile',
       controller: 'myProfileCtrl',
+      controllerAs: 'ctrl',
       resolve: routeRoleChecks.user
     });
   }
