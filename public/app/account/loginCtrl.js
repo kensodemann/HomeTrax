@@ -5,15 +5,16 @@
 
   function LoginCtrl($scope, $location, authService, notifier) {
     $scope.signin = function(username, password) {
-      authService.authenticateUser(username, password)
-        .then(function(success) {
-          if (success) {
-            notifier.notify('Welcome Home!');
-            $location.path('/').replace();
-          } else {
-            notifier.error('Login Failed!');
-          }
-        });
+      authService.authenticateUser(username, password).then(handleResult);
+
+      function handleResult(success){
+        if (success) {
+          notifier.notify('Welcome Home!');
+          $location.path('/').replace();
+        } else {
+          notifier.error('Login Failed!');
+        }
+      }
     };
   }
 }());

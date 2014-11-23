@@ -21,15 +21,23 @@
 
     function loadEventCategories() {
       var dfd = $q.defer();
-      evtCats = EventCategory.query({}, function() {
-        angular.forEach(evtCats, function(cat) {
-          cat.include = !(excludedCategories[cat.name]);
-        });
-        dfd.resolve(true);
-      }, function() {
-        dfd.resolve(false);
-      });
+      evtCats = EventCategory.query({}, success, error);
       return dfd.promise;
+
+      function success() {
+        setIncludeFlags();
+        dfd.resolve(true);
+
+        function setIncludeFlags() {
+          angular.forEach(evtCats, function(cat) {
+            cat.include = !(excludedCategories[cat.name]);
+          });
+        }
+      }
+
+      function error() {
+        dfd.resolve(false);
+      }
     }
 
     return {

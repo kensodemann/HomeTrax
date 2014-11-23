@@ -7,10 +7,11 @@
     $scope.identity = identity;
 
     $scope.logout = function() {
-      authService.logoutUser()
-        .then(function() {
-          $location.path('/login');
-        });
+      authService.logoutUser().then(navigateToLogin);
+
+      function navigateToLogin(){
+        $location.path('/login');
+      }
     };
   }
 }());

@@ -28,13 +28,17 @@
     };
 
     $scope.setPassword = function() {
-      $scope.passwordModel.$update(function() {
+      $scope.passwordModel.$update(success, error);
+
+      function success() {
         notifier.notify('Password changed successfully');
         passwordEditor.hide();
-      }, function(reason) {
+      }
+
+      function error(reason) {
         $scope.errorMessage = reason.data.reason;
         notifier.error(reason.data.reason);
-      });
+      }
     };
 
     var passwordEditor = $modal({

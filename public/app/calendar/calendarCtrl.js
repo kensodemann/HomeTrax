@@ -42,9 +42,7 @@
     };
 
     $scope.showOptions = function() {
-      aside.$promise.then(function() {
-        aside.show();
-      });
+      aside.$promise.then(aside.show);
     };
 
 
@@ -70,16 +68,18 @@
 
     editorScope.remove = function() {
       return messageDialogService.ask('Are you sure you would like to remove this event?', 'Remove Event')
-        .then(function(answer) {
-          function success() {
-            $scope.calendar.fullCalendar('refetchEvents');
-            eventEditor.hide();
-          }
+        .then(handleAnswer);
 
-          if (answer) {
-            editorScope.resource.$remove(success);
-          }
-        });
+      function handleAnswer(answer) {
+        if (answer) {
+          editorScope.resource.$remove(successCallback);
+        }
+
+        function successCallback() {
+          $scope.calendar.fullCalendar('refetchEvents');
+          eventEditor.hide();
+        }
+      }
     };
 
     $scope.dayClicked = function(day) {
@@ -101,9 +101,7 @@
     function showEditor() {
       copyEventToEditorModel(editorScope.resource);
       initializeDataWatchers();
-      eventEditor.$promise.then(function() {
-        eventEditor.show();
-      });
+      eventEditor.$promise.then(eventEditor.show);
     }
 
     function copyEventToEditorModel(event) {
@@ -152,11 +150,7 @@
 
     function initializeDataWatchers() {
       deregisterPreviousWatcher();
-      dateWatcher = editorScope.$watch('model.start', function(newValue, oldValue, scope) {
-        if (newValue !== oldValue) {
-          adjustEndDateTime(newValue, oldValue, scope);
-        }
-      });
+      dateWatcher = editorScope.$watch('model.start', adjustEndDateTime);
 
       function deregisterPreviousWatcher() {
         if (dateWatcher) {
@@ -165,12 +159,12 @@
       }
 
       function adjustEndDateTime(newDate, oldDate, scope) {
-        scope.model.end += (newDate - oldDate);
+        if (newDate !== oldDate) {
+          scope.model.end += (newDate - oldDate);
+        }
       }
     }
 
-    // TODO: test?
-    // TODO: Look into using the AngularStrap typeahead instead
     function buildSuggestionEngine() {
       editorScope.eventCategories = EventCategory.query(function() {
         eventCategorySuggestions.initialize();
