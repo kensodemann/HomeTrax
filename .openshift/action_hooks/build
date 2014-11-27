@@ -13,7 +13,7 @@ bower install
 
 ##########
 echo "INFO: Running 'grunt build'"
-grunt build
+grunt
 
 #########
 export HOME=$OLD_HOME
