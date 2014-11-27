@@ -21,5 +21,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Tasks
-  grunt.registerTask('default', ['clean', 'karma']);
+  grunt.registerTask('default', ['clean']);
 };
