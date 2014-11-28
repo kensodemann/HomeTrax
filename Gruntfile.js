@@ -20,6 +20,21 @@ module.exports = function(grunt) {
             moment: true
           }
         }
+      },
+      test: {
+        src: ['test/client/**/*.js'],
+        options: {
+          globals: {
+            angular: true,
+            beforeEach: true,
+            describe: true,
+            expect: true,
+            inject: true,
+            it: true,
+            module: true,
+            sinon: true
+          }
+        }
       }
     },
 
