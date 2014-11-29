@@ -10,12 +10,12 @@
   function configure($routeProvider, $locationProvider) {
     var routeRoleChecks = {
       admin: {
-        auth: function(authService) {
+        auth: /* @ngInject */function(authService) {
           return authService.currentUserAuthorizedForRoute('admin');
         }
       },
       user: {
-        auth: function(authService) {
+        auth: /* @ngInject */function(authService) {
           return authService.currentUserAuthorizedForRoute('');
         }
       }

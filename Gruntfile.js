@@ -55,10 +55,59 @@ module.exports = function(grunt) {
     },
 
     // Build
-    concat: {
+    preprocess: {
+      dev: {
+        options: {
+          context: {
+            DEBUG: true
+          }
+        },
+        files: {
+          'server/includes/scripts.jade': 'server/includes/scripts.tpl.jade',
+          'server/includes/layout.jade': 'server/includes/layout.tpl.jade'
+        }
+      },
       dist: {
-        src: ['public/app/**/*.js'],
-        dest: 'public/dist/build.js'
+        files: {
+          'server/includes/scripts.jade': 'server/includes/scripts.tpl.jade',
+          'server/includes/layout.jade': 'server/includes/layout.tpl.jade'
+        }
+      }
+    },
+    concat: {
+      js: {
+        options: {
+          sourceMap: true
+        },
+        src: ['public/app/app.js', 'public/app/**/*.js'],
+        dest: 'public/dist/<%= pkg.name %>.js'
+      },
+      stylus: {
+        src: ['public/css/**/*.css'],
+        dest: 'public/dist/<%= pkg.name %>.css'
+      }
+    },
+    ngAnnotate: {
+      options: {
+        singleQuotes: true,
+      },
+      dist: {
+        files: {
+          'public/dist/<%= pkg.name %>.js': ['public/dist/<%= pkg.name %>.js']
+        }
+      }
+    },
+    uglify: {
+      dist: {
+        src: 'public/dist/<%= pkg.name %>.js',
+        dest: 'public/dist/<%= pkg.name %>.min.js'
+      }
+    },
+    cssmin: {
+      dist: {
+        files: {
+          'public/dist/<%= pkg.name %>.min.css': ['public/dist/<%= pkg.name %>.css']
+        }
       }
     },
 
@@ -69,6 +118,8 @@ module.exports = function(grunt) {
           'server.js',
           'public/app/**/*.js',
           'server/**/*.js',
+          'server/includes/layout.tpl.jade',
+          'server/includes/scripts.tpl.jade',
           'test/**/*.js'],
         tasks: ['devBuild']
       }
@@ -78,16 +129,18 @@ module.exports = function(grunt) {
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-ng-annotate');
+  grunt.loadNpmTasks('grunt-preprocess');
 
   // Tasks
-  grunt.registerTask('default', ['devBuild']);
-  grunt.registerTask('openShiftBuild', ['clean']);
-  grunt.registerTask('devBuild', ['clean', 'karma', 'mochaTest', 'jshint']);
+  grunt.registerTask('default', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
+  grunt.registerTask('openShiftBuild', ['clean', 'preprocess:dist', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
+  grunt.registerTask('devBuild', ['clean', 'preprocess:dev', 'karma', 'mochaTest', 'jshint', 'concat']);
   grunt.registerTask('dev', ['devBuild', 'watch']);
 };

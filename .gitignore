@@ -1,8 +1,9 @@
 node_modules/*
-public/css/*.css
-!public/css/theme.css
 .idea/*
 !.idea/codeStyleSettings.xml
 *.html
 public/dist/
 public/vendor/
+
+server/includes/scripts.jade
+server/includes/layout.jade
