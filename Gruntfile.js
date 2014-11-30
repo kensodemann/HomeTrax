@@ -1,17 +1,17 @@
-'use strict';
-
 module.exports = function(grunt) {
+  'use strict';
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["build"],
+    clean: ["public/dist", "server/includes/layout.jade", "server/includes/scripts.jade", "public/app/**/*.html", "server/**/*.html"],
 
     // Code Quality Checks
     jshint: {
       client: {
-        src: ['public/app/**/*.js'],
+        src: ['public/app/**/*.js', 'Gruntfile.js'],
         options: {
           globals: {
             '$': true,
@@ -82,14 +82,14 @@ module.exports = function(grunt) {
         src: ['public/app/app.js', 'public/app/**/*.js'],
         dest: 'public/dist/<%= pkg.name %>.js'
       },
-      stylus: {
+      css: {
         src: ['public/css/**/*.css'],
         dest: 'public/dist/<%= pkg.name %>.css'
       }
     },
     ngAnnotate: {
       options: {
-        singleQuotes: true,
+        singleQuotes: true
       },
       dist: {
         files: {

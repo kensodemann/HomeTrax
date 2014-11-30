@@ -3,9 +3,7 @@
 
   angular.module('app').controller('calendarCtrl', CalendarCtrl);
 
-  function CalendarCtrl($scope, $log, $aside, $modal, calendarData, EventCategory, messageDialogService) {
-    var dateTimeFormat = 'MM/DD/YYYY h:mm A';
-    var dateFormat = 'MM/DD/YYYY';
+  function CalendarCtrl($scope, $log, $aside, calendarData, eventEditor) {
 
     $scope.eventSources = [{
       events: function(start, end, timezone, callback) {
@@ -45,149 +43,16 @@
       aside.$promise.then(aside.show);
     };
 
-
-    var editorScope = $scope.$new(true);
-    editorScope.dateTimeFormat = dateTimeFormat;
-    editorScope.dateFormat = dateFormat;
-    var eventEditor = $modal({
-      template: '/partials/calendar/templates/eventEditor',
-      backdrop: 'static',
-      show: false,
-      scope: editorScope
-    });
-
-    editorScope.ok = function() {
-      copyEditorModelToEventResource();
-      editorScope.resource.$save(function() {
-        $scope.calendar.fullCalendar('refetchEvents');
-        eventEditor.hide();
-      }, function(response) {
-        editorScope.errorMessage = response.data.reason;
-      });
-    };
-
-    editorScope.remove = function() {
-      return messageDialogService.ask('Are you sure you would like to remove this event?', 'Remove Event')
-        .then(handleAnswer);
-
-      function handleAnswer(answer) {
-        if (answer) {
-          editorScope.resource.$remove(successCallback);
-        }
-
-        function successCallback() {
-          $scope.calendar.fullCalendar('refetchEvents');
-          eventEditor.hide();
-        }
-      }
-    };
-
     $scope.dayClicked = function(day) {
-      editorScope.title = 'New Event';
-      editorScope.displayRemoveButton = false;
-      editorScope.resource = new calendarData.newEvent(day);
-      buildSuggestionEngine();
-      showEditor();
+      var event = new calendarData.newEvent(day);
+      eventEditor.initialize($scope.calendar);
+      eventEditor.open(event, 'create');
     };
 
-    $scope.eventClicked = function(event) {
-      editorScope.title = 'Edit Event';
-      editorScope.displayRemoveButton = true;
-      editorScope.resource = event;
-      buildSuggestionEngine();
-      showEditor();
+    $scope.eventClicked = function (event){
+      eventEditor.initialize($scope.calendar);
+      eventEditor.open(event, 'edit');
     };
-
-    function showEditor() {
-      copyEventToEditorModel(editorScope.resource);
-      initializeDataWatchers();
-      eventEditor.$promise.then(eventEditor.show);
-    }
-
-    function copyEventToEditorModel(event) {
-      editorScope.model = {
-        title: event.title,
-        isAllDayEvent: !!event.allDay,
-        start: event.start.valueOf(),
-        end: event.end.valueOf(),
-        category: event.category,
-        isPrivate: !!event.private,
-        user: event.user
-      };
-    }
-
-    function copyEditorModelToEventResource() {
-      var m = editorScope.model;
-      var res = editorScope.resource;
-      res.title = m.title;
-      res.allDay = m.isAllDayEvent;
-      res.start = moment(m.start);
-      res.end = moment(m.end);
-      res.category = (typeof m.category === 'object') ? m.category.name : lookupCategory(m.category);
-      res.private = m.isPrivate;
-      res.user = m.user;
-    }
-
-    function lookupCategory(category) {
-      if (category) {
-        var matching = $.grep(editorScope.eventCategories, function(c) {
-          return c.name.toUpperCase() === category.toUpperCase();
-        });
-
-        if (matching.length > 0) {
-          return matching[0].name;
-        } else {
-          EventCategory.save({
-            name: category
-          });
-        }
-      }
-
-      return category;
-    }
-
-    var dateWatcher;
-
-    function initializeDataWatchers() {
-      deregisterPreviousWatcher();
-      dateWatcher = editorScope.$watch('model.start', adjustEndDateTime);
-
-      function deregisterPreviousWatcher() {
-        if (dateWatcher) {
-          dateWatcher();
-        }
-      }
-
-      function adjustEndDateTime(newDate, oldDate, scope) {
-        if (newDate !== oldDate) {
-          scope.model.end += (newDate - oldDate);
-        }
-      }
-    }
-
-    function buildSuggestionEngine() {
-      editorScope.eventCategories = EventCategory.query(function() {
-        eventCategorySuggestions.initialize();
-      });
-
-      var eventCategorySuggestions = new Bloodhound({
-        datumTokenizer: function(d) {
-          return Bloodhound.tokenizers.whitespace(d.name);
-        },
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        local: editorScope.eventCategories
-      });
-
-      editorScope.categories = {
-        displayKey: 'name',
-        source: eventCategorySuggestions.ttAdapter()
-      };
-
-      editorScope.categoryOptions = {
-        highlight: true,
-        hint: true
-      };
-    }
 
     $scope.eventDropped = function() {
       $log.log('You dropped the bomb on me');
