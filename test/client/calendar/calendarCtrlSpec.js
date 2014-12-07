@@ -117,10 +117,10 @@
 
     describe('Instantiation', function() {
       it('loads the events', function() {
-        createController();
+        var ctrl = createController();
         var loadedEvents;
 
-        scope.eventSources[0].events(moment(), moment(), 'local', function(evts) {
+        ctrl.eventSources[0].events(moment(), moment(), 'local', function(evts) {
           loadedEvents = evts;
         });
 
@@ -131,11 +131,11 @@
       });
 
       it('loads the event categories', function() {
-        createController();
+        var ctrl = createController();
         var aside = getAside();
         var loadedEvents;
 
-        scope.eventSources[0].events(moment(), moment(), 'local', function(evts) {
+        ctrl.eventSources[0].events(moment(), moment(), 'local', function(evts) {
           loadedEvents = evts;
         });
 
@@ -148,9 +148,9 @@
 
     describe('Adding a new event', function() {
       it('initializes the event editor service', function() {
-        createController();
+        var ctrl = createController();
 
-        scope.dayClicked(moment());
+        ctrl.uiConfig.calendar.dayClick(moment());
 
         expect(mockEventEditor.initialize.calledOnce).to.be.true;
         expect(mockEventEditor.initialize.calledWith(mockCalendar)).to.be.true;
@@ -158,17 +158,17 @@
 
       it('creates a new event for the day', function() {
         var day = moment();
-        createController();
+        var ctrl = createController();
 
-        scope.dayClicked(day);
+        ctrl.uiConfig.calendar.dayClick(day);
 
         expect(mockCalendarData.newEvent.calledOnce).to.be.true;
         expect(mockCalendarData.newEvent.calledWith(day)).to.be.true;
       });
 
       it('opens the event editor passing the new event', function() {
-        createController();
-        scope.dayClicked(moment());
+        var ctrl = createController();
+        ctrl.uiConfig.calendar.dayClick(moment());
         expect(mockEventEditor.open.calledOnce).to.be.true;
         expect(mockEventEditor.open.calledWith(testEvent)).to.be.true;
       });
@@ -176,7 +176,7 @@
 
     describe('Editing an Event', function() {
       it('initializes the event editor service', function() {
-        createController();
+        var ctrl = createController();
 
         var eventToEdit = {
           _id: 42,
@@ -184,21 +184,21 @@
           start: moment(),
           end: moment()
         };
-        scope.eventClicked(eventToEdit);
+        ctrl.uiConfig.calendar.eventClick(eventToEdit);
 
         expect(mockEventEditor.initialize.calledOnce).to.be.true;
         expect(mockEventEditor.initialize.calledWith(mockCalendar)).to.be.true;
       });
 
       it('opens the event editor passing the clicked event', function() {
-        createController();
+        var ctrl = createController();
         var eventToEdit = {
           _id: 42,
           title: 'The answer to life the universe and everything',
           start: moment(),
           end: moment()
         };
-        scope.eventClicked(eventToEdit);
+        ctrl.uiConfig.calendar.eventClick(eventToEdit);
         expect(mockEventEditor.open.calledOnce).to.be.true;
         expect(mockEventEditor.open.calledWith(eventToEdit)).to.be.true;
       });

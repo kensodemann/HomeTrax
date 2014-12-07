@@ -37,7 +37,7 @@
     });
 
     $routeProvider.when('/calendar', {
-      templateUrl: '/partials/calendar/calendar',
+      templateUrl: '/partials/calendar/templates/calendar',
       controller: 'calendarCtrl',
       controllerAs: 'ctrl',
       resolve: routeRoleChecks.user

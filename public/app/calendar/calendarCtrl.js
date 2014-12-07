@@ -4,8 +4,9 @@
   angular.module('app').controller('calendarCtrl', CalendarCtrl);
 
   function CalendarCtrl($scope, $log, $aside, calendarData, eventEditor) {
+    var self = this;
 
-    $scope.eventSources = [{
+    self.eventSources = [{
       events: function(start, end, timezone, callback) {
         calendarData.load().then(function() {
           asideScope.eventCategories = calendarData.eventCategories();
@@ -39,26 +40,11 @@
       $scope.calendar.fullCalendar('refetchEvents');
     };
 
-    $scope.showOptions = function() {
+    self.showOptions = function() {
       aside.$promise.then(aside.show);
     };
 
-    $scope.dayClicked = function(day) {
-      var event = new calendarData.newEvent(day);
-      eventEditor.initialize($scope.calendar);
-      eventEditor.open(event, 'create');
-    };
-
-    $scope.eventClicked = function (event){
-      eventEditor.initialize($scope.calendar);
-      eventEditor.open(event, 'edit');
-    };
-
-    $scope.eventDropped = function() {
-      $log.log('You dropped the bomb on me');
-    };
-
-    $scope.uiConfig = {
+    self.uiConfig = {
       calendar: {
         editable: true,
         timezone: 'local',
@@ -67,10 +53,25 @@
           center: 'title',
           right: 'today prev,next'
         },
-        dayClick: $scope.dayClicked,
-        eventClick: $scope.eventClicked,
-        eventDrop: $scope.eventDropped
+        dayClick: dayClicked,
+        eventClick: eventClicked,
+        eventDrop: eventDropped
       }
     };
+
+    function eventDropped() {
+      $log.log('You dropped the bomb on me');
+    }
+
+    function dayClicked(day) {
+      var event = new calendarData.newEvent(day);
+      eventEditor.initialize($scope.calendar);
+      eventEditor.open(event, 'create');
+    }
+
+    function eventClicked(event) {
+      eventEditor.initialize($scope.calendar);
+      eventEditor.open(event, 'edit');
+    }
   }
 }());
