@@ -3,7 +3,7 @@
   'use strict';
 
   describe('loginCtrl', function() {
-    beforeEach(module('app'));
+    beforeEach(module('app.account'));
 
     var scope;
     var $controllerConstructor;

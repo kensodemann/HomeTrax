@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').controller('userAdminMenuCtrl', UserAdminMenuCtrl);
+  angular.module('app.account').controller('userAdminMenuCtrl', UserAdminMenuCtrl);
 
   function UserAdminMenuCtrl(identity) {
     var self = this;

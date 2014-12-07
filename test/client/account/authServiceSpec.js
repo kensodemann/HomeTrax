@@ -9,7 +9,7 @@
     var serviceUnderTest;
     var scope;
 
-    beforeEach(module('app'));
+    beforeEach(module('app.account'));
 
     beforeEach(function() {
       mockHttp = sinon.stub({

@@ -3,7 +3,7 @@
 
 // In combination with this: http://www.bennadel.com/blog/2450-using-ngcontroller-with-ngrepeat-in-angularjs.htm
 // This could be used to do an editable table (I am thinking about for the account transactions, etc.)
-  angular.module('app').controller('financialAccountCtrl', FinancialAccountCtrl);
+  angular.module('app.finance').controller('financialAccountCtrl', FinancialAccountCtrl);
 
   function FinancialAccountCtrl($location) {
     var self = this;

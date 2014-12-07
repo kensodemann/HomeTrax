@@ -3,7 +3,7 @@
   'use strict';
 
   describe('identity', function() {
-    beforeEach(module('app'));
+    beforeEach(module('app.account'));
 
     describe('isAuthenticated', function() {
       it('returns false if there is no user', inject(function(identity) {

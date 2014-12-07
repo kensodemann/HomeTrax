@@ -9,7 +9,7 @@
     var mockModalConstructor;
     var serviceUnderTest;
 
-    beforeEach(module('app'));
+    beforeEach(module('app.core'));
 
     beforeEach(function() {
       mockModal = sinon.stub({

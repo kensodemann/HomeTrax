@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').factory('messageDialogService', MessageDialogService);
+  angular.module('app.core').factory('messageDialogService', MessageDialogService);
 
   function MessageDialogService($modal, $rootScope, $q) {
     var exports = {

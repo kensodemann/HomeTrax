@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').factory('calendarData', CalendarData);
+  angular.module('app.calendar').factory('calendarData', CalendarData);
 
   function CalendarData($q, CalendarEvent, EventCategory, identity) {
     var evts;

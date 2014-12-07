@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').controller('calendarCtrl', CalendarCtrl);
+  angular.module('app.calendar').controller('calendarCtrl', CalendarCtrl);
 
   function CalendarCtrl($scope, $log, $aside, calendarData, eventEditor) {
     var self = this;

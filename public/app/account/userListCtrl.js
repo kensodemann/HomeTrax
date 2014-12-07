@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').controller('userListCtrl', UserListCtrl);
+  angular.module('app.account').controller('userListCtrl', UserListCtrl);
 
   function UserListCtrl(User, userEditor) {
     var self = this;

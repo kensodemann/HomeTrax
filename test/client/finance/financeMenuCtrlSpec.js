@@ -7,7 +7,7 @@
 
     var mockIdentity;
 
-    beforeEach(module('app'));
+    beforeEach(module('app.finance'));
 
     beforeEach(function() {
       buildMockIdentity();

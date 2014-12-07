@@ -9,7 +9,7 @@
     var scope;
     var serviceUnderTest;
 
-    beforeEach(module('app'));
+    beforeEach(module('app.calendar'));
 
     beforeEach(function() {
       mockCalendarEvent = sinon.stub().returns(Object);

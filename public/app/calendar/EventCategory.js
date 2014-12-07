@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').factory('EventCategory', EventCategory);
+  angular.module('app.calendar').factory('EventCategory', EventCategory);
 
   function EventCategory($resource) {
     return $resource('/api/eventCategories/:id', {

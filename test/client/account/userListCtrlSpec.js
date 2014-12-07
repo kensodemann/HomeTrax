@@ -10,7 +10,7 @@
     var mockUserConstructor;
     var mockUserEditor;
 
-    beforeEach(module('app'));
+    beforeEach(module('app.account'));
 
     beforeEach(inject(function($controller, $q) {
       $controllerConstructor = $controller;

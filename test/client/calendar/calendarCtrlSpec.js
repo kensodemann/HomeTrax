@@ -3,7 +3,7 @@
   'use strict';
 
   describe('calendarCtrl', function() {
-    beforeEach(module('app'));
+    beforeEach(module('app.calendar'));
 
     var askDfd;
     var loadDfd;

@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').factory('eventEditor', eventEditor);
+  angular.module('app.calendar').factory('eventEditor', eventEditor);
 
   function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService) {
     var exports = {

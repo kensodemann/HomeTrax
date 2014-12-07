@@ -6,7 +6,7 @@
     var scope;
     var el;
 
-    beforeEach(module('app'));
+    beforeEach(module('app.core'));
 
     beforeEach(inject(function($rootScope, $compile) {
       scope = $rootScope;

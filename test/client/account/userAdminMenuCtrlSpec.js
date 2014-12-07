@@ -5,7 +5,7 @@
   describe('userAdminMenuCtrl', function() {
     var $controllerConstructor;
 
-    beforeEach(module('app'));
+    beforeEach(module('app.account'));
 
     beforeEach(inject(function($controller) {
       $controllerConstructor = $controller;

@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').factory('userEditor', userEditor);
+  angular.module('app.account').factory('userEditor', userEditor);
 
   function userEditor($rootScope, $modal, notifier) {
     var exports = {

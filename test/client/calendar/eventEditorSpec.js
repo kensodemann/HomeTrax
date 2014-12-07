@@ -20,7 +20,7 @@
 
     var testEventCategories;
 
-    beforeEach(module('app'));
+    beforeEach(module('app.calendar'));
 
     beforeEach(function() {
       buildMockCalendar();

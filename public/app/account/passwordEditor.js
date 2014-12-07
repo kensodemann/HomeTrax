@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').factory('passwordEditor', PasswordEditor);
+  angular.module('app.account').factory('passwordEditor', PasswordEditor);
 
   function PasswordEditor($rootScope, $modal, UserPassword, notifier) {
     var exports = {

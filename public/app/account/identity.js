@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').factory('identity', Identity);
+  angular.module('app.account').factory('identity', Identity);
 
   function Identity($window, User) {
     var currentUser;

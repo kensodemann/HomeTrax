@@ -11,7 +11,7 @@
     var mockNotifier;
     var mockUser;
 
-    beforeEach(module('app'));
+    beforeEach(module('app.account'));
 
     beforeEach(function() {
       buildMockModal();

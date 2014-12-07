@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').directive('isOnOrAfterDate', IsOnOrAfterDate);
+  angular.module('app.core').directive('isOnOrAfterDate', IsOnOrAfterDate);
 
   function IsOnOrAfterDate() {
     return {

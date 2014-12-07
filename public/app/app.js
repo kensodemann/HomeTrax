@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app', ['ngAnimate', 'ngRoute', 'ngResource', 'siyfion.sfTypeahead', 'ui.calendar', 'mgcrea.ngStrap']);
+  angular.module('app', ['app.core', 'app.account', 'app.calendar', 'ngAnimate', 'ngRoute', 'ngResource']);
 
   angular.module('app')
     .config(configure)
