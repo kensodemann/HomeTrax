@@ -3,35 +3,35 @@
   'use strict';
 
   describe('calendarMenuCtrl', function() {
-    var scope;
     var $controllerConstructor;
+
+    var mockIdentity;
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $rootScope) {
-      scope = $rootScope.$new();
+    beforeEach(function(){
+      mockIdentity = {};
+    });
+
+    beforeEach(inject(function($controller) {
       $controllerConstructor = $controller;
     }));
 
+    function createController (){
+      return $controllerConstructor('calendarMenuCtrl', {
+        identity: mockIdentity
+      });
+    }
 
     it('should exist', function() {
-      var ctrl = $controllerConstructor('calendarMenuCtrl', {
-        $scope: scope
-      });
-
+      var ctrl = createController();
       expect(ctrl).to.not.be.undefined;
     });
 
     describe('identity', function() {
       it('Should set the identity to the injected identity object', function() {
-        var mockIdentity = {};
-
-        $controllerConstructor('calendarMenuCtrl', {
-          $scope: scope,
-          identity: mockIdentity
-        });
-
-        expect(scope.identity).to.equal(mockIdentity);
+        var ctrl = createController();
+        expect(ctrl.identity).to.equal(mockIdentity);
       });
     });
   });
