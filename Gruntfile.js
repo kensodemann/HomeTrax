@@ -10,6 +10,9 @@ module.exports = function(grunt) {
 
     // Code Quality Checks
     jshint: {
+      options:{
+        strict: true
+      },
       client: {
         src: ['public/app/**/*.js', 'Gruntfile.js'],
         options: {
@@ -24,6 +27,7 @@ module.exports = function(grunt) {
       test: {
         src: ['test/client/**/*.js'],
         options: {
+          expr: true,
           globals: {
             angular: true,
             beforeEach: true,

@@ -1,4 +1,3 @@
-/*jshint expr: true*/
 (function() {
   'use strict';
 
