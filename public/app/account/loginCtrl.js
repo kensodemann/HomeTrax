@@ -1,15 +1,21 @@
-angular.module('app')
-  .controller('loginCtrl', ['$scope', '$location', 'authService', 'notifier',
-    function($scope, $location, authService, notifier) {
-      $scope.signin = function(username, password) {
-        authService.authenticateUser(username, password)
-          .then(function(success) {
-            if (success) {
-              notifier.notify('Welcome Home!');
-              $location.path('/').replace();
-            } else {
-              notifier.error('Login Failed!');
-            }
-          });
+(function() {
+  'use strict';
+
+  angular.module('app.account').controller('loginCtrl', LoginCtrl);
+
+  function LoginCtrl($location, authService, notifier) {
+    var self = this;
+    self.signin = function(username, password) {
+      authService.authenticateUser(username, password).then(handleResult);
+
+      function handleResult(success){
+        if (success) {
+          notifier.notify('Welcome Home!');
+          $location.path('/').replace();
+        } else {
+          notifier.error('Login Failed!');
+        }
       }
-    }]);
+    };
+  }
+}());

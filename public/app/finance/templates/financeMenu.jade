@@ -1,0 +1,15 @@
+ul.nav.navbar-nav(ng-controller="financeMenuCtrl as ctrl")
+	li.dropdown(ng-show="ctrl.identity.isAuthenticated()")
+		a.dropdown-toggle(href="#" data-toggle="dropdown") Finance <b class="caret"></b>
+		ul.dropdown-menu(role='menu')
+			li
+				a(href="/finance/account?acct=bank1") Checking
+			li
+				a(href="/finance/account?acct=bank2") Savings
+			li
+				a(href="/finance/account?acct=credit1") Credit Card
+			li
+				a(href="/") One Per Account
+			li.divider(ng-show="ctrl.identity.isAuthorized('admin')")
+			li
+				a(href="/finance/setup", ng-show="ctrl.identity.isAuthorized('admin')") Setup

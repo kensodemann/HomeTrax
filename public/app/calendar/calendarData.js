@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'EventCategory', 'identity',
-  function($q, CalendarEvent, EventCategory, identity) {
+  angular.module('app.calendar').factory('calendarData', CalendarData);
+
+  function CalendarData($q, CalendarEvent, EventCategory, identity) {
     var evts;
     var evtCats = [];
     var mineOnly;
@@ -19,15 +21,23 @@ angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'EventCate
 
     function loadEventCategories() {
       var dfd = $q.defer();
-      evtCats = EventCategory.query({}, function() {
-        angular.forEach(evtCats, function(cat) {
-          cat.include = !(excludedCategories[cat.name]);
-        });
-        dfd.resolve(true);
-      }, function() {
-        dfd.resolve(false);
-      });
+      evtCats = EventCategory.query({}, success, error);
       return dfd.promise;
+
+      function success() {
+        setIncludeFlags();
+        dfd.resolve(true);
+
+        function setIncludeFlags() {
+          angular.forEach(evtCats, function(cat) {
+            cat.include = !(excludedCategories[cat.name]);
+          });
+        }
+      }
+
+      function error() {
+        dfd.resolve(false);
+      }
     }
 
     return {
@@ -73,4 +83,5 @@ angular.module('app').factory('calendarData', ['$q', 'CalendarEvent', 'EventCate
         return evtCats;
       }
     };
-  }]);
+  }
+}());

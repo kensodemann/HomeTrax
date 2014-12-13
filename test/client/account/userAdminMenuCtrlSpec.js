@@ -1,27 +1,26 @@
-'use strict'
+(function() {
+  'use strict';
 
-describe('userAdminMenuCtrl', function() {
-  var scope;
-  var $controllerConstructor;
+  describe('userAdminMenuCtrl', function() {
+    var $controllerConstructor;
 
-  beforeEach(module('app'));
+    beforeEach(module('app.account'));
 
-  beforeEach(inject(function($controller, $rootScope) {
-    scope = $rootScope.$new();
-    $controllerConstructor = $controller;
-  }));
+    beforeEach(inject(function($controller) {
+      $controllerConstructor = $controller;
+    }));
 
 
-  describe('identity', function() {
-    it('Should set the identity to the injected identity object', function() {
-      var mockIdentity = {};
+    describe('identity', function() {
+      it('Should set the identity to the injected identity object', function() {
+        var mockIdentity = {};
 
-      var ctrl = $controllerConstructor('userAdminMenuCtrl', {
-        $scope: scope,
-        identity: mockIdentity
+        var ctrl = $controllerConstructor('userAdminMenuCtrl', {
+          identity: mockIdentity
+        });
+
+        expect(ctrl.identity).to.equal(mockIdentity);
       });
-
-      expect(scope.identity).to.equal(mockIdentity);
     });
   });
-})
+}());

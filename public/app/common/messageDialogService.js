@@ -1,13 +1,15 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('app').factory('messageDialogService', ['$modal', '$rootScope', '$q',
-  function($modal, $rootScope, $q) {
+  angular.module('app.core').factory('messageDialogService', MessageDialogService);
+
+  function MessageDialogService($modal, $rootScope, $q) {
     var exports = {
       ask: function(question, title) {
         askDfd = $q.defer();
         askScope.question = question;
         askScope.title = title;
-        askDlg.$promise.then(function(){
+        askDlg.$promise.then(function() {
           askDlg.show();
         });
         return askDfd.promise;
@@ -34,4 +36,5 @@ angular.module('app').factory('messageDialogService', ['$modal', '$rootScope', '
     };
 
     return exports;
-  }]);
+  }
+}());

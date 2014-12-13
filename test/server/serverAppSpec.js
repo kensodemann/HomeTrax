@@ -10,12 +10,14 @@ var path = require('path');
 var serverApp;
 describe('ServerApp', function() {
   beforeEach(function() {
+    sinon.stub(console, "warn");
     serverApp = new ServerApp();
   });
 
-  afterEach(function() {
+  afterEach(function(done) {
+    console.warn.restore();
     // clean up initial data creation
-    db.users.remove();
+    db.users.remove(done);
   });
 
   it('Builds', function() {

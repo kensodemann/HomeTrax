@@ -30,7 +30,8 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-      'public/app/app.js'
+      'public/app/app.js',
+      'public/app/**/app.*.js'
     ],
 
 
