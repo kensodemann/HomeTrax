@@ -25,37 +25,6 @@ describe('api/changepassword Route', function() {
     var calledWith;
     var testUser;
 
-    function loadUsers(done) {
-      var salt = encryption.createSalt();
-      var hash = encryption.hash(salt, 'ThisIsFreaky');
-      db.users.remove({}, function() {
-        db.users.save({
-          firstName: 'Ken',
-          lastName: 'Sodemann',
-          username: 'kws@email.com',
-          salt: salt,
-          hashedPassword: hash
-        }, function() {
-          salt = encryption.createSalt();
-          hash = encryption.hash(salt, 'IAmSexyBee');
-          db.users.save({
-            firstName: 'Lisa',
-            lastName: 'Buerger',
-            username: 'llb@email.com',
-            salt: salt,
-            hashedPassword: hash
-          }, function() {
-            db.users.findOne({
-              username: 'kws@email.com'
-            }, function(err, user) {
-              testUser = user;
-              done();
-            });
-          });
-        });
-      });
-    }
-
     beforeEach(function(done) {
       loadUsers(done);
       authStub = {
@@ -66,9 +35,41 @@ describe('api/changepassword Route', function() {
           };
         }
       };
+
       proxyquire('../../../server/config/routes', {
         '../services/authentication': authStub
       })(app);
+
+      function loadUsers(done) {
+        var salt = encryption.createSalt();
+        var hash = encryption.hash(salt, 'ThisIsFreaky');
+        db.users.remove({}, function() {
+          db.users.save({
+            firstName: 'Ken',
+            lastName: 'Sodemann',
+            username: 'kws@email.com',
+            salt: salt,
+            hashedPassword: hash
+          }, function() {
+            salt = encryption.createSalt();
+            hash = encryption.hash(salt, 'IAmSexyBee');
+            db.users.save({
+              firstName: 'Lisa',
+              lastName: 'Buerger',
+              username: 'llb@email.com',
+              salt: salt,
+              hashedPassword: hash
+            }, function() {
+              db.users.findOne({
+                username: 'kws@email.com'
+              }, function(err, user) {
+                testUser = user;
+                done();
+              });
+            });
+          });
+        });
+      }
     });
 
     afterEach(function(done) {

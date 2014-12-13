@@ -5,12 +5,18 @@ var db = require('../config/database');
 var encryption = require('../services/encryption');
 var ObjectId = require("mongojs").ObjectId;
 
+module.exports.init = init;
 module.exports.get = get;
 module.exports.getById = getById;
 module.exports.add = add;
 module.exports.update = update;
 module.exports.changePassword = changePassword;
 
+function init(app) {
+
+}
+
+//noinspection JSUnusedLocalSymbols
 function get(req, res) {
   db.users.find({}, {
     salt: 0,
@@ -36,7 +42,7 @@ function getById(req, res) {
   });
 }
 
-function add(req, res, next) {
+function add(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
@@ -48,7 +54,7 @@ function add(req, res, next) {
   });
 }
 
-function update(req, res, next) {
+function update(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
@@ -58,7 +64,7 @@ function update(req, res, next) {
   });
 }
 
-function changePassword(req, res, next) {
+function changePassword(req, res) {
   db.users.findOne({
     _id: new ObjectId(req.params.id)
   }, function(err, user) {

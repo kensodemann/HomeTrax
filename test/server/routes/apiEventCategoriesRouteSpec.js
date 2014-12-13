@@ -2,45 +2,47 @@
 
 var expect = require('chai').expect;
 var express = require('express');
+var bodyParser = require('body-parser');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
+var db = require('../../../server/config/database');
 
 describe('api/eventCategories Routes', function() {
   var app;
+  var myFavoriteCategory;
+  var authStub = {
+    requiresApiLogin: function(req, res, next) {
+      requiresApiLoginCalled = true;
+      next();
+    }
+  };
+  var requiresApiLoginCalled;
 
   beforeEach(function() {
     app = express();
+    app.use(bodyParser());
+  });
+
+  beforeEach(function(done) {
+    loadData(done);
+  });
+
+  beforeEach(function() {
+    requiresApiLoginCalled = false;
+    proxyquire('../../../server/config/routes', {
+      '../services/authentication': authStub
+    })(app);
+  });
+
+  afterEach(function(done) {
+    removeData(done);
   });
 
   describe('GET', function() {
-    var authStub = {
-      requiresApiLogin: function(req, res, next) {
-        requiresApiLoginCalled = true;
-        next();
-      }
-    };
-    var eventCategoriesRepositoryStub = {
-      get: function(req, res, next) {
-        eventCategoriesRepositoryGetCalled = true;
-        res.send();
-      }
-    };
-    var requiresApiLoginCalled;
-    var eventCategoriesRepositoryGetCalled;
-
-    beforeEach(function() {
-      requiresApiLoginCalled = false;
-      eventCategoriesRepositoryGetCalled = false;
-      proxyquire('../../../server/config/routes', {
-        '../services/authentication': authStub,
-        '../repositories/eventCategories': eventCategoriesRepositoryStub
-      })(app);
-    });
-
     it('requires an API login', function(done) {
       request(app)
         .get('/api/eventCategories')
-        .end(function(err, res) {
+        .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
         });
@@ -50,44 +52,21 @@ describe('api/eventCategories Routes', function() {
       request(app)
         .get('/api/eventCategories')
         .end(function(err, res) {
-          expect(eventCategoriesRepositoryGetCalled).to.be.true;
+          expect(res.status).to.equal(200);
+          expect(res.body.length).to.equal(4);
           done();
         });
     });
   });
 
   describe('POST', function() {
-    var authStub = {
-      requiresApiLogin: function(req, res, next) {
-        requiresApiLoginCalled = true;
-        next();
-      }
-    };
-    var eventCategoriesRepositoryStub = {
-      save: function(req, res, next) {
-        eventCategoriesRepositorySaveCalled = true;
-        res.send();
-      }
-    };
-    var requiresApiLoginCalled;
-    var eventCategoriesRepositorySaveCalled;
-
-    beforeEach(function() {
-      requiresApiLoginCalled = false;
-      eventCategoriesRepositorySaveCalled = false;
-      proxyquire('../../../server/config/routes', {
-        '../services/authentication': authStub,
-        '../repositories/eventCategories': eventCategoriesRepositoryStub
-      })(app);
-    });
-
     it('requires an API login', function(done) {
       request(app)
         .post('/api/eventCategories')
         .send({
           name: 'this is a name'
         })
-        .end(function(err, res) {
+        .end(function() {
           expect(requiresApiLoginCalled).to.be.true;
           done();
         });
@@ -100,22 +79,61 @@ describe('api/eventCategories Routes', function() {
           name: 'this is a name'
         })
         .end(function(err, res) {
-          expect(eventCategoriesRepositorySaveCalled).to.be.true;
-          done();
+          expect(!!err).to.be.false;
+          expect(res.status).to.equal(201);
+          db.eventCategories.find(function(err, cats) {
+            expect(cats.length).to.equal(5);
+            done();
+          });
         });
     });
 
     it('saves specified event category', function(done) {
       request(app)
-        .post('/api/eventCategories/1')
+        .post('/api/eventCategories/' + myFavoriteCategory._id.toString())
         .send({
           _id: 1,
           name: 'this is a name'
         })
         .end(function(err, res) {
-          expect(eventCategoriesRepositorySaveCalled).to.be.true;
-          done();
+          expect(!!err).to.be.false;
+          expect(res.status).to.equal(200);
+          db.eventCategories.findOne({_id: myFavoriteCategory._id}, function(err, cat) {
+            expect(cat.name).to.equal('this is a name');
+            db.eventCategories.find(function(err, cats) {
+              expect(cats.length).to.equal(4);
+              done();
+            });
+          });
         });
     });
   });
-});
+
+  function loadData(done) {
+    db.eventCategories.remove(function() {
+      db.eventCategories.insert([{
+        name: 'Test'
+      }, {
+        name: 'Health & Fitness'
+      }, {
+        name: 'Sexual Relations'
+      }, {
+        name: 'Family & Friends'
+      }], function() {
+        db.eventCategories.findOne({
+          name: 'Sexual Relations'
+        }, function(err, e) {
+          myFavoriteCategory = e;
+          done();
+        });
+      });
+    });
+  }
+
+  function removeData(done) {
+    db.eventCategories.remove(function() {
+      done();
+    });
+  }
+})
+;
