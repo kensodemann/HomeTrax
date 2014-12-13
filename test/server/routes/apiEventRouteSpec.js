@@ -33,7 +33,7 @@ describe('api/events Routes', function (){
       eventsRepositoryGetCalled = false;
       proxyquire('../../../server/config/routes', {
         '../services/authentication': authStub,
-        '../controllers/events': eventsRepositoryStub
+        '../repositories/events': eventsRepositoryStub
       })(app);
     });
 
@@ -77,7 +77,7 @@ describe('api/events Routes', function (){
       eventsRepositorySaveCalled = false;
       proxyquire('../../../server/config/routes', {
         '../services/authentication': authStub,
-        '../controllers/events': eventsRepositoryStub
+        '../repositories/events': eventsRepositoryStub
       })(app);
     });
 
@@ -140,7 +140,7 @@ describe('api/events Routes', function (){
       eventsRepositoryRemoveCalled = false;
       proxyquire('../../../server/config/routes', {
         '../services/authentication': authStub,
-        '../controllers/events': eventsRepositoryStub
+        '../repositories/events': eventsRepositoryStub
       })(app);
     });
 

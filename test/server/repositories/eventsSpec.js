@@ -2,7 +2,7 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var eventsController = require('../../../server/controllers/events');
+var eventsController = require('../../../server/repositories/events');
 var db = require('../../../server/config/database');
 var ObjectId = require('mongojs').ObjectId;
 
