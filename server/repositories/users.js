@@ -1,3 +1,5 @@
+'use strict';
+
 var authentication = require('../services/authentication');
 var db = require('../config/database');
 var encryption = require('../services/encryption');
@@ -14,7 +16,7 @@ module.exports.get = function(req, res) {
 
 module.exports.getById = function(req, res) {
   db.users.findOne({
-    _id: ObjectId(req.params.id)
+    _id: new ObjectId(req.params.id)
   }, {
     salt: 0,
     hashedPassword: 0
@@ -52,7 +54,7 @@ module.exports.update = function(req, res, next) {
 
 module.exports.changePassword = function(req, res, next) {
   db.users.findOne({
-    _id: ObjectId(req.params.id)
+    _id: new ObjectId(req.params.id)
   }, function(err, user) {
     if (!user) {
       res.status(404);
@@ -96,7 +98,7 @@ function validateUser(req, callback) {
 
   db.users.findOne({
       "_id": {
-        $ne: ObjectId(user._id)
+        $ne: new ObjectId(user._id)
       },
       "username": user.username
     },
@@ -139,7 +141,7 @@ function insert(user, res) {
 
 function update(id, userData, res) {
   db.users.update({
-    _id: ObjectId(id)
+    _id: new ObjectId(id)
   }, {
     $set: {
       firstName: userData.firstName,
@@ -160,7 +162,7 @@ function updatePassword(id, passwordData, res) {
   var hash = encryption.hash(salt, passwordData.newPassword);
 
   db.users.update({
-    _id: ObjectId(id)
+    _id: new ObjectId(id)
   }, {
     $set: {
       salt: salt,

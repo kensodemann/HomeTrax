@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var passport = require('passport');
 var encryption = require('./encryption');
@@ -17,7 +17,7 @@ exports.authenticate = function(req, res, next) {
     if (!user) {
       res.send({
         success: false
-      })
+      });
     }
     req.logIn(user, function(err) {
       if (err) {

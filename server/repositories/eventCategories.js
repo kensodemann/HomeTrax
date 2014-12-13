@@ -1,7 +1,6 @@
-'use strict'
+'use strict';
 
 var db = require('../config/database');
-var ObjectId = require("mongojs").ObjectId;
 
 module.exports.get = function(req, res) {
   db.eventCategories.find(function(err, cats) {

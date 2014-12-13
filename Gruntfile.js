@@ -1,6 +1,6 @@
-module.exports = function(grunt) {
-  'use strict';
+'use strict';
 
+module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         strict: true
       },
       client: {
-        src: ['public/app/**/*.js', 'Gruntfile.js'],
+        src: ['public/app/**/*.js'],
         options: {
           globals: {
             '$': true,
@@ -24,7 +24,14 @@ module.exports = function(grunt) {
           }
         }
       },
-      test: {
+      server:{
+        src:['server/**/*.js', 'Gruntfile.js'],
+        options:{
+          globals:{},
+          node: true
+        }
+      },
+      clientTest: {
         src: ['test/client/**/*.js'],
         options: {
           expr: true,

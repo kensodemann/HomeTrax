@@ -6,7 +6,7 @@ var ObjectId = require("mongojs").ObjectId;
 module.exports.get = function(req, res) {
   db.events.find({
     $or: [
-      {userId: ObjectId(req.user._id)},
+      {userId: new ObjectId(req.user._id)},
       {private: false},
       {private: null}
     ]
@@ -17,7 +17,7 @@ module.exports.get = function(req, res) {
 
 module.exports.getById = function(req, res) {
   db.events.findOne({
-    _id: ObjectId(req.params.id)
+    _id: new ObjectId(req.params.id)
   }, function(err, ev) {
     if (ev) {
       if (ev.private && ev.userId.toString() !== req.user._id.toString()) {
@@ -45,7 +45,7 @@ module.exports.save = function(req, res) {
 
 module.exports.remove = function(req, res) {
   db.events.findOne({
-    _id: ObjectId(req.params.id)
+    _id: new ObjectId(req.params.id)
   }, function(err, e) {
     if (!e) {
       res.status(404);
@@ -54,7 +54,7 @@ module.exports.remove = function(req, res) {
 
     if (userIsAuthorized(e.userId, req, res)) {
       db.events.remove({
-        _id: ObjectId(req.params.id)
+        _id: new ObjectId(req.params.id)
       }, true, function(err, e) {
         res.send(e);
       });
@@ -64,15 +64,15 @@ module.exports.remove = function(req, res) {
 
 function assignIdFromRequest(req, e) {
   if (req.params && req.params.id) {
-    e._id = ObjectId(req.params.id);
+    e._id = new ObjectId(req.params.id);
   }
 }
 
 function assignUserId(e, req) {
   if (!e.userId) {
-    e.userId = ObjectId(req.user._id);
+    e.userId = new ObjectId(req.user._id);
   } else {
-    e.userId = ObjectId(e.userId);
+    e.userId = new ObjectId(e.userId);
   }
 }
 
