@@ -6,26 +6,26 @@ var eventsController = require('../../../server/repositories/events');
 var db = require('../../../server/config/database');
 var ObjectId = require('mongojs').ObjectId;
 
-describe('events controller', function (){
+describe('events controller', function() {
   var myPublicEvent;
   var myPrivateEvent;
   var otherUserPublicEvent;
   var otherUserPrivateEvent;
 
-  beforeEach(function (done){
+  beforeEach(function(done) {
     loadEvents(done);
   });
 
-  afterEach(function (done){
-    db.events.remove(function (){
+  afterEach(function(done) {
+    db.events.remove(function() {
       done();
     });
   });
 
-  describe('get', function (){
+  describe('get', function() {
     var req;
 
-    beforeEach(function (){
+    beforeEach(function() {
       req = sinon.stub({
         user: {
           _id: '53a4dd887c6dc30000bee3af'
@@ -33,11 +33,11 @@ describe('events controller', function (){
       });
     });
 
-    it('returns events for user and non-private events for other users', function (done){
+    it('returns events for user and non-private events for other users', function(done) {
       eventsController.get(req, {
-        send: function (events){
+        send: function(events) {
           expect(events.length).to.equal(3);
-          events.forEach(function (e){
+          events.forEach(function(e) {
             if (e.private) {
               expect(e.userId.toString()).to.equal('53a4dd887c6dc30000bee3af');
             }
@@ -48,10 +48,10 @@ describe('events controller', function (){
     });
   });
 
-  describe('getById', function (){
+  describe('getById', function() {
     var req;
 
-    beforeEach(function (){
+    beforeEach(function() {
       req = sinon.stub({
         user: {
           _id: '53a4dd887c6dc30000bee3af'
@@ -60,14 +60,14 @@ describe('events controller', function (){
       });
     });
 
-    it('returns a status of 404 if the event does not exist', function (done){
+    it('returns a status of 404 if the event does not exist', function(done) {
       var status;
       req.params.id = '53a4dd887c6dc30000bee3af';
       eventsController.getById(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(e).to.be.undefined;
           expect(status).to.equal(404);
           done();
@@ -75,34 +75,34 @@ describe('events controller', function (){
       });
     });
 
-    it('returns the event if the event exists and is mine', function (done){
+    it('returns the event if the event exists and is mine', function(done) {
       req.params.id = myPrivateEvent._id.toString();
       eventsController.getById(req, {
-        send: function (e){
+        send: function(e) {
           expect(e).to.deep.equal(myPrivateEvent);
           done();
         }
       });
     });
 
-    it('returns the event if the event exists, is not mine, but is public', function (done){
+    it('returns the event if the event exists, is not mine, but is public', function(done) {
       req.params.id = otherUserPublicEvent._id.toString();
       eventsController.getById(req, {
-        send: function (e){
+        send: function(e) {
           expect(e).to.deep.equal(otherUserPublicEvent);
           done();
         }
       });
     });
 
-    it('returns a status of 403 if the event exists, is not mine and is private', function (done){
+    it('returns a status of 403 if the event exists, is not mine and is private', function(done) {
       var status;
       req.params.id = otherUserPrivateEvent._id.toString();
       eventsController.getById(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(e).to.be.undefined;
           expect(status).to.equal(403);
           done();
@@ -111,10 +111,10 @@ describe('events controller', function (){
     });
   });
 
-  describe('save', function (){
+  describe('save', function() {
     var req;
 
-    beforeEach(function (){
+    beforeEach(function() {
       req = sinon.stub({
         user: {
           _id: '53a4dd887c6dc30000bee3af'
@@ -124,7 +124,7 @@ describe('events controller', function (){
     });
 
 
-    it('Adds new data to the events collection', function (done){
+    it('Adds new data to the events collection', function(done) {
       req.body = {
         title: 'This is a new one',
         allDay: true,
@@ -134,9 +134,9 @@ describe('events controller', function (){
         category: 'whatever'
       };
       eventsController.save(req, {
-        send: function (e){
+        send: function(e) {
           expect(e._id).to.not.be.undefined;
-          db.events.count(function (err, cnt){
+          db.events.count(function(err, cnt) {
             expect(cnt).to.equal(5);
             done();
           });
@@ -144,15 +144,15 @@ describe('events controller', function (){
       });
     });
 
-    it('Saves changes to existing items', function (done){
+    it('Saves changes to existing items', function(done) {
       req.body = myPrivateEvent;
       myPrivateEvent.private = false;
       myPrivateEvent.title = 'some other title';
       eventsController.save(req, {
-        send: function (){
+        send: function() {
           db.events.findOne({
             _id: myPrivateEvent._id
-          }, function (err, ev){
+          }, function(err, ev) {
             expect(ev.private).to.be.false;
             expect(ev.title).to.equal('some other title');
             done();
@@ -161,7 +161,7 @@ describe('events controller', function (){
       });
     });
 
-    it('Sets userId to logged in user when saving new data', function (done){
+    it('Sets userId to logged in user when saving new data', function(done) {
       req.body = {
         title: 'This is a new one',
         allDay: true,
@@ -171,21 +171,21 @@ describe('events controller', function (){
         category: 'whatever'
       };
       eventsController.save(req, {
-        send: function (e){
+        send: function(e) {
           expect(e.userId.toString()).to.equal(req.user._id.toString());
           done();
         }
       });
     });
 
-    it('forbids users from modifying other users events', function (done){
+    it('forbids users from modifying other users events', function(done) {
       var status;
       req.body = otherUserPublicEvent;
       eventsController.save(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(status).to.equal(403);
           expect(e).to.be.undefined;
           done();
@@ -193,16 +193,16 @@ describe('events controller', function (){
       });
     });
 
-    it('does not allow the start date to be greater than the end date', function(done){
+    it('does not allow the start date to be greater than the end date', function(done) {
       var status;
       myPublicEvent.start = '2014-09-03T12:00:00.000Z';
       myPrivateEvent.end = '2014-09-02T12:00:00.000Z';
       req.body = myPublicEvent;
       eventsController.save(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(status).to.equal(400);
           expect(e.reason).to.equal('Error: Start date must be on or before the end date.');
           done();
@@ -210,16 +210,16 @@ describe('events controller', function (){
       });
     });
 
-    it('does not allow the start time to be greater than the end date', function(done){
+    it('does not allow the start time to be greater than the end date', function(done) {
       var status;
       myPublicEvent.start = '2014-09-03T12:00:01.000Z';
       myPrivateEvent.end = '2014-09-03T12:00:00.000Z';
       req.body = myPublicEvent;
       eventsController.save(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(status).to.equal(400);
           expect(e.reason).to.equal('Error: Start date must be on or before the end date.');
           done();
@@ -227,15 +227,15 @@ describe('events controller', function (){
       });
     });
 
-    it('does not allow saving an event without a title', function(done){
+    it('does not allow saving an event without a title', function(done) {
       var status;
       myPublicEvent.title = '';
       req.body = myPublicEvent;
       eventsController.save(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(status).to.equal(400);
           expect(e.reason).to.equal('Error: Events must have a title.');
           done();
@@ -243,15 +243,15 @@ describe('events controller', function (){
       });
     });
 
-    it('does not allow saving an event without a start date', function(done){
+    it('does not allow saving an event without a start date', function(done) {
       var status;
       myPublicEvent.start = '';
       req.body = myPublicEvent;
       eventsController.save(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(status).to.equal(400);
           expect(e.reason).to.equal('Error: Events must have a start date.');
           done();
@@ -259,15 +259,15 @@ describe('events controller', function (){
       });
     });
 
-    it('does not allow saving an event without a category', function(done){
+    it('does not allow saving an event without a category', function(done) {
       var status;
       myPublicEvent.category = '';
       req.body = myPublicEvent;
       eventsController.save(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(status).to.equal(400);
           expect(e.reason).to.equal('Error: Events must have a category.');
           done();
@@ -276,10 +276,10 @@ describe('events controller', function (){
     });
   });
 
-  describe('remove', function (){
+  describe('remove', function() {
     var req;
 
-    beforeEach(function (){
+    beforeEach(function() {
       req = sinon.stub({
         user: {
           _id: '53a4dd887c6dc30000bee3af'
@@ -288,15 +288,15 @@ describe('events controller', function (){
       });
     });
 
-    it('removes the specified item', function (done){
+    it('removes the specified item', function(done) {
       req.params.id = myPrivateEvent._id.toString();
       eventsController.remove(req, {
-        send: function (){
-          db.events.count(function (err, cnt){
+        send: function() {
+          db.events.count(function(err, cnt) {
             expect(cnt).to.equal(3);
             db.events.count({
               _id: myPrivateEvent._id
-            }, function (err, cnt){
+            }, function(err, cnt) {
               expect(cnt).to.equal(0);
               done();
             });
@@ -305,7 +305,7 @@ describe('events controller', function (){
       });
     });
 
-    it('retuns 404 if item does not exist', function (done){
+    it('retuns 404 if item does not exist', function(done) {
       var status;
       req.body = {
         _id: new ObjectId('53a4dd887c6dc30000bee3a1'),
@@ -313,13 +313,13 @@ describe('events controller', function (){
         userId: new ObjectId(req.user._id)
       };
       eventsController.remove(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(status).to.equal(404);
           expect(e).to.be.undefined;
-          db.events.count(function (err, cnt){
+          db.events.count(function(err, cnt) {
             expect(cnt).to.equal(4);
             done();
           });
@@ -327,19 +327,19 @@ describe('events controller', function (){
       });
     });
 
-    it('returns 403 if item belongs to someone else', function (done){
+    it('returns 403 if item belongs to someone else', function(done) {
       var status;
       req.params = {
         id: otherUserPublicEvent._id.toString()
       };
       eventsController.remove(req, {
-        status: function (s){
+        status: function(s) {
           status = s;
         },
-        send: function (e){
+        send: function(e) {
           expect(status).to.equal(403);
           expect(e).to.be.undefined;
-          db.events.count(function (err, cnt){
+          db.events.count(function(err, cnt) {
             expect(cnt).to.equal(4);
             done();
           });
@@ -348,9 +348,9 @@ describe('events controller', function (){
     });
   });
 
-  function loadEvents(done){
-    db.events.remove({}, function (){
-      db.events.save({
+  function loadEvents(done) {
+    db.events.remove({}, function() {
+      db.events.insert([{
         title: 'Eat Something',
         allDay: false,
         start: '2014-06-20T12:00:00',
@@ -358,41 +358,35 @@ describe('events controller', function (){
         category: 'Health & Fitness',
         private: false,
         userId: new ObjectId('53a4dd887c6dc30000bee3af')
-      }, function (error, value){
-        myPublicEvent = value;
-        db.events.save({
-          title: 'Fart',
-          allDay: false,
-          start: '2014-06-20T13:01:00',
-          end: '2014-06-20T13:05:00',
-          category: 'Health & Fitness',
-          private: true,
-          userId: new ObjectId('53a4dd887c6dc30000bee3af')
-        }, function (error, value){
-          myPrivateEvent = value;
-          db.events.save({
-            title: 'Have Sex',
-            allDay: false,
-            start: '2014-06-22T16:00:00',
-            end: '2014-06-22T18:45:00',
-            category: 'Recreation',
-            userId: new ObjectId('53a4dd887c6dc30000bee3ae')
-          }, function (error, value){
-            otherUserPublicEvent = value;
-            db.events.save({
-              title: 'Sleep',
-              allDay: false,
-              start: '2014-06-23T12:00:00',
-              end: '2014-06-20T13:00:00',
-              category: 'Health & Fitness',
-              private: true,
-              userId: new ObjectId('53a4dd887c6dc30000bee3ae')
-            }, function (error, value){
-              otherUserPrivateEvent = value;
-              done();
-            });
-          });
-        });
+      }, {
+        title: 'Fart',
+        allDay: false,
+        start: '2014-06-20T13:01:00',
+        end: '2014-06-20T13:05:00',
+        category: 'Health & Fitness',
+        private: true,
+        userId: new ObjectId('53a4dd887c6dc30000bee3af')
+      }, {
+        title: 'Have Sex',
+        allDay: false,
+        start: '2014-06-22T16:00:00',
+        end: '2014-06-22T18:45:00',
+        category: 'Recreation',
+        userId: new ObjectId('53a4dd887c6dc30000bee3ae')
+      }, {
+        title: 'Sleep',
+        allDay: false,
+        start: '2014-06-23T12:00:00',
+        end: '2014-06-20T13:00:00',
+        category: 'Health & Fitness',
+        private: true,
+        userId: new ObjectId('53a4dd887c6dc30000bee3ae')
+      }], function(err, events) {
+        myPublicEvent = events[0];
+        myPrivateEvent = events[1];
+        otherUserPublicEvent = events[2];
+        otherUserPrivateEvent = events[3];
+        done();
       });
     });
   }
