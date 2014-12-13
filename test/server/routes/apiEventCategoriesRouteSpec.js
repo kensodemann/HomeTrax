@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var expect = require('chai').expect;
 var express = require('express');
@@ -18,13 +18,13 @@ describe('api/eventCategories Routes', function() {
         requiresApiLoginCalled = true;
         next();
       }
-    }
+    };
     var eventCategoriesRepositoryStub = {
       get: function(req, res, next) {
         eventCategoriesRepositoryGetCalled = true;
         res.send();
       }
-    }
+    };
     var requiresApiLoginCalled;
     var eventCategoriesRepositoryGetCalled;
 
@@ -62,13 +62,13 @@ describe('api/eventCategories Routes', function() {
         requiresApiLoginCalled = true;
         next();
       }
-    }
+    };
     var eventCategoriesRepositoryStub = {
       save: function(req, res, next) {
         eventCategoriesRepositorySaveCalled = true;
         res.send();
       }
-    }
+    };
     var requiresApiLoginCalled;
     var eventCategoriesRepositorySaveCalled;
 

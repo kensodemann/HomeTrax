@@ -158,7 +158,7 @@ describe('events controller', function (){
             done();
           });
         }
-      })
+      });
     });
 
     it('Sets userId to logged in user when saving new data', function (done){
@@ -308,9 +308,9 @@ describe('events controller', function (){
     it('retuns 404 if item does not exist', function (done){
       var status;
       req.body = {
-        _id: ObjectId('53a4dd887c6dc30000bee3a1'),
+        _id: new ObjectId('53a4dd887c6dc30000bee3a1'),
         title: 'I do not exist',
-        userId: ObjectId(req.user._id)
+        userId: new ObjectId(req.user._id)
       };
       eventsController.remove(req, {
         status: function (s){
@@ -357,7 +357,7 @@ describe('events controller', function (){
         end: '2014-06-20T13:00:00',
         category: 'Health & Fitness',
         private: false,
-        userId: ObjectId('53a4dd887c6dc30000bee3af')
+        userId: new ObjectId('53a4dd887c6dc30000bee3af')
       }, function (error, value){
         myPublicEvent = value;
         db.events.save({
@@ -367,7 +367,7 @@ describe('events controller', function (){
           end: '2014-06-20T13:05:00',
           category: 'Health & Fitness',
           private: true,
-          userId: ObjectId('53a4dd887c6dc30000bee3af')
+          userId: new ObjectId('53a4dd887c6dc30000bee3af')
         }, function (error, value){
           myPrivateEvent = value;
           db.events.save({
@@ -376,7 +376,7 @@ describe('events controller', function (){
             start: '2014-06-22T16:00:00',
             end: '2014-06-22T18:45:00',
             category: 'Recreation',
-            userId: ObjectId('53a4dd887c6dc30000bee3ae')
+            userId: new ObjectId('53a4dd887c6dc30000bee3ae')
           }, function (error, value){
             otherUserPublicEvent = value;
             db.events.save({
@@ -386,7 +386,7 @@ describe('events controller', function (){
               end: '2014-06-20T13:00:00',
               category: 'Health & Fitness',
               private: true,
-              userId: ObjectId('53a4dd887c6dc30000bee3ae')
+              userId: new ObjectId('53a4dd887c6dc30000bee3ae')
             }, function (error, value){
               otherUserPrivateEvent = value;
               done();

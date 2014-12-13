@@ -1,3 +1,5 @@
+'use strict';
+
 var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -19,6 +21,8 @@ describe('api/changepassword Route', function() {
   });
 
   describe('PUT', function() {
+    var authStub;
+    var calledWith;
     var testUser;
 
     function loadUsers(done) {
@@ -59,7 +63,7 @@ describe('api/changepassword Route', function() {
           return function(req, res, next) {
             calledWith = role;
             next();
-          }
+          };
         }
       };
       proxyquire('../../../server/config/routes', {
@@ -74,7 +78,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Requires admin or matching current user', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -88,7 +92,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Requires a valid user _id', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -101,7 +105,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Will not allow password change if the old password is invalid', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'SomethingBogus';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -115,7 +119,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Will not allow password change if the new password is invalid', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'Short';
       request(app)
@@ -129,7 +133,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Sets new salt', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -147,7 +151,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Sets the password', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -165,4 +169,4 @@ describe('api/changepassword Route', function() {
         });
     });
   });
-})
+});

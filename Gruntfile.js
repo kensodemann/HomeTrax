@@ -6,11 +6,12 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["public/dist", "server/includes/layout.jade", "server/includes/scripts.jade", "public/app/**/*.html", "server/**/*.html"],
+    clean: ["public/dist", "server/includes/layout.jade", "server/includes/scripts.jade", "public/app/**/*.html",
+      "server/**/*.html"],
 
     // Code Quality Checks
     jshint: {
-      options:{
+      options: {
         strict: true
       },
       client: {
@@ -24,10 +25,9 @@ module.exports = function(grunt) {
           }
         }
       },
-      server:{
-        src:['server/**/*.js', 'Gruntfile.js'],
-        options:{
-          globals:{},
+      server: {
+        src: ['server/**/*.js', 'Gruntfile.js'],
+        options: {
           node: true
         }
       },
@@ -36,6 +36,7 @@ module.exports = function(grunt) {
         options: {
           expr: true,
           globals: {
+            afterEach: true,
             angular: true,
             beforeEach: true,
             describe: true,
@@ -45,6 +46,19 @@ module.exports = function(grunt) {
             module: true,
             sinon: true
           }
+        }
+      },
+      serverTest: {
+        src: ['test/server/**/*.js'],
+        options: {
+          expr: true,
+          globals: {
+            afterEach: true,
+            beforeEach: true,
+            describe: true,
+            it: true
+          },
+          node: true
         }
       }
     },

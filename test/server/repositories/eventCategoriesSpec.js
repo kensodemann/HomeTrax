@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
@@ -73,7 +73,7 @@ describe('eventCategories Controller', function() {
             });
           });
         }
-      })
+      });
     });
   });
 

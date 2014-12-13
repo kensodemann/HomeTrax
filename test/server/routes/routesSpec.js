@@ -1,3 +1,5 @@
+'use strict';
+
 var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -70,7 +72,7 @@ describe('Basic Routes', function() {
       request(app)
         .post('/login')
         .end(function(err, res) {
-          expect(res.status).to.equal(200)
+          expect(res.status).to.equal(200);
           expect(authCalled).to.be.true;
           done();
         });
