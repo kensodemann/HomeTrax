@@ -4,9 +4,8 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 var eventCategoriesController = require('../../../server/repositories/eventCategories');
 var db = require('../../../server/config/database');
-var ObjectId = require('mongojs').ObjectId;
 
-describe('eventCategories Controller', function() {
+describe('eventCategories Repository', function() {
   var myFavoriteCategory;
 
   beforeEach(function(done) {
@@ -28,7 +27,7 @@ describe('eventCategories Controller', function() {
       eventCategoriesController.get({}, {
         send: function(eventCats) {
           expect(eventCats.length).to.equal(4);
-          eventCats.forEach(function(e, idx) {
+          eventCats.forEach(function(e) {
             expect(e.name).to.be.a('String');
           });
           done();
@@ -62,7 +61,7 @@ describe('eventCategories Controller', function() {
       };
       myFavoriteCategory.name = 'some other name';
       eventCategoriesController.save(req, {
-        send: function(e) {
+        send: function() {
           db.eventCategories.findOne({
             _id: myFavoriteCategory._id
           }, function(err, cat) {
@@ -88,7 +87,7 @@ describe('eventCategories Controller', function() {
         name: 'Sexual Relations'
       }, {
         name: 'Family & Friends'
-      }], function(error, value) {
+      }], function() {
         db.eventCategories.findOne({
           name: 'Sexual Relations'
         }, function(err, e) {

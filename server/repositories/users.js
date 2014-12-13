@@ -5,16 +5,22 @@ var db = require('../config/database');
 var encryption = require('../services/encryption');
 var ObjectId = require("mongojs").ObjectId;
 
-module.exports.get = function(req, res) {
+module.exports.get = get;
+module.exports.getById = getById;
+module.exports.add = add;
+module.exports.update = update;
+module.exports.changePassword = changePassword;
+
+function get(req, res) {
   db.users.find({}, {
     salt: 0,
     hashedPassword: 0
   }, function(err, users) {
     res.send(users);
   });
-};
+}
 
-module.exports.getById = function(req, res) {
+function getById(req, res) {
   db.users.findOne({
     _id: new ObjectId(req.params.id)
   }, {
@@ -28,9 +34,9 @@ module.exports.getById = function(req, res) {
       res.send();
     }
   });
-};
+}
 
-module.exports.add = function(req, res, next) {
+function add(req, res, next) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
@@ -40,19 +46,19 @@ module.exports.add = function(req, res, next) {
       }
     }
   });
-};
+}
 
-module.exports.update = function(req, res, next) {
+function update(req, res, next) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
     } else {
-      update(req.params.id, user, res);
+      updateUser(req.params.id, user, res);
     }
   });
-};
+}
 
-module.exports.changePassword = function(req, res, next) {
+function changePassword(req, res, next) {
   db.users.findOne({
     _id: new ObjectId(req.params.id)
   }, function(err, user) {
@@ -69,10 +75,10 @@ module.exports.changePassword = function(req, res, next) {
     }
 
     if (newPasswordIsValid(req.body.newPassword, res)) {
-      updatePassword(req.params.id, req.body, res);
+      updateUserPassword(req.params.id, req.body, res);
     }
   });
-};
+}
 
 
 function newPasswordIsValid(password, res) {
@@ -139,7 +145,7 @@ function insert(user, res) {
   });
 }
 
-function update(id, userData, res) {
+function updateUser(id, userData, res) {
   db.users.update({
     _id: new ObjectId(id)
   }, {
@@ -157,7 +163,7 @@ function update(id, userData, res) {
   });
 }
 
-function updatePassword(id, passwordData, res) {
+function updateUserPassword(id, passwordData, res) {
   var salt = encryption.createSalt();
   var hash = encryption.hash(salt, passwordData.newPassword);
 

@@ -6,7 +6,7 @@ var eventsController = require('../../../server/repositories/events');
 var db = require('../../../server/config/database');
 var ObjectId = require('mongojs').ObjectId;
 
-describe('events controller', function() {
+describe('events repository', function() {
   var myPublicEvent;
   var myPrivateEvent;
   var otherUserPublicEvent;
