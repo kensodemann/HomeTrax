@@ -1,3 +1,5 @@
+'use strict';
+
 var db = require('./database');
 var encryption = require('../services/encryption');
 
@@ -23,4 +25,4 @@ function createDefaultAdministrator() {
 
 module.exports = function() {
   createDefaultAdministrator();
-}
+};

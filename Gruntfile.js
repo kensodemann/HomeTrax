@@ -1,20 +1,21 @@
-module.exports = function(grunt) {
-  'use strict';
+'use strict';
 
+module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["public/dist", "server/includes/layout.jade", "server/includes/scripts.jade", "public/app/**/*.html", "server/**/*.html"],
+    clean: ["public/dist", "server/includes/layout.jade", "server/includes/scripts.jade", "public/app/**/*.html",
+      "server/**/*.html"],
 
     // Code Quality Checks
     jshint: {
-      options:{
+      options: {
         strict: true
       },
       client: {
-        src: ['public/app/**/*.js', 'Gruntfile.js'],
+        src: ['public/app/**/*.js'],
         options: {
           globals: {
             '$': true,
@@ -24,11 +25,18 @@ module.exports = function(grunt) {
           }
         }
       },
-      test: {
+      server: {
+        src: ['server/**/*.js', 'Gruntfile.js'],
+        options: {
+          node: true
+        }
+      },
+      clientTest: {
         src: ['test/client/**/*.js'],
         options: {
           expr: true,
           globals: {
+            afterEach: true,
             angular: true,
             beforeEach: true,
             describe: true,
@@ -38,6 +46,19 @@ module.exports = function(grunt) {
             module: true,
             sinon: true
           }
+        }
+      },
+      serverTest: {
+        src: ['test/server/**/*.js'],
+        options: {
+          expr: true,
+          globals: {
+            afterEach: true,
+            beforeEach: true,
+            describe: true,
+            it: true
+          },
+          node: true
         }
       }
     },

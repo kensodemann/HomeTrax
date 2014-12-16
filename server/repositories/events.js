@@ -1,12 +1,13 @@
 'use strict';
 
 var db = require('../config/database');
+var Q = require('q');
 var ObjectId = require("mongojs").ObjectId;
 
 module.exports.get = function(req, res) {
   db.events.find({
     $or: [
-      {userId: ObjectId(req.user._id)},
+      {userId: new ObjectId(req.user._id)},
       {private: false},
       {private: null}
     ]
@@ -15,74 +16,73 @@ module.exports.get = function(req, res) {
   });
 };
 
-module.exports.getById = function(req, res) {
-  db.events.findOne({
-    _id: ObjectId(req.params.id)
-  }, function(err, ev) {
-    if (ev) {
-      if (ev.private && ev.userId.toString() !== req.user._id.toString()) {
-        res.status(403);
-        return res.send();
-      }
-      res.send(ev);
-    } else {
-      res.status(404);
-      res.send();
-    }
-  });
-};
-
 module.exports.save = function(req, res) {
   var e = req.body;
   assignIdFromRequest(req, e);
   assignUserId(e, req);
-  if (userIsAuthorized(e.userId, req, res) && isValid(e, res)) {
+  if (isValid(e, res)) {
+    determineIfActionIsValid(req).done(yes, no);
+  }
+
+  function yes() {
     db.events.save(e, function(err, ev) {
+      if (!req.params || !req.params.id) {
+        res.status(201);
+      }
       res.send(ev);
     });
+  }
+
+  function no(stat) {
+    res.status(stat);
+    res.end();
   }
 };
 
 module.exports.remove = function(req, res) {
-  db.events.findOne({
-    _id: ObjectId(req.params.id)
-  }, function(err, e) {
-    if (!e) {
-      res.status(404);
-      return res.send();
-    }
+  determineIfActionIsValid(req).done(yes, no);
 
-    if (userIsAuthorized(e.userId, req, res)) {
-      db.events.remove({
-        _id: ObjectId(req.params.id)
-      }, true, function(err, e) {
-        res.send(e);
-      });
-    }
-  });
+  function yes() {
+    db.events.remove({
+      _id: new ObjectId(req.params.id)
+    }, true, function(err, e) {
+      res.send(e);
+    });
+  }
+
+  function no(stat){
+    res.status(stat);
+    res.end();
+  }
 };
 
 function assignIdFromRequest(req, e) {
   if (req.params && req.params.id) {
-    e._id = ObjectId(req.params.id);
+    e._id = new ObjectId(req.params.id);
   }
 }
 
 function assignUserId(e, req) {
-  if (!e.userId) {
-    e.userId = ObjectId(req.user._id);
-  } else {
-    e.userId = ObjectId(e.userId);
-  }
+  e.userId = new ObjectId(req.user._id);
 }
 
-function userIsAuthorized(userId, req, res) {
-  if (userId.toString() !== req.user._id.toString()) {
-    res.status(403);
-    res.send();
-    return false;
+function determineIfActionIsValid(req) {
+  var dfd = Q.defer();
+  if (!req.params || !req.params.id) {
+    dfd.resolve(true);
+  } else {
+    db.events.findOne({_id: new ObjectId(req.params.id)}, function(err, evt) {
+      if (!evt) {
+        return dfd.reject(404);
+      }
+      if (evt.userId.toString() !== req.user._id.toString()) {
+        return dfd.reject(403);
+      }
+      dfd.resolve(true);
+    });
   }
-  return true;
+
+  return dfd.promise;
 }
 
 function isValid(evt, res) {

@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var fs = require('fs');
 var config = require('./config/config');
@@ -16,7 +18,7 @@ var ServerApp = function() {
       //  allows us to run/test the app locally.
       console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
       self.ipaddress = "127.0.0.1";
-    };
+    }
   };
 
 
@@ -61,7 +63,6 @@ var ServerApp = function() {
   self.initializeServer = function() {
     self.app = express();
 
-    debugger;
     require('./config/express')(self.app, config);
     require('./config/routes')(self.app);
   };

@@ -1,3 +1,5 @@
+'use strict';
+
 // force use of testing database (serverApp sets up some initial data)
 process.env.NODE_ENV = 'testing';
 

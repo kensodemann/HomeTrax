@@ -1,9 +1,9 @@
 'use strict';
 
 var authentication = require('../services/authentication');
-var users = require('../controllers/users');
-var events = require('../controllers/events');
-var eventCategories = require('../controllers/eventCategories');
+var users = require('../repositories/users');
+var events = require('../repositories/events');
+var eventCategories = require('../repositories/eventCategories');
 
 function redirectToHttps(req, res, next) {
   if (req.headers['x-forwarded-proto'] == 'http') {

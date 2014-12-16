@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app', ['app.core', 'app.account', 'app.calendar', 'ngAnimate', 'ngRoute', 'ngResource']);
+  angular.module('app', ['app.core', 'app.account', 'app.calendar', 'app.finance', 'ngAnimate', 'ngRoute', 'ngResource']);
 
   angular.module('app')
     .config(configure)

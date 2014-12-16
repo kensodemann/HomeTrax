@@ -1,20 +1,34 @@
+'use strict';
+
 var authentication = require('../services/authentication');
 var db = require('../config/database');
 var encryption = require('../services/encryption');
 var ObjectId = require("mongojs").ObjectId;
 
-module.exports.get = function(req, res) {
+module.exports.init = init;
+module.exports.get = get;
+module.exports.getById = getById;
+module.exports.add = add;
+module.exports.update = update;
+module.exports.changePassword = changePassword;
+
+function init(app) {
+
+}
+
+//noinspection JSUnusedLocalSymbols
+function get(req, res) {
   db.users.find({}, {
     salt: 0,
     hashedPassword: 0
   }, function(err, users) {
     res.send(users);
   });
-};
+}
 
-module.exports.getById = function(req, res) {
+function getById(req, res) {
   db.users.findOne({
-    _id: ObjectId(req.params.id)
+    _id: new ObjectId(req.params.id)
   }, {
     salt: 0,
     hashedPassword: 0
@@ -26,9 +40,9 @@ module.exports.getById = function(req, res) {
       res.send();
     }
   });
-};
+}
 
-module.exports.add = function(req, res, next) {
+function add(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
@@ -38,21 +52,21 @@ module.exports.add = function(req, res, next) {
       }
     }
   });
-};
+}
 
-module.exports.update = function(req, res, next) {
+function update(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
     } else {
-      update(req.params.id, user, res);
+      updateUser(req.params.id, user, res);
     }
   });
-};
+}
 
-module.exports.changePassword = function(req, res, next) {
+function changePassword(req, res) {
   db.users.findOne({
-    _id: ObjectId(req.params.id)
+    _id: new ObjectId(req.params.id)
   }, function(err, user) {
     if (!user) {
       res.status(404);
@@ -67,10 +81,10 @@ module.exports.changePassword = function(req, res, next) {
     }
 
     if (newPasswordIsValid(req.body.newPassword, res)) {
-      updatePassword(req.params.id, req.body, res);
+      updateUserPassword(req.params.id, req.body, res);
     }
   });
-};
+}
 
 
 function newPasswordIsValid(password, res) {
@@ -96,7 +110,7 @@ function validateUser(req, callback) {
 
   db.users.findOne({
       "_id": {
-        $ne: ObjectId(user._id)
+        $ne: new ObjectId(user._id)
       },
       "username": user.username
     },
@@ -137,9 +151,9 @@ function insert(user, res) {
   });
 }
 
-function update(id, userData, res) {
+function updateUser(id, userData, res) {
   db.users.update({
-    _id: ObjectId(id)
+    _id: new ObjectId(id)
   }, {
     $set: {
       firstName: userData.firstName,
@@ -155,12 +169,12 @@ function update(id, userData, res) {
   });
 }
 
-function updatePassword(id, passwordData, res) {
+function updateUserPassword(id, passwordData, res) {
   var salt = encryption.createSalt();
   var hash = encryption.hash(salt, passwordData.newPassword);
 
   db.users.update({
-    _id: ObjectId(id)
+    _id: new ObjectId(id)
   }, {
     $set: {
       salt: salt,

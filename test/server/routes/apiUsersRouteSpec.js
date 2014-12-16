@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var expect = require('chai').expect;
 var express = require('express');
@@ -54,13 +54,13 @@ describe('api/users Routes', function() {
           return function(req, res, next) {
             roleCalledWith = role;
             next();
-          }
+          };
         },
         requiresRoleOrIsCurrentUser: function(role) {
           return function(req, res, next) {
             roleOrCurrentCalledWith = role;
             next();
-          }
+          };
         }
       };
       roleCalledWith = '';
@@ -173,7 +173,7 @@ describe('api/users Routes', function() {
           return function(req, res, next) {
             calledWith = role;
             next();
-          }
+          };
         }
       };
       proxyquire('../../../server/config/routes', {
@@ -366,7 +366,7 @@ describe('api/users Routes', function() {
           return function(req, res, next) {
             calledWith = role;
             next();
-          }
+          };
         }
       };
       proxyquire('../../../server/config/routes', {
