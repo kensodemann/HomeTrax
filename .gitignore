@@ -7,3 +7,7 @@ public/vendor/
 
 server/includes/scripts.jade
 server/includes/layout.jade
+
+.c9/
+data/
+*.log
