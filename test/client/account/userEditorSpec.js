@@ -1,3 +1,4 @@
+/* global beforeEach describe expect inject it sinon */
 (function() {
   'use strict';
 
@@ -24,35 +25,28 @@
 
       function buildMockModal() {
         var mockPromise = sinon.stub({
-          then: function() {
-          }
+          then: function() {}
         });
 
         mockModal = sinon.stub({
           $promise: mockPromise,
-          hide: function() {
-          },
-          show: function() {
-          }
+          hide: function() {},
+          show: function() {}
         });
         mockModalConstructor = sinon.stub().returns(mockModal);
       }
 
       function buildMockNotifier() {
         mockNotifier = sinon.stub({
-          notify: function() {
-          },
-          error: function() {
-          }
+          notify: function() {},
+          error: function() {}
         });
       }
 
       function buildMockUser() {
         mockUser = sinon.stub({
-          $save: function() {
-          },
-          $update: function() {
-          }
+          $save: function() {},
+          $update: function() {}
         });
       }
     });
@@ -154,8 +148,10 @@
 
     describe('saving', function() {
       var ctrl;
+      var callback;
       beforeEach(function() {
         ctrl = getEditorCtrl();
+        callback = sinon.stub();
       });
 
       describe('existing user', function() {
@@ -163,7 +159,7 @@
           serviceUnderTest.open(mockUser, 'edit');
         });
 
-        it('copies data back to the resource', function(){
+        it('copies data back to the resource', function() {
           ctrl.model.firstName = 'Wilma';
           ctrl.model.lastName = 'Rubble';
           ctrl.model.username = 'wife@swap.com';
@@ -196,14 +192,18 @@
 
         it('notifies the user on failure', function() {
           ctrl.save();
-          mockUser.$update.callArg(1, {data: 'You are a sucky sucky failure'});
+          mockUser.$update.callArg(1, {
+            data: 'You are a sucky sucky failure'
+          });
           expect(mockNotifier.error.calledOnce).to.be.true;
           expect(mockNotifier.error.calledWith("You are a sucky sucky failure")).to.be.true;
         });
 
         it('does not close on failure', function() {
           ctrl.save();
-          mockUser.$update.callArg(1, {data: 'You are a sucky sucky failure'});
+          mockUser.$update.callArg(1, {
+            data: 'You are a sucky sucky failure'
+          });
           expect(mockModal.hide.called).to.be.false;
         });
       });
@@ -213,7 +213,7 @@
           serviceUnderTest.open(mockUser, 'create');
         });
 
-        it('copies data back to the resource', function(){
+        it('copies data back to the resource', function() {
           ctrl.model.firstName = 'Betty';
           ctrl.model.lastName = 'Flintstone';
           ctrl.model.username = 'wife.swap@too.com';
@@ -246,19 +246,51 @@
 
         it('notifies the user on failure', function() {
           ctrl.save();
-          mockUser.$save.callArg(1, {data: 'You are a sucky sucky failure'});
+          mockUser.$save.callArg(1, {
+            data: 'You are a sucky sucky failure'
+          });
           expect(mockNotifier.error.calledOnce).to.be.true;
           expect(mockNotifier.error.calledWith("You are a sucky sucky failure")).to.be.true;
         });
 
         it('does not close on failure', function() {
           ctrl.save();
-          mockUser.$save.callArg(1, {data: 'You are a sucky sucky failure'});
+          mockUser.$save.callArg(1, {
+            data: 'You are a sucky sucky failure'
+          });
           expect(mockModal.hide.called).to.be.false;
+        });
+      });
+
+      describe('onSave callback', function() {
+        beforeEach(function() {
+          serviceUnderTest.open(mockUser, 'create');
+        });
+
+        it('is called if specified and save succeeds', function() {
+          serviceUnderTest.open(mockUser, 'create', callback);
+          ctrl.save();
+          mockUser.$save.callArg(0);
+          expect(callback.calledOnce).to.be.true;
+          expect(callback.calledWith(mockUser)).to.be.true;
+        });
+
+        it('is not called if not specified but save succeeds', function() {
+          serviceUnderTest.open(mockUser, 'create');
+          ctrl.save();
+          mockUser.$save.callArg(0);
+          expect(callback.called).to.be.false;
+        });
+
+        it('is not called if specified but save fails', function() {
+          serviceUnderTest.open(mockUser, 'create', callback);
+          ctrl.save();
+          mockUser.$save.callArg(1, {
+            data: 'You are a sucky sucky failure'
+          });
+          expect(callback.called).to.be.false;
         });
       });
     });
   });
 }());
-  
-  

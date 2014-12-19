@@ -1,3 +1,4 @@
+/* global beforeEach describe expect inject it sinon */
 (function() {
   'use strict';
 
@@ -89,7 +90,15 @@
       it('opens the editor', function() {
         ctrl.create();
         expect(mockUserEditor.open.calledOnce).to.be.true;
-        expect(mockUserEditor.open.calledWithExactly(mockUser, 'create')).to.be.true;
+        expect(mockUserEditor.open.calledWith(mockUser, 'create')).to.be.true;
+      });
+      
+      it('pushes the new user', function() {
+        mockUserConstructor.query.returns([1, 2, 3, 4, 5, 6]);
+        var ctrl = createController();
+        ctrl.create();
+        mockUserEditor.open.callArgWith(2, mockUser);
+        expect(ctrl.users).to.deep.equal([1, 2, 3, 4, 5, 6, mockUser]);
       });
     });
   });

@@ -20,11 +20,12 @@
       save: saveOrUpdate
     };
 
+    var saveCallback;
     var userResource;
 
     return exports;
 
-    function open(user, mode) {
+    function open(user, mode, callback) {
       initializeController();
       editor.$promise.then(editor.show);
 
@@ -44,6 +45,7 @@
         }
 
         function initializeModel() {
+          saveCallback = callback;
           editorScope.ctrl.model = {};
           editorScope.ctrl.model.firstName = user.firstName;
           editorScope.ctrl.model.lastName = user.lastName;
@@ -59,7 +61,8 @@
       function saveResource() {
         if (editorScope.ctrl.mode === 'create') {
           userResource.$save(success, error);
-        } else {
+        }
+        else {
           userResource.$update(success, error);
         }
 
@@ -67,6 +70,9 @@
           notifier.notify((editorScope.ctrl.mode === 'create') ?
             "User created successfully" : "Changes to user saved successfully");
           editor.hide();
+          if (saveCallback) {
+            saveCallback(userResource);
+          }
         }
 
         function error(reason) {

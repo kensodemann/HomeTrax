@@ -13,7 +13,11 @@
     };
 
     self.create = function() {
-      userEditor.open(new User(), 'create');
+      userEditor.open(new User(), 'create', addNewUser);
+
+      function addNewUser(user) {
+        self.users.push(user);
+      }
     };
   }
 }());
