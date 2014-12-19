@@ -23,7 +23,9 @@
     }
 
     function isAuthenticated() {
-      return !!exports.currentUser;
+      setCurrentUser();
+      console.log(exports.currentUser);
+      return !!exports.currentUser._id;
     }
 
     function isAuthorized(role) {
