@@ -50,6 +50,8 @@
           editorScope.ctrl.model.firstName = user.firstName;
           editorScope.ctrl.model.lastName = user.lastName;
           editorScope.ctrl.model.username = user.username;
+          editorScope.ctrl.model.isAdministrator = !!user.roles &&
+            (user.roles.indexOf('admin') > -1);
         }
       }
     }

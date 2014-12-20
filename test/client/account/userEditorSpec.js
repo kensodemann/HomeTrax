@@ -144,6 +144,17 @@
         expect(ctrl.model.lastName).to.equal('Jackson');
         expect(ctrl.model.username).to.equal('email@me.com');
       });
+      
+      it('sets isAdministrator in the editor model if the user has the admin role', function(){
+        mockUser.roles = ['admin'];
+        serviceUnderTest.open(mockUser, 'Anything');
+        expect(ctrl.model.isAdministrator).to.be.true;
+      });
+      
+      it('clears isAdministrator in the editor model if the user does not have the admin role', function(){
+        serviceUnderTest.open(mockUser, 'Anything');
+        expect(ctrl.model.isAdministrator).to.be.false;
+      });
     });
 
     describe('saving', function() {
