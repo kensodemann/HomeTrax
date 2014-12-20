@@ -16,16 +16,14 @@
     return exports;
 
     function setCurrentUser() {
-      exports.currentUser = new User();
       if (!!$window.bootstrappedUserObject) {
+        exports.currentUser = new User();
         angular.extend(exports.currentUser, $window.bootstrappedUserObject);
       }
     }
 
     function isAuthenticated() {
-      setCurrentUser();
-      console.log(exports.currentUser);
-      return !!exports.currentUser._id;
+      return !!exports.currentUser;
     }
 
     function isAuthorized(role) {
