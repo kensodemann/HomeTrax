@@ -1,12 +1,21 @@
+/* global angular moment */
 (function() {
   'use strict';
 
   angular.module('app').controller('aboutCtrl', AboutCtrl);
 
   function AboutCtrl() {
-    this.currentVersion = 'pre-0.7';
-
     this.versions = [{
+      id: "Pre_0_7_5",
+      name: "Pre-Release 0.7.5",
+      releaseDate: moment("2014/12/20", "YYYY/MM/DD"),
+      description: "This version added nothing. Everything is under the hood clean-up",
+      features: [
+        "Cleaned up the grunt tasks",
+        "Cleaned up the code",
+        "Can now develop from Cloud 9"
+      ]
+    },{
       id: "Pre_0_7",
       name: "Pre-Release 0.7",
       releaseDate: moment("2014/11/22", "YYYY/MM/DD"),
@@ -44,5 +53,7 @@
         "This About page"
       ]
     }];
+    
+    this.currentVersion = this.versions[0].name;
   }
 }());
