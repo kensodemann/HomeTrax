@@ -12,7 +12,7 @@ export HOME=$OPENSHIFT_REPO_DIR
 bower install
 
 ##########
-echo "INFO: Running 'grunt build'"
+echo "INFO: Running 'grunt openShiftBuild'"
 grunt openShiftBuild
 
 #########
