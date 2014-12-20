@@ -144,6 +144,30 @@ describe('api/events Routes', function() {
           done();
         });
     });
+    
+    it('strips fields starting with _ except _id ', function(done) {
+      request(app)
+        .post('/api/events')
+        .send({
+          title: 'This is a new one',
+          allDay: true,
+          start: '2014-06-22',
+          private: true,
+          color: 'blue',
+          category: 'whatever',
+          _category: 'whatever',
+          _start: 'something',
+          __id: '42'
+        })
+        .end(function(err, res) {
+          expect(res.status).to.be.equal(201);
+          expect(res.body._id).to.not.be.undefined;
+          expect(res.body.__id).to.be.undefined;
+          expect(res.body._category).to.be.undefined;
+          expect(res.body._start).to.be.undefined;
+          done();
+        });
+    });
 
     it('Saves changes to existing items', function(done) {
       request(app)
