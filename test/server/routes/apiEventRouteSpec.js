@@ -1,3 +1,4 @@
+/* global afterEach beforeEach describe it */
 'use strict';
 
 var expect = require('chai').expect;
@@ -123,6 +124,24 @@ describe('api/events Routes', function() {
             expect(evt.userId.toString()).to.equal('53a4dd887c6dc30000bee3af');
             done();
           });
+        });
+    });
+    
+    it('returns the _id when saving new data', function(done) {
+      request(app)
+        .post('/api/events')
+        .send({
+          title: 'This is a new one',
+          allDay: true,
+          start: '2014-06-22',
+          private: true,
+          color: 'blue',
+          category: 'whatever'
+        })
+        .end(function(err, res) {
+          expect(res.status).to.be.equal(201);
+          expect(res.body._id).to.not.be.undefined;
+          done();
         });
     });
 
