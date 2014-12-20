@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var fs = require('fs');
 var config = require('./config/config');
@@ -8,15 +10,15 @@ var ServerApp = function() {
   self.setupVariables = function() {
     //  Set the environment variables we need.
     process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-    self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-    self.port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+    self.ipaddress = process.env.OPENSHIFT_NODEJS_IP || process.env.IP;
+    self.port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT ||  8080;
 
     if (typeof self.ipaddress === "undefined") {
       //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
       //  allows us to run/test the app locally.
       console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
       self.ipaddress = "127.0.0.1";
-    };
+    }
   };
 
 
@@ -61,7 +63,6 @@ var ServerApp = function() {
   self.initializeServer = function() {
     self.app = express();
 
-    debugger;
     require('./config/express')(self.app, config);
     require('./config/routes')(self.app);
   };

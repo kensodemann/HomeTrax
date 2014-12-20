@@ -1,8 +1,9 @@
-'use strict'
+(function() {
+  'use strict';
 
-angular.module('app')
-  .controller('calendarMenuCtrl', ['$scope', 'identity',
-    function($scope, identity) {
-      $scope.identity = identity;
-    }
-  ]);
+  angular.module('app.calendar').controller('calendarMenuCtrl', CalendarMenuCtrl);
+
+  function CalendarMenuCtrl(identity) {
+    this.identity = identity;
+  }
+}());

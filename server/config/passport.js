@@ -1,3 +1,5 @@
+'use strict';
+
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var db = require('./database');
@@ -32,7 +34,7 @@ module.exports = function() {
 
   passport.deserializeUser(function(id, done) {
     db.users.findOne({
-      _id: ObjectId(id)
+      _id: new ObjectId(id)
     },
     function(err, user) {
       if (user) {
@@ -40,6 +42,6 @@ module.exports = function() {
       } else {
         return done(null, false);
       }
-    })
+    });
   });
-}
+};

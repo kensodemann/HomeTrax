@@ -1,69 +1,59 @@
-angular.module('app', ['ngAnimate', 'ngRoute', 'ngResource', 'siyfion.sfTypeahead', 'ui.calendar', 'mgcrea.ngStrap']);
+/* global angular */
+(function() {
+  'use strict';
 
-angular.module('app')
-  .config(function($routeProvider, $locationProvider) {
+  angular.module('app', ['app.core', 'app.account', 'app.calendar', 'app.finance', 'ngAnimate', 'ngRoute', 'ngResource']);
+
+  angular.module('app')
+    .config(configure)
+    .run(runApplication);
+
+  function configure($routeProvider, $locationProvider,
+    mainRoutes, accountRoutes, calendarRoutes, financeRoutes) {
     var routeRoleChecks = {
       admin: {
-        auth: function(authService) {
-          return authService.currentUserAuthorizedForRoute('admin')
+        auth: /* @ngInject */ function(authService) {
+          return authService.currentUserAuthorizedForRoute('admin');
         }
       },
       user: {
-        auth: function(authService) {
-          return authService.currentUserAuthorizedForRoute('')
+        auth: /* @ngInject */ function(authService) {
+          return authService.currentUserAuthorizedForRoute('');
         }
       }
     };
 
     $locationProvider.html5Mode(true);
 
-    $routeProvider.when('/', {
-      templateUrl: '/partials/main/main',
-      controller: 'mainCtrl',
-      resolve: routeRoleChecks.user
-    });
+    setupRoutes(mainRoutes);
+    setupRoutes(accountRoutes);
+    setupRoutes(calendarRoutes);
+    setupRoutes(financeRoutes);
 
-    $routeProvider.when('/about', {
-      templateUrl: '/partials/main/about',
-      controller: 'aboutCtrl'
-    });
+    function setupRoutes(routes) {
+      angular.forEach(routes, function(route) {
+        createRoute(route);
+      });
 
-    $routeProvider.when('/calendar', {
-      templateUrl: '/partials/calendar/calendar',
-      controller: 'calendarCtrl',
-      resolve: routeRoleChecks.user
-    });
-
-    $routeProvider.when('/login', {
-      templateUrl: '/partials/account/login',
-      controller: 'loginCtrl'
-    });
-
-    $routeProvider.when('/finance/account', {
-      templateUrl: '/partials/finance/account',
-      controller: 'financialAccountCtrl',
-      resolve: routeRoleChecks.user
-    });
-
-    $routeProvider.when('/account/userlist', {
-      templateUrl: '/partials/account/userList',
-      controller: 'userListCtrl',
-      resolve: routeRoleChecks.admin
-    });
-
-    $routeProvider.when('/account/myprofile', {
-      templateUrl: '/partials/account/myProfile',
-      controller: 'myProfileCtrl',
-      resolve: routeRoleChecks.user
-    });
-  });
-
-angular.module('app').run(function($rootScope, $location) {
-  $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
-    if (rejection === 'Not Authorized') {
-      $location.path('/');
-    } else if (rejection === 'Not Logged In') {
-      $location.path('/login');
+      function createRoute(route) {
+        $routeProvider.when(route.path, {
+          templateUrl: route.templateUrl,
+          controller: route.controller,
+          controllerAs: 'ctrl',
+          resolve: route.resolve
+        });
+      }
     }
-  });
-});
+  }
+
+  function runApplication($rootScope, $location) {
+    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
+      if (rejection === 'Not Authorized') {
+        $location.path('/');
+      }
+      else if (rejection === 'Not Logged In') {
+        $location.path('/login');
+      }
+    });
+  }
+}());

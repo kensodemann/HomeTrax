@@ -1,19 +1,33 @@
-angular.module('app').factory('identity', ['$window', 'User',
-  function($window, User) {
-    var currentUser;
+/* global angular */
+(function() {
+  'use strict';
 
-    if (!!$window.bootstrappedUserObject) {
-      currentUser = new User();
-      angular.extend(currentUser, $window.bootstrappedUserObject);
-    }
+  angular.module('app.account').factory('identity', Identity);
 
-    return {
-      currentUser: currentUser,
-      isAuthenticated: function() {
-        return !!this.currentUser;
-      },
-      isAuthorized: function(role) {
-        return this.isAuthenticated() && (!role || ( !!this.currentUser.roles && this.currentUser.roles.indexOf(role) > -1));
+  function Identity($window, User) {
+    var exports = {
+      currentUser: undefined,
+      isAuthenticated: isAuthenticated,
+      isAuthorized: isAuthorized
+    };
+
+    setCurrentUser();
+
+    return exports;
+
+    function setCurrentUser() {
+      if (!!$window.bootstrappedUserObject) {
+        exports.currentUser = new User();
+        angular.extend(exports.currentUser, $window.bootstrappedUserObject);
       }
     }
-  }]);
+
+    function isAuthenticated() {
+      return !!exports.currentUser;
+    }
+
+    function isAuthorized(role) {
+      return isAuthenticated() && (!role || (!!exports.currentUser.roles && exports.currentUser.roles.indexOf(role) > -1));
+    }
+  }
+}());

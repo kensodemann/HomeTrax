@@ -1,35 +1,37 @@
-'use strict'
+(function() {
+  'use strict';
 
-describe('calendarMenuCtrl', function() {
-  var scope;
-  var $controllerConstructor;
+  describe('calendarMenuCtrl', function() {
+    var $controllerConstructor;
 
-  beforeEach(module('app'));
+    var mockIdentity;
 
-  beforeEach(inject(function($controller, $rootScope) {
-    scope = $rootScope.$new();
-    $controllerConstructor = $controller;
-  }));
+    beforeEach(module('app.calendar'));
 
+    beforeEach(function(){
+      mockIdentity = {};
+    });
 
-  it('should exist', function(){
-      var ctrl = $controllerConstructor('calendarMenuCtrl', {
-        $scope: scope
-      });
+    beforeEach(inject(function($controller) {
+      $controllerConstructor = $controller;
+    }));
 
-      expect(ctrl).to.not.be.undefined;
-  });
-
-  describe('identity', function() {
-    it('Should set the identity to the injected identity object', function() {
-      var mockIdentity = {};
-
-      var ctrl = $controllerConstructor('calendarMenuCtrl', {
-        $scope: scope,
+    function createController (){
+      return $controllerConstructor('calendarMenuCtrl', {
         identity: mockIdentity
       });
+    }
 
-      expect(scope.identity).to.equal(mockIdentity);
+    it('should exist', function() {
+      var ctrl = createController();
+      expect(ctrl).to.not.be.undefined;
+    });
+
+    describe('identity', function() {
+      it('Should set the identity to the injected identity object', function() {
+        var ctrl = createController();
+        expect(ctrl.identity).to.equal(mockIdentity);
+      });
     });
   });
-});
+}());

@@ -1,13 +1,20 @@
-angular.module('app')
-  .controller('loginMenuCtrl', ['$scope', 'identity', 'authService', '$location',
-    function($scope, identity, authService, $location) {
-      $scope.identity = identity;
+(function() {
+  'use strict';
 
-      $scope.logout = function() {
-        authService.logoutUser()
-          .then(function() {
-            $location.path('/login');
-          });
-      };
+  angular.module('app.account').controller('loginMenuCtrl', LoginMenuCtrl);
+
+  function LoginMenuCtrl(identity, authService, $location) {
+    var self = this;
+
+    self.identity = identity;
+    self.logout = logout;
+
+    function logout() {
+      authService.logoutUser().then(navigateToLogin);
+
+      function navigateToLogin(){
+        $location.path('/login');
+      }
     }
-  ])
+  }
+}());

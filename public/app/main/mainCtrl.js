@@ -1,10 +1,15 @@
-angular.module('app')
-  .controller('mainCtrl', function($scope, identity) {
-  	var message = "Hello World from Angular!!";
+(function() {
+  'use strict';
 
-  	if (identity.isAuthenticated()){
-  		message += "  I am logged in!"
-  	}
+  angular.module('app').controller('mainCtrl', MainCtrl);
 
-    $scope.hello = message;
-  });
+  function MainCtrl(identity) {
+    var message = "Hello World from Angular!!";
+
+    if (identity.isAuthenticated()) {
+      message += "  I am logged in!";
+    }
+
+    this.hello = message;
+  }
+}());

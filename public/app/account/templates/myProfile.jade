@@ -1,0 +1,27 @@
+div.container
+	form.form-horizontal.well(name="profileForm")
+		h2.text-center My Profile
+		fieldset
+			.form-group
+				label.col-md-2.control-label(for='username') Username
+				group.col-md-10
+					input.form-control(name='username', type='text', ng-model='ctrl.user.username', required)
+					.error-container(ng-show='profileForm.username.$invalid')
+						small.text-danger(ng-show='profileForm.username.$error.required') Required
+			.form-group
+				label.col-md-2.control-label(for='firstName') First Name
+				.col-md-10
+					input.form-control(name='firstName', type='text', ng-model='ctrl.user.firstName', required)
+					.error-container(ng-show='profileForm.firstName.$invalid')
+						small.text-danger(ng-show='profileForm.firstName.$error.required') Required
+			.form-group
+				label.col-md-2.control-label(for='lastName') Last Name
+				.col-md-10
+					input.form-control(name='lastName', type='text', ng-model='ctrl.user.lastName', required)
+					.error-container(ng-show='profileForm.lastName.$invalid')
+						small.text-danger(ng-show='profileForm.lastName.$error.required') Required
+		.form-group
+			.col-md-offset-2.col-md-10.btn-area
+				button.btn.btn-default(type='button', ng-click="ctrl.reset()") Reset
+				button.btn.btn-primary(type='submit', ng-click='ctrl.save()', ng-disabled="profileForm.$invalid") Save
+				button.btn.btn-default(type='button', ng-click='ctrl.openPasswordEditor()') Set Password

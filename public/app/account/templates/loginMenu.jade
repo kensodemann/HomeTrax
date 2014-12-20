@@ -1,0 +1,4 @@
+ul.nav.navbar-nav.navbar-right(ng-controller="loginMenuCtrl as loginMenuCtrl")
+  li
+    a(href="/login" ng-hide="loginMenuCtrl.identity.isAuthenticated()") Log In
+    a(href="#" ng-click="loginMenuCtrl.logout()" ng-show="loginMenuCtrl.identity.isAuthenticated()") Log Out

@@ -1,35 +1,41 @@
-'use strict'
+(function() {
+  'use strict';
 
-describe('financeMenuCtrl', function() {
-  var scope;
-  var $controllerConstructor;
+  describe('financeMenuCtrl', function() {
+    var $controllerConstructor;
 
-  beforeEach(module('app'));
+    var mockIdentity;
 
-  beforeEach(inject(function($controller, $rootScope) {
-    scope = $rootScope.$new();
-    $controllerConstructor = $controller;
-  }));
+    beforeEach(module('app.finance'));
 
+    beforeEach(function() {
+      buildMockIdentity();
 
-  it('should exist', function(){
-      var ctrl = $controllerConstructor('financeMenuCtrl', {
-        $scope: scope
-      });
+      function buildMockIdentity() {
+        mockIdentity = sinon.stub();
+      }
+    });
 
-      expect(ctrl).to.not.be.undefined;
-  });
+    beforeEach(inject(function($controller) {
+      $controllerConstructor = $controller;
+    }));
 
-  describe('identity', function() {
-    it('Should set the identity to the injected identity object', function() {
-      var mockIdentity = {};
-
-      var ctrl = $controllerConstructor('financeMenuCtrl', {
-        $scope: scope,
+    function createController() {
+      return $controllerConstructor('financeMenuCtrl', {
         identity: mockIdentity
       });
+    }
 
-      expect(scope.identity).to.equal(mockIdentity);
+    it('should exist', function() {
+      var ctrl = createController();
+      expect(ctrl).to.not.be.undefined;
+    });
+
+    describe('identity', function() {
+      it('Should set the identity to the injected identity object', function() {
+        var ctrl = createController();
+        expect(ctrl.identity).to.equal(mockIdentity);
+      });
     });
   });
-})
+}());

@@ -1,21 +1,30 @@
-angular.module('app').value('myToastr', toastr);
+(function() {
+  'use strict';
 
-angular.module('app').factory('notifier', function(myToastr) {
-  return {
-    notify: function(msg) {
+  angular.module('app.core').value('myToastr', toastr);
+
+  angular.module('app.core').factory('notifier', Notifier);
+
+  function Notifier($log, myToastr) {
+    return {
+      notify: notify,
+      error: error
+    };
+
+    function notify(msg) {
       myToastr.success(msg, null, {
         showMethod: "slideDown",
         positionClass: "toast-bottom-right"
       });
-      console.log(msg);
-    },
+      $log.info(msg);
+    }
 
-    error: function(msg) {
+    function error(msg) {
       myToastr.error(msg, null, {
         showMethod: "slideDown",
         positionClass: "toast-bottom-right"
       });
-      console.log(msg);
+      $log.error(msg);
     }
   }
-})
+}());

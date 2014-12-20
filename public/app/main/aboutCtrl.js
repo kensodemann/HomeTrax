@@ -1,8 +1,21 @@
-angular.module('app')
-  .controller('aboutCtrl', function($scope) {
-    $scope.currentVersion = 'pre-0.7';
+/* global angular moment */
+(function() {
+  'use strict';
 
-    $scope.versions = [{
+  angular.module('app').controller('aboutCtrl', AboutCtrl);
+
+  function AboutCtrl() {
+    this.versions = [{
+      id: "Pre_0_7_5",
+      name: "Pre-Release 0.7.5",
+      releaseDate: moment("2014/12/20", "YYYY/MM/DD"),
+      description: "This version added nothing. Everything is under the hood clean-up",
+      features: [
+        "Cleaned up the grunt tasks",
+        "Cleaned up the code",
+        "Can now develop from Cloud 9"
+      ]
+    },{
       id: "Pre_0_7",
       name: "Pre-Release 0.7",
       releaseDate: moment("2014/11/22", "YYYY/MM/DD"),
@@ -31,7 +44,7 @@ angular.module('app')
       name: "Pre-Release 0.5",
       releaseDate: moment("2014/06/14", "YYYY/MM/DD"),
       description: "This is the first version to include any type of meaningful user interaction.  " +
-        "This version also includes the start of some styling.",
+      "This version also includes the start of some styling.",
       features: [
         "Styling",
         "Default admin user",
@@ -40,4 +53,7 @@ angular.module('app')
         "This About page"
       ]
     }];
-  });
+    
+    this.currentVersion = this.versions[0].name;
+  }
+}());

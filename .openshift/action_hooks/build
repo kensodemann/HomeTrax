@@ -13,7 +13,7 @@ bower install
 
 ##########
 echo "INFO: Running 'grunt build'"
-grunt
+grunt openShiftBuild
 
 #########
 export HOME=$OLD_HOME

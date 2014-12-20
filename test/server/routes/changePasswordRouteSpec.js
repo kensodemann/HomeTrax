@@ -1,3 +1,5 @@
+'use strict';
+
 var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -19,38 +21,9 @@ describe('api/changepassword Route', function() {
   });
 
   describe('PUT', function() {
+    var authStub;
+    var calledWith;
     var testUser;
-
-    function loadUsers(done) {
-      var salt = encryption.createSalt();
-      var hash = encryption.hash(salt, 'ThisIsFreaky');
-      db.users.remove({}, function() {
-        db.users.save({
-          firstName: 'Ken',
-          lastName: 'Sodemann',
-          username: 'kws@email.com',
-          salt: salt,
-          hashedPassword: hash
-        }, function() {
-          salt = encryption.createSalt();
-          hash = encryption.hash(salt, 'IAmSexyBee');
-          db.users.save({
-            firstName: 'Lisa',
-            lastName: 'Buerger',
-            username: 'llb@email.com',
-            salt: salt,
-            hashedPassword: hash
-          }, function() {
-            db.users.findOne({
-              username: 'kws@email.com'
-            }, function(err, user) {
-              testUser = user;
-              done();
-            });
-          });
-        });
-      });
-    }
 
     beforeEach(function(done) {
       loadUsers(done);
@@ -59,12 +32,44 @@ describe('api/changepassword Route', function() {
           return function(req, res, next) {
             calledWith = role;
             next();
-          }
+          };
         }
       };
+
       proxyquire('../../../server/config/routes', {
         '../services/authentication': authStub
       })(app);
+
+      function loadUsers(done) {
+        var salt = encryption.createSalt();
+        var hash = encryption.hash(salt, 'ThisIsFreaky');
+        db.users.remove({}, function() {
+          db.users.save({
+            firstName: 'Ken',
+            lastName: 'Sodemann',
+            username: 'kws@email.com',
+            salt: salt,
+            hashedPassword: hash
+          }, function() {
+            salt = encryption.createSalt();
+            hash = encryption.hash(salt, 'IAmSexyBee');
+            db.users.save({
+              firstName: 'Lisa',
+              lastName: 'Buerger',
+              username: 'llb@email.com',
+              salt: salt,
+              hashedPassword: hash
+            }, function() {
+              db.users.findOne({
+                username: 'kws@email.com'
+              }, function(err, user) {
+                testUser = user;
+                done();
+              });
+            });
+          });
+        });
+      }
     });
 
     afterEach(function(done) {
@@ -74,7 +79,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Requires admin or matching current user', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -88,7 +93,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Requires a valid user _id', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -101,7 +106,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Will not allow password change if the old password is invalid', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'SomethingBogus';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -115,7 +120,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Will not allow password change if the new password is invalid', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'Short';
       request(app)
@@ -129,7 +134,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Sets new salt', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -147,7 +152,7 @@ describe('api/changepassword Route', function() {
     });
 
     it('Sets the password', function(done) {
-      var passwordData = new Object();
+      var passwordData = {};
       passwordData.password = 'ThisIsFreaky';
       passwordData.newPassword = 'SomethingValid';
       request(app)
@@ -165,4 +170,4 @@ describe('api/changepassword Route', function() {
         });
     });
   });
-})
+});
