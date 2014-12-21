@@ -143,6 +143,7 @@ module.exports = function(grunt) {
         files: ['Gruntfile.js',
           'server.js',
           'public/app/**/*.js',
+          'public/css/**/*.css',
           'server/**/*.js',
           'server/includes/layout.tpl.jade',
           'server/includes/scripts.tpl.jade',

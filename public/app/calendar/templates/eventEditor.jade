@@ -21,8 +21,9 @@
 									small.text-danger(ng-show='eventEditor.category.$error.required') Required
 						.form-group
 							label.col.md-10.col-md-offset-2
-								input(type='checkbox', ng-model='ctrl.model.isAllDayEvent')
-								span &nbsp;All day event
+								.checkbox-group
+									input(type='checkbox', ng-model='ctrl.model.isAllDayEvent')
+									span &nbsp;All day event
 						.form-group
 							label.col-md-2.control-label(for='startDate') Start
 							.col-md-5
@@ -37,8 +38,9 @@
 								input.form-control(type="text", ng-model="ctrl.model.end", name="endTime", ng-hide="ctrl.model.isAllDayEvent", bs-timepicker, data-time-type="number", required)
 						.form-group
 							label.col.md-10.col-md-offset-2
-								input(type='checkbox', ng-model='ctrl.model.isPrivate')
-								span &nbsp;Private event
+								.checkbox-group
+									input(type='checkbox', ng-model='ctrl.model.isPrivate')
+									span &nbsp;Private event
 						.form-group
 							.col-md-offset-4.col-md-8.text-danger {{ctrl.errorMessage}}
 				.modal-footer

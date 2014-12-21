@@ -40,6 +40,11 @@
 									small.text-danger(ng-show='userEditor.verifyPassword.$error.required') Required
 									small.text-danger(ng-show='!userEditor.verifyPassword.$error.required && userEditor.verifyPassword.$error.matchesValue') Must match password
 						.form-group
+							label.col.md-9.col-md-offset-3
+								.checkbox-group
+									input(type='checkbox', ng-model='ctrl.model.isAdministrator')
+									span &nbsp;Administrator
+						.form-group
 							.col-md-offset-4.col-md-8.text-danger {{ctrl.errorMessage}}
 				.modal-footer
 					button.btn.btn-default(type='button', ng-click="$hide()") Close

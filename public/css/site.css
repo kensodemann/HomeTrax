@@ -11,6 +11,10 @@ a.btn:focus {
   padding-right: 2em;
 }
 
+.checkbox-group {
+  padding-left: 14px;
+}
+
 .form-control[date-time-picker] {
   cursor: pointer;
   background-color: #fff;
