@@ -201,6 +201,17 @@
         expect(mockEvent.$save.calledOnce).to.be.true;
       });
     });
+    
+    describe('resizing an event', function() {
+      it('saves the event', function() {
+        var mockEvent = sinon.stub({
+          $save: function() {}
+        });
+        var ctrl = createController();
+        ctrl.uiConfig.calendar.eventResize(mockEvent);
+        expect(mockEvent.$save.calledOnce).to.be.true;
+      });
+    });
 
     describe('limiting to my events', function() {
       beforeEach(function() {

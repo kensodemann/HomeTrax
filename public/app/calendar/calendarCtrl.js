@@ -1,3 +1,4 @@
+/* global angular */
 (function() {
   'use strict';
 
@@ -34,7 +35,8 @@
     asideScope.categoryChanged = function(cat) {
       if (cat.include) {
         calendarData.includeCategory(cat.name);
-      } else {
+      }
+      else {
         calendarData.excludeCategory(cat.name);
       }
       $scope.calendar.fullCalendar('refetchEvents');
@@ -55,11 +57,12 @@
         },
         dayClick: dayClicked,
         eventClick: eventClicked,
-        eventDrop: eventDropped
+        eventDrop: saveEvent,
+        eventResize: saveEvent
       }
     };
 
-    function eventDropped(event) {
+    function saveEvent(event) {
       event.$save();
     }
 
