@@ -1,3 +1,4 @@
+/* global angular */
 (function() {
   'use strict';
 
@@ -89,6 +90,10 @@
         userResource.username = editorScope.ctrl.model.username;
         if (editorScope.ctrl.mode === 'create') {
           userResource.password = editorScope.ctrl.model.password;
+        }
+        userResource.roles = [];
+        if (editorScope.ctrl.model.isAdministrator){
+          userResource.roles.push('admin');
         }
       }
     }
