@@ -1,3 +1,4 @@
+/* global afterEach beforeEach describe it */
 'use strict';
 
 var expect = require('chai').expect;
@@ -307,7 +308,8 @@ describe('api/users Routes', function() {
           firstName: 'Fred',
           lastName: 'Flintstone',
           username: 'lls@email.com',
-          password: 'wilmabettyswap'
+          password: 'wilmabettyswap',
+          roles:['worker']
         })
         .end(function(err, res) {
           expect(res.status).to.equal(201);
@@ -318,6 +320,7 @@ describe('api/users Routes', function() {
               expect(user.firstName).to.equal('Fred');
               expect(user.lastName).to.equal('Flintstone');
               expect(user.username).to.equal('lls@email.com');
+              expect(user.roles).to.deep.equal(['worker']);
               expect(user.salt).to.not.be.undefined;
               expect(user.hashedPassword).to.not.be.undefined;
               expect(user._id.toString()).to.equal(res.body._id);
@@ -443,6 +446,7 @@ describe('api/users Routes', function() {
       testUser.firstName = 'Fred';
       testUser.lastName = 'Flintstone';
       testUser.username = 'ff@email.com';
+      testUser.roles = ['worker', 'husband', 'dad'];
       request(app)
         .put('/api/users/' + testUser._id)
         .send(testUser)
@@ -455,6 +459,7 @@ describe('api/users Routes', function() {
               expect(user.firstName).to.equal('Fred');
               expect(user.lastName).to.equal('Flintstone');
               expect(user.username).to.equal('ff@email.com');
+              expect(user.roles).to.deep.equal(['worker', 'husband', 'dad']);
               done();
             });
         });
