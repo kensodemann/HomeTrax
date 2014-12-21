@@ -158,7 +158,8 @@ function updateUser(id, userData, res) {
     $set: {
       firstName: userData.firstName,
       lastName: userData.lastName,
-      username: userData.username
+      username: userData.username,
+      roles: userData.roles
     }
   }, {}, function(err) {
     if (err) {

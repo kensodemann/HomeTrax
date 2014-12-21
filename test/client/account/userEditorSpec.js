@@ -144,6 +144,17 @@
         expect(ctrl.model.lastName).to.equal('Jackson');
         expect(ctrl.model.username).to.equal('email@me.com');
       });
+
+      it('sets isAdministrator in the editor model if the user has the admin role', function() {
+        mockUser.roles = ['admin'];
+        serviceUnderTest.open(mockUser, 'Anything');
+        expect(ctrl.model.isAdministrator).to.be.true;
+      });
+
+      it('clears isAdministrator in the editor model if the user does not have the admin role', function() {
+        serviceUnderTest.open(mockUser, 'Anything');
+        expect(ctrl.model.isAdministrator).to.be.false;
+      });
     });
 
     describe('saving', function() {
@@ -164,11 +175,27 @@
           ctrl.model.lastName = 'Rubble';
           ctrl.model.username = 'wife@swap.com';
           ctrl.model.password = 'spiceItUpABit';
+          ctrl.model.isAdministrator = false;
           ctrl.save();
           expect(mockUser.firstName).to.equal('Wilma');
           expect(mockUser.lastName).to.equal('Rubble');
           expect(mockUser.username).to.equal('wife@swap.com');
           expect(mockUser.password).to.be.undefined;
+          expect(mockUser.roles).to.deep.equal([]);
+        });
+
+        it('adds the admin role if isAdministrator', function() {
+          ctrl.model.firstName = 'Wilma';
+          ctrl.model.lastName = 'Rubble';
+          ctrl.model.username = 'wife@swap.com';
+          ctrl.model.password = 'spiceItUpABit';
+          ctrl.model.isAdministrator = true;
+          ctrl.save();
+          expect(mockUser.firstName).to.equal('Wilma');
+          expect(mockUser.lastName).to.equal('Rubble');
+          expect(mockUser.username).to.equal('wife@swap.com');
+          expect(mockUser.password).to.be.undefined;
+          expect(mockUser.roles).to.deep.equal(['admin']);
         });
 
         it('calls $update on the resource', function() {

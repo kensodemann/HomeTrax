@@ -1,3 +1,4 @@
+/* global angular */
 (function() {
   'use strict';
 
@@ -50,6 +51,8 @@
           editorScope.ctrl.model.firstName = user.firstName;
           editorScope.ctrl.model.lastName = user.lastName;
           editorScope.ctrl.model.username = user.username;
+          editorScope.ctrl.model.isAdministrator = !!user.roles &&
+            (user.roles.indexOf('admin') > -1);
         }
       }
     }
@@ -87,6 +90,10 @@
         userResource.username = editorScope.ctrl.model.username;
         if (editorScope.ctrl.mode === 'create') {
           userResource.password = editorScope.ctrl.model.password;
+        }
+        userResource.roles = [];
+        if (editorScope.ctrl.model.isAdministrator){
+          userResource.roles.push('admin');
         }
       }
     }
