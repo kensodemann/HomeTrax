@@ -59,8 +59,8 @@
       }
     };
 
-    function eventDropped() {
-      $log.log('You dropped the bomb on me');
+    function eventDropped(event) {
+      event.$save();
     }
 
     function dayClicked(day) {
