@@ -102,6 +102,9 @@
 
       function buildMockIdentity() {
         mockIdentity = sinon.stub();
+        mockIdentity.currentUser = {
+          _id: "42"
+        };
       }
 
       function buildMockMessageDialogService() {
@@ -190,16 +193,19 @@
     });
 
     describe('Opening the editor', function() {
-      var testEvent = {
-        "_id": "547bb0daeb5412000042fac1",
-        "start": moment("2014-12-01T01:00:00.000Z"),
-        "end": moment("2014-12-01T02:30:00.000Z"),
-        "allDay": false,
-        "title": "AA Meeting",
-        "category": "Personal",
-        "private": true,
-        "userId": "53a4dcea7c6dc30000bee3ab"
-      };
+      var testEvent;
+      beforeEach(function() {
+        testEvent = {
+          "_id": "547bb0daeb5412000042fac1",
+          "start": moment("2014-12-01T01:00:00.000Z"),
+          "end": moment("2014-12-01T02:30:00.000Z"),
+          "allDay": false,
+          "title": "AA Meeting",
+          "category": "Personal",
+          "private": true,
+          "userId": "53a4dcea7c6dc30000bee3ab"
+        };
+      });
 
       it('does not show the dialog if it is not ready', function() {
         serviceUnderTest.open(testEvent, 'anything');
@@ -233,6 +239,27 @@
         expect(ctrl.model.end).to.equal(moment('2014-12-01T02:30:00.000Z').valueOf());
         expect(ctrl.model.category).to.equal('Personal');
         expect(ctrl.model.isPrivate).to.be.true;
+      });
+
+      it('allows editing if the event has no userId', function() {
+        var ctrl = getEditorCtrl();
+        testEvent.userId = undefined;
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.isReadonly).to.be.false;
+      });
+
+      it("allows editing if the event's userId matches the identity", function() {
+        var ctrl = getEditorCtrl();
+        mockIdentity.currentUser._id = testEvent.userId;
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.isReadonly).to.be.false;
+      });
+
+      it("disallows editing if the event's userId does not match the identity", function() {
+        var ctrl = getEditorCtrl();
+        mockIdentity.currentUser._id = '4273';
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.isReadonly).to.be.true;
       });
 
       describe('Event Category Autocompletion', function() {

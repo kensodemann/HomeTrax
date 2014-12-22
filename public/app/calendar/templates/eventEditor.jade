@@ -42,8 +42,8 @@
 									input(type='checkbox', ng-model='ctrl.model.isPrivate')
 									span &nbsp;Private event
 						.form-group
-							.col-md-offset-4.col-md-8.text-danger {{ctrl.errorMessage}}
+							.col-md-offset-4.col-md-8.text-danger {{ctrl.errorMessage}} {{ctrl.isReadonly}}
 				.modal-footer
-					button.btn.btn-default.pull-left(type='button', ng-click="ctrl.remove()", ng-show="ctrl.mode === 'edit'") Remove
+					button.btn.btn-default.pull-left(type='button', ng-click="ctrl.remove()", ng-show="!ctrl.isReadonly && ctrl.mode === 'edit'") Remove
 					button.btn.btn-default(type='button', ng-click="$hide()") Cancel
 					button.btn.btn-primary(type='submit', ng-click='ctrl.ok()', ng-disabled="eventEditor.$invalid || errorMessage") Save Event

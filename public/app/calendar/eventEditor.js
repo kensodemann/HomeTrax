@@ -13,7 +13,8 @@
     var editorScope = $rootScope.$new(true);
     editorScope.ctrl = {
       ok: saveAndClose,
-      remove: remove
+      remove: remove,
+      isReadonly: false
     };
     var editor = $modal({
       template: '/partials/calendar/templates/eventEditor',
@@ -87,6 +88,8 @@
       eventResource = event;
       editorScope.ctrl.mode = mode;
       editorScope.ctrl.title = (mode === 'create') ? 'New Event' : 'Edit Event';
+      editorScope.ctrl.isReadonly = !!event.userId &&
+        event.userId.toString() !== identity.currentUser._id.toString();
       copyEventToEditorModel();
       buildSuggestionEngine();
       initializeDataWatchers();
