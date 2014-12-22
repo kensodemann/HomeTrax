@@ -15,6 +15,10 @@ a.btn:focus {
   padding-left: 14px;
 }
 
+.form-static {
+  padding: 8px 12px;
+}
+
 .form-control[date-time-picker] {
   cursor: pointer;
   background-color: #fff;
