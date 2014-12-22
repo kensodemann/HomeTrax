@@ -4,7 +4,7 @@ div.container
 		fieldset
 			.form-group
 				label.col-md-2.control-label(for='username') Username
-				group.col-md-10
+				.col-md-10
 					input.form-control(name='username', type='text', ng-model='ctrl.user.username', required)
 					.error-container(ng-show='profileForm.username.$invalid')
 						small.text-danger(ng-show='profileForm.username.$error.required') Required
