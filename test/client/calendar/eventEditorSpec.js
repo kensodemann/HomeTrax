@@ -1,3 +1,4 @@
+/* global beforeEach describe expect inject it moment sinon */
 (function() {
   'use strict';
 
@@ -9,6 +10,7 @@
     var mockCalendar;
     var mockCalendarEvent;
     var mockEventCategory;
+    var mockIdentity;
     var mockMessageDialogService;
     var mockModal;
     var mockModalConstructor;
@@ -26,6 +28,7 @@
       buildMockCalendarEvent();
       setupTestEventCategories();
       buildMockEventCategory();
+      buildMockIdentity();
       buildMockMessageDialogService();
       buildMockModal();
       buildMockNotifier();
@@ -37,36 +40,53 @@
         $provide.value('EventCategory', mockEventCategory);
         $provide.value('$window', mockWindow);
         $provide.value('messageDialogService', mockMessageDialogService);
+        $provide.value('identity', mockIdentity);
       });
 
       function setupTestEventCategories() {
-        testEventCategories = [
-          {"name": "Test", "_id": "5401cb6f95b028e003e6bd17"},
-          {"name": "Appointments", "_id": "5401cf2e95b028e003e6bd18"},
-          {"name": "Holiday", "_id": "540475e3d587a23c155222f5"},
-          {"name": "Family", "_id": "54047fd2d587a23c155222fa"},
-          {"name": "Fried Chicken", "_id": "542b789f78f2be0815c90fe9"},
-          {"name": "Technology", "_id": "542bfa75f7b14c80126a9b8b"},
-          {"name": "Church", "_id": "542bfaa2f7b14c80126a9b8d"},
-          {"name": "Meeting", "_id": "542bfd0eb16d48880e05079c"},
-          {"name": "Travel", "_id": "542bfd53b16d48880e05079f"},
-          {"name": "Recreation", "_id": "542f5824c68b48fc13a7674e"}
-        ];
+        testEventCategories = [{
+          "name": "Test",
+          "_id": "5401cb6f95b028e003e6bd17"
+        }, {
+          "name": "Appointments",
+          "_id": "5401cf2e95b028e003e6bd18"
+        }, {
+          "name": "Holiday",
+          "_id": "540475e3d587a23c155222f5"
+        }, {
+          "name": "Family",
+          "_id": "54047fd2d587a23c155222fa"
+        }, {
+          "name": "Fried Chicken",
+          "_id": "542b789f78f2be0815c90fe9"
+        }, {
+          "name": "Technology",
+          "_id": "542bfa75f7b14c80126a9b8b"
+        }, {
+          "name": "Church",
+          "_id": "542bfaa2f7b14c80126a9b8d"
+        }, {
+          "name": "Meeting",
+          "_id": "542bfd0eb16d48880e05079c"
+        }, {
+          "name": "Travel",
+          "_id": "542bfd53b16d48880e05079f"
+        }, {
+          "name": "Recreation",
+          "_id": "542f5824c68b48fc13a7674e"
+        }];
       }
 
       function buildMockCalendar() {
         mockCalendar = sinon.stub({
-          fullCalendar: function() {
-          }
+          fullCalendar: function() {}
         });
       }
 
       function buildMockCalendarEvent() {
         mockCalendarEvent = sinon.stub({
-          $save: function() {
-          },
-          $remove: function() {
-          }
+          $save: function() {},
+          $remove: function() {}
         });
         mockCalendarEvent.start = moment();
         mockCalendarEvent.end = moment();
@@ -74,52 +94,46 @@
 
       function buildMockEventCategory() {
         mockEventCategory = sinon.stub({
-          query: function() {
-          },
-          save: function() {
-          }
+          query: function() {},
+          save: function() {}
         });
         mockEventCategory.query.returns(testEventCategories);
       }
 
+      function buildMockIdentity() {
+        mockIdentity = sinon.stub();
+      }
+
       function buildMockMessageDialogService() {
         mockMessageDialogService = sinon.stub({
-          ask: function() {
-          }
+          ask: function() {}
         });
       }
 
       function buildMockModal() {
         var mockPromise = sinon.stub({
-          then: function() {
-          }
+          then: function() {}
         });
 
         mockModal = sinon.stub({
           $promise: mockPromise,
-          hide: function() {
-          },
-          show: function() {
-          }
+          hide: function() {},
+          show: function() {}
         });
         mockModalConstructor = sinon.stub().returns(mockModal);
       }
 
       function buildMockNotifier() {
         mockNotifier = sinon.stub({
-          notify: function() {
-          },
-          error: function() {
-          }
+          notify: function() {},
+          error: function() {}
         });
       }
 
       function buildMockWindow() {
         mockBloodhound = sinon.stub({
-          initialize: function() {
-          },
-          ttAdapter: function() {
-          }
+          initialize: function() {},
+          ttAdapter: function() {}
         });
         mockBloodhoundConstructor = sinon.stub().returns(mockBloodhound);
         mockBloodhoundConstructor.tokenizers = {
@@ -340,7 +354,10 @@
 
       it('grabs the name if category is an object', function() {
         // This covers the case that a category is chosen directly from the typeahead drop down
-        ctrl.model.category = {_id: 1, name: 'Holiday'};
+        ctrl.model.category = {
+          _id: 1,
+          name: 'Holiday'
+        };
         ctrl.ok();
         expect(mockCalendarEvent.category).to.equal('Holiday');
       });
@@ -454,5 +471,3 @@
     });
   });
 }());
-  
-  

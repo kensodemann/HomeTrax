@@ -1,9 +1,10 @@
+/* global angular moment */
 (function() {
   'use strict';
 
   angular.module('app.calendar').factory('eventEditor', eventEditor);
 
-  function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService) {
+  function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, identity) {
     var exports = {
       initialize: initialize,
       open: open
@@ -109,7 +110,7 @@
 
         var eventCategorySuggestions = new $window.Bloodhound({
           datumTokenizer: function(d) {
-            return Bloodhound.tokenizers.whitespace(d.name);
+            return $window.Bloodhound.tokenizers.whitespace(d.name);
           },
           queryTokenizer: $window.Bloodhound.tokenizers.whitespace,
           local: eventCategories
