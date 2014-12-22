@@ -148,7 +148,7 @@ module.exports = function(grunt) {
           'server/includes/layout.tpl.jade',
           'server/includes/scripts.tpl.jade',
           'test/**/*.js'],
-        tasks: ['devBuild']
+        tasks: ['default']
       }
     }
   });
@@ -166,8 +166,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-preprocess');
 
   // Tasks
-  grunt.registerTask('default', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
+  grunt.registerTask('default', ['clean', 'preprocess:dev', 'karma', 'mochaTest', 'jshint', 'concat']);
+  grunt.registerTask('build', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
   grunt.registerTask('openShiftBuild', ['clean', 'preprocess:dist', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
-  grunt.registerTask('devBuild', ['clean', 'preprocess:dev', 'karma', 'mochaTest', 'jshint', 'concat']);
-  grunt.registerTask('dev', ['devBuild', 'watch']);
+  grunt.registerTask('dev', ['default', 'watch']);
 };
