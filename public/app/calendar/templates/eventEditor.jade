@@ -10,40 +10,40 @@
 						.form-group
 							label.col-md-2.control-label(for='title') Title
 							.col-md-10
-								input.form-control(name='title', type='text', ng-model='ctrl.model.title', required)
+								input.form-control(name='title', type='text', ng-model='ctrl.model.title', ng-disabled="ctrl.isReadonly", required)
 								.error-container(ng-show='eventEditor.title.$invalid')
 									small.text-danger(ng-show='eventEditor.title.$error.required') Required
 						.form-group
 							label.col-md-2.control-label(for='category') Category
 							.col-md-10
-								input.form-control(name='category', type='text', ng-model='ctrl.model.category', options='ctrl.categoryOptions', datasets='ctrl.categories', sf-typeahead, required)
+								input.form-control(name='category', type='text', ng-model='ctrl.model.category', options='ctrl.categoryOptions', datasets='ctrl.categories', sf-typeahead, ng-disabled="ctrl.isReadonly", required)
 								.error-container(ng-show='eventEditor.category.$invalid')
 									small.text-danger(ng-show='eventEditor.category.$error.required') Required
 						.form-group
 							label.col.md-10.col-md-offset-2
 								.checkbox-group
-									input(type='checkbox', ng-model='ctrl.model.isAllDayEvent')
+									input(type='checkbox', ng-model='ctrl.model.isAllDayEvent', ng-disabled="ctrl.isReadonly")
 									span &nbsp;All day event
 						.form-group
 							label.col-md-2.control-label(for='startDate') Start
 							.col-md-5
-								input.form-control(type="text", ng-model="ctrl.model.start", name="startDate", bs-datepicker, data-date-type="number", required)
+								input.form-control(type="text", ng-model="ctrl.model.start", name="startDate", bs-datepicker, data-date-type="number", ng-disabled="ctrl.isReadonly", required)
 							.col-md-5
-								input.form-control(type="text", ng-model="ctrl.model.start", name="startTime", ng-hide="ctrl.model.isAllDayEvent", bs-timepicker, data-time-type="number", required)
+								input.form-control(type="text", ng-model="ctrl.model.start", name="startTime", ng-hide="ctrl.model.isAllDayEvent", bs-timepicker, data-time-type="number", ng-disabled="ctrl.isReadonly", required)
 						.form-group
 							label.col-md-2.control-label(for='endDate') End
 							.col-md-5
-								input.form-control(type="text", ng-model="ctrl.model.end", name="endDate", bs-datepicker, data-date-type="number", required)
+								input.form-control(type="text", ng-model="ctrl.model.end", name="endDate", bs-datepicker, data-date-type="number", ng-disabled="ctrl.isReadonly", required)
 							.col-md-5
-								input.form-control(type="text", ng-model="ctrl.model.end", name="endTime", ng-hide="ctrl.model.isAllDayEvent", bs-timepicker, data-time-type="number", required)
+								input.form-control(type="text", ng-model="ctrl.model.end", name="endTime", ng-hide="ctrl.model.isAllDayEvent", bs-timepicker, data-time-type="number", ng-disabled="ctrl.isReadonly", required)
 						.form-group
 							label.col.md-10.col-md-offset-2
 								.checkbox-group
-									input(type='checkbox', ng-model='ctrl.model.isPrivate')
+									input(type='checkbox', ng-model='ctrl.model.isPrivate', ng-disabled="ctrl.isReadonly")
 									span &nbsp;Private event
 						.form-group
-							.col-md-offset-4.col-md-8.text-danger {{ctrl.errorMessage}} {{ctrl.isReadonly}}
+							.col-md-offset-4.col-md-8.text-danger {{ctrl.errorMessage}}
 				.modal-footer
 					button.btn.btn-default.pull-left(type='button', ng-click="ctrl.remove()", ng-show="!ctrl.isReadonly && ctrl.mode === 'edit'") Remove
 					button.btn.btn-default(type='button', ng-click="$hide()") Cancel
-					button.btn.btn-primary(type='submit', ng-click='ctrl.ok()', ng-disabled="eventEditor.$invalid || errorMessage") Save Event
+					button.btn.btn-primary(type='submit', ng-click='ctrl.ok()', ng-disabled="eventEditor.$invalid || errorMessage", ng-show="!ctrl.isReadonly") Save Event
