@@ -17,7 +17,8 @@
         TestTag: 2
       }, {
         UserId: "3",
-        TestTag: 4
+        TestTag: 4,
+        color: "#ff0000"
       }, {
         UserId: "4",
         TestTag: 5
@@ -50,6 +51,24 @@
         expect(res[0].TestTag).to.equal(1);
         expect(res[2].TestTag).to.equal(4);
         expect(res[4].TestTag).to.equal(7);
+      });
+
+      it('returns the color defined for the user if defined', function() {
+        httpBackend.expectGET('/api/users')
+          .respond(testData);
+        var res = serviceUnderTest.query({});
+        httpBackend.flush();
+
+        expect(res[2].color).to.equal("#ff0000");
+      });
+      
+      it('defaults the color if it is not defined', function() {
+        httpBackend.expectGET('/api/users')
+          .respond(testData);
+        var res = serviceUnderTest.query({});
+        httpBackend.flush();
+
+        expect(res[0].color).to.equal("#3a87ad");
       });
     });
   });
