@@ -446,6 +446,7 @@ describe('api/users Routes', function() {
       testUser.firstName = 'Fred';
       testUser.lastName = 'Flintstone';
       testUser.username = 'ff@email.com';
+      testUser.color = "#ffeedc";
       testUser.roles = ['worker', 'husband', 'dad'];
       request(app)
         .put('/api/users/' + testUser._id)
@@ -459,6 +460,7 @@ describe('api/users Routes', function() {
               expect(user.firstName).to.equal('Fred');
               expect(user.lastName).to.equal('Flintstone');
               expect(user.username).to.equal('ff@email.com');
+              expect(user.color).to.equal("#ffeedc");
               expect(user.roles).to.deep.equal(['worker', 'husband', 'dad']);
               done();
             });

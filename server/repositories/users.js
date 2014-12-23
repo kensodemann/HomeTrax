@@ -159,6 +159,7 @@ function updateUser(id, userData, res) {
       firstName: userData.firstName,
       lastName: userData.lastName,
       username: userData.username,
+      color: userData.color,
       roles: userData.roles
     }
   }, {}, function(err) {
