@@ -1,3 +1,4 @@
+/* global angular */
 (function() {
   'use strict';
 
@@ -16,11 +17,17 @@
       self.user.$update();
     };
 
-    self.openPasswordEditor = function(){
+    self.backgroundColor = function(color) {
+      return {
+        "background-color": color
+      };
+    };
+
+    self.openPasswordEditor = function() {
       passwordEditor.open(identity.currentUser._id);
     };
 
-    function currentUser(){
+    function currentUser() {
       return User.get({
         id: identity.currentUser._id
       });

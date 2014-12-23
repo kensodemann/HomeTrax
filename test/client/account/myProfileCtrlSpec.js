@@ -60,19 +60,19 @@
       });
     });
 
-    describe('Reset', function() {
-      it('Gets the data for the currently logged in user', function() {
-        ctrl.user = undefined;
+    // describe('Reset', function() {
+    //   it('Gets the data for the currently logged in user', function() {
+    //     ctrl.user = undefined;
 
-        ctrl.reset();
+    //     ctrl.reset();
 
-        expect(mockUserResource.get.calledTwice).to.be.true;
-        expect(mockUserResource.get.calledWith({
-          id: '123456789009876543211234'
-        })).to.be.true;
-        expect(ctrl.user).to.equal(mockUser);
-      });
-    });
+    //     expect(mockUserResource.get.calledTwice).to.be.true;
+    //     expect(mockUserResource.get.calledWith({
+    //       id: '123456789009876543211234'
+    //     })).to.be.true;
+    //     expect(ctrl.user).to.equal(mockUser);
+    //   });
+    // });
 
     describe('Save', function() {
       it('updates the data', function() {
@@ -88,5 +88,14 @@
         expect(mockPasswordEditor.open.calledWithExactly('123456789009876543211234')).to.be.true;
       });
     });
+
+    describe('Color Style', function() {
+      it('sets the background color to the specified color', function() {
+        var style = ctrl.backgroundColor("#ffef12");
+        expect(style).to.deep.equal({
+          'background-color': '#ffef12'
+        });
+      })
+    })
   });
 }());
