@@ -133,7 +133,7 @@
         expect(style).to.deep.equal({
           'background-color': '#ffef12'
         });
-      })
-    })
+      });
+    });
   });
 }());
