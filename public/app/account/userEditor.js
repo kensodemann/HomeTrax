@@ -18,7 +18,8 @@
     });
 
     editorScope.ctrl = {
-      save: saveOrUpdate
+      save: saveOrUpdate,
+      backgroundColor: setBackgroundColor
     };
 
     var saveCallback;
@@ -51,6 +52,7 @@
           editorScope.ctrl.model.firstName = user.firstName;
           editorScope.ctrl.model.lastName = user.lastName;
           editorScope.ctrl.model.username = user.username;
+          editorScope.ctrl.model.color = user.color;
           editorScope.ctrl.model.isAdministrator = !!user.roles &&
             (user.roles.indexOf('admin') > -1);
         }
@@ -88,14 +90,21 @@
         userResource.firstName = editorScope.ctrl.model.firstName;
         userResource.lastName = editorScope.ctrl.model.lastName;
         userResource.username = editorScope.ctrl.model.username;
+        userResource.color = editorScope.ctrl.model.color;
         if (editorScope.ctrl.mode === 'create') {
           userResource.password = editorScope.ctrl.model.password;
         }
         userResource.roles = [];
-        if (editorScope.ctrl.model.isAdministrator){
+        if (editorScope.ctrl.model.isAdministrator) {
           userResource.roles.push('admin');
         }
       }
+    }
+
+    function setBackgroundColor(color) {
+      return {
+        "background-color": color
+      };
     }
   }
 }());

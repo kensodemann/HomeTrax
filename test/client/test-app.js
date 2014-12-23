@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('app.account', ['ngResource']);
 angular.module('app.calendar', ['ngResource']);
 angular.module('app.core', []);

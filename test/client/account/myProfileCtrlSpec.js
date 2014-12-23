@@ -1,3 +1,4 @@
+/* global beforeEach describe expect inject it sinon */
 (function() {
   'use strict';
 
@@ -7,6 +8,7 @@
     var ctrl;
     var $controllerConstructor;
     var mockIdentity;
+    var mockNotifier;
     var mockPasswordEditor;
     var mockUserResource;
     var mockUser;
@@ -19,34 +21,50 @@
     }));
 
     function createMocks() {
-      mockIdentity = sinon.stub({
-        currentUser: {
-          _id: '123456789009876543211234'
-        }
-      });
+      buildMockIdentity();
+      buildMockNotifier();
+      buildMockPasswordEditor();
+      buildMockUser();
 
-      mockPasswordEditor = sinon.stub({
-        open: function() {
-        }
-      });
+      function buildMockIdentity() {
+        mockIdentity = sinon.stub({
+          currentUser: {
+            _id: '123456789009876543211234'
+          }
+        });
+      }
 
-      mockUser = sinon.stub({
-        $update: function() {
-        }
-      });
+      function buildMockNotifier() {
+        mockNotifier = sinon.stub({
+          error: function() {},
+          notify: function() {}
+        });
+      }
 
-      mockUserResource = sinon.stub({
-        get: function() {
-        }
-      });
-      mockUserResource.get.returns(mockUser);
+      function buildMockPasswordEditor() {
+        mockPasswordEditor = sinon.stub({
+          open: function() {}
+        });
+      }
+
+      function buildMockUser() {
+        mockUser = sinon.stub({
+          $update: function() {}
+        });
+
+        mockUserResource = sinon.stub({
+          get: function() {}
+        });
+        mockUserResource.get.returns(mockUser);
+      }
     }
 
     function createController() {
       ctrl = $controllerConstructor('myProfileCtrl', {
         User: mockUserResource,
         identity: mockIdentity,
-        passwordEditor: mockPasswordEditor
+        passwordEditor: mockPasswordEditor,
+        notifier: mockNotifier
       });
     }
 
@@ -79,6 +97,26 @@
         ctrl.save();
         expect(mockUser.$update.calledOnce).to.be.true;
       });
+
+      it('notifies the user upon success', function() {
+        ctrl.save();
+        mockUser.$update.callArg(0);
+        expect(mockNotifier.notify.calledOnce).to.be.true;
+        expect(mockNotifier.notify.calledWith('Profile modifications saved successfully'));
+      });
+
+      it('notifies the user upon error', function() {
+        ctrl.save();
+        mockUser.$update.callArgWith(1, {
+          status: 400,
+          statusText: 'something went wrong',
+          data: {
+            reason: 'because you suck eggs'
+          }
+        });
+        expect(mockNotifier.error.calledOnce).to.be.true;
+        expect(mockNotifier.error.calledWith('because you suck eggs')).to.be.true;
+      });
     });
 
     describe('Changing Password', function() {
@@ -86,6 +124,15 @@
         ctrl.openPasswordEditor();
         expect(mockPasswordEditor.open.calledOnce).to.be.true;
         expect(mockPasswordEditor.open.calledWithExactly('123456789009876543211234')).to.be.true;
+      });
+    });
+
+    describe('Color Style', function() {
+      it('sets the background color to the specified color', function() {
+        var style = ctrl.backgroundColor("#ffef12");
+        expect(style).to.deep.equal({
+          'background-color': '#ffef12'
+        });
       });
     });
   });
