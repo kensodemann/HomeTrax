@@ -4,7 +4,7 @@
 
   angular.module('app.account').controller('myProfileCtrl', MyProfileCtrl);
 
-  function MyProfileCtrl(User, identity, passwordEditor) {
+  function MyProfileCtrl(User, identity, passwordEditor, notifier) {
     var self = this;
 
     self.user = currentUser();
@@ -14,7 +14,15 @@
     };
 
     self.save = function() {
-      self.user.$update();
+      self.user.$update(success, error);
+
+      function success() {
+        notifier.notify('Profile modifications saved successfully');
+      }
+
+      function error(err) {
+        notifier.error(err.data.reason);
+      }
     };
 
     self.backgroundColor = function(color) {
