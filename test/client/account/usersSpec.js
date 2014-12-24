@@ -33,7 +33,8 @@
         lastName: 'Meany'
       }];
       mockUser = sinon.stub({
-        query: function() {}
+        query: function() {},
+        $save: function() {}
       });
       mockUser.query.returns(testData);
     }
@@ -49,7 +50,7 @@
     });
 
     describe('instantiation', function() {
-      it('queriues all of the users', function() {
+      it('queries all of the users', function() {
         expect(mockUser.query.calledOnce).to.be.true;
       });
 
@@ -117,6 +118,41 @@
         });
         queryUsersDfd.resolve();
         scope.$digest();
+      });
+    });
+
+    describe('add', function() {
+      it('saves the passed user', function() {
+        serviceUnderTest.add(mockUser);
+        expect(mockUser.$save.calledOnce).to.be.true;
+      });
+
+      it('pushes the user if the save succeeds', function() {
+        serviceUnderTest.add(mockUser);
+        mockUser.$save.yield();
+        expect(serviceUnderTest.all.length).to.equal(3);
+      });
+
+      it('calls first callback on success', function(done) {
+        serviceUnderTest.add(mockUser, success, error);
+        mockUser.$save.yield();
+
+        function success() {
+          done();
+        }
+
+        function error() {}
+      });
+
+      it('calls second callback on failure', function(done) {
+        serviceUnderTest.add(mockUser, success, error);
+        mockUser.$save.callArg(1);
+
+        function success() {}
+
+        function error() {
+          done();
+        }
       });
     });
   });
