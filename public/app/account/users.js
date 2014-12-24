@@ -6,7 +6,8 @@
 
   function Users($q, User) {
     var exports = {
-      get: getUser
+      get: getUser,
+      add: addUser
     };
 
     getAllUsers();
@@ -36,6 +37,17 @@
           return user._id === id;
         });
         return matching.length > 0 ? matching[0] : undefined;
+      }
+    }
+
+    function addUser(user, success, error) {
+      user.$save(savedSuccessfully, error);
+
+      function savedSuccessfully(value, responseHeaders) {
+        exports.all.push(user);
+        if (!!success) {
+          success(value, responseHeaders);
+        }
       }
     }
   }
