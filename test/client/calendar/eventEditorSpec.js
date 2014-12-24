@@ -331,6 +331,20 @@
         });
       });
     });
+    
+    describe('Color Style', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+      });
+      
+      it('sets the background color to the specified color', function() {
+        var style = ctrl.backgroundColor("#ffef12");
+        expect(style).to.deep.equal({
+          'background-color': '#ffef12'
+        });
+      });
+    });
 
     describe('Datetime Handling', function() {
       var editor;

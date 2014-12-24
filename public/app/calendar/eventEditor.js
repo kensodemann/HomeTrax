@@ -14,7 +14,9 @@
     editorScope.ctrl = {
       ok: saveAndClose,
       remove: remove,
-      isReadonly: false
+      isReadonly: false,
+      eventOwnerName: undefined,
+      backgroundColor: setBackgroundColor
     };
     var editor = $modal({
       template: '/partials/calendar/templates/eventEditor',
@@ -155,6 +157,12 @@
           }
         }
       }
+    }
+    
+    function setBackgroundColor(color) {
+      return {
+        "background-color": color
+      };
     }
 
     function initialize(cal) {
