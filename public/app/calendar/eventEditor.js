@@ -4,7 +4,7 @@
 
   angular.module('app.calendar').factory('eventEditor', eventEditor);
 
-  function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, identity) {
+  function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, users, identity) {
     var exports = {
       initialize: initialize,
       open: open
@@ -86,10 +86,7 @@
 
     function open(event, mode) {
       eventResource = event;
-      editorScope.ctrl.mode = mode;
-      editorScope.ctrl.title = (mode === 'create') ? 'New Event' : 'Edit Event';
-      editorScope.ctrl.isReadonly = !!event.userId &&
-        event.userId.toString() !== identity.currentUser._id.toString();
+      initializeEditorFlags();
       copyEventToEditorModel();
       buildSuggestionEngine();
       initializeDataWatchers();
@@ -128,6 +125,18 @@
           highlight: true,
           hint: true
         };
+      }
+
+      function initializeEditorFlags() {
+        editorScope.ctrl.mode = mode;
+        editorScope.ctrl.title = (mode === 'create') ? 'New Event' : 'Edit Event';
+        editorScope.ctrl.isReadonly = !!event.userId &&
+          event.userId.toString() !== identity.currentUser._id.toString();
+        if (editorScope.ctrl.isReadonly) {
+          users.get(event.userId).then(function(user) {
+            editorScope.ctrl.eventOwnerName = !!user ? user.firstName + ' ' + user.lastName : 'another user';
+          });
+        }
       }
 
       function initializeDataWatchers() {

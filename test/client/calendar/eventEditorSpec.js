@@ -15,9 +15,13 @@
     var mockModal;
     var mockModalConstructor;
     var mockNotifier;
+    var mockUsers;
     var mockWindow;
 
     var askDfd;
+    var usersGetDfd;
+    
+    var rootScope;
 
     var testEventCategories;
 
@@ -32,6 +36,7 @@
       buildMockMessageDialogService();
       buildMockModal();
       buildMockNotifier();
+      buildMockUsers();
       buildMockWindow();
 
       module(function($provide) {
@@ -41,6 +46,7 @@
         $provide.value('$window', mockWindow);
         $provide.value('messageDialogService', mockMessageDialogService);
         $provide.value('identity', mockIdentity);
+        $provide.value('users', mockUsers);
       });
 
       function setupTestEventCategories() {
@@ -146,12 +152,21 @@
           Bloodhound: mockBloodhoundConstructor
         };
       }
+
+      function buildMockUsers() {
+        mockUsers = sinon.stub({
+          get: function() {}
+        });
+      }
     });
 
-    beforeEach(inject(function($q, eventEditor) {
+    beforeEach(inject(function($q, $rootScope, eventEditor) {
       askDfd = $q.defer();
       mockMessageDialogService.ask.returns(askDfd.promise);
+      usersGetDfd = $q.defer();
+      mockUsers.get.returns(usersGetDfd.promise);
       serviceUnderTest = eventEditor;
+      rootScope = $rootScope;
     }));
 
     it('Should exist', function() {
@@ -255,12 +270,39 @@
         expect(ctrl.isReadonly).to.be.false;
       });
 
-      it("disallows editing if the event's userId does not match the identity", function() {
-        var ctrl = getEditorCtrl();
-        mockIdentity.currentUser._id = '4273';
-        serviceUnderTest.open(testEvent, 'anything');
-        expect(ctrl.isReadonly).to.be.true;
+      describe('events for other users', function() {
+        var ctrl;
+        beforeEach(function() {
+          ctrl = getEditorCtrl();
+        });
+
+        it('cannot be edited by the current user', function() {
+          mockIdentity.currentUser._id = '4273';
+          serviceUnderTest.open(testEvent, 'anything');
+          expect(ctrl.isReadonly).to.be.true;
+        });
+
+        it("displays a message with the ownwer's name if the owner exists", function() {
+          mockIdentity.currentUser._id = '4273';
+          serviceUnderTest.open(testEvent, 'anything');
+          usersGetDfd.resolve({
+            firstName: 'Jackie',
+            lastName: 'Jones'
+          });
+          rootScope.$digest();
+          expect(ctrl.eventOwnerName).to.equal('Jackie Jones');
+        });
+        
+        it("displays a message with a generic name if the owner does not exist", function() {
+          mockIdentity.currentUser._id = '4273';
+          serviceUnderTest.open(testEvent, 'anything');
+          usersGetDfd.resolve();
+          rootScope.$digest();
+          expect(ctrl.eventOwnerName).to.equal('another user');
+        });
       });
+
+
 
       describe('Event Category Autocompletion', function() {
         it('gets a list of event categories', function() {
