@@ -20,7 +20,7 @@
 
     var askDfd;
     var usersGetDfd;
-    
+
     var rootScope;
 
     var testEventCategories;
@@ -256,6 +256,21 @@
         expect(ctrl.model.isPrivate).to.be.true;
       });
 
+      it("sets the color to the event's color if there is one", function() {
+        mockIdentity.currentUser.color = "#112233";
+        testEvent.color = "#FEF102";
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.model.color).to.equal("#FEF102");
+      });
+
+      it("sets the color to the user's the event does not have a color", function() {
+        mockIdentity.currentUser.color = "#112233";
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.model.color).to.equal("#112233");
+      });
+
       it('allows editing if the event has no userId', function() {
         var ctrl = getEditorCtrl();
         testEvent.userId = undefined;
@@ -292,7 +307,7 @@
           rootScope.$digest();
           expect(ctrl.eventOwnerName).to.equal('Jackie Jones');
         });
-        
+
         it("displays a message with a generic name if the owner does not exist", function() {
           mockIdentity.currentUser._id = '4273';
           serviceUnderTest.open(testEvent, 'anything');
@@ -301,8 +316,6 @@
           expect(ctrl.eventOwnerName).to.equal('another user');
         });
       });
-
-
 
       describe('Event Category Autocompletion', function() {
         it('gets a list of event categories', function() {
@@ -328,6 +341,20 @@
           serviceUnderTest.open(testEvent, 'anything');
           var ctrl = getEditorCtrl();
           expect(ctrl.categories.displayKey).to.equal('name');
+        });
+      });
+    });
+
+    describe('Color Style', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+      });
+
+      it('sets the background color to the specified color', function() {
+        var style = ctrl.backgroundColor("#ffef12");
+        expect(style).to.deep.equal({
+          'background-color': '#ffef12'
         });
       });
     });
@@ -407,6 +434,7 @@
         ctrl.model.category = 'Health & Fitness';
         ctrl.model.isPrivate = true;
         ctrl.model.user = 'KWS';
+        ctrl.model.color = "#abcdef";
       });
 
       it('copies the data to the resource', function() {
@@ -418,6 +446,7 @@
         expect(mockCalendarEvent.end.valueOf()).to.equal(moment('2014-07-02T13:00:00').valueOf());
         expect(mockCalendarEvent.category).to.equal('Health & Fitness');
         expect(mockCalendarEvent.private).to.be.true;
+        expect(mockCalendarEvent.color).to.equal('#abcdef');
         expect(mockCalendarEvent.user).to.equal('KWS');
       });
 

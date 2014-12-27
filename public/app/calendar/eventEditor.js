@@ -14,7 +14,9 @@
     editorScope.ctrl = {
       ok: saveAndClose,
       remove: remove,
-      isReadonly: false
+      isReadonly: false,
+      eventOwnerName: undefined,
+      backgroundColor: setBackgroundColor
     };
     var editor = $modal({
       template: '/partials/calendar/templates/eventEditor',
@@ -43,6 +45,7 @@
         eventResource.category = (typeof m.category === 'object') ? m.category.name : lookupCategory(m.category);
         eventResource.private = m.isPrivate;
         eventResource.user = m.user;
+        eventResource.color = m.color;
 
         function lookupCategory(category) {
           if (category) {
@@ -99,7 +102,8 @@
           start: event.start.valueOf(),
           end: event.end.valueOf(),
           category: event.category,
-          isPrivate: !!event.private
+          isPrivate: !!event.private,
+          color: event.color || identity.currentUser.color
         };
       }
 
@@ -155,6 +159,12 @@
           }
         }
       }
+    }
+    
+    function setBackgroundColor(color) {
+      return {
+        "background-color": color
+      };
     }
 
     function initialize(cal) {
