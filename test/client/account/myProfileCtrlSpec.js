@@ -7,6 +7,7 @@
 
     var ctrl;
     var $controllerConstructor;
+    var mockColors;
     var mockIdentity;
     var mockNotifier;
     var mockPasswordEditor;
@@ -21,10 +22,18 @@
     }));
 
     function createMocks() {
+      buildMockColors();
       buildMockIdentity();
       buildMockNotifier();
       buildMockPasswordEditor();
       buildMockUser();
+
+      function buildMockColors() {
+        mockColors = {
+          eventColors: [1, 2, 3],
+          userColors: [4, 5, 6]
+        };
+      }
 
       function buildMockIdentity() {
         mockIdentity = sinon.stub({
@@ -64,7 +73,8 @@
         User: mockUserResource,
         identity: mockIdentity,
         passwordEditor: mockPasswordEditor,
-        notifier: mockNotifier
+        notifier: mockNotifier,
+        colors: mockColors
       });
     }
 
@@ -74,13 +84,17 @@
         expect(mockUserResource.get.calledWith({
           id: '123456789009876543211234'
         })).to.be.true;
-        expect(ctrl.user).to.equal(mockUser);
+        expect(ctrl.model).to.equal(mockUser);
+      });
+
+      it('Exposes the user colors', function() {
+        expect(ctrl.colors).to.deep.equal(mockColors.userColors);
       });
     });
 
     describe('Reset', function() {
       it('Gets the data for the currently logged in user', function() {
-        ctrl.user = undefined;
+        ctrl.model = undefined;
 
         ctrl.reset();
 
@@ -88,7 +102,7 @@
         expect(mockUserResource.get.calledWith({
           id: '123456789009876543211234'
         })).to.be.true;
-        expect(ctrl.user).to.equal(mockUser);
+        expect(ctrl.model).to.equal(mockUser);
       });
     });
 

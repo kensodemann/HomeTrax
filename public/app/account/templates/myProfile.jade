@@ -5,25 +5,24 @@ div.container
 			.form-group
 				label.col-md-2.control-label(for='username') Username
 				.col-md-10
-					input.form-control(name='username', type='text', ng-model='ctrl.user.username', required)
+					input.form-control(name='username', type='text', ng-model='ctrl.model.username', required)
 					.error-container(ng-show='profileForm.username.$invalid')
 						small.text-danger(ng-show='profileForm.username.$error.required') Required
 			.form-group
 				label.col-md-2.control-label(for='firstName') First Name
 				.col-md-10
-					input.form-control(name='firstName', type='text', ng-model='ctrl.user.firstName', required)
+					input.form-control(name='firstName', type='text', ng-model='ctrl.model.firstName', required)
 					.error-container(ng-show='profileForm.firstName.$invalid')
 						small.text-danger(ng-show='profileForm.firstName.$error.required') Required
 			.form-group
 				label.col-md-2.control-label(for='lastName') Last Name
 				.col-md-10
-					input.form-control(name='lastName', type='text', ng-model='ctrl.user.lastName', required)
+					input.form-control(name='lastName', type='text', ng-model='ctrl.model.lastName', required)
 					.error-container(ng-show='profileForm.lastName.$invalid')
 						small.text-danger(ng-show='profileForm.lastName.$error.required') Required
 			.form-group
-				label.col-md-2.control-label(for='color') My Color
-				.col-md-1
-					div.form-control(ng-style='ctrl.backgroundColor(ctrl.user.color)', ng-model='ctrl.user.color', colorpicker="hex")
+				label.col-md-2.control-label My Color
+				include userColors
 		.form-group
 			.col-md-offset-2.col-md-10.btn-area
 				button.btn.btn-default(type='button', ng-click="ctrl.reset()") Reset

@@ -4,7 +4,7 @@
 
   angular.module('app.account').factory('userEditor', userEditor);
 
-  function userEditor($rootScope, $modal, notifier) {
+  function userEditor($rootScope, $modal, notifier, colors) {
     var exports = {
       open: open
     };
@@ -39,6 +39,7 @@
         function initializeCtrlVariables() {
           userResource = user;
           editorScope.ctrl.mode = mode;
+          editorScope.ctrl.colors = colors.userColors;
         }
 
         function initializeLabels() {

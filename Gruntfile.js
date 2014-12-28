@@ -109,7 +109,7 @@ module.exports = function(grunt) {
         dest: 'public/dist/<%= pkg.name %>.js'
       },
       css: {
-        src: ['public/css/**/*.css'],
+        src: ['public/css/theme.css', 'public/css/**/*.css', 'public/css/site.css'],
         dest: 'public/dist/<%= pkg.name %>.css'
       }
     },
