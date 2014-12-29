@@ -149,5 +149,28 @@
         });
       });
     });
+
+    describe('color panel class', function() {
+      beforeEach(function() {
+        ctrl.model.color = "#FEFEFE";
+      });
+
+      it("is an empty string if the passed color does not match the model's color", function() {
+        var cls = ctrl.colorPanelClass("#EFEFEF");
+        expect(cls).to.equal('');
+      });
+
+      it("is form-control-selected if the passed color matches the model's color", function() {
+        var cls = ctrl.colorPanelClass("#FEFEFE");
+        expect(cls).to.equal('form-control-selected');
+      });
+    });
+
+    describe('select color', function() {
+      it('sets the color in the model', function() {
+        ctrl.selectColor('#ABACAB');
+        expect(ctrl.model.color).to.equal('#ABACAB');
+      });
+    });
   });
 }());

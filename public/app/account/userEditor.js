@@ -19,7 +19,9 @@
 
     editorScope.ctrl = {
       save: saveOrUpdate,
-      backgroundColor: setBackgroundColor
+      backgroundColor: setBackgroundColor,
+      colorPanelClass: colorPanelClass,
+      selectColor: selectColor
     };
 
     var saveCallback;
@@ -106,6 +108,14 @@
       return {
         "background-color": color
       };
+    }
+
+    function colorPanelClass(color) {
+      return color === editorScope.ctrl.model.color ? "form-control-selected" : "";
+    }
+
+    function selectColor(color) {
+      editorScope.ctrl.model.color = color;
     }
   }
 }());

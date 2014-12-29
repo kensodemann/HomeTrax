@@ -183,6 +183,38 @@
       });
     });
 
+    describe('color panel class', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+        ctrl.model.color = "#FEFEFE";
+      });
+
+      it("is an empty string if the passed color does not match the model's color", function() {
+        var cls = ctrl.colorPanelClass("#EFEFEF");
+        expect(cls).to.equal('');
+      });
+
+      it("is form-control-selected if the passed color matches the model's color", function() {
+        var cls = ctrl.colorPanelClass("#FEFEFE");
+        expect(cls).to.equal('form-control-selected');
+      });
+    });
+
+    describe('select color', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+      });
+
+      it('sets the color in the model', function() {
+        ctrl.selectColor('#ABACAB');
+        expect(ctrl.model.color).to.equal('#ABACAB');
+      });
+    });
+
     describe('saving', function() {
       var ctrl;
       var callback;
