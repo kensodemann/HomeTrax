@@ -9,6 +9,7 @@
     var mockBloodhoundConstructor;
     var mockCalendar;
     var mockCalendarEvent;
+    var mockColors;
     var mockEventCategory;
     var mockIdentity;
     var mockMessageDialogService;
@@ -30,6 +31,7 @@
     beforeEach(function() {
       buildMockCalendar();
       buildMockCalendarEvent();
+      buildMockColors();
       setupTestEventCategories();
       buildMockEventCategory();
       buildMockIdentity();
@@ -47,6 +49,7 @@
         $provide.value('messageDialogService', mockMessageDialogService);
         $provide.value('identity', mockIdentity);
         $provide.value('users', mockUsers);
+        $provide.value('colors', mockColors);
       });
 
       function setupTestEventCategories() {
@@ -96,6 +99,12 @@
         });
         mockCalendarEvent.start = moment();
         mockCalendarEvent.end = moment();
+      }
+
+      function buildMockColors() {
+        mockColors = {
+          eventColors: ["#123456", "#098765", "#111111"]
+        };
       }
 
       function buildMockEventCategory() {
@@ -255,16 +264,31 @@
         expect(ctrl.model.category).to.equal('Personal');
         expect(ctrl.model.isPrivate).to.be.true;
       });
-
-      it("sets the color to the event's color if there is one", function() {
+      
+      it("builds a color list based on the user's color at the event colors", function(){
         mockIdentity.currentUser.color = "#112233";
-        testEvent.color = "#FEF102";
         var ctrl = getEditorCtrl();
         serviceUnderTest.open(testEvent, 'anything');
-        expect(ctrl.model.color).to.equal("#FEF102");
+        expect(ctrl.colors).to.deep.equal(["#112233", "#123456", "#098765", "#111111"]);
       });
 
-      it("sets the color to the user's the event does not have a color", function() {
+      it("sets the color to the event's color if there is one and it is defined in the colors list", function() {
+        mockIdentity.currentUser.color = "#112233";
+        testEvent.color = "#098765";
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.model.color).to.equal("#098765");
+      });
+      
+      it("sets the color to the user's color if the event's color is not defined in the colors list", function() {
+        mockIdentity.currentUser.color = "#112233";
+        testEvent.color = "#098766";
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.model.color).to.equal("#112233");
+      });
+
+      it("sets the color to the user's color if the event does not have a color", function() {
         mockIdentity.currentUser.color = "#112233";
         var ctrl = getEditorCtrl();
         serviceUnderTest.open(testEvent, 'anything');
@@ -356,6 +380,38 @@
         expect(style).to.deep.equal({
           'background-color': '#ffef12'
         });
+      });
+    });
+
+    describe('color panel class', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+        ctrl.model.color = "#FEFEFE";
+      });
+
+      it("is an empty string if the passed color does not match the model's color", function() {
+        var cls = ctrl.colorPanelClass("#EFEFEF");
+        expect(cls).to.equal('');
+      });
+
+      it("is form-control-selected if the passed color matches the model's color", function() {
+        var cls = ctrl.colorPanelClass("#FEFEFE");
+        expect(cls).to.equal('form-control-selected');
+      });
+    });
+
+    describe('select color', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+      });
+
+      it('sets the color in the model', function() {
+        ctrl.selectColor('#ABACAB');
+        expect(ctrl.model.color).to.equal('#ABACAB');
       });
     });
 
