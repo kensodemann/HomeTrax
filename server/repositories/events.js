@@ -6,11 +6,13 @@ var ObjectId = require("mongojs").ObjectId;
 
 module.exports.get = function(req, res) {
   db.events.find({
-    $or: [
-      {userId: new ObjectId(req.user._id)},
-      {private: false},
-      {private: null}
-    ]
+    $or: [{
+      userId: new ObjectId(req.user._id)
+    }, {
+      private: false
+    }, {
+      private: null
+    }]
   }, function(err, events) {
     res.send(events);
   });
@@ -20,8 +22,19 @@ module.exports.save = function(req, res) {
   var e = req.body;
   assignIdFromRequest(req, e);
   assignUserId(e, req);
+  removeFields();
   if (isValid(e, res)) {
     determineIfActionIsValid(req).done(yes, no);
+  }
+
+  function removeFields() {
+    for (var p in e) {
+      if (e.hasOwnProperty(p)) {
+        if (p.match(/^_.*/) && p !== '_id') {
+          delete e[p];
+        }
+      }
+    }
   }
 
   function yes() {
@@ -50,7 +63,7 @@ module.exports.remove = function(req, res) {
     });
   }
 
-  function no(stat){
+  function no(stat) {
     res.status(stat);
     res.end();
   }
@@ -70,8 +83,11 @@ function determineIfActionIsValid(req) {
   var dfd = Q.defer();
   if (!req.params || !req.params.id) {
     dfd.resolve(true);
-  } else {
-    db.events.findOne({_id: new ObjectId(req.params.id)}, function(err, evt) {
+  }
+  else {
+    db.events.findOne({
+      _id: new ObjectId(req.params.id)
+    }, function(err, evt) {
       if (!evt) {
         return dfd.reject(404);
       }

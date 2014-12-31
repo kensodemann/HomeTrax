@@ -1,3 +1,4 @@
+/* global beforeEach describe expect inject it moment sinon */
 (function() {
   'use strict';
 
@@ -8,14 +9,20 @@
     var mockBloodhoundConstructor;
     var mockCalendar;
     var mockCalendarEvent;
+    var mockColors;
     var mockEventCategory;
+    var mockIdentity;
     var mockMessageDialogService;
     var mockModal;
     var mockModalConstructor;
     var mockNotifier;
+    var mockUsers;
     var mockWindow;
 
     var askDfd;
+    var usersGetDfd;
+
+    var rootScope;
 
     var testEventCategories;
 
@@ -24,11 +31,14 @@
     beforeEach(function() {
       buildMockCalendar();
       buildMockCalendarEvent();
+      buildMockColors();
       setupTestEventCategories();
       buildMockEventCategory();
+      buildMockIdentity();
       buildMockMessageDialogService();
       buildMockModal();
       buildMockNotifier();
+      buildMockUsers();
       buildMockWindow();
 
       module(function($provide) {
@@ -37,89 +47,111 @@
         $provide.value('EventCategory', mockEventCategory);
         $provide.value('$window', mockWindow);
         $provide.value('messageDialogService', mockMessageDialogService);
+        $provide.value('identity', mockIdentity);
+        $provide.value('users', mockUsers);
+        $provide.value('colors', mockColors);
       });
 
       function setupTestEventCategories() {
-        testEventCategories = [
-          {"name": "Test", "_id": "5401cb6f95b028e003e6bd17"},
-          {"name": "Appointments", "_id": "5401cf2e95b028e003e6bd18"},
-          {"name": "Holiday", "_id": "540475e3d587a23c155222f5"},
-          {"name": "Family", "_id": "54047fd2d587a23c155222fa"},
-          {"name": "Fried Chicken", "_id": "542b789f78f2be0815c90fe9"},
-          {"name": "Technology", "_id": "542bfa75f7b14c80126a9b8b"},
-          {"name": "Church", "_id": "542bfaa2f7b14c80126a9b8d"},
-          {"name": "Meeting", "_id": "542bfd0eb16d48880e05079c"},
-          {"name": "Travel", "_id": "542bfd53b16d48880e05079f"},
-          {"name": "Recreation", "_id": "542f5824c68b48fc13a7674e"}
-        ];
+        testEventCategories = [{
+          "name": "Test",
+          "_id": "5401cb6f95b028e003e6bd17"
+        }, {
+          "name": "Appointments",
+          "_id": "5401cf2e95b028e003e6bd18"
+        }, {
+          "name": "Holiday",
+          "_id": "540475e3d587a23c155222f5"
+        }, {
+          "name": "Family",
+          "_id": "54047fd2d587a23c155222fa"
+        }, {
+          "name": "Fried Chicken",
+          "_id": "542b789f78f2be0815c90fe9"
+        }, {
+          "name": "Technology",
+          "_id": "542bfa75f7b14c80126a9b8b"
+        }, {
+          "name": "Church",
+          "_id": "542bfaa2f7b14c80126a9b8d"
+        }, {
+          "name": "Meeting",
+          "_id": "542bfd0eb16d48880e05079c"
+        }, {
+          "name": "Travel",
+          "_id": "542bfd53b16d48880e05079f"
+        }, {
+          "name": "Recreation",
+          "_id": "542f5824c68b48fc13a7674e"
+        }];
       }
 
       function buildMockCalendar() {
         mockCalendar = sinon.stub({
-          fullCalendar: function() {
-          }
+          fullCalendar: function() {}
         });
       }
 
       function buildMockCalendarEvent() {
         mockCalendarEvent = sinon.stub({
-          $save: function() {
-          },
-          $remove: function() {
-          }
+          $save: function() {},
+          $remove: function() {}
         });
         mockCalendarEvent.start = moment();
         mockCalendarEvent.end = moment();
       }
 
+      function buildMockColors() {
+        mockColors = {
+          eventColors: ["#123456", "#098765", "#111111"]
+        };
+      }
+
       function buildMockEventCategory() {
         mockEventCategory = sinon.stub({
-          query: function() {
-          },
-          save: function() {
-          }
+          query: function() {},
+          save: function() {}
         });
         mockEventCategory.query.returns(testEventCategories);
       }
 
+      function buildMockIdentity() {
+        mockIdentity = sinon.stub();
+        mockIdentity.currentUser = {
+          _id: "42"
+        };
+      }
+
       function buildMockMessageDialogService() {
         mockMessageDialogService = sinon.stub({
-          ask: function() {
-          }
+          ask: function() {}
         });
       }
 
       function buildMockModal() {
         var mockPromise = sinon.stub({
-          then: function() {
-          }
+          then: function() {}
         });
 
         mockModal = sinon.stub({
           $promise: mockPromise,
-          hide: function() {
-          },
-          show: function() {
-          }
+          hide: function() {},
+          show: function() {}
         });
         mockModalConstructor = sinon.stub().returns(mockModal);
       }
 
       function buildMockNotifier() {
         mockNotifier = sinon.stub({
-          notify: function() {
-          },
-          error: function() {
-          }
+          notify: function() {},
+          error: function() {}
         });
       }
 
       function buildMockWindow() {
         mockBloodhound = sinon.stub({
-          initialize: function() {
-          },
-          ttAdapter: function() {
-          }
+          initialize: function() {},
+          ttAdapter: function() {}
         });
         mockBloodhoundConstructor = sinon.stub().returns(mockBloodhound);
         mockBloodhoundConstructor.tokenizers = {
@@ -129,12 +161,21 @@
           Bloodhound: mockBloodhoundConstructor
         };
       }
+
+      function buildMockUsers() {
+        mockUsers = sinon.stub({
+          get: function() {}
+        });
+      }
     });
 
-    beforeEach(inject(function($q, eventEditor) {
+    beforeEach(inject(function($q, $rootScope, eventEditor) {
       askDfd = $q.defer();
       mockMessageDialogService.ask.returns(askDfd.promise);
+      usersGetDfd = $q.defer();
+      mockUsers.get.returns(usersGetDfd.promise);
       serviceUnderTest = eventEditor;
+      rootScope = $rootScope;
     }));
 
     it('Should exist', function() {
@@ -176,16 +217,19 @@
     });
 
     describe('Opening the editor', function() {
-      var testEvent = {
-        "_id": "547bb0daeb5412000042fac1",
-        "start": moment("2014-12-01T01:00:00.000Z"),
-        "end": moment("2014-12-01T02:30:00.000Z"),
-        "allDay": false,
-        "title": "AA Meeting",
-        "category": "Personal",
-        "private": true,
-        "userId": "53a4dcea7c6dc30000bee3ab"
-      };
+      var testEvent;
+      beforeEach(function() {
+        testEvent = {
+          "_id": "547bb0daeb5412000042fac1",
+          "start": moment("2014-12-01T01:00:00.000Z"),
+          "end": moment("2014-12-01T02:30:00.000Z"),
+          "allDay": false,
+          "title": "AA Meeting",
+          "category": "Personal",
+          "private": true,
+          "userId": "53a4dcea7c6dc30000bee3ab"
+        };
+      });
 
       it('does not show the dialog if it is not ready', function() {
         serviceUnderTest.open(testEvent, 'anything');
@@ -220,6 +264,82 @@
         expect(ctrl.model.category).to.equal('Personal');
         expect(ctrl.model.isPrivate).to.be.true;
       });
+      
+      it("builds a color list based on the user's color at the event colors", function(){
+        mockIdentity.currentUser.color = "#112233";
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.colors).to.deep.equal(["#112233", "#123456", "#098765", "#111111"]);
+      });
+
+      it("sets the color to the event's color if there is one and it is defined in the colors list", function() {
+        mockIdentity.currentUser.color = "#112233";
+        testEvent.color = "#098765";
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.model.color).to.equal("#098765");
+      });
+      
+      it("sets the color to the user's color if the event's color is not defined in the colors list", function() {
+        mockIdentity.currentUser.color = "#112233";
+        testEvent.color = "#098766";
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.model.color).to.equal("#112233");
+      });
+
+      it("sets the color to the user's color if the event does not have a color", function() {
+        mockIdentity.currentUser.color = "#112233";
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.model.color).to.equal("#112233");
+      });
+
+      it('allows editing if the event has no userId', function() {
+        var ctrl = getEditorCtrl();
+        testEvent.userId = undefined;
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.isReadonly).to.be.false;
+      });
+
+      it("allows editing if the event's userId matches the identity", function() {
+        var ctrl = getEditorCtrl();
+        mockIdentity.currentUser._id = testEvent.userId;
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.isReadonly).to.be.false;
+      });
+
+      describe('events for other users', function() {
+        var ctrl;
+        beforeEach(function() {
+          ctrl = getEditorCtrl();
+        });
+
+        it('cannot be edited by the current user', function() {
+          mockIdentity.currentUser._id = '4273';
+          serviceUnderTest.open(testEvent, 'anything');
+          expect(ctrl.isReadonly).to.be.true;
+        });
+
+        it("displays a message with the ownwer's name if the owner exists", function() {
+          mockIdentity.currentUser._id = '4273';
+          serviceUnderTest.open(testEvent, 'anything');
+          usersGetDfd.resolve({
+            firstName: 'Jackie',
+            lastName: 'Jones'
+          });
+          rootScope.$digest();
+          expect(ctrl.eventOwnerName).to.equal('Jackie Jones');
+        });
+
+        it("displays a message with a generic name if the owner does not exist", function() {
+          mockIdentity.currentUser._id = '4273';
+          serviceUnderTest.open(testEvent, 'anything');
+          usersGetDfd.resolve();
+          rootScope.$digest();
+          expect(ctrl.eventOwnerName).to.equal('another user');
+        });
+      });
 
       describe('Event Category Autocompletion', function() {
         it('gets a list of event categories', function() {
@@ -246,6 +366,52 @@
           var ctrl = getEditorCtrl();
           expect(ctrl.categories.displayKey).to.equal('name');
         });
+      });
+    });
+
+    describe('Color Style', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+      });
+
+      it('sets the background color to the specified color', function() {
+        var style = ctrl.backgroundColor("#ffef12");
+        expect(style).to.deep.equal({
+          'background-color': '#ffef12'
+        });
+      });
+    });
+
+    describe('color panel class', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+        ctrl.model.color = "#FEFEFE";
+      });
+
+      it("is an empty string if the passed color does not match the model's color", function() {
+        var cls = ctrl.colorPanelClass("#EFEFEF");
+        expect(cls).to.equal('');
+      });
+
+      it("is form-control-selected if the passed color matches the model's color", function() {
+        var cls = ctrl.colorPanelClass("#FEFEFE");
+        expect(cls).to.equal('form-control-selected');
+      });
+    });
+
+    describe('select color', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+      });
+
+      it('sets the color in the model', function() {
+        ctrl.selectColor('#ABACAB');
+        expect(ctrl.model.color).to.equal('#ABACAB');
       });
     });
 
@@ -324,6 +490,7 @@
         ctrl.model.category = 'Health & Fitness';
         ctrl.model.isPrivate = true;
         ctrl.model.user = 'KWS';
+        ctrl.model.color = "#abcdef";
       });
 
       it('copies the data to the resource', function() {
@@ -335,12 +502,16 @@
         expect(mockCalendarEvent.end.valueOf()).to.equal(moment('2014-07-02T13:00:00').valueOf());
         expect(mockCalendarEvent.category).to.equal('Health & Fitness');
         expect(mockCalendarEvent.private).to.be.true;
+        expect(mockCalendarEvent.color).to.equal('#abcdef');
         expect(mockCalendarEvent.user).to.equal('KWS');
       });
 
       it('grabs the name if category is an object', function() {
         // This covers the case that a category is chosen directly from the typeahead drop down
-        ctrl.model.category = {_id: 1, name: 'Holiday'};
+        ctrl.model.category = {
+          _id: 1,
+          name: 'Holiday'
+        };
         ctrl.ok();
         expect(mockCalendarEvent.category).to.equal('Holiday');
       });
@@ -454,5 +625,3 @@
     });
   });
 }());
-  
-  

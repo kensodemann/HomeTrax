@@ -1,3 +1,4 @@
+/* global beforeEach describe expect inject it moment sinon */
 (function() {
   'use strict';
 
@@ -34,8 +35,7 @@
 
       function buildMockCalendar() {
         mockCalendar = sinon.stub({
-          fullCalendar: function() {
-          }
+          fullCalendar: function() {}
         });
         scope.calendar = mockCalendar;
       }
@@ -47,20 +47,13 @@
         };
 
         mockCalendarData = sinon.stub({
-          load: function() {
-          },
-          events: function() {
-          },
-          eventCategories: function() {
-          },
-          newEvent: function() {
-          },
-          limitToMine: function() {
-          },
-          excludeCategory: function() {
-          },
-          includeCategory: function() {
-          }
+          load: function() {},
+          events: function() {},
+          eventCategories: function() {},
+          newEvent: function() {},
+          limitToMine: function() {},
+          excludeCategory: function() {},
+          includeCategory: function() {}
         });
         mockCalendarData.load.returns(loadDfd.promise);
         mockCalendarData.events.returns([]);
@@ -72,19 +65,15 @@
 
       function buildMockEventEditor() {
         mockEventEditor = sinon.stub({
-          initialize: function() {
-          },
-          open: function() {
-          }
+          initialize: function() {},
+          open: function() {}
         });
       }
 
       function buildMockAside() {
         mockAside = sinon.stub({
-          hide: function() {
-          },
-          show: function() {
-          },
+          hide: function() {},
+          show: function() {},
           $promise: mockPromise
         });
 
@@ -94,8 +83,7 @@
 
       function buildMockPromise() {
         mockPromise = sinon.stub({
-          then: function() {
-          }
+          then: function() {}
         });
       }
     });
@@ -200,6 +188,28 @@
         ctrl.uiConfig.calendar.eventClick(eventToEdit);
         expect(mockEventEditor.open.calledOnce).to.be.true;
         expect(mockEventEditor.open.calledWith(eventToEdit)).to.be.true;
+      });
+    });
+
+    describe('drag-n-dropping an event', function() {
+      it('saves the event', function() {
+        var mockEvent = sinon.stub({
+          $save: function() {}
+        });
+        var ctrl = createController();
+        ctrl.uiConfig.calendar.eventDrop(mockEvent);
+        expect(mockEvent.$save.calledOnce).to.be.true;
+      });
+    });
+    
+    describe('resizing an event', function() {
+      it('saves the event', function() {
+        var mockEvent = sinon.stub({
+          $save: function() {}
+        });
+        var ctrl = createController();
+        ctrl.uiConfig.calendar.eventResize(mockEvent);
+        expect(mockEvent.$save.calledOnce).to.be.true;
       });
     });
 

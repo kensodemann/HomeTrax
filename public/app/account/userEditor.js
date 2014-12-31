@@ -1,9 +1,10 @@
+/* global angular */
 (function() {
   'use strict';
 
   angular.module('app.account').factory('userEditor', userEditor);
 
-  function userEditor($rootScope, $modal, notifier) {
+  function userEditor($rootScope, $modal, notifier, colors) {
     var exports = {
       open: open
     };
@@ -17,7 +18,10 @@
     });
 
     editorScope.ctrl = {
-      save: saveOrUpdate
+      save: saveOrUpdate,
+      backgroundColor: setBackgroundColor,
+      colorPanelClass: colorPanelClass,
+      selectColor: selectColor
     };
 
     var saveCallback;
@@ -37,6 +41,7 @@
         function initializeCtrlVariables() {
           userResource = user;
           editorScope.ctrl.mode = mode;
+          editorScope.ctrl.colors = colors.userColors;
         }
 
         function initializeLabels() {
@@ -50,6 +55,9 @@
           editorScope.ctrl.model.firstName = user.firstName;
           editorScope.ctrl.model.lastName = user.lastName;
           editorScope.ctrl.model.username = user.username;
+          editorScope.ctrl.model.color = user.color;
+          editorScope.ctrl.model.isAdministrator = !!user.roles &&
+            (user.roles.indexOf('admin') > -1);
         }
       }
     }
@@ -85,10 +93,29 @@
         userResource.firstName = editorScope.ctrl.model.firstName;
         userResource.lastName = editorScope.ctrl.model.lastName;
         userResource.username = editorScope.ctrl.model.username;
+        userResource.color = editorScope.ctrl.model.color;
         if (editorScope.ctrl.mode === 'create') {
           userResource.password = editorScope.ctrl.model.password;
         }
+        userResource.roles = [];
+        if (editorScope.ctrl.model.isAdministrator) {
+          userResource.roles.push('admin');
+        }
       }
+    }
+
+    function setBackgroundColor(color) {
+      return {
+        "background-color": color
+      };
+    }
+
+    function colorPanelClass(color) {
+      return color === editorScope.ctrl.model.color ? "form-control-selected" : "";
+    }
+
+    function selectColor(color) {
+      editorScope.ctrl.model.color = color;
     }
   }
 }());

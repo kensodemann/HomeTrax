@@ -109,7 +109,7 @@ module.exports = function(grunt) {
         dest: 'public/dist/<%= pkg.name %>.js'
       },
       css: {
-        src: ['public/css/**/*.css'],
+        src: ['public/css/theme.css', 'public/css/**/*.css', 'public/css/site.css'],
         dest: 'public/dist/<%= pkg.name %>.css'
       }
     },
@@ -143,11 +143,12 @@ module.exports = function(grunt) {
         files: ['Gruntfile.js',
           'server.js',
           'public/app/**/*.js',
+          'public/css/**/*.css',
           'server/**/*.js',
           'server/includes/layout.tpl.jade',
           'server/includes/scripts.tpl.jade',
           'test/**/*.js'],
-        tasks: ['devBuild']
+        tasks: ['default']
       }
     }
   });
@@ -165,8 +166,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-preprocess');
 
   // Tasks
-  grunt.registerTask('default', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
+  grunt.registerTask('default', ['clean', 'preprocess:dev', 'karma', 'mochaTest', 'jshint', 'concat']);
+  grunt.registerTask('build', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
   grunt.registerTask('openShiftBuild', ['clean', 'preprocess:dist', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
-  grunt.registerTask('devBuild', ['clean', 'preprocess:dev', 'karma', 'mochaTest', 'jshint', 'concat']);
-  grunt.registerTask('dev', ['devBuild', 'watch']);
+  grunt.registerTask('dev', ['default', 'watch']);
 };

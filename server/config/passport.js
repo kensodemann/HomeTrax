@@ -17,9 +17,11 @@ module.exports = function() {
             return done(null, {
               _id: user._id,
               username: user.username,
-              roles: user.roles
+              roles: user.roles,
+              color: user.color
             });
-          } else {
+          }
+          else {
             return done(null, false);
           }
         });
@@ -35,11 +37,14 @@ module.exports = function() {
   passport.deserializeUser(function(id, done) {
     db.users.findOne({
       _id: new ObjectId(id)
-    },
-    function(err, user) {
+    }, {
+      salt: 0,
+      hashedPassword: 0
+    }, function(err, user) {
       if (user) {
         return done(null, user);
-      } else {
+      }
+      else {
         return done(null, false);
       }
     });

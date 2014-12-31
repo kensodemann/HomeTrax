@@ -6,6 +6,7 @@
     var serviceUnderTest;
     var scope;
 
+    var mockColors;
     var mockModal;
     var mockModalConstructor;
     var mockNotifier;
@@ -14,6 +15,7 @@
     beforeEach(module('app.account'));
 
     beforeEach(function() {
+      buildMockColors();
       buildMockModal();
       buildMockNotifier();
       buildMockUser();
@@ -21,7 +23,15 @@
       module(function($provide) {
         $provide.value('$modal', mockModalConstructor);
         $provide.value('notifier', mockNotifier);
+        $provide.value('colors', mockColors);
       });
+
+      function buildMockColors() {
+        mockColors = {
+          eventColors: [],
+          userColors: []
+        };
+      }
 
       function buildMockModal() {
         var mockPromise = sinon.stub({
@@ -90,6 +100,20 @@
       });
     });
 
+    describe('Color Style', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+      });
+
+      it('sets the background color to the specified color', function() {
+        var style = ctrl.backgroundColor("#ffef12");
+        expect(style).to.deep.equal({
+          'background-color': '#ffef12'
+        });
+      });
+    });
+
     describe('opening the editor', function() {
       var ctrl;
       beforeEach(function() {
@@ -138,11 +162,56 @@
         mockUser.firstName = 'Billy';
         mockUser.lastName = 'Jackson';
         mockUser.username = 'email@me.com';
+        mockUser.color = "#f14273";
         serviceUnderTest.open(mockUser, 'Anything');
         expect(ctrl.model).to.not.equal(mockUser);
         expect(ctrl.model.firstName).to.equal('Billy');
         expect(ctrl.model.lastName).to.equal('Jackson');
         expect(ctrl.model.username).to.equal('email@me.com');
+        expect(ctrl.model.color).to.equal("#f14273");
+      });
+
+      it('sets isAdministrator in the editor model if the user has the admin role', function() {
+        mockUser.roles = ['admin'];
+        serviceUnderTest.open(mockUser, 'Anything');
+        expect(ctrl.model.isAdministrator).to.be.true;
+      });
+
+      it('clears isAdministrator in the editor model if the user does not have the admin role', function() {
+        serviceUnderTest.open(mockUser, 'Anything');
+        expect(ctrl.model.isAdministrator).to.be.false;
+      });
+    });
+
+    describe('color panel class', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+        ctrl.model.color = "#FEFEFE";
+      });
+
+      it("is an empty string if the passed color does not match the model's color", function() {
+        var cls = ctrl.colorPanelClass("#EFEFEF");
+        expect(cls).to.equal('');
+      });
+
+      it("is form-control-selected if the passed color matches the model's color", function() {
+        var cls = ctrl.colorPanelClass("#FEFEFE");
+        expect(cls).to.equal('form-control-selected');
+      });
+    });
+
+    describe('select color', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+      });
+
+      it('sets the color in the model', function() {
+        ctrl.selectColor('#ABACAB');
+        expect(ctrl.model.color).to.equal('#ABACAB');
       });
     });
 
@@ -164,11 +233,29 @@
           ctrl.model.lastName = 'Rubble';
           ctrl.model.username = 'wife@swap.com';
           ctrl.model.password = 'spiceItUpABit';
+          ctrl.model.color = "#123456";
+          ctrl.model.isAdministrator = false;
           ctrl.save();
           expect(mockUser.firstName).to.equal('Wilma');
           expect(mockUser.lastName).to.equal('Rubble');
           expect(mockUser.username).to.equal('wife@swap.com');
           expect(mockUser.password).to.be.undefined;
+          expect(mockUser.color).to.equal("#123456");
+          expect(mockUser.roles).to.deep.equal([]);
+        });
+
+        it('adds the admin role if isAdministrator', function() {
+          ctrl.model.firstName = 'Wilma';
+          ctrl.model.lastName = 'Rubble';
+          ctrl.model.username = 'wife@swap.com';
+          ctrl.model.password = 'spiceItUpABit';
+          ctrl.model.isAdministrator = true;
+          ctrl.save();
+          expect(mockUser.firstName).to.equal('Wilma');
+          expect(mockUser.lastName).to.equal('Rubble');
+          expect(mockUser.username).to.equal('wife@swap.com');
+          expect(mockUser.password).to.be.undefined;
+          expect(mockUser.roles).to.deep.equal(['admin']);
         });
 
         it('calls $update on the resource', function() {

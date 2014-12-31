@@ -1,26 +1,56 @@
+/* global angular */
 (function() {
   'use strict';
 
   angular.module('app.account').controller('myProfileCtrl', MyProfileCtrl);
 
-  function MyProfileCtrl(User, identity, passwordEditor) {
+  function MyProfileCtrl(User, identity, passwordEditor, notifier, colors) {
     var self = this;
 
-    self.user = currentUser();
+    self.model = currentUser();
+    self.reset = reset;
+    self.save = saveUser;
+    self.backgroundColor = backgroundColor;
+    self.colorPanelClass = colorPanelClass;
+    self.selectColor = selectColor;
+    self.openPasswordEditor = openPasswordEditor;
+    self.colors = colors.userColors;
 
-    self.reset = function() {
-      self.user = currentUser();
-    };
+    function reset() {
+      self.model = currentUser();
+    }
 
-    self.save = function() {
-      self.user.$update();
-    };
+    function saveUser() {
+      self.model.$update(success, error);
 
-    self.openPasswordEditor = function(){
+      function success() {
+        notifier.notify('Profile modifications saved successfully');
+      }
+
+      function error(err) {
+        notifier.error(err.data.reason);
+      }
+    }
+
+    function backgroundColor(color) {
+      return {
+        "background-color": color
+      };
+    }
+
+    function colorPanelClass(color) {
+      return color === self.model.color ? "form-control-selected" : "";
+    }
+
+    function selectColor(color) {
+      self.model.color = color;
+    }
+
+    function openPasswordEditor() {
       passwordEditor.open(identity.currentUser._id);
-    };
+    }
 
-    function currentUser(){
+    function currentUser() {
       return User.get({
         id: identity.currentUser._id
       });
