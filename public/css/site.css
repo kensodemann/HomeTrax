@@ -24,6 +24,10 @@ a.btn:focus {
   background-color: #fff;
 }
 
+.form-control-selected {
+  border: 4px solid #000000;
+}
+
 .form-signin {
   max-width: 330px;
   padding: 15px;

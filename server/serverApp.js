@@ -1,7 +1,6 @@
 'use strict';
 
 var express = require('express');
-var fs = require('fs');
 var config = require('./config/config');
 
 var ServerApp = function() {

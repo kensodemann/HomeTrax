@@ -23,9 +23,10 @@
 								.error-container(ng-show='eventEditor.category.$invalid')
 									small.text-danger(ng-show='eventEditor.category.$error.required') Required
 						.form-group
-							label.col-md-2.control-label(for='color') Event Color
-							.col-md-1
-								div.form-control(ng-style='ctrl.backgroundColor(ctrl.model.color)', ng-model='ctrl.model.color', colorpicker="hex")
+							label.col-md-2.control-label Event Color
+							.col-md-1(ng-repeat="color in ctrl.colors")
+								.form-control(ng-class='ctrl.colorPanelClass(color)', ng-style='ctrl.backgroundColor(color)', ng-click='ctrl.selectColor(color)')
+
 						.form-group
 							label.col.md-10.col-md-offset-2
 								.checkbox-group

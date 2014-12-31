@@ -4,7 +4,7 @@
 
   angular.module('app.account').factory('userEditor', userEditor);
 
-  function userEditor($rootScope, $modal, notifier) {
+  function userEditor($rootScope, $modal, notifier, colors) {
     var exports = {
       open: open
     };
@@ -19,7 +19,9 @@
 
     editorScope.ctrl = {
       save: saveOrUpdate,
-      backgroundColor: setBackgroundColor
+      backgroundColor: setBackgroundColor,
+      colorPanelClass: colorPanelClass,
+      selectColor: selectColor
     };
 
     var saveCallback;
@@ -39,6 +41,7 @@
         function initializeCtrlVariables() {
           userResource = user;
           editorScope.ctrl.mode = mode;
+          editorScope.ctrl.colors = colors.userColors;
         }
 
         function initializeLabels() {
@@ -105,6 +108,14 @@
       return {
         "background-color": color
       };
+    }
+
+    function colorPanelClass(color) {
+      return color === editorScope.ctrl.model.color ? "form-control-selected" : "";
+    }
+
+    function selectColor(color) {
+      editorScope.ctrl.model.color = color;
     }
   }
 }());

@@ -6,6 +6,7 @@
     var serviceUnderTest;
     var scope;
 
+    var mockColors;
     var mockModal;
     var mockModalConstructor;
     var mockNotifier;
@@ -14,6 +15,7 @@
     beforeEach(module('app.account'));
 
     beforeEach(function() {
+      buildMockColors();
       buildMockModal();
       buildMockNotifier();
       buildMockUser();
@@ -21,7 +23,15 @@
       module(function($provide) {
         $provide.value('$modal', mockModalConstructor);
         $provide.value('notifier', mockNotifier);
+        $provide.value('colors', mockColors);
       });
+
+      function buildMockColors() {
+        mockColors = {
+          eventColors: [],
+          userColors: []
+        };
+      }
 
       function buildMockModal() {
         var mockPromise = sinon.stub({
@@ -89,13 +99,13 @@
         expect(config.show).to.be.false;
       });
     });
-    
+
     describe('Color Style', function() {
       var ctrl;
       beforeEach(function() {
         ctrl = getEditorCtrl();
       });
-      
+
       it('sets the background color to the specified color', function() {
         var style = ctrl.backgroundColor("#ffef12");
         expect(style).to.deep.equal({
@@ -170,6 +180,38 @@
       it('clears isAdministrator in the editor model if the user does not have the admin role', function() {
         serviceUnderTest.open(mockUser, 'Anything');
         expect(ctrl.model.isAdministrator).to.be.false;
+      });
+    });
+
+    describe('color panel class', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+        ctrl.model.color = "#FEFEFE";
+      });
+
+      it("is an empty string if the passed color does not match the model's color", function() {
+        var cls = ctrl.colorPanelClass("#EFEFEF");
+        expect(cls).to.equal('');
+      });
+
+      it("is form-control-selected if the passed color matches the model's color", function() {
+        var cls = ctrl.colorPanelClass("#FEFEFE");
+        expect(cls).to.equal('form-control-selected');
+      });
+    });
+
+    describe('select color', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = getEditorCtrl();
+        ctrl.model = {};
+      });
+
+      it('sets the color in the model', function() {
+        ctrl.selectColor('#ABACAB');
+        expect(ctrl.model.color).to.equal('#ABACAB');
       });
     });
 
