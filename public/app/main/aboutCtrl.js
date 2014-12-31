@@ -8,15 +8,17 @@
     this.versions = [{
       id: "Pre_0_8",
       name: "Pre-Release 0.8",
-      releaseDate: null, //moment("2014/12/31", "YYYY/MM/DD"),
+      releaseDate:moment("2014/12/31", "YYYY/MM/DD"),
       description: "General polish release: roles, colors, drag-n-drop, bug fixes",
       features: [
         "Added drag-n-drop and resizing support to calendar events",
-        "Added color coding to the users"
+        "Added color coding to the users",
+        "Added color coding to events"
       ],
       bugFixes: [
-        "Disable editing of other user's events (UI, backend never allowed it)",
-        "Remove FullCalendar injected fields from events (they are not needed by this appplication)"
+        "Disabled editing of other user's events (UI, backend never allowed it)",
+        "Removed FullCalendar injected fields from events (they are not needed by this appplication)",
+        "Removed hashed password and salt from identity information"
       ]
     }, {
       id: "Pre_0_7_5",
