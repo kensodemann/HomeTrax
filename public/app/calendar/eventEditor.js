@@ -32,6 +32,7 @@
     var eventCategories;
     var eventResource;
     var currentCalendar;
+    var zoneOffset = moment().zone() * 60000;
 
     return exports;
 
@@ -51,8 +52,8 @@
         editorScope.ctrl.model = {
           title: event.title,
           isAllDayEvent: !!event.allDay,
-          start: event.start.valueOf(),
-          end: event.end.valueOf(),
+          start: event.start.valueOf() + zoneOffset,
+          end: event.end.valueOf() + zoneOffset,
           category: event.category,
           isPrivate: !!event.private,
           color: (colors.eventColors.indexOf(event.color) > -1) ? event.color : identity.currentUser.color
@@ -127,8 +128,8 @@
         var m = editorScope.ctrl.model;
         eventResource.title = m.title;
         eventResource.allDay = m.isAllDayEvent;
-        eventResource.start = moment(m.start);
-        eventResource.end = moment(m.end);
+        eventResource.start = moment(m.start - zoneOffset);
+        eventResource.end = moment(m.end - zoneOffset);
         eventResource.category = (typeof m.category === 'object') ? m.category.name : lookupCategory(m.category);
         eventResource.private = m.isPrivate;
         eventResource.user = m.user;

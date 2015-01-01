@@ -256,16 +256,17 @@
 
       it('copies the passed event to the editor model', function() {
         var ctrl = getEditorCtrl();
+        var zoneOffset = moment().zone() * 60000;
         serviceUnderTest.open(testEvent, 'anything');
         expect(ctrl.model.title).to.equal('AA Meeting');
         expect(ctrl.model.isAllDayEvent).to.be.false;
-        expect(ctrl.model.start).to.equal(moment('2014-12-01T01:00:00.000Z').valueOf());
-        expect(ctrl.model.end).to.equal(moment('2014-12-01T02:30:00.000Z').valueOf());
+        expect(ctrl.model.start).to.equal(moment('2014-12-01T01:00:00.000Z').valueOf() + zoneOffset);
+        expect(ctrl.model.end).to.equal(moment('2014-12-01T02:30:00.000Z').valueOf() + zoneOffset);
         expect(ctrl.model.category).to.equal('Personal');
         expect(ctrl.model.isPrivate).to.be.true;
       });
-      
-      it("builds a color list based on the user's color at the event colors", function(){
+
+      it("builds a color list based on the user's color at the event colors", function() {
         mockIdentity.currentUser.color = "#112233";
         var ctrl = getEditorCtrl();
         serviceUnderTest.open(testEvent, 'anything');
@@ -279,7 +280,7 @@
         serviceUnderTest.open(testEvent, 'anything');
         expect(ctrl.model.color).to.equal("#098765");
       });
-      
+
       it("sets the color to the user's color if the event's color is not defined in the colors list", function() {
         mockIdentity.currentUser.color = "#112233";
         testEvent.color = "#098766";
@@ -417,7 +418,9 @@
 
     describe('Datetime Handling', function() {
       var editor;
+      var zoneOffset;
       beforeEach(function() {
+        zoneOffset = moment().zone() * 60000;
         editor = getEditorScope();
         serviceUnderTest.open({
           title: 'Eat Something',
@@ -436,7 +439,7 @@
           editor.ctrl.model.end = editor.ctrl.model.end + 1234567;
           editor.$digest();
 
-          expect(editor.ctrl.model.start.valueOf()).to.equal(moment('2014-06-20T12:00:00').valueOf());
+          expect(editor.ctrl.model.start.valueOf()).to.equal(moment('2014-06-20T12:00:00').valueOf() + zoneOffset);
         });
 
         it('does not change if the all day indicator is toggled', function() {
@@ -445,24 +448,24 @@
           editor.ctrl.model.isAllDayEvent = false;
           editor.$digest();
 
-          expect(editor.ctrl.model.start.valueOf()).to.equal(moment('2014-06-20T12:00:00').valueOf());
+          expect(editor.ctrl.model.start.valueOf()).to.equal(moment('2014-06-20T12:00:00').valueOf() + zoneOffset);
         });
       });
 
       describe('End', function() {
         it('maintains hours difference when begin datetime changes', function() {
-          editor.ctrl.model.start = moment('2014-08-02T08:00:00').toDate();
+          editor.ctrl.model.start = moment(moment('2014-08-02T08:00:00').valueOf() + zoneOffset).toDate();
           editor.$digest();
 
-          expect(editor.ctrl.model.end.valueOf()).to.equal(moment('2014-08-02T09:30:00').valueOf());
+          expect(editor.ctrl.model.end.valueOf()).to.equal(moment('2014-08-02T09:30:00').valueOf() + zoneOffset);
         });
 
         it('maintains new hours difference if end datetime changes then begin datetime changes', function() {
-          editor.ctrl.model.end = moment('2014-08-02T08:30:00').valueOf();
-          editor.ctrl.model.start = moment('2014-06-20T14:00:00').valueOf();
+          editor.ctrl.model.end = moment('2014-08-02T08:30:00').valueOf() + zoneOffset;
+          editor.ctrl.model.start = moment('2014-06-20T14:00:00').valueOf() + zoneOffset;
           editor.$digest();
 
-          expect(editor.ctrl.model.end).to.equal(moment('2014-08-02T10:30:00').valueOf());
+          expect(editor.ctrl.model.end).to.equal(moment('2014-08-02T10:30:00').valueOf() + zoneOffset);
         });
 
         it('does not change if the all day indicator is toggled', function() {
@@ -471,22 +474,24 @@
           editor.ctrl.model.isAllDayEvent = false;
           editor.$digest();
 
-          expect(editor.ctrl.model.end.valueOf()).to.equal(moment('2014-06-20T13:30:00').valueOf());
+          expect(editor.ctrl.model.end.valueOf()).to.equal(moment('2014-06-20T13:30:00').valueOf() + zoneOffset);
         });
       });
     });
 
     describe('saving events', function() {
       var ctrl;
+      var zoneOffset;
       beforeEach(function() {
+        zoneOffset = moment().zone() * 60000;
         serviceUnderTest.initialize(mockCalendar);
         serviceUnderTest.open(mockCalendarEvent);
         ctrl = getEditorCtrl();
         ctrl.model = {};
         ctrl.model.title = 'Eat Something';
         ctrl.model.isAllDayEvent = false;
-        ctrl.model.start = moment('2014-07-01T12:00:00').valueOf();
-        ctrl.model.end = moment('2014-07-02T13:00:00').valueOf();
+        ctrl.model.start = moment('2014-07-01T12:00:00').valueOf() + zoneOffset;
+        ctrl.model.end = moment('2014-07-02T13:00:00').valueOf() + zoneOffset;
         ctrl.model.category = 'Health & Fitness';
         ctrl.model.isPrivate = true;
         ctrl.model.user = 'KWS';
