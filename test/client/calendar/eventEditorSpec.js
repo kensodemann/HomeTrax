@@ -266,6 +266,18 @@
         expect(ctrl.model.isPrivate).to.be.true;
       });
 
+      it('subtracts a day from the end date if this is an all-day event', function() {
+        testEvent.allDay = true;
+        testEvent.start = moment("2014-12-01T00:00:00.000Z");
+        testEvent.end = moment("2014-12-03T00:00:00.000Z");
+        var ctrl = getEditorCtrl();
+        var zoneOffset = moment().zone() * 60000;
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(ctrl.model.isAllDayEvent).to.be.true;
+        expect(ctrl.model.start).to.equal(moment('2014-12-01T00:00:00.000Z').valueOf() + zoneOffset);
+        expect(ctrl.model.end).to.equal(moment('2014-12-02T00:00:00.000Z').valueOf() + zoneOffset);
+      });
+
       it("builds a color list based on the user's color at the event colors", function() {
         mockIdentity.currentUser.color = "#112233";
         var ctrl = getEditorCtrl();
@@ -499,16 +511,29 @@
       });
 
       it('copies the data to the resource', function() {
-        ctrl.model.isAllDayEvent = true;
         ctrl.ok();
         expect(mockCalendarEvent.title).to.equal('Eat Something');
-        expect(mockCalendarEvent.allDay).to.be.true;
+        expect(mockCalendarEvent.allDay).to.be.false;
         expect(mockCalendarEvent.start.valueOf()).to.equal(moment('2014-07-01T12:00:00').valueOf());
         expect(mockCalendarEvent.end.valueOf()).to.equal(moment('2014-07-02T13:00:00').valueOf());
         expect(mockCalendarEvent.category).to.equal('Health & Fitness');
         expect(mockCalendarEvent.private).to.be.true;
         expect(mockCalendarEvent.color).to.equal('#abcdef');
         expect(mockCalendarEvent.user).to.equal('KWS');
+      });
+
+      it('sets start time to midnight for all day events', function() {
+        ctrl.model.isAllDayEvent = true;
+        ctrl.ok();
+        expect(mockCalendarEvent.allDay).to.be.true;
+        expect(mockCalendarEvent.start.valueOf()).to.equal(moment('2014-07-01T00:00:00').valueOf() - zoneOffset);
+      });
+
+      it('sets end time to the start of the following day for all day events', function() {
+        ctrl.model.isAllDayEvent = true;
+        ctrl.ok();
+        expect(mockCalendarEvent.allDay).to.be.true;
+        expect(mockCalendarEvent.end.valueOf()).to.equal(moment('2014-07-03T00:00:00').valueOf() - zoneOffset);
       });
 
       it('grabs the name if category is an object', function() {
