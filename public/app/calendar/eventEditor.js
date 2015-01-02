@@ -32,6 +32,7 @@
     var eventCategories;
     var eventResource;
     var currentCalendar;
+    var zoneOffset = moment().zone() * 60000;
 
     return exports;
 
@@ -48,11 +49,14 @@
       editor.$promise.then(editor.show);
 
       function copyEventToEditorModel() {
+
         editorScope.ctrl.model = {
           title: event.title,
           isAllDayEvent: !!event.allDay,
-          start: event.start.valueOf(),
-          end: event.end.valueOf(),
+          start: event.start.valueOf() + zoneOffset,
+          end: moment(event.end)
+            .subtract(!!event.allDay ? 1 : 0, 'd')
+            .valueOf() + zoneOffset,
           category: event.category,
           isPrivate: !!event.private,
           color: (colors.eventColors.indexOf(event.color) > -1) ? event.color : identity.currentUser.color
@@ -89,7 +93,7 @@
         ctrl.mode = mode;
         ctrl.title = (mode === 'create') ? 'New Event' : 'Edit Event';
         ctrl.isReadonly = !!event.userId &&
-          event.userId.toString() !== identity.currentUser._id.toString();
+        event.userId.toString() !== identity.currentUser._id.toString();
         if (ctrl.isReadonly) {
           users.get(event.userId).then(function(user) {
             ctrl.eventOwnerName = !!user ? user.firstName + ' ' + user.lastName : 'another user';
@@ -127,8 +131,24 @@
         var m = editorScope.ctrl.model;
         eventResource.title = m.title;
         eventResource.allDay = m.isAllDayEvent;
-        eventResource.start = moment(m.start);
-        eventResource.end = moment(m.end);
+        if (eventResource.allDay) {
+          eventResource.start = moment(m.start)
+            .hour(0)
+            .minute(0)
+            .second(0)
+            .millisecond(0)
+            .subtract(zoneOffset, 'ms');
+          eventResource.end = moment(m.end)
+            .hour(0)
+            .minute(0)
+            .second(0)
+            .millisecond(0)
+            .add(1, 'd')
+            .subtract(zoneOffset, 'ms');
+        } else {
+          eventResource.start = moment(m.start - zoneOffset);
+          eventResource.end = moment(m.end - zoneOffset);
+        }
         eventResource.category = (typeof m.category === 'object') ? m.category.name : lookupCategory(m.category);
         eventResource.private = m.isPrivate;
         eventResource.user = m.user;

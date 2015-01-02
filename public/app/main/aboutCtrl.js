@@ -6,9 +6,19 @@
 
   function AboutCtrl() {
     this.versions = [{
+      id: "Pre_0_8_1",
+      name: "Pre-Release 0.8.1",
+      releaseDate: moment("2015/01/01", "YYYY/MM/DD"),
+      description: "Fix Events",
+      bugFixes: [
+        "Fixed timezone handling such that it acts like there is not one",
+        "Fixed end date handling for all day events",
+        "Fixed the date creeping issue with all day events"
+      ]
+    }, {
       id: "Pre_0_8",
       name: "Pre-Release 0.8",
-      releaseDate:moment("2014/12/31", "YYYY/MM/DD"),
+      releaseDate: moment("2014/12/31", "YYYY/MM/DD"),
       description: "General polish release: roles, colors, drag-n-drop, bug fixes",
       features: [
         "Added drag-n-drop and resizing support to calendar events",
@@ -59,7 +69,7 @@
       name: "Pre-Release 0.5",
       releaseDate: moment("2014/06/14", "YYYY/MM/DD"),
       description: "This is the first version to include any type of meaningful user interaction.  " +
-        "This version also includes the start of some styling.",
+      "This version also includes the start of some styling.",
       features: [
         "Styling",
         "Default admin user",

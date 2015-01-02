@@ -49,7 +49,7 @@
     self.uiConfig = {
       calendar: {
         editable: true,
-        timezone: 'local',
+        timezone: false,
         header: {
           left: 'month agendaWeek agendaDay',
           center: 'title',
