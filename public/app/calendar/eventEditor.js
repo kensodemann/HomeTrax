@@ -153,6 +153,7 @@
         eventResource.private = m.isPrivate;
         eventResource.user = m.user;
         eventResource.color = m.color;
+        eventResource.eventType = 'miscellaneous';
 
         function lookupCategory(category) {
           if (category) {

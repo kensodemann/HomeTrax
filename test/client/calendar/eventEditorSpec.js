@@ -520,6 +520,7 @@
         expect(mockCalendarEvent.private).to.be.true;
         expect(mockCalendarEvent.color).to.equal('#abcdef');
         expect(mockCalendarEvent.user).to.equal('KWS');
+        expect(mockCalendarEvent.eventType).to.equal('miscellaneous');
       });
 
       it('sets start time to midnight for all day events', function() {
