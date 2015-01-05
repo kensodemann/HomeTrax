@@ -25,4 +25,21 @@ describe('colors', function() {
       });
     });
   });
+
+  describe('getting a pallet', function() {
+    it('returns the Nth pallet if n is less than the number of palets', function(){
+      var pallet = colors.getPallet(3);
+      expect(pallet).to.deep.equal(colors.userPallets[3]);
+    });
+    
+    it('returns the 0th pallet if n is the number of pallets', function(){
+      var pallet = colors.getPallet(6);
+      expect(pallet).to.deep.equal(colors.userPallets[0]);
+    });
+    
+    it('returns the appropriate pallet if n is greater than the number of pallets', function(){
+      var pallet = colors.getPallet(10);
+      expect(pallet).to.deep.equal(colors.userPallets[4]);
+    });
+  });
 });
