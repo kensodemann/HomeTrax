@@ -309,7 +309,7 @@ describe('api/users Routes', function() {
           lastName: 'Flintstone',
           username: 'lls@email.com',
           password: 'wilmabettyswap',
-          roles:['worker']
+          roles: ['worker']
         })
         .end(function(err, res) {
           expect(res.status).to.equal(201);
@@ -342,6 +342,7 @@ describe('api/users Routes', function() {
           lastName: 'Sodemann',
           username: 'kws@email.com',
           salt: 'NH4Cl',
+          colors: ["#a0a0a0", "#b0b0b0", "#c0c0c0"],
           password: 'ThisIsFreaky'
         }, function() {
           db.users.save({
@@ -349,6 +350,7 @@ describe('api/users Routes', function() {
             lastName: 'Buerger',
             username: 'llb@email.com',
             salt: 'CaCl2',
+            colors: ["#d0d0d0", "#e0e0e0", "#f0f0f0"],
             password: 'IAmSexyBee'
           }, function() {
             db.users.findOne({
@@ -446,7 +448,7 @@ describe('api/users Routes', function() {
       testUser.firstName = 'Fred';
       testUser.lastName = 'Flintstone';
       testUser.username = 'ff@email.com';
-      testUser.color = "#ffeedc";
+      testUser.colors = ["#ffeedc"];
       testUser.roles = ['worker', 'husband', 'dad'];
       request(app)
         .put('/api/users/' + testUser._id)
@@ -460,20 +462,20 @@ describe('api/users Routes', function() {
               expect(user.firstName).to.equal('Fred');
               expect(user.lastName).to.equal('Flintstone');
               expect(user.username).to.equal('ff@email.com');
-              expect(user.color).to.equal("#ffeedc");
               expect(user.roles).to.deep.equal(['worker', 'husband', 'dad']);
               done();
             });
         });
     });
 
-    it('Does not effect the salt or password', function(done) {
+    it('Does not effect the salt, password, or colors', function(done) {
       var origSalt = testUser.salt;
       var origPassword = testUser.password;
       testUser.firstName = 'Fred';
       testUser.lastName = 'Flintstone';
       testUser.username = 'ff@email.com';
       testUser.salt = 'NaCl';
+      testUser.colors = ["#111111", "#222222", "#333333"];
       testUser.password = 'SomethingElse';
       request(app)
         .put('/api/users/' + testUser._id)
@@ -486,6 +488,7 @@ describe('api/users Routes', function() {
             function(err, user) {
               expect(user.salt).to.equal(origSalt);
               expect(user.password).to.equal(origPassword);
+              expect(user.colors).to.deep.equal(["#a0a0a0", "#b0b0b0", "#c0c0c0"]);
               done();
             });
         });
