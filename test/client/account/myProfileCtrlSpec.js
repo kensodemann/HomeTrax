@@ -86,10 +86,6 @@
         })).to.be.true;
         expect(ctrl.model).to.equal(mockUser);
       });
-
-      it('Exposes the user colors', function() {
-        expect(ctrl.colors).to.deep.equal(mockColors.userColors);
-      });
     });
 
     describe('Reset', function() {
@@ -138,38 +134,6 @@
         ctrl.openPasswordEditor();
         expect(mockPasswordEditor.open.calledOnce).to.be.true;
         expect(mockPasswordEditor.open.calledWithExactly('123456789009876543211234')).to.be.true;
-      });
-    });
-
-    describe('Color Style', function() {
-      it('sets the background color to the specified color', function() {
-        var style = ctrl.backgroundColor("#ffef12");
-        expect(style).to.deep.equal({
-          'background-color': '#ffef12'
-        });
-      });
-    });
-
-    describe('color panel class', function() {
-      beforeEach(function() {
-        ctrl.model.color = "#FEFEFE";
-      });
-
-      it("is an empty string if the passed color does not match the model's color", function() {
-        var cls = ctrl.colorPanelClass("#EFEFEF");
-        expect(cls).to.equal('');
-      });
-
-      it("is form-control-selected if the passed color matches the model's color", function() {
-        var cls = ctrl.colorPanelClass("#FEFEFE");
-        expect(cls).to.equal('form-control-selected');
-      });
-    });
-
-    describe('select color', function() {
-      it('sets the color in the model', function() {
-        ctrl.selectColor('#ABACAB');
-        expect(ctrl.model.color).to.equal('#ABACAB');
       });
     });
   });

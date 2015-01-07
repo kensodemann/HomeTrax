@@ -4,17 +4,13 @@
 
   angular.module('app.account').controller('myProfileCtrl', MyProfileCtrl);
 
-  function MyProfileCtrl(User, identity, passwordEditor, notifier, colors) {
+  function MyProfileCtrl(User, identity, passwordEditor, notifier) {
     var self = this;
 
     self.model = currentUser();
     self.reset = reset;
     self.save = saveUser;
-    self.backgroundColor = backgroundColor;
-    self.colorPanelClass = colorPanelClass;
-    self.selectColor = selectColor;
     self.openPasswordEditor = openPasswordEditor;
-    self.colors = colors.userColors;
 
     function reset() {
       self.model = currentUser();
@@ -30,20 +26,6 @@
       function error(err) {
         notifier.error(err.data.reason);
       }
-    }
-
-    function backgroundColor(color) {
-      return {
-        "background-color": color
-      };
-    }
-
-    function colorPanelClass(color) {
-      return color === self.model.color ? "form-control-selected" : "";
-    }
-
-    function selectColor(color) {
-      self.model.color = color;
     }
 
     function openPasswordEditor() {

@@ -4,7 +4,7 @@
 
   angular.module('app.calendar').factory('eventEditor', eventEditor);
 
-  function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, users, identity, colors) {
+  function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, users, identity) {
     var exports = {
       initialize: initialize,
       open: open
@@ -15,10 +15,7 @@
       ok: saveAndClose,
       remove: remove,
       isReadonly: false,
-      eventOwnerName: undefined,
-      backgroundColor: setBackgroundColor,
-      colorPanelClass: colorPanelClass,
-      selectColor: selectColor
+      eventOwnerName: undefined
     };
 
     var editor = $modal({
@@ -58,8 +55,7 @@
             .subtract(!!event.allDay ? 1 : 0, 'd')
             .valueOf() + zoneOffset,
           category: event.category,
-          isPrivate: !!event.private,
-          color: (colors.eventColors.indexOf(event.color) > -1) ? event.color : identity.currentUser.color
+          isPrivate: !!event.private
         };
       }
 
@@ -99,10 +95,6 @@
             ctrl.eventOwnerName = !!user ? user.firstName + ' ' + user.lastName : 'another user';
           });
         }
-        ctrl.colors = [identity.currentUser.color];
-        angular.forEach(colors.eventColors, function(c) {
-          ctrl.colors.push(c);
-        });
       }
 
       function initializeDataWatchers() {
@@ -193,21 +185,6 @@
 
     function displayError(response) {
       editorScope.ctrl.errorMessage = response.data.reason;
-    }
-
-
-    function setBackgroundColor(color) {
-      return {
-        "background-color": color
-      };
-    }
-
-    function colorPanelClass(color) {
-      return color === editorScope.ctrl.model.color ? "form-control-selected" : "";
-    }
-
-    function selectColor(color) {
-      editorScope.ctrl.model.color = color;
     }
   }
 }());
