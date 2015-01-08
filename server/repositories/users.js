@@ -1,6 +1,7 @@
 'use strict';
 
 var authentication = require('../services/authentication');
+var colors = require('../services/colors');
 var db = require('../config/database');
 var encryption = require('../services/encryption');
 var ObjectId = require("mongojs").ObjectId;
@@ -26,6 +27,7 @@ function get(req, res) {
   });
 }
 
+
 function getById(req, res) {
   db.users.findOne({
     _id: new ObjectId(req.params.id)
@@ -35,18 +37,21 @@ function getById(req, res) {
   }, function(err, user) {
     if (user) {
       res.send(user);
-    } else {
+    }
+    else {
       res.status(404);
       res.send();
     }
   });
 }
 
+
 function add(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
-    } else {
+    }
+    else {
       if (newPasswordIsValid(user.password, res)) {
         insert(user, res);
       }
@@ -54,15 +59,18 @@ function add(req, res) {
   });
 }
 
+
 function update(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
       return sendError(err, res);
-    } else {
+    }
+    else {
       updateUser(req.params.id, user, res);
     }
   });
 }
+
 
 function changePassword(req, res) {
   db.users.findOne({
@@ -122,6 +130,7 @@ function validateUser(req, callback) {
     });
 }
 
+
 function validateRequiredFields(user) {
   if (!user.username) {
     return new Error('Username is required');
@@ -142,14 +151,22 @@ function insert(user, res) {
   user.hashedPassword = encryption.hash(user.salt, user.password);
   user.password = undefined;
 
-  db.users.insert(user, function(err, user) {
+  db.users.count(function(err, userCount) {
     if (err) {
       return sendError(err, res);
     }
-    res.status(201);
-    return res.send(user);
+
+    user.colors = colors.getPallet(userCount);
+    db.users.insert(user, function(err, user) {
+      if (err) {
+        return sendError(err, res);
+      }
+      res.status(201);
+      return res.send(user);
+    });
   });
 }
+
 
 function updateUser(id, userData, res) {
   db.users.update({
@@ -170,6 +187,7 @@ function updateUser(id, userData, res) {
   });
 }
 
+
 function updateUserPassword(id, passwordData, res) {
   var salt = encryption.createSalt();
   var hash = encryption.hash(salt, passwordData.newPassword);
@@ -189,6 +207,7 @@ function updateUserPassword(id, passwordData, res) {
     res.send();
   });
 }
+
 
 function sendError(err, res) {
   res.status(400);

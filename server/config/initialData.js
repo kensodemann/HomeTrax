@@ -1,5 +1,6 @@
 'use strict';
 
+var colors = require('../services/colors');
 var db = require('./database');
 var encryption = require('../services/encryption');
 
@@ -17,6 +18,7 @@ function createDefaultAdministrator() {
         salt: salt,
         hashedPassword: hash,
         isDefaultAdmin: true,
+        colors: colors.getPallet(0),
         roles: ['admin']
       });
     }
