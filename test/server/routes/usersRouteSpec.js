@@ -23,28 +23,22 @@ describe('api/users Routes', function() {
 
     function loadUsers(done) {
       db.users.remove({}, function() {
-        db.users.save({
+        db.users.insert([{
           firstName: 'Ken',
           lastName: 'Sodemann',
           salt: 'NaCl',
           hashedPassword: 'GoldenCrisp'
-        }, function() {
-          db.users.save({
-            firstName: 'Lisa',
-            lastName: 'Buerger',
-            salt: 'CaCl2',
-            hashedPassword: 'BlackGold'
-          }, function() {
-            db.users.save({
-              firstName: 'Geoff',
-              lastName: 'Jones',
-              salt: 'CH3COONa',
-              hashedPassword: 'BlackStickyTar'
-            }, function() {
-              done();
-            });
-          });
-        });
+        }, {
+          firstName: 'Lisa',
+          lastName: 'Buerger',
+          salt: 'CaCl2',
+          hashedPassword: 'BlackGold'
+        }, {
+          firstName: 'Geoff',
+          lastName: 'Jones',
+          salt: 'CH3COONa',
+          hashedPassword: 'BlackStickyTar'
+        }], done);
       });
     }
 
@@ -158,12 +152,11 @@ describe('api/users Routes', function() {
 
     function loadUsers(done) {
       db.users.remove({}, function() {
-        db.users.save({
+        db.users.insert([{
           firstName: 'Ken',
           lastName: 'Sodemann',
           username: 'kws@email.com'
-        });
-        done();
+        }], done);
       });
     }
 
@@ -337,28 +330,26 @@ describe('api/users Routes', function() {
 
     function loadUsers(done) {
       db.users.remove({}, function() {
-        db.users.save({
+        db.users.insert([{
           firstName: 'Ken',
           lastName: 'Sodemann',
           username: 'kws@email.com',
           salt: 'NH4Cl',
           colors: ["#a0a0a0", "#b0b0b0", "#c0c0c0"],
           password: 'ThisIsFreaky'
-        }, function() {
-          db.users.save({
-            firstName: 'Lisa',
-            lastName: 'Buerger',
-            username: 'llb@email.com',
-            salt: 'CaCl2',
-            colors: ["#d0d0d0", "#e0e0e0", "#f0f0f0"],
-            password: 'IAmSexyBee'
-          }, function() {
-            db.users.findOne({
-              username: 'kws@email.com'
-            }, function(err, user) {
-              testUser = user;
-              done();
-            });
+        }, {
+          firstName: 'Lisa',
+          lastName: 'Buerger',
+          username: 'llb@email.com',
+          salt: 'CaCl2',
+          colors: ["#d0d0d0", "#e0e0e0", "#f0f0f0"],
+          password: 'IAmSexyBee'
+        }], function() {
+          db.users.findOne({
+            username: 'kws@email.com'
+          }, function(err, user) {
+            testUser = user;
+            done();
           });
         });
       });
