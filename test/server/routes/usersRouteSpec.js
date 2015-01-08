@@ -1,6 +1,7 @@
 /* global afterEach beforeEach describe it */
 'use strict';
 
+var colors = require('../../../server/services/colors');
 var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -316,6 +317,7 @@ describe('api/users Routes', function() {
               expect(user.roles).to.deep.equal(['worker']);
               expect(user.salt).to.not.be.undefined;
               expect(user.hashedPassword).to.not.be.undefined;
+              expect(user.colors).to.deep.equal(colors.userPallets[1]);
               expect(user._id.toString()).to.equal(res.body._id);
               done();
             });
