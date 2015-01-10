@@ -14,8 +14,15 @@
       getColor: getColor
     };
 
-    function getColor(type, useUserColor) {
-      return identity.currentUser.colors[type];
+    function getColor(type, useSystemColors) {
+      var colors;
+      if (useSystemColors) {
+        colors = [identity.currentUser.colors[0], '#990033', '#669933', '#9933FF'];
+      }
+      else {
+        colors = identity.currentUser.colors;
+      }
+      return colors[type];
     }
 
     return exports;
