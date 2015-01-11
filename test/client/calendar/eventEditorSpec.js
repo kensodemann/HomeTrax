@@ -102,9 +102,12 @@
       }
 
       function buildMockColors() {
-        mockColors = {
-          eventColors: ["#123456", "#098765", "#111111"]
-        };
+        mockColors = sinon.stub({
+          getColor: function() {}
+        });
+        mockColors.getColor.returns('#343434');
+        mockColors.getColor.withArgs(42).returns('#121212');
+        mockColors.calendar = 42;
       }
 
       function buildMockEventCategory() {
@@ -264,6 +267,14 @@
         expect(ctrl.model.end).to.equal(moment('2014-12-01T02:30:00.000Z').valueOf() + zoneOffset);
         expect(ctrl.model.category).to.equal('Personal');
         expect(ctrl.model.isPrivate).to.be.true;
+      });
+
+      it("uses the user's default color for calendar events", function() {
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(mockColors.getColor.calledOnce).to.be.true;
+        expect(mockColors.getColor.calledWithExactly(mockColors.calendar)).to.be.true;
+        expect(ctrl.model.color).to.equal('#121212');
       });
 
       it('subtracts a day from the end date if this is an all-day event', function() {
@@ -444,6 +455,7 @@
         expect(mockCalendarEvent.private).to.be.true;
         expect(mockCalendarEvent.user).to.equal('KWS');
         expect(mockCalendarEvent.eventType).to.equal('miscellaneous');
+        expect(mockCalendarEvent.color).to.equal('#abcdef');
       });
 
       it('sets start time to midnight for all day events', function() {

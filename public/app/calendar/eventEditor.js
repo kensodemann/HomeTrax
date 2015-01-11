@@ -4,7 +4,7 @@
 
   angular.module('app.calendar').factory('eventEditor', eventEditor);
 
-  function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, users, identity) {
+  function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, users, identity, colors) {
     var exports = {
       initialize: initialize,
       open: open
@@ -55,7 +55,8 @@
             .subtract(!!event.allDay ? 1 : 0, 'd')
             .valueOf() + zoneOffset,
           category: event.category,
-          isPrivate: !!event.private
+          isPrivate: !!event.private,
+          color: colors.getColor(colors.calendar)
         };
       }
 
@@ -89,7 +90,7 @@
         ctrl.mode = mode;
         ctrl.title = (mode === 'create') ? 'New Event' : 'Edit Event';
         ctrl.isReadonly = !!event.userId &&
-        event.userId.toString() !== identity.currentUser._id.toString();
+          event.userId.toString() !== identity.currentUser._id.toString();
         if (ctrl.isReadonly) {
           users.get(event.userId).then(function(user) {
             ctrl.eventOwnerName = !!user ? user.firstName + ' ' + user.lastName : 'another user';
@@ -137,7 +138,8 @@
             .millisecond(0)
             .add(1, 'd')
             .subtract(zoneOffset, 'ms');
-        } else {
+        }
+        else {
           eventResource.start = moment(m.start - zoneOffset);
           eventResource.end = moment(m.end - zoneOffset);
         }
