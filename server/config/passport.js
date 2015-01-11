@@ -18,7 +18,7 @@ module.exports = function() {
               _id: user._id,
               username: user.username,
               roles: user.roles,
-              color: user.color
+              colors: user.colors
             });
           }
           else {
