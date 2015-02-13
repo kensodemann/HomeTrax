@@ -67,3 +67,9 @@ a.btn:focus {
 .options-row {
   margin-bottom: 12px;
 }
+
+.view-section {
+  border: 1px solid #000000;
+  padding: 0.5em;
+  margin: 0.5em;
+}
