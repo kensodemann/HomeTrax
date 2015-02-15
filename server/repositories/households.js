@@ -8,3 +8,5 @@ module.exports.get = function(req, res) {
     res.send(h);
   });
 };
+
+module.exports.save = function(req, res) {};

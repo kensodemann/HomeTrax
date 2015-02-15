@@ -7,7 +7,7 @@ var request = require('supertest');
 var proxyquire = require('proxyquire');
 var db = require('../../../server/config/database');
 
-describe('api/eventCategories Routes', function() {
+describe('api/household Routes', function() {
   var app;
   var myFavoriteHousehold;
   var authStub = {
@@ -54,6 +54,20 @@ describe('api/eventCategories Routes', function() {
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           expect(res.body.length).to.equal(3);
+          done();
+        });
+    });
+  });
+
+  describe('POST', function() {
+    it('requires an API login', function(done) {
+      request(app)
+        .post('/api/households')
+        .send({
+          name: 'this is a name'
+        })
+        .end(function() {
+          expect(requiresApiLoginCalled).to.be.true;
           done();
         });
     });
