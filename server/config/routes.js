@@ -23,10 +23,10 @@ module.exports = function(app) {
   app.post('/api/eventCategories/:id?', redirectToHttps, authentication.requiresApiLogin, eventCategories.save);
 
   app.get('/api/households', redirectToHttps, authentication.requiresApiLogin, households.get);
-  app.post('/api/households/:id?', redirectToHttps, authentication.requiresApiLogin, households.get);
+  app.post('/api/households/:id?', redirectToHttps, authentication.requiresApiLogin, households.save);
 
   app.get('/api/users', redirectToHttps, authentication.requiresRole('admin'), users.get);
-  app.get('/api/users/:id', redirectToHttps, authentication.requiresRoleOrIsCurrentUser('admin'), users.getById);                                       b
+  app.get('/api/users/:id', redirectToHttps, authentication.requiresRoleOrIsCurrentUser('admin'), users.getById);
   app.post('/api/users', authentication.requiresRole('admin'), users.add);
   app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'), users.update);
 

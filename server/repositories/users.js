@@ -4,6 +4,7 @@ var authentication = require('../services/authentication');
 var colors = require('../services/colors');
 var db = require('../config/database');
 var encryption = require('../services/encryption');
+var error = require('../services/error');
 var ObjectId = require("mongojs").ObjectId;
 
 module.exports.init = init;
@@ -49,7 +50,7 @@ function getById(req, res) {
 function add(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
-      return sendError(err, res);
+      return error.send(err, res);
     }
     else {
       if (newPasswordIsValid(user.password, res)) {
@@ -63,7 +64,7 @@ function add(req, res) {
 function update(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
-      return sendError(err, res);
+      return error.send(err, res);
     }
     else {
       updateUser(req.params.id, user, res);
@@ -153,13 +154,13 @@ function insert(user, res) {
 
   db.users.count(function(err, userCount) {
     if (err) {
-      return sendError(err, res);
+      return error.send(err, res);
     }
 
     user.colors = colors.getPallet(userCount);
     db.users.insert(user, function(err, user) {
       if (err) {
-        return sendError(err, res);
+        return error.send(err, res);
       }
       res.status(201);
       return res.send(user);
@@ -180,7 +181,7 @@ function updateUser(id, userData, res) {
     }
   }, {}, function(err) {
     if (err) {
-      return sendError(err, res);
+      return error.send(err, res);
     }
     res.status(200);
     return res.send(userData);
@@ -201,17 +202,9 @@ function updateUserPassword(id, passwordData, res) {
     }
   }, {}, function(err) {
     if (err) {
-      return sendError(err, res);
+      return error.send(err, res);
     }
     res.status(200);
     res.send();
-  });
-}
-
-
-function sendError(err, res) {
-  res.status(400);
-  res.send({
-    reason: err.toString()
   });
 }
