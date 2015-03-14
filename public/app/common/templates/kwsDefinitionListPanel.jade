@@ -1,0 +1,9 @@
+.panel.panel-default
+	.panel-heading
+		h3.panel-title {{kwsTitle}}
+	.panel-body
+		dl.dl-horizontal(ng-repeat="list in kwsLists")
+			span(ng-repeat="item in list")
+				dt {{item.label}}
+				dd {{item.value}}
+
