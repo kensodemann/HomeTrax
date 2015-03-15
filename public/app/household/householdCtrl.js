@@ -7,7 +7,7 @@
   function HouseholdCtrl() {
     var self = this;
 
-    var household = {
+    self.household = {
       name: 'My Condo',
       addressLine1: '2422 Fox River Pkwy',
       addressLine2: 'Unit F',
@@ -23,27 +23,27 @@
       policyNumber: '1234-45'
     };
 
-    self.title = household.name;
+    self.title = self.household.name;
     self.addressLines = [];
-    self.addressLines.push(household.addressLine1);
-    self.addressLines.push(household.addressLine2);
-    self.addressLines.push(household.city + ', ' + household.state + ' ' + household.postal);
-    self.addressLines.push(household.phone);
+    self.addressLines.push(self.household.addressLine1);
+    self.addressLines.push(self.household.addressLine2);
+    self.addressLines.push(self.household.city + ', ' + self.household.state + ' ' + self.household.postal);
+    self.addressLines.push(self.household.phone);
 
     function InfoItem(label, value){
       this.label = label + ':';
-      this.value = value;
+      this.columnName = value;
     }
 
     var financialData = [];
     var insuranceData = [];
-    financialData.push(new InfoItem('Purchase Date', household.purchaseDate));
-    financialData.push(new InfoItem('Purchase Price', household.purchasePrice));
-    financialData.push(new InfoItem('Mortgage Balance', household.mortgageBalance));
-    financialData.push(new InfoItem('Property Taxes', household.propertyTaxes));
+    financialData.push(new InfoItem('Purchase Date', 'purchaseDate'));
+    financialData.push(new InfoItem('Purchase Price', 'purchasePrice'));
+    financialData.push(new InfoItem('Mortgage Balance', 'mortgageBalance'));
+    financialData.push(new InfoItem('Property Taxes', 'propertyTaxes'));
 
-    insuranceData.push(new InfoItem('Insurance Company', household.insuranceCompany));
-    insuranceData.push(new InfoItem('Policy Number', household.policyNumber));
+    insuranceData.push(new InfoItem('Insurance Company', 'insuranceCompany'));
+    insuranceData.push(new InfoItem('Policy Number', 'policyNumber'));
 
     self.basicInformation = [financialData, insuranceData];
   }

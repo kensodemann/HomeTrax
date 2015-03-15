@@ -8,7 +8,8 @@
       restrict: 'AE',
       scope: {
         kwsTitle: "@",
-        kwsLists: "="
+        kwsLists: "=",
+        kwsModel: "="
       },
       templateUrl: '/partials/common/templates/kwsDefinitionListPanel'
     };

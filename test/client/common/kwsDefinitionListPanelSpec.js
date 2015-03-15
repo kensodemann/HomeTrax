@@ -10,23 +10,28 @@
 
     beforeEach(inject(function($rootScope, $compile) {
       scope = $rootScope;
+      scope.myModel = {
+        foo: 'Value 1',
+        bar: 'Value 3',
+        snafu:'Value 5'
+      };
       scope.lists = [[{
         label: 'Label 1',
-        value: 'Value 1'
+        columnName: 'foo'
       }, {
         label: 'Label 2',
         value: 'Value 2'
       }], [{
         label: 'Label 3',
-        value: 'Value 3'
+        columnName: 'bar'
       }, {
         label: 'Label 4',
         value: 'Value 4'
       }, {
         label: 'Label 5',
-        value: 'Value 5'
+        columnName: 'snafu'
       }]];
-      el = angular.element('<kws-definition-list-panel kws-title="I Am Title" kws-lists="lists"></kws-definition-list-panel>');
+      el = angular.element('<kws-definition-list-panel kws-title="I Am Title" kws-lists="lists" kws-model="myModel"></kws-definition-list-panel>');
       $compile(el)(scope);
       scope.$digest();
     }));
