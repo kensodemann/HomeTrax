@@ -13,3 +13,5 @@ server/includes/layout.jade
 .c9/
 data/
 *.log
+
+.sass-cache/
