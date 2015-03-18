@@ -71,5 +71,9 @@ a.btn:focus {
 .view-section {
   border: 1px solid #000000;
   padding: 0.5em;
-  margin: 0.5em;
+}
+
+.jumbotron{
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
