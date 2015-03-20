@@ -1,3 +1,4 @@
 .jumbotron
-	h2.text-center {{kwsTitle}}
-	.text-center(ng-repeat="line in kwsSubTextLines") {{line}}
+	span(ng-repeat="line in kwsLines")
+		h2.text-center(ng-if="$index === 0") {{line.displayValue}}
+		.text-center(ng-if="$index !== 0") {{line.displayValue}}

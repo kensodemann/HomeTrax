@@ -108,11 +108,11 @@
         expect(scope.lists[0][3].displayValue).to.equal('$1,234.46');
       });
 
-      it('is set to the value for a string value', function(){
+      it('is set to the column value for a string value', function(){
         expect(scope.lists[0][4].displayValue).to.equal('I am string');
       });
 
-      it('is set to the value for an undefined type value', function(){
+      it('is set to the column value for an undefined type value', function(){
         expect(scope.lists[0][5].displayValue).to.equal('I am string');
       });
     });

@@ -23,12 +23,12 @@
       policyNumber: '1234-45'
     };
 
-    self.title = self.household.name;
-    self.addressLines = [];
-    self.addressLines.push(self.household.addressLine1);
-    self.addressLines.push(self.household.addressLine2);
-    self.addressLines.push(self.household.city + ', ' + self.household.state + ' ' + self.household.postal);
-    self.addressLines.push(self.household.phone);
+    self.headerLines = [];
+    self.headerLines.push(self.household.name);
+    self.headerLines.push(self.household.addressLine1);
+    self.headerLines.push(self.household.addressLine2);
+    self.headerLines.push(self.household.city + ', ' + self.household.state + ' ' + self.household.postal);
+    self.headerLines.push(self.household.phone);
 
     function InfoItem(label, columnName, dataType){
       this.label = label + ':';
