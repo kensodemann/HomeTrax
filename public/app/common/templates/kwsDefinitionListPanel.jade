@@ -5,8 +5,4 @@
 		dl.dl-horizontal(ng-repeat="list in kwsLists")
 			span(ng-repeat="item in list")
 				dt {{item.label}}
-				span(ng-if="!!item.value")
-					dd {{item.value}}
-				span(ng-if="!!item.columnName")
-					dd {{kwsModel[item.columnName]}}
-
+				dd {{item.displayValue}}
