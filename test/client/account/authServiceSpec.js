@@ -36,7 +36,7 @@
     }));
 
     describe('authenticateUser', function() {
-      it('Returns a promise', function() {
+      it.only('Returns a promise', function() {
         var p = serviceUnderTest.authenticateUser('jimmy', 'CrackCornz');
         expect(p.then).to.be.a('function');
       });

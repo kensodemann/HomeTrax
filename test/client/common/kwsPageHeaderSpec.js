@@ -16,7 +16,19 @@
 
     describe('Basic Rendering', function() {
       beforeEach(function() {
-        scope.lines = [{value: 'Killswitch'}, {value: 'line 1'}, {value: 'line 2'}, {value: 'line 3'}];
+        scope.lines = [{
+          value: 'Killswitch',
+          modes: 'EV'
+        }, {
+          value: 'line 1',
+          modes: 'EV'
+        }, {
+          value: 'line 2',
+          modes: 'EV'
+        }, {
+          value: 'line 3',
+          modes: 'EV'
+        }];
         el = angular.element('<kws-page-header kws-lines="lines"></kws-page-header>');
         compile(el)(scope);
         scope.$digest();
