@@ -1,4 +1,7 @@
 .jumbotron
-	span(ng-repeat="line in kwsLines")
+	button.btn.btn-xs.pull-right
+		span.glyphicon.glyphicon-pencil
+	.clearfix
+	span.clearfix(ng-repeat="line in kwsLines")
 		h2.text-center(ng-if="$index === 0") {{line.displayValue}}
 		.text-center(ng-if="$index !== 0") {{line.displayValue}}
