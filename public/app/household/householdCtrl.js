@@ -23,18 +23,19 @@
       policyNumber: '1234-45'
     };
 
-    self.title = self.household.name;
-    self.addressLines = [];
-    self.addressLines.push(self.household.addressLine1);
-    self.addressLines.push(self.household.addressLine2);
-    self.addressLines.push(self.household.city + ', ' + self.household.state + ' ' + self.household.postal);
-    self.addressLines.push(self.household.phone);
-
-    function InfoItem(label, columnName, dataType){
+    function InfoItem(label, columnName, dataType) {
       this.label = label + ':';
       this.columnName = columnName;
       this.dataType = dataType;
     }
+
+    self.headerLines = [];
+    self.headerLines.push(new InfoItem('Name', 'name'));
+    self.headerLines.push(new InfoItem('Address Line 1', 'addressLine1'));
+    self.headerLines.push(new InfoItem('Address Line 2', 'addressLine2'));
+    self.headerLines.push({value: self.household.city + ', ' + self.household.state + ' ' + self.household.postal});
+    self.headerLines.push(new InfoItem('Phone Number', 'phone'));
+
 
     var financialData = [];
     var insuranceData = [];
