@@ -15,10 +15,10 @@
       state: 'WI',
       postal: '53189',
       phone: '(920) 988-4261',
-      purchaseDate: '10/12/2013',
-      purchasePrice: '176,000.00',
-      mortgageBalance: '123,432.00',
-      propertyTaxes: '3,234.00',
+      purchaseDate: new Date(2013, 9, 12),
+      purchasePrice: 176000.00,
+      mortgageBalance: 123432.00,
+      propertyTaxes: 3234.00,
       insuranceCompany: 'Farmer\'s Insurance',
       policyNumber: '1234-45'
     };
@@ -30,17 +30,18 @@
     self.addressLines.push(self.household.city + ', ' + self.household.state + ' ' + self.household.postal);
     self.addressLines.push(self.household.phone);
 
-    function InfoItem(label, value){
+    function InfoItem(label, columnName, dataType){
       this.label = label + ':';
-      this.columnName = value;
+      this.columnName = columnName;
+      this.dataType = dataType;
     }
 
     var financialData = [];
     var insuranceData = [];
-    financialData.push(new InfoItem('Purchase Date', 'purchaseDate'));
-    financialData.push(new InfoItem('Purchase Price', 'purchasePrice'));
-    financialData.push(new InfoItem('Mortgage Balance', 'mortgageBalance'));
-    financialData.push(new InfoItem('Property Taxes', 'propertyTaxes'));
+    financialData.push(new InfoItem('Purchase Date', 'purchaseDate', 'date'));
+    financialData.push(new InfoItem('Purchase Price', 'purchasePrice', 'currency'));
+    financialData.push(new InfoItem('Mortgage Balance', 'mortgageBalance', 'currency'));
+    financialData.push(new InfoItem('Property Taxes', 'propertyTaxes', 'currency'));
 
     insuranceData.push(new InfoItem('Insurance Company', 'insuranceCompany'));
     insuranceData.push(new InfoItem('Policy Number', 'policyNumber'));
