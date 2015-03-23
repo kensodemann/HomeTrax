@@ -35,7 +35,7 @@
     self.headerLines.push(new InfoItem('Address Line 1', 'addressLine1'));
     self.headerLines.push(new InfoItem('Address Line 2', 'addressLine2'));
     self.headerLines.push({
-      value: self.household.city + ', ' + self.household.state + ' ' + self.household.postal,
+      template: '{{kwsModel.city}}, {{kwsModel.state}} {{kwsModel.postal}}',
       modes: 'V'
     });
     self.headerLines.push(new InfoItem('City', 'city', 'string', 'E'));

@@ -4,8 +4,10 @@
 	.clearfix
 	div(ng-hide="ctrl.editMode")
 		span.clearfix(ng-repeat="line in kwsLines | filter: {modes: 'V'}")
-			h2.text-center(ng-if="$index === 0") {{line.displayValue}}
-			.text-center(ng-if="$index !== 0") {{line.displayValue}}
+			h2.text-center(ng-if="$index === 0")
+				kws-templated-view(kws-model="kwsModel", kws-template="{{line.template}}")
+			.text-center(ng-if="$index !== 0")
+				kws-templated-view(kws-model="kwsModel", kws-template="{{line.template}}")
 	.container
 		form.form-horizontal(ng-show="ctrl.editMode")
 			fieldset

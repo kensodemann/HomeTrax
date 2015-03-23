@@ -19,38 +19,37 @@
     };
   }
 
-  function link(scope, element, attributes, controller) {
-    assignDisplayValues(scope.kwsLines, scope.kwsModel);
+  function link(scope) {
+    generateTemplates(scope.kwsLines);
   }
 
-  function assignDisplayValues(lines, model) {
+  function generateTemplates(lines) {
     lines.forEach(function(item) {
-      if (!!item.columnName) {
-        item.displayValue = model[item.columnName];
-        item.template = "{{line." + item.columnName + "}}";
-      } else {
-        item.displayValue = item.value;
+      if (!item.template) {
+        if (!item.columnName){
+          throw new Error("Must have a template or a column name");
+        }
+        item.template = "{{kwsModel." + item.columnName + "}}";
       }
     });
   }
 
-  function KwsPageHeaderCtrl($scope){
+  function KwsPageHeaderCtrl($scope) {
     var self = this;
 
     self.editClicked = startEditing;
     self.cancelClicked = stopEditing;
     self.doneClicked = saveChanges;
 
-    function startEditing(){
+    function startEditing() {
       self.editMode = true;
     }
 
-    function stopEditing(){
+    function stopEditing() {
       self.editMode = false;
     }
 
-    function saveChanges(){
-      assignDisplayValues($scope.kwsLines, $scope.kwsModel);
+    function saveChanges() {
       self.editMode = false;
     }
   }
