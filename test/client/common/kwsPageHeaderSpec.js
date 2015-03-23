@@ -16,7 +16,19 @@
 
     describe('Basic Rendering', function() {
       beforeEach(function() {
-        scope.lines = [{value: 'Killswitch'}, {value: 'line 1'}, {value: 'line 2'}, {value: 'line 3'}];
+        scope.lines = [{
+          template: 'Killswitch',
+          modes: 'EV'
+        }, {
+          template: 'line 1',
+          modes: 'EV'
+        }, {
+          template: 'line 2',
+          modes: 'EV'
+        }, {
+          template: 'line 3',
+          modes: 'EV'
+        }];
         el = angular.element('<kws-page-header kws-lines="lines"></kws-page-header>');
         compile(el)(scope);
         scope.$digest();
@@ -27,37 +39,52 @@
       });
 
       it('Renders the first line as the title', function() {
-        expect(el[0].innerHTML).to.contain('>Killswitch</h2>');
+        expect(el[0].innerHTML).to.contain('><kws-templated-view kws-model="kwsModel" kws-template="Killswitch"></kws-templated-view></h2>');
       });
 
       it('Renders the rest as subtext, one per line', function() {
-        var re = />line 1<\/div>.*>line 2<\/div>.*>line 3<\/div>/;
+        var re = /kws-template="line 1"><\/kws-templated-view>.*kws-template="line 2"><\/kws-templated-view>.*kws-template="line 3"><\/kws-templated-view>/;
         expect(re.test(el[0].innerHTML)).to.be.true;
       });
     });
 
-    describe('Display Value', function() {
+    describe('Template', function() {
       beforeEach(function() {
         scope.myModel = {
-          name: 'I am name',
+          firstName: 'Peter',
+          lastName: 'Piper',
           address: '123 South Main Street'
         };
         scope.lines = [{
-          value: 'I am value'
+          columnName: 'address'
         }, {
-          columnName: 'name'
+          template: '{{kwsModel.lastName}}, {{kwsModel.firstName}}'
         }];
         el = angular.element('<kws-page-header kws-lines="lines" kws-model="myModel"></kws-page-header>');
         compile(el)(scope);
         scope.$digest();
       });
 
-      it('is set to the value for value nodes', function() {
-        expect(scope.lines[0].displayValue).to.equal('I am value');
+      it('is generated if there is not specified', function() {
+        expect(scope.lines[0].template).to.equal('{{kwsModel.address}}');
       });
 
       it('is set to the column value for nodes associated with a column', function() {
-        expect(scope.lines[1].displayValue).to.equal('I am name');
+        expect(scope.lines[1].template).to.equal('{{kwsModel.lastName}}, {{kwsModel.firstName}}');
+      });
+    });
+
+    describe('Bad Lines', function(){
+      it('raises an error ', function(done){
+        scope.lines = [{value: 'this is bogus'}];
+        el = angular.element('<kws-page-header kws-lines="lines"></kws-page-header>');
+        try{
+          compile(el)(scope);
+          scope.$digest();
+        } catch(err){
+          expect(err.message).to.equal('Must have a template or a column name');
+          done();
+        }
       });
     });
   });
