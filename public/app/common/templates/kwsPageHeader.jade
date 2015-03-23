@@ -4,7 +4,7 @@
 	.clearfix
 	div(ng-hide="ctrl.editMode")
 		span.clearfix(ng-repeat="line in kwsLines | filter: {modes: 'V'}")
-			h2.text-center(ng-if="$index === 0" ng-bind-template="'{{line.template}}'")
+			h2.text-center(ng-if="$index === 0") {{line.displayValue}}
 			.text-center(ng-if="$index !== 0") {{line.displayValue}}
 	.container
 		form.form-horizontal(ng-show="ctrl.editMode")

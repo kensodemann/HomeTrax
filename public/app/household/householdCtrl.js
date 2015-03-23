@@ -34,10 +34,10 @@
     self.headerLines.push(new InfoItem('Name', 'name'));
     self.headerLines.push(new InfoItem('Address Line 1', 'addressLine1'));
     self.headerLines.push(new InfoItem('Address Line 2', 'addressLine2'));
-    //self.headerLines.push({
-    //  value: self.household.city + ', ' + self.household.state + ' ' + self.household.postal,
-    //  modes: 'V'
-    //});
+    self.headerLines.push({
+      value: self.household.city + ', ' + self.household.state + ' ' + self.household.postal,
+      modes: 'V'
+    });
     self.headerLines.push(new InfoItem('City', 'city', 'string', 'E'));
     self.headerLines.push(new InfoItem('State', 'state', 'string', 'E'));
     self.headerLines.push(new InfoItem('Postal Code', 'postal', 'string', 'E'));
