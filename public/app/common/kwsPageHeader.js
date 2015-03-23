@@ -37,20 +37,29 @@
   function KwsPageHeaderCtrl($scope) {
     var self = this;
 
+    var origModel;
+
     self.editClicked = startEditing;
     self.cancelClicked = stopEditing;
     self.doneClicked = saveChanges;
 
     function startEditing() {
-      self.editMode = true;
+      if (!self.editMode) {
+        origModel = {};
+        $.extend(true, origModel, $scope.kwsModel);
+        self.editMode = true;
+      }
     }
 
     function stopEditing() {
+      $.extend(true, $scope.kwsModel, origModel);
       self.editMode = false;
     }
 
     function saveChanges() {
-      self.editMode = false;
+      $scope.kwsModel.$save(function(){
+        self.editMode = false;
+      });
     }
   }
 }());
