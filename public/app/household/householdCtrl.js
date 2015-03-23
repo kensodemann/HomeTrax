@@ -4,24 +4,10 @@
 
   angular.module('app.household').controller('householdCtrl', HouseholdCtrl);
 
-  function HouseholdCtrl() {
+  function HouseholdCtrl(householdData) {
     var self = this;
 
-    self.household = {
-      name: 'My Condo',
-      addressLine1: '2422 Fox River Pkwy',
-      addressLine2: 'Unit F',
-      city: 'Waukesha',
-      state: 'WI',
-      postal: '53189',
-      phone: '(920) 988-4261',
-      purchaseDate: new Date(2013, 9, 12),
-      purchasePrice: 176000.00,
-      mortgageBalance: 123432.00,
-      propertyTaxes: 3234.00,
-      insuranceCompany: 'Farmer\'s Insurance',
-      policyNumber: '1234-45'
-    };
+    initialize();
 
     function InfoItem(label, columnName, dataType, modes) {
       this.label = label + ':';
@@ -55,5 +41,12 @@
     insuranceData.push(new InfoItem('Policy Number', 'policyNumber'));
 
     self.basicInformation = [financialData, insuranceData];
+
+    function initialize() {
+      self.household = {};
+      householdData.load().then(function(h) {
+        self.household = householdData.household;
+      });
+    }
   }
 }());
