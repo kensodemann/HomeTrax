@@ -32,10 +32,10 @@
 
     var financialData = [];
     var insuranceData = [];
-    financialData.push(new InfoItem('Purchase Date', 'purchaseDate', undefined));
+    financialData.push(new InfoItem('Purchase Date', 'purchaseDate', "{{kwsModel.purchaseDate | date: 'mediumDate' }}"));
     financialData.push(new InfoItem('Purchase Price', 'purchasePrice', '{{kwsModel.purchasePrice | currency }}'));
-    financialData.push(new InfoItem('Mortgage Balance', 'mortgageBalance', undefined));
-    financialData.push(new InfoItem('Property Taxes', 'propertyTaxes', undefined));
+    financialData.push(new InfoItem('Mortgage Balance', 'mortgageBalance', '{{kwsModel.mortgageBalance | currency }}'));
+    financialData.push(new InfoItem('Property Taxes', 'propertyTaxes', '{{kwsModel.propertyTaxes | currency }}'));
 
     insuranceData.push(new InfoItem('Insurance Company', 'insuranceCompany'));
     insuranceData.push(new InfoItem('Policy Number', 'policyNumber'));
@@ -45,7 +45,13 @@
     function initialize() {
       householdData.load().then(function() {
         self.household = householdData.household;
-        self.household.purchasePrice = 176004.236;
+        self.household.purchaseDate = new Date(2013, 9, 15);
+        self.household.purchasePrice = 176004.23;
+        self.household.mortgageBalance = 123043.72;
+        self.household.propertyTaxes = 3402.50;
+
+        self.household.insuranceCompany = "Farmer's Insurance";
+        self.household.policyNumber = '12349-39500-3';
       });
     }
   }
