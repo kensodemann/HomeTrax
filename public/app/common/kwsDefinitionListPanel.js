@@ -20,37 +20,20 @@
     };
   }
 
-  function link(scope, element, attributes, controller) {
-    assignDisplayValues(scope.kwsLists, scope.kwsModel);
+  function link(scope) {
+    generateTemplates(scope.kwsLists);
   }
 
-  function assignDisplayValues(lists, model) {
-    lists.forEach(function(list) {
+  function generateTemplates(lists) {
+    lists.forEach(function(list){
       list.forEach(function(item) {
-        if (!!item.columnName) {
-          item.displayValue = formatModelValue(item, model);
-        } else {
-          item.displayValue = item.value;
+        if (!item.template) {
+          if (!item.columnName){
+            throw new Error("Must have a template or a column name");
+          }
+          item.template = "{{kwsModel." + item.columnName + "}}";
         }
       });
     });
-
-    function formatModelValue(listItem, model) {
-      if (listItem.dataType === 'date') {
-        return filter('date')(model[listItem.columnName], 'mediumDate');
-      }
-      if (!!listItem.dataType && listItem.dataType !== 'string') {
-        return filter(listItem.dataType)(model[listItem.columnName]);
-      }
-      return model[listItem.columnName];
-    }
-  }
-
-  function backupEditableValues() {
-
-  }
-
-  function restoreEditableValues() {
-
   }
 }());
