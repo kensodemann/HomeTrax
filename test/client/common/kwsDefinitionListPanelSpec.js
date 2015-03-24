@@ -26,13 +26,13 @@
           columnName: 'foo'
         }, {
           label: 'Label 2',
-          value: 'Value 2'
+          template: 'Value 2'
         }], [{
           label: 'Label 3',
           columnName: 'bar'
         }, {
           label: 'Label 4',
-          value: 'Value 4'
+          template: 'Value 4'
         }, {
           label: 'Label 5',
           columnName: 'snafu'
@@ -51,69 +51,48 @@
       });
 
       it('renders the lists', function() {
-        var re = /<dl.*Label 1<\/dt>.*Value 1<\/dd>.*Label 2<\/dt>.*Value 2<\/dd>.*<\/dl>.*<dl.*Label 3<\/dt>.*Value 3<\/dd>.*Label 4<\/dt>.*Value 4<\/dd>.*Label 5<\/dt>.*Value 5<\/dd>.*<\/dl>/;
+        var re = /<dl.*Label 1<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="\{\{kwsModel.foo\}\}"><\/kws-templated-view><\/dd>.*Label 2<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="Value 2"><\/kws-templated-view><\/dd>.*Label 3<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="\{\{kwsModel.bar\}\}"><\/kws-templated-view><\/dd>.*Label 4<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="Value 4"><\/kws-templated-view><\/dd>.*Label 5<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="\{\{kwsModel.snafu\}\}"><\/kws-templated-view><\/dd>.*<\/dl>/;
         expect(re.test(el[0].innerHTML)).to.be.true;
       });
     });
 
-    describe('Display Value', function() {
+    describe('Template', function() {
       beforeEach(function() {
         scope.myModel = {
-          dateField: new Date(2015, 2, 17),
-          numericField: 123456.4956,
-          currencyField: 1234.457,
-          stringField: 'I am string'
+          firstName: 'Peter',
+          lastName: 'Piper',
+          address: '123 South Main Street'
         };
         scope.lists = [[{
-          label: 'Value Column',
-          value: 'I am value'
+          columnName: 'address'
         }, {
-          label: 'Date column',
-          columnName: 'dateField',
-          dataType: 'date'
-        }, {
-          label: 'Numeric column',
-          columnName: 'numericField',
-          dataType: 'number'
-        }, {
-          label: 'Currency Column',
-          columnName: 'currencyField',
-          dataType: 'currency'
-        }, {
-          label: 'String Column',
-          columnName: 'stringField',
-          dataType: 'string'
-        }, {
-          label: 'String Column',
-          columnName: 'stringField'
+          template: '{{kwsModel.lastName}}, {{kwsModel.firstName}}'
         }]];
         el = angular.element('<kws-definition-list-panel kws-title="I Am Title" kws-lists="lists" kws-model="myModel"></kws-definition-list-panel>');
         compile(el)(scope);
         scope.$digest();
       });
 
-      it('is set to the value for value nodes', function() {
-        expect(scope.lists[0][0].displayValue).to.equal('I am value');
+      it('is generated if it is not specified', function() {
+        expect(scope.lists[0][0].template).to.equal('{{kwsModel.address}}');
       });
 
-      it('is set to the short date format for a date', function(){
-        expect(scope.lists[0][1].displayValue).to.equal('Mar 17, 2015');
+      it('is set to the column value for nodes associated with a column', function() {
+        expect(scope.lists[0][1].template).to.equal('{{kwsModel.lastName}}, {{kwsModel.firstName}}');
       });
+    });
 
-      it('is set to the number format for a number', function(){
-        expect(scope.lists[0][2].displayValue).to.equal('123,456.496');
-      });
-
-      it('is set to the currency format for a currency value', function(){
-        expect(scope.lists[0][3].displayValue).to.equal('$1,234.46');
-      });
-
-      it('is set to the column value for a string value', function(){
-        expect(scope.lists[0][4].displayValue).to.equal('I am string');
-      });
-
-      it('is set to the column value for an undefined type value', function(){
-        expect(scope.lists[0][5].displayValue).to.equal('I am string');
+    describe('Bad Items', function(){
+      it('raises an error ', function(done){
+        scope.lists = [[{value: 'this is bogus'}]];
+        el = angular.element('<kws-definition-list-panel kws-lists="lists"></kws-definition-list-panel>');
+        try{
+          compile(el)(scope);
+          scope.$digest();
+        } catch(err){
+          expect(err.message).to.equal('Must have a template or a column name');
+          done();
+        }
       });
     });
   });

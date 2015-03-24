@@ -65,7 +65,7 @@
         scope.$digest();
       });
 
-      it('is generated if there is not specified', function() {
+      it('is generated if it is not specified', function() {
         expect(scope.lines[0].template).to.equal('{{kwsModel.address}}');
       });
 
