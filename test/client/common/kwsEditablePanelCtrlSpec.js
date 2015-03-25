@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('kwsPageHeaderCtrl', function() {
+  describe('kwsEditablePanelCtrl', function() {
     var scope;
     var $controllerConstructor;
 
@@ -13,7 +13,7 @@
     }));
 
     function createController() {
-      return $controllerConstructor('kwsPageHeaderCtrl', {
+      return $controllerConstructor('kwsEditablePanelCtrl', {
         $scope: scope
       });
     }

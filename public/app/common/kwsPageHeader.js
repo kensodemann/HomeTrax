@@ -1,9 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.core')
-    .controller('kwsPageHeaderCtrl', KwsPageHeaderCtrl)
-    .directive('kwsPageHeader', kwsPageHeader);
+  angular.module('app.core').directive('kwsPageHeader', kwsPageHeader);
 
   function kwsPageHeader() {
     return {
@@ -14,7 +12,7 @@
       },
       link: link,
       templateUrl: '/partials/common/templates/kwsPageHeader',
-      controller: 'kwsPageHeaderCtrl',
+      controller: 'kwsEditablePanelCtrl',
       controllerAs: 'ctrl'
     };
   }
@@ -32,34 +30,5 @@
         item.template = "{{kwsModel." + item.columnName + "}}";
       }
     });
-  }
-
-  function KwsPageHeaderCtrl($scope) {
-    var self = this;
-
-    var origModel;
-
-    self.editClicked = startEditing;
-    self.cancelClicked = stopEditing;
-    self.doneClicked = saveChanges;
-
-    function startEditing() {
-      if (!self.editMode) {
-        origModel = {};
-        $.extend(true, origModel, $scope.kwsModel);
-        self.editMode = true;
-      }
-    }
-
-    function stopEditing() {
-      $.extend(true, $scope.kwsModel, origModel);
-      self.editMode = false;
-    }
-
-    function saveChanges() {
-      $scope.kwsModel.$save(function(){
-        self.editMode = false;
-      });
-    }
   }
 }());
