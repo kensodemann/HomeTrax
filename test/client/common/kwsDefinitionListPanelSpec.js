@@ -23,19 +23,24 @@
         };
         scope.lists = [[{
           label: 'Label 1',
-          columnName: 'foo'
+          columnName: 'foo',
+          modes: 'EV'
         }, {
           label: 'Label 2',
-          template: 'Value 2'
+          template: 'Value 2',
+          modes: 'EV'
         }], [{
           label: 'Label 3',
-          columnName: 'bar'
+          columnName: 'bar',
+          modes: 'EV'
         }, {
           label: 'Label 4',
-          template: 'Value 4'
+          template: 'Value 4',
+          modes: 'EV'
         }, {
           label: 'Label 5',
-          columnName: 'snafu'
+          columnName: 'snafu',
+          modes: 'EV'
         }]];
         el = angular.element('<kws-definition-list-panel kws-title="I Am Title" kws-lists="lists" kws-model="myModel"></kws-definition-list-panel>');
         compile(el)(scope);
@@ -47,7 +52,7 @@
       });
 
       it('renders the title', function() {
-        expect(el[0].innerHTML).to.contain('<div class="panel-heading"><h3 class="panel-title ng-binding">I Am Title</h3>');
+        expect(el[0].innerHTML).to.contain('<div class="panel-heading"><h3 class="panel-title ng-binding">I Am Title');
       });
 
       it('renders the lists', function() {
@@ -82,14 +87,14 @@
       });
     });
 
-    describe('Bad Items', function(){
-      it('raises an error ', function(done){
+    describe('Bad Items', function() {
+      it('raises an error ', function(done) {
         scope.lists = [[{value: 'this is bogus'}]];
         el = angular.element('<kws-definition-list-panel kws-lists="lists"></kws-definition-list-panel>');
-        try{
+        try {
           compile(el)(scope);
           scope.$digest();
-        } catch(err){
+        } catch (err) {
           expect(err.message).to.equal('Must have a template or a column name');
           done();
         }

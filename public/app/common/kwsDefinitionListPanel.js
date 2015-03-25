@@ -16,7 +16,9 @@
         kwsModel: "="
       },
       link: link,
-      templateUrl: '/partials/common/templates/kwsDefinitionListPanel'
+      templateUrl: '/partials/common/templates/kwsDefinitionListPanel',
+      controller: 'kwsEditablePanelCtrl',
+      controllerAs: 'ctrl'
     };
   }
 
@@ -25,10 +27,10 @@
   }
 
   function generateTemplates(lists) {
-    lists.forEach(function(list){
+    lists.forEach(function(list) {
       list.forEach(function(item) {
         if (!item.template) {
-          if (!item.columnName){
+          if (!item.columnName) {
             throw new Error("Must have a template or a column name");
           }
           item.template = "{{kwsModel." + item.columnName + "}}";

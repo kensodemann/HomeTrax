@@ -1,9 +1,13 @@
 .panel.panel-default
 	.panel-heading
 		h3.panel-title {{kwsTitle}}
+			button.btn.btn-xs.pull-right(ng-click="ctrl.editClicked()")
+				span.glyphicon.glyphicon-pencil
 	.panel-body
-		dl.dl-horizontal(ng-repeat="list in kwsLists")
-			span(ng-repeat="item in list")
-				dt {{item.label}}
-				dd
-					kws-templated-view(kws-model="kwsModel", kws-template="{{item.template}}")
+		div(ng-hide="ctrl.editMode")
+			dl.dl-horizontal(ng-repeat="list in kwsLists | filter: {modes: 'V'}")
+				span(ng-repeat="item in list")
+					dt {{item.label}}
+					dd
+						kws-templated-view(kws-model="kwsModel", kws-template="{{item.template}}")
+		div(ng-show="ctrl.editMode") This is edit mode, bow down to me!
