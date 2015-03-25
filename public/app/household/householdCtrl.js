@@ -45,13 +45,6 @@
     function initialize() {
       householdData.load().then(function() {
         self.household = householdData.household;
-        self.household.purchaseDate = new Date(2013, 9, 15);
-        self.household.purchasePrice = 176004.23;
-        self.household.mortgageBalance = 123043.72;
-        self.household.propertyTaxes = 3402.50;
-
-        self.household.insuranceCompany = "Farmer's Insurance";
-        self.household.policyNumber = '12349-39500-3';
       });
     }
   }

@@ -5,9 +5,20 @@
 				span.glyphicon.glyphicon-pencil
 	.panel-body
 		div(ng-hide="ctrl.editMode")
-			dl.dl-horizontal(ng-repeat="list in kwsLists | filter: {modes: 'V'}")
-				span(ng-repeat="item in list")
+			dl.dl-horizontal(ng-repeat="list in kwsLists")
+				span(ng-repeat="item in list | filter: {modes: 'V'}")
 					dt {{item.label}}
 					dd
 						kws-templated-view(kws-model="kwsModel", kws-template="{{item.template}}")
-		div(ng-show="ctrl.editMode") This is edit mode, bow down to me!
+		div.editor(ng-show="ctrl.editMode")
+			form.form-horizontal
+				div(ng-repeat="list in kwsLists")
+					fieldset
+						div.form-group(ng-repeat="item in list| filter: {modes: 'E'}")
+							.row
+								label.control-label.col-md-6(for="{{item.columnName}}") {{item.label}}
+								.col-md-6
+									input.form-control(name="{{item.columnName}}" ng-model="kwsModel[item.columnName]")
+				.modal-footer
+					button.btn.btn-default(ng-click="ctrl.cancelClicked()") Cancel
+					button.btn.btn-primary(ng-click="ctrl.doneClicked()") Done
