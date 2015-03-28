@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 
     // Housekeeping
     clean: ["public/dist", "server/includes/layout.jade", "server/includes/scripts.jade", "public/app/**/*.html",
-      "public/css/*.map", "public/css/*.css", "server/**/*.html"],
+      "public/css/**/*.map", "public/css/**/*.css", "server/**/*.html"],
 
     // Code Quality Checks
     jshint: {
