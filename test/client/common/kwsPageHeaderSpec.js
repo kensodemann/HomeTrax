@@ -60,6 +60,7 @@
           columnName: 'address',
           modes: 'EV'
         }, {
+          columnName: 'lastName',
           template: '{{kwsModel.lastName}}, {{kwsModel.firstName}}',
           modes: 'V'
         }, {
@@ -75,7 +76,7 @@
         expect(scope.lines[0].template).to.equal('{{kwsModel.address}}');
       });
 
-      it('is set to the column value for nodes associated with a column', function() {
+      it('keeps the existing template if specified', function() {
         expect(scope.lines[1].template).to.equal('{{kwsModel.lastName}}, {{kwsModel.firstName}}');
       });
 
@@ -84,7 +85,7 @@
       });
     });
 
-    describe('Edit Template', function() {
+    describe('Edit Mode Template', function() {
       beforeEach(function() {
         scope.myModel = {
           firstName: 'Peter',
@@ -96,6 +97,7 @@
           columnName: 'address',
           modes: 'EV'
         }, {
+          columnName: 'lastName',
           editTemplate: '{{kwsModel.lastName}}, {{kwsModel.firstName}}',
           modes: 'E'
         }, {
@@ -112,7 +114,7 @@
            '<input class="form-control" name="address" ng-model="kwsModel[\'address\']">');
       });
 
-      it('is set to the column value for nodes associated with a column', function() {
+      it('keeps the existing template if specified', function() {
         expect(scope.lines[1].editTemplate).to.equal('{{kwsModel.lastName}}, {{kwsModel.firstName}}');
       });
 
