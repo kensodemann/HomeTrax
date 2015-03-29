@@ -18,16 +18,16 @@
       beforeEach(function() {
         scope.lines = [{
           template: 'Killswitch',
-          modes: 'EV'
+          modes: 'V'
         }, {
           template: 'line 1',
-          modes: 'EV'
+          modes: 'V'
         }, {
           template: 'line 2',
-          modes: 'EV'
+          modes: 'V'
         }, {
           template: 'line 3',
-          modes: 'EV'
+          modes: 'V'
         }];
         el = angular.element('<kws-page-header kws-lines="lines"></kws-page-header>');
         compile(el)(scope);
@@ -48,17 +48,24 @@
       });
     });
 
-    describe('Template', function() {
+    describe('View Mode Template', function() {
       beforeEach(function() {
         scope.myModel = {
           firstName: 'Peter',
           lastName: 'Piper',
-          address: '123 South Main Street'
+          address: '123 South Main Street',
+          city: 'Hamelin'
         };
         scope.lines = [{
-          columnName: 'address'
+          columnName: 'address',
+          modes: 'EV'
         }, {
-          template: '{{kwsModel.lastName}}, {{kwsModel.firstName}}'
+          columnName: 'lastName',
+          template: '{{kwsModel.lastName}}, {{kwsModel.firstName}}',
+          modes: 'V'
+        }, {
+          columnName: 'city',
+          modes: 'E'
         }];
         el = angular.element('<kws-page-header kws-lines="lines" kws-model="myModel"></kws-page-header>');
         compile(el)(scope);
@@ -69,20 +76,74 @@
         expect(scope.lines[0].template).to.equal('{{kwsModel.address}}');
       });
 
-      it('is set to the column value for nodes associated with a column', function() {
+      it('keeps the existing template if specified', function() {
         expect(scope.lines[1].template).to.equal('{{kwsModel.lastName}}, {{kwsModel.firstName}}');
+      });
+
+      it('is not set if the line is not used in View mode', function() {
+        expect(scope.lines[2].template).to.be.undefined;
       });
     });
 
-    describe('Bad Lines', function(){
-      it('raises an error ', function(done){
-        scope.lines = [{value: 'this is bogus'}];
+    describe('Edit Mode Template', function() {
+      beforeEach(function() {
+        scope.myModel = {
+          firstName: 'Peter',
+          lastName: 'Piper',
+          address: '123 South Main Street',
+          city: 'Hamelin'
+        };
+        scope.lines = [{
+          columnName: 'address',
+          modes: 'EV'
+        }, {
+          columnName: 'lastName',
+          editTemplate: '{{kwsModel.lastName}}, {{kwsModel.firstName}}',
+          modes: 'E'
+        }, {
+          columnName: 'city',
+          modes: 'V'
+        }];
+        el = angular.element('<kws-page-header kws-lines="lines" kws-model="myModel"></kws-page-header>');
+        compile(el)(scope);
+        scope.$digest();
+      });
+
+      it('is generated if it is not specified', function() {
+        expect(scope.lines[0].editTemplate).to.equal(
+           '<input class="form-control" name="address" ng-model="kwsModel[\'address\']">');
+      });
+
+      it('keeps the existing template if specified', function() {
+        expect(scope.lines[1].editTemplate).to.equal('{{kwsModel.lastName}}, {{kwsModel.firstName}}');
+      });
+
+      it('is not set if the line is not used in Edit mode', function() {
+        expect(scope.lines[2].editTemplate).to.be.undefined;
+      });
+    });
+
+    describe('Bad Lines', function() {
+      it('raises an error if no view template and no column name', function(done) {
+        scope.lines = [{value: 'this is bogus', modes: 'V'}];
         el = angular.element('<kws-page-header kws-lines="lines"></kws-page-header>');
-        try{
+        try {
           compile(el)(scope);
           scope.$digest();
-        } catch(err){
-          expect(err.message).to.equal('Must have a template or a column name');
+        } catch (err) {
+          expect(err.message).to.equal('Must have a view template or a column name');
+          done();
+        }
+      });
+
+      it('raises an error if no edit template and no column name', function(done) {
+        scope.lines = [{value: 'this is bogus', modes: 'E'}];
+        el = angular.element('<kws-page-header kws-lines="lines"></kws-page-header>');
+        try {
+          compile(el)(scope);
+          scope.$digest();
+        } catch (err) {
+          expect(err.message).to.equal('Must have an edit template or a column name');
           done();
         }
       });

@@ -18,7 +18,7 @@
 							.row
 								label.control-label.col-md-6(for="{{item.columnName}}") {{item.label}}
 								.col-md-6
-									input.form-control(name="{{item.columnName}}" ng-model="kwsModel[item.columnName]")
+									kws-templated-view(kws-model="kwsModel", kws-template="{{item.editTemplate}}")
 				.modal-footer
 					button.btn.btn-default(ng-click="ctrl.cancelClicked()") Cancel
 					button.btn.btn-primary(ng-click="ctrl.doneClicked()") Done
