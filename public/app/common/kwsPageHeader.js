@@ -41,12 +41,15 @@
 
     function createViewModeTemplate(line) {
       if (!line.columnName) {
-        throw new Error("Must have a template or a column name");
+        throw new Error("Must have a view template or a column name");
       }
       line.template = "{{kwsModel." + line.columnName + "}}";
     }
 
     function createEditModeTemplate(line){
+      if (!line.columnName) {
+        throw new Error("Must have an edit template or a column name");
+      }
       var cn = line.columnName;
       line.editTemplate = '<input class="form-control" name="' + cn + '" ng-model="kwsModel[\'' + cn + '\']">';
     }

@@ -18,16 +18,16 @@
       beforeEach(function() {
         scope.lines = [{
           template: 'Killswitch',
-          modes: 'EV'
+          modes: 'V'
         }, {
           template: 'line 1',
-          modes: 'EV'
+          modes: 'V'
         }, {
           template: 'line 2',
-          modes: 'EV'
+          modes: 'V'
         }, {
           template: 'line 3',
-          modes: 'EV'
+          modes: 'V'
         }];
         el = angular.element('<kws-page-header kws-lines="lines"></kws-page-header>');
         compile(el)(scope);
@@ -122,14 +122,26 @@
     });
 
     describe('Bad Lines', function() {
-      it('raises an error ', function(done) {
+      it('raises an error if no view template and no column name', function(done) {
         scope.lines = [{value: 'this is bogus', modes: 'V'}];
         el = angular.element('<kws-page-header kws-lines="lines"></kws-page-header>');
         try {
           compile(el)(scope);
           scope.$digest();
         } catch (err) {
-          expect(err.message).to.equal('Must have a template or a column name');
+          expect(err.message).to.equal('Must have a view template or a column name');
+          done();
+        }
+      });
+
+      it('raises an error if no edit template and no column name', function(done) {
+        scope.lines = [{value: 'this is bogus', modes: 'E'}];
+        el = angular.element('<kws-page-header kws-lines="lines"></kws-page-header>');
+        try {
+          compile(el)(scope);
+          scope.$digest();
+        } catch (err) {
+          expect(err.message).to.equal('Must have an edit template or a column name');
           done();
         }
       });
