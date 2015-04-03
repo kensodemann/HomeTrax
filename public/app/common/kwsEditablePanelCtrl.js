@@ -26,7 +26,7 @@
     }
 
     function saveChanges() {
-      $scope.kwsModel.$save(function(){
+      $scope.kwsModel.$save(function() {
         self.editMode = false;
       });
     }
