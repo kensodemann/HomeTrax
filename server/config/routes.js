@@ -5,6 +5,7 @@ var users = require('../repositories/users');
 var events = require('../repositories/events');
 var eventCategories = require('../repositories/eventCategories');
 var households = require('../repositories/households');
+var versions = require('../repositories/versions');
 
 function redirectToHttps(req, res, next) {
   if (req.headers['x-forwarded-proto'] == 'http') {
@@ -31,6 +32,8 @@ module.exports = function(app) {
   app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'), users.update);
 
   app.put('/api/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'), users.changePassword);
+
+  app.get('/api/versions', redirectToHttps, versions.get);
 
   app.post('/login', redirectToHttps, authentication.authenticate);
   app.post('/logout', function(req, res) {
