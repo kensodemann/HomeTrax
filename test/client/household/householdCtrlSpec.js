@@ -37,6 +37,18 @@
         createController();
         expect(mockHouseholdData.load.calledOnce).to.be.true;
       });
+
+      it('sets up the header lines', function() {
+        var ctrl = createController();
+        expect(ctrl.headerLines.length).to.equal(8);
+      });
+
+      it('sets up the basic information lines', function() {
+        var ctrl = createController();
+        expect(ctrl.basicInformation.length).to.equal(2);
+        expect(ctrl.basicInformation[0].length).to.equal(4);
+        expect(ctrl.basicInformation[1].length).to.equal(2);
+      });
     });
   });
 })();
