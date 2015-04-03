@@ -20,10 +20,6 @@ div.container
 					input.form-control(name='lastName', type='text', ng-model='ctrl.model.lastName', required)
 					.error-container(ng-show='profileForm.lastName.$invalid')
 						small.text-danger(ng-show='profileForm.lastName.$error.required') Required
-			.form-group
-				label.col-md-2.control-label My Color
-				.col-md-1(ng-repeat="color in ctrl.colors")
-					.form-control(ng-class='ctrl.colorPanelClass(color)', ng-style='ctrl.backgroundColor(color)', ng-click='ctrl.selectColor(color)')
 		.form-group
 			.col-md-offset-2.col-md-10.btn-area
 				button.btn.btn-default(type='button', ng-click="ctrl.reset()") Reset

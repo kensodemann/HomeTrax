@@ -2,9 +2,29 @@
 (function() {
   'use strict';
 
-  angular.module('app.core').constant('colors', {
-    eventColors: ["#000033", "#333333", "#336633", "#660033", "#660066", "#990033", "#CC3366", "#CC6633", "#FF0066"],
+  angular.module('app.core').factory('colors', ColorService);
 
-    userColors: ["#0066CC", "#3399CC", "#00FFFF", "#6633CC", "#9966CC", "#CC66CC", "#FF66CC", "#FFCCFF", "#FFCCCC"]
-  });
+  function ColorService(identity) {
+    var exports = {
+      calendar: 0,
+      appointment: 1,
+      task: 2,
+      anniversary: 3,
+
+      getColor: getColor
+    };
+
+    function getColor(type, useSystemColors) {
+      var colors;
+      if (useSystemColors) {
+        colors = [identity.currentUser.colors[0], '#990033', '#669933', '#9933FF'];
+      }
+      else {
+        colors = identity.currentUser.colors;
+      }
+      return colors[type];
+    }
+
+    return exports;
+  }
 })();

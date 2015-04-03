@@ -1,6 +1,0 @@
-.container
-	h2(ng-hide="ctrl.editMode === 'message'", ng-click="ctrl.messageClicked()") {{ctrl.message}}
-	input.form-control(ng-show="ctrl.editMode === 'message'", ng-model="ctrl.message", ng-blur="ctrl.handleChange()")
-	h3(ng-hide="ctrl.editMode === 'subtext'", ng-click="ctrl.subtextClicked()") {{ctrl.subtext}}
-	input.form-control(ng-show="ctrl.editMode === 'subtext'", ng-model="ctrl.subtext", ng-blur="ctrl.handleChange()")
-	h4 Account: {{ctrl.accountName}}

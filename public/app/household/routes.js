@@ -2,14 +2,14 @@
 (function() {
   'use strict';
 
-  angular.module('app.finance').constant('financeRoutes', [{
-    path: '/finance/account',
-    templateUrl: '/partials/finance/templates/account',
-    controller: 'financialAccountCtrl',
+  angular.module('app.household').constant('householdRoutes', [{
+    path: '/household',
+    templateUrl: '/partials/household/templates/household',
+    controller: 'householdCtrl',
     resolve: {
       authorized: /* @ngInject */ function(authService) {
         return authService.currentUserAuthorizedForRoute('');
       }
     }
   }]);
-})();
+}());

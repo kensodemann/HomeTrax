@@ -1,7 +1,13 @@
 'use strict';
 
+var colors = require('../services/colors');
 var db = require('./database');
 var encryption = require('../services/encryption');
+
+module.exports = function() {
+  createDefaultAdministrator();
+  createDefaultHousehold();
+};
 
 function createDefaultAdministrator() {
   db.users.find({
@@ -17,12 +23,25 @@ function createDefaultAdministrator() {
         salt: salt,
         hashedPassword: hash,
         isDefaultAdmin: true,
+        colors: colors.getPallet(0),
         roles: ['admin']
       });
     }
   });
 }
 
-module.exports = function() {
-  createDefaultAdministrator();
-};
+function createDefaultHousehold() {
+  db.households.find({}, function(err, h) {
+    if (h.length === 0) {
+      var salt = encryption.createSalt();
+      var hash = encryption.hash(salt, 'the default admin password');
+      db.households.save({
+        name: 'My House',
+        addressLine1: 'In the middle of my street',
+        city: 'change me',
+        state: 'WA',
+        postal: '12345'
+      });
+    }
+  });
+}

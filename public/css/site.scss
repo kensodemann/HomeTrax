@@ -1,10 +1,7 @@
+@import "variables";
+
 body {
   padding-top: 61px;
-}
-
-a.btn:hover,
-a.btn:focus {
-  color: #97310e;
 }
 
 .navbar-right {
@@ -32,18 +29,18 @@ a.btn:focus {
   max-width: 330px;
   padding: 15px;
   margin: 0 auto;
-}
-
-.form-signin input[type="text"] {
-  margin-bottom: -1px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  input {
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
 }
 
 .ng-invalid {
@@ -61,9 +58,29 @@ a.btn:focus {
 }
 
 .aside .aside-dialog .aside-header {
-  background-color: #772953;
+  background-color: $brand-info;
 }
 
 .options-row {
   margin-bottom: 12px;
+}
+
+.view-section {
+  border: 1px solid #000000;
+  padding: 0.5em;
+}
+
+.container .jumbotron {
+  padding: 10px;
+  h2 {
+    margin: 5px;
+  }
+}
+
+.tab-pane {
+  padding-top: 15px;
+}
+
+.editor {
+  padding: 10px;
 }

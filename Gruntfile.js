@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 
     // Housekeeping
     clean: ["public/dist", "server/includes/layout.jade", "server/includes/scripts.jade", "public/app/**/*.html",
-      "server/**/*.html"],
+      "public/css/**/*.map", "public/css/**/*.css", "server/**/*.html"],
 
     // Code Quality Checks
     jshint: {
@@ -81,6 +81,18 @@ module.exports = function(grunt) {
     },
 
     // Build
+    sass: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'public/css',
+          src: ['*.scss'],
+          dest: 'public/css/dist',
+          ext: '.css'
+        }]
+      }
+    },
+
     preprocess: {
       dev: {
         options: {
@@ -109,7 +121,7 @@ module.exports = function(grunt) {
         dest: 'public/dist/<%= pkg.name %>.js'
       },
       css: {
-        src: ['public/css/theme.css', 'public/css/**/*.css', 'public/css/site.css'],
+        src: ['public/css/dist/theme.css', 'public/css/dist/**/*.css', 'public/css/dist/site.css'],
         dest: 'public/dist/<%= pkg.name %>.css'
       }
     },
@@ -143,7 +155,7 @@ module.exports = function(grunt) {
         files: ['Gruntfile.js',
           'server.js',
           'public/app/**/*.js',
-          'public/css/**/*.css',
+          'public/css/**/*.scss',
           'server/**/*.js',
           'server/includes/layout.tpl.jade',
           'server/includes/scripts.tpl.jade',
@@ -158,6 +170,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
@@ -166,8 +179,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-preprocess');
 
   // Tasks
-  grunt.registerTask('default', ['clean', 'preprocess:dev', 'karma', 'mochaTest', 'jshint', 'concat']);
+  grunt.registerTask('default', ['clean', 'preprocess:dev', 'sass', 'karma', 'mochaTest', 'jshint', 'concat']);
   grunt.registerTask('build', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
-  grunt.registerTask('openShiftBuild', ['clean', 'preprocess:dist', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
+  grunt.registerTask('openShiftBuild', ['clean', 'preprocess:dist', 'sass', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
   grunt.registerTask('dev', ['default', 'watch']);
 };

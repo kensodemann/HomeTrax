@@ -15,10 +15,7 @@
       ok: saveAndClose,
       remove: remove,
       isReadonly: false,
-      eventOwnerName: undefined,
-      backgroundColor: setBackgroundColor,
-      colorPanelClass: colorPanelClass,
-      selectColor: selectColor
+      eventOwnerName: undefined
     };
 
     var editor = $modal({
@@ -59,7 +56,7 @@
             .valueOf() + zoneOffset,
           category: event.category,
           isPrivate: !!event.private,
-          color: (colors.eventColors.indexOf(event.color) > -1) ? event.color : identity.currentUser.color
+          color: colors.getColor(colors.calendar)
         };
       }
 
@@ -93,16 +90,12 @@
         ctrl.mode = mode;
         ctrl.title = (mode === 'create') ? 'New Event' : 'Edit Event';
         ctrl.isReadonly = !!event.userId &&
-        event.userId.toString() !== identity.currentUser._id.toString();
+          event.userId.toString() !== identity.currentUser._id.toString();
         if (ctrl.isReadonly) {
           users.get(event.userId).then(function(user) {
             ctrl.eventOwnerName = !!user ? user.firstName + ' ' + user.lastName : 'another user';
           });
         }
-        ctrl.colors = [identity.currentUser.color];
-        angular.forEach(colors.eventColors, function(c) {
-          ctrl.colors.push(c);
-        });
       }
 
       function initializeDataWatchers() {
@@ -145,7 +138,8 @@
             .millisecond(0)
             .add(1, 'd')
             .subtract(zoneOffset, 'ms');
-        } else {
+        }
+        else {
           eventResource.start = moment(m.start - zoneOffset);
           eventResource.end = moment(m.end - zoneOffset);
         }
@@ -153,6 +147,7 @@
         eventResource.private = m.isPrivate;
         eventResource.user = m.user;
         eventResource.color = m.color;
+        eventResource.eventType = 'miscellaneous';
 
         function lookupCategory(category) {
           if (category) {
@@ -192,21 +187,6 @@
 
     function displayError(response) {
       editorScope.ctrl.errorMessage = response.data.reason;
-    }
-
-
-    function setBackgroundColor(color) {
-      return {
-        "background-color": color
-      };
-    }
-
-    function colorPanelClass(color) {
-      return color === editorScope.ctrl.model.color ? "form-control-selected" : "";
-    }
-
-    function selectColor(color) {
-      editorScope.ctrl.model.color = color;
     }
   }
 }());

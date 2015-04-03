@@ -1,6 +1,7 @@
 /* global afterEach beforeEach describe it */
 'use strict';
 
+var colors = require('../../../server/services/colors');
 var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -23,28 +24,22 @@ describe('api/users Routes', function() {
 
     function loadUsers(done) {
       db.users.remove({}, function() {
-        db.users.save({
+        db.users.insert([{
           firstName: 'Ken',
           lastName: 'Sodemann',
           salt: 'NaCl',
           hashedPassword: 'GoldenCrisp'
-        }, function() {
-          db.users.save({
-            firstName: 'Lisa',
-            lastName: 'Buerger',
-            salt: 'CaCl2',
-            hashedPassword: 'BlackGold'
-          }, function() {
-            db.users.save({
-              firstName: 'Geoff',
-              lastName: 'Jones',
-              salt: 'CH3COONa',
-              hashedPassword: 'BlackStickyTar'
-            }, function() {
-              done();
-            });
-          });
-        });
+        }, {
+          firstName: 'Lisa',
+          lastName: 'Buerger',
+          salt: 'CaCl2',
+          hashedPassword: 'BlackGold'
+        }, {
+          firstName: 'Geoff',
+          lastName: 'Jones',
+          salt: 'CH3COONa',
+          hashedPassword: 'BlackStickyTar'
+        }], done);
       });
     }
 
@@ -158,12 +153,11 @@ describe('api/users Routes', function() {
 
     function loadUsers(done) {
       db.users.remove({}, function() {
-        db.users.save({
+        db.users.insert([{
           firstName: 'Ken',
           lastName: 'Sodemann',
           username: 'kws@email.com'
-        });
-        done();
+        }], done);
       });
     }
 
@@ -309,7 +303,7 @@ describe('api/users Routes', function() {
           lastName: 'Flintstone',
           username: 'lls@email.com',
           password: 'wilmabettyswap',
-          roles:['worker']
+          roles: ['worker']
         })
         .end(function(err, res) {
           expect(res.status).to.equal(201);
@@ -323,6 +317,7 @@ describe('api/users Routes', function() {
               expect(user.roles).to.deep.equal(['worker']);
               expect(user.salt).to.not.be.undefined;
               expect(user.hashedPassword).to.not.be.undefined;
+              expect(user.colors).to.deep.equal(colors.userPallets[1]);
               expect(user._id.toString()).to.equal(res.body._id);
               done();
             });
@@ -337,26 +332,26 @@ describe('api/users Routes', function() {
 
     function loadUsers(done) {
       db.users.remove({}, function() {
-        db.users.save({
+        db.users.insert([{
           firstName: 'Ken',
           lastName: 'Sodemann',
           username: 'kws@email.com',
           salt: 'NH4Cl',
+          colors: ["#a0a0a0", "#b0b0b0", "#c0c0c0"],
           password: 'ThisIsFreaky'
-        }, function() {
-          db.users.save({
-            firstName: 'Lisa',
-            lastName: 'Buerger',
-            username: 'llb@email.com',
-            salt: 'CaCl2',
-            password: 'IAmSexyBee'
-          }, function() {
-            db.users.findOne({
-              username: 'kws@email.com'
-            }, function(err, user) {
-              testUser = user;
-              done();
-            });
+        }, {
+          firstName: 'Lisa',
+          lastName: 'Buerger',
+          username: 'llb@email.com',
+          salt: 'CaCl2',
+          colors: ["#d0d0d0", "#e0e0e0", "#f0f0f0"],
+          password: 'IAmSexyBee'
+        }], function() {
+          db.users.findOne({
+            username: 'kws@email.com'
+          }, function(err, user) {
+            testUser = user;
+            done();
           });
         });
       });
@@ -446,7 +441,7 @@ describe('api/users Routes', function() {
       testUser.firstName = 'Fred';
       testUser.lastName = 'Flintstone';
       testUser.username = 'ff@email.com';
-      testUser.color = "#ffeedc";
+      testUser.colors = ["#ffeedc"];
       testUser.roles = ['worker', 'husband', 'dad'];
       request(app)
         .put('/api/users/' + testUser._id)
@@ -460,20 +455,20 @@ describe('api/users Routes', function() {
               expect(user.firstName).to.equal('Fred');
               expect(user.lastName).to.equal('Flintstone');
               expect(user.username).to.equal('ff@email.com');
-              expect(user.color).to.equal("#ffeedc");
               expect(user.roles).to.deep.equal(['worker', 'husband', 'dad']);
               done();
             });
         });
     });
 
-    it('Does not effect the salt or password', function(done) {
+    it('Does not effect the salt, password, or colors', function(done) {
       var origSalt = testUser.salt;
       var origPassword = testUser.password;
       testUser.firstName = 'Fred';
       testUser.lastName = 'Flintstone';
       testUser.username = 'ff@email.com';
       testUser.salt = 'NaCl';
+      testUser.colors = ["#111111", "#222222", "#333333"];
       testUser.password = 'SomethingElse';
       request(app)
         .put('/api/users/' + testUser._id)
@@ -486,6 +481,7 @@ describe('api/users Routes', function() {
             function(err, user) {
               expect(user.salt).to.equal(origSalt);
               expect(user.password).to.equal(origPassword);
+              expect(user.colors).to.deep.equal(["#a0a0a0", "#b0b0b0", "#c0c0c0"]);
               done();
             });
         });

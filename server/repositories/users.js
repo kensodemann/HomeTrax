@@ -1,8 +1,10 @@
 'use strict';
 
 var authentication = require('../services/authentication');
+var colors = require('../services/colors');
 var db = require('../config/database');
 var encryption = require('../services/encryption');
+var error = require('../services/error');
 var ObjectId = require("mongojs").ObjectId;
 
 module.exports.init = init;
@@ -26,6 +28,7 @@ function get(req, res) {
   });
 }
 
+
 function getById(req, res) {
   db.users.findOne({
     _id: new ObjectId(req.params.id)
@@ -35,18 +38,21 @@ function getById(req, res) {
   }, function(err, user) {
     if (user) {
       res.send(user);
-    } else {
+    }
+    else {
       res.status(404);
       res.send();
     }
   });
 }
 
+
 function add(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
-      return sendError(err, res);
-    } else {
+      return error.send(err, res);
+    }
+    else {
       if (newPasswordIsValid(user.password, res)) {
         insert(user, res);
       }
@@ -54,15 +60,18 @@ function add(req, res) {
   });
 }
 
+
 function update(req, res) {
   validateUser(req, function(err, user) {
     if (err) {
-      return sendError(err, res);
-    } else {
+      return error.send(err, res);
+    }
+    else {
       updateUser(req.params.id, user, res);
     }
   });
 }
+
 
 function changePassword(req, res) {
   db.users.findOne({
@@ -122,6 +131,7 @@ function validateUser(req, callback) {
     });
 }
 
+
 function validateRequiredFields(user) {
   if (!user.username) {
     return new Error('Username is required');
@@ -142,14 +152,22 @@ function insert(user, res) {
   user.hashedPassword = encryption.hash(user.salt, user.password);
   user.password = undefined;
 
-  db.users.insert(user, function(err, user) {
+  db.users.count(function(err, userCount) {
     if (err) {
-      return sendError(err, res);
+      return error.send(err, res);
     }
-    res.status(201);
-    return res.send(user);
+
+    user.colors = colors.getPallet(userCount);
+    db.users.insert(user, function(err, user) {
+      if (err) {
+        return error.send(err, res);
+      }
+      res.status(201);
+      return res.send(user);
+    });
   });
 }
+
 
 function updateUser(id, userData, res) {
   db.users.update({
@@ -159,17 +177,17 @@ function updateUser(id, userData, res) {
       firstName: userData.firstName,
       lastName: userData.lastName,
       username: userData.username,
-      color: userData.color,
       roles: userData.roles
     }
   }, {}, function(err) {
     if (err) {
-      return sendError(err, res);
+      return error.send(err, res);
     }
     res.status(200);
     return res.send(userData);
   });
 }
+
 
 function updateUserPassword(id, passwordData, res) {
   var salt = encryption.createSalt();
@@ -184,16 +202,9 @@ function updateUserPassword(id, passwordData, res) {
     }
   }, {}, function(err) {
     if (err) {
-      return sendError(err, res);
+      return error.send(err, res);
     }
     res.status(200);
     res.send();
-  });
-}
-
-function sendError(err, res) {
-  res.status(400);
-  res.send({
-    reason: err.toString()
   });
 }

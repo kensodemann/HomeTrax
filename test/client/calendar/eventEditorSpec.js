@@ -102,9 +102,12 @@
       }
 
       function buildMockColors() {
-        mockColors = {
-          eventColors: ["#123456", "#098765", "#111111"]
-        };
+        mockColors = sinon.stub({
+          getColor: function() {}
+        });
+        mockColors.getColor.returns('#343434');
+        mockColors.getColor.withArgs(42).returns('#121212');
+        mockColors.calendar = 42;
       }
 
       function buildMockEventCategory() {
@@ -266,6 +269,14 @@
         expect(ctrl.model.isPrivate).to.be.true;
       });
 
+      it("uses the user's default color for calendar events", function() {
+        var ctrl = getEditorCtrl();
+        serviceUnderTest.open(testEvent, 'anything');
+        expect(mockColors.getColor.calledOnce).to.be.true;
+        expect(mockColors.getColor.calledWithExactly(mockColors.calendar)).to.be.true;
+        expect(ctrl.model.color).to.equal('#121212');
+      });
+
       it('subtracts a day from the end date if this is an all-day event', function() {
         testEvent.allDay = true;
         testEvent.start = moment("2014-12-01T00:00:00.000Z");
@@ -276,36 +287,6 @@
         expect(ctrl.model.isAllDayEvent).to.be.true;
         expect(ctrl.model.start).to.equal(moment('2014-12-01T00:00:00.000Z').valueOf() + zoneOffset);
         expect(ctrl.model.end).to.equal(moment('2014-12-02T00:00:00.000Z').valueOf() + zoneOffset);
-      });
-
-      it("builds a color list based on the user's color at the event colors", function() {
-        mockIdentity.currentUser.color = "#112233";
-        var ctrl = getEditorCtrl();
-        serviceUnderTest.open(testEvent, 'anything');
-        expect(ctrl.colors).to.deep.equal(["#112233", "#123456", "#098765", "#111111"]);
-      });
-
-      it("sets the color to the event's color if there is one and it is defined in the colors list", function() {
-        mockIdentity.currentUser.color = "#112233";
-        testEvent.color = "#098765";
-        var ctrl = getEditorCtrl();
-        serviceUnderTest.open(testEvent, 'anything');
-        expect(ctrl.model.color).to.equal("#098765");
-      });
-
-      it("sets the color to the user's color if the event's color is not defined in the colors list", function() {
-        mockIdentity.currentUser.color = "#112233";
-        testEvent.color = "#098766";
-        var ctrl = getEditorCtrl();
-        serviceUnderTest.open(testEvent, 'anything');
-        expect(ctrl.model.color).to.equal("#112233");
-      });
-
-      it("sets the color to the user's color if the event does not have a color", function() {
-        mockIdentity.currentUser.color = "#112233";
-        var ctrl = getEditorCtrl();
-        serviceUnderTest.open(testEvent, 'anything');
-        expect(ctrl.model.color).to.equal("#112233");
       });
 
       it('allows editing if the event has no userId', function() {
@@ -379,52 +360,6 @@
           var ctrl = getEditorCtrl();
           expect(ctrl.categories.displayKey).to.equal('name');
         });
-      });
-    });
-
-    describe('Color Style', function() {
-      var ctrl;
-      beforeEach(function() {
-        ctrl = getEditorCtrl();
-      });
-
-      it('sets the background color to the specified color', function() {
-        var style = ctrl.backgroundColor("#ffef12");
-        expect(style).to.deep.equal({
-          'background-color': '#ffef12'
-        });
-      });
-    });
-
-    describe('color panel class', function() {
-      var ctrl;
-      beforeEach(function() {
-        ctrl = getEditorCtrl();
-        ctrl.model = {};
-        ctrl.model.color = "#FEFEFE";
-      });
-
-      it("is an empty string if the passed color does not match the model's color", function() {
-        var cls = ctrl.colorPanelClass("#EFEFEF");
-        expect(cls).to.equal('');
-      });
-
-      it("is form-control-selected if the passed color matches the model's color", function() {
-        var cls = ctrl.colorPanelClass("#FEFEFE");
-        expect(cls).to.equal('form-control-selected');
-      });
-    });
-
-    describe('select color', function() {
-      var ctrl;
-      beforeEach(function() {
-        ctrl = getEditorCtrl();
-        ctrl.model = {};
-      });
-
-      it('sets the color in the model', function() {
-        ctrl.selectColor('#ABACAB');
-        expect(ctrl.model.color).to.equal('#ABACAB');
       });
     });
 
@@ -518,8 +453,9 @@
         expect(mockCalendarEvent.end.valueOf()).to.equal(moment('2014-07-02T13:00:00').valueOf());
         expect(mockCalendarEvent.category).to.equal('Health & Fitness');
         expect(mockCalendarEvent.private).to.be.true;
-        expect(mockCalendarEvent.color).to.equal('#abcdef');
         expect(mockCalendarEvent.user).to.equal('KWS');
+        expect(mockCalendarEvent.eventType).to.equal('miscellaneous');
+        expect(mockCalendarEvent.color).to.equal('#abcdef');
       });
 
       it('sets start time to midnight for all day events', function() {

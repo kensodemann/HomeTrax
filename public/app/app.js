@@ -2,33 +2,19 @@
 (function() {
   'use strict';
 
-  angular.module('app', ['app.core', 'app.account', 'app.calendar', 'app.finance', 'ngAnimate', 'ngRoute', 'ngResource']);
+  angular.module('app', ['app.core', 'app.account', 'app.calendar', 'app.household', 'ngAnimate', 'ngRoute', 'ngResource']);
 
   angular.module('app')
     .config(configure)
     .run(runApplication);
 
-  function configure($routeProvider, $locationProvider,
-    mainRoutes, accountRoutes, calendarRoutes, financeRoutes) {
-    var routeRoleChecks = {
-      admin: {
-        auth: /* @ngInject */ function(authService) {
-          return authService.currentUserAuthorizedForRoute('admin');
-        }
-      },
-      user: {
-        auth: /* @ngInject */ function(authService) {
-          return authService.currentUserAuthorizedForRoute('');
-        }
-      }
-    };
-
+  function configure($routeProvider, $locationProvider, mainRoutes, accountRoutes, calendarRoutes, householdRoutes) {
     $locationProvider.html5Mode(true);
 
     setupRoutes(mainRoutes);
     setupRoutes(accountRoutes);
     setupRoutes(calendarRoutes);
-    setupRoutes(financeRoutes);
+    setupRoutes(householdRoutes);
 
     function setupRoutes(routes) {
       angular.forEach(routes, function(route) {

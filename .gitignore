@@ -4,10 +4,15 @@ node_modules/*
 *.html
 public/dist/
 public/vendor/
+public/css/*
+!public/css/*.scss
 
 server/includes/scripts.jade
 server/includes/layout.jade
 
 .c9/
 data/
+!server/data/
 *.log
+
+.sass-cache/

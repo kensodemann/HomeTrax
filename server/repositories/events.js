@@ -1,6 +1,7 @@
 'use strict';
 
 var db = require('../config/database');
+var error = require('../services/error');
 var Q = require('q');
 var ObjectId = require("mongojs").ObjectId;
 
@@ -103,27 +104,20 @@ function determineIfActionIsValid(req) {
 
 function isValid(evt, res) {
   if (!evt.title) {
-    sendError(new Error('Events must have a title.'), res);
+    error.send(new Error('Events must have a title.'), res);
     return false;
   }
   if (!evt.category) {
-    sendError(new Error('Events must have a category.'), res);
+    error.send(new Error('Events must have a category.'), res);
     return false;
   }
   if (!evt.start) {
-    sendError(new Error('Events must have a start date.'), res);
+    error.send(new Error('Events must have a start date.'), res);
     return false;
   }
   if (evt.end && evt.end < evt.start) {
-    sendError(new Error('Start date must be on or before the end date.'), res);
+    error.send(new Error('Start date must be on or before the end date.'), res);
     return false;
   }
   return true;
-}
-
-function sendError(err, res) {
-  res.status(400);
-  res.send({
-    reason: err.toString()
-  });
 }

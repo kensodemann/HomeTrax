@@ -1,0 +1,21 @@
+.jumbotron
+	button.btn.btn-xs.pull-right(ng-click="ctrl.editClicked()")
+		span.glyphicon.glyphicon-pencil
+	.clearfix
+	div(ng-hide="ctrl.editMode")
+		span.clearfix(ng-repeat="line in kwsLines | filter: {modes: 'V'}")
+			h2.text-center(ng-if="$index === 0")
+				kws-templated-view(kws-model="kwsModel", kws-template="{{line.template}}")
+			.text-center(ng-if="$index !== 0")
+				kws-templated-view(kws-model="kwsModel", kws-template="{{line.template}}")
+	.container(ng-show="ctrl.editMode")
+		form.form-horizontal
+			fieldset
+				div.form-group(ng-repeat="line in kwsLines| filter: {modes: 'E'}")
+					.row
+						label.control-label.col-md-2(for="{{line.columnName}}") {{line.label}}
+						.col-md-10
+							kws-templated-view(kws-model="kwsModel", kws-template="{{line.editTemplate}}")
+			.modal-footer
+				button.btn.btn-default(ng-click="ctrl.cancelClicked()") Cancel
+				button.btn.btn-primary(ng-click="ctrl.doneClicked()") Done
