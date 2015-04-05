@@ -6,7 +6,9 @@ var ObjectId = require('mongojs').ObjectId;
 var Q = require('q');
 
 module.exports.get = function(req, res) {
-  db.households.find(function(err, h) {
+  db.entities.find({
+    entityType: 'household'
+  }, function(err, h) {
     if (err) {
       return error.send(err, res);
     }
@@ -16,6 +18,7 @@ module.exports.get = function(req, res) {
 
 module.exports.save = function(req, res) {
   assignIdFromRequest();
+  setEntityType();
   if (dataIsValid(req, res)) {
     actionIsValid(req).done(yes, no);
   }
@@ -26,8 +29,12 @@ module.exports.save = function(req, res) {
     }
   }
 
+  function setEntityType() {
+    req.body.entityType = 'household';
+  }
+
   function yes() {
-    db.households.save(req.body, function(err, h) {
+    db.entities.save(req.body, function(err, h) {
       if (err) {
         error.send(err, res);
       }
@@ -75,7 +82,7 @@ function actionIsValid(req) {
     dfd.resolve(true);
   }
   else {
-    db.households.findOne({
+    db.entities.findOne({
       _id: new ObjectId(req.params.id)
     }, function(err, h) {
       if (!h) {
@@ -86,4 +93,3 @@ function actionIsValid(req) {
   }
   return dfd.promise;
 }
-

@@ -2,7 +2,7 @@
 
 var mongojs = require('mongojs');
 
-var collections = ['events', 'eventCategories', 'households', 'users'];
+var collections = ['entities', 'events', 'eventCategories', 'households', 'users'];
 
 function openShiftConnectString() {
   return process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
