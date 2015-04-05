@@ -86,4 +86,3 @@ function actionIsValid(req) {
   }
   return dfd.promise;
 }
-

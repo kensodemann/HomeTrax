@@ -31,16 +31,15 @@ function createDefaultAdministrator() {
 }
 
 function createDefaultHousehold() {
-  db.households.find({}, function(err, h) {
+  db.entities.find({entityType: 'household'}, function(err, h) {
     if (h.length === 0) {
-      var salt = encryption.createSalt();
-      var hash = encryption.hash(salt, 'the default admin password');
-      db.households.save({
+      db.entities.save({
         name: 'My House',
         addressLine1: 'In the middle of my street',
         city: 'change me',
         state: 'WA',
-        postal: '12345'
+        postal: '12345',
+        entityType: 'household'
       });
     }
   });
