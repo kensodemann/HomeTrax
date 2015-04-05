@@ -92,7 +92,9 @@ describe('api/household Routes', function() {
         .end(function(err, res) {
           expect(!!err).to.be.false;
           expect(res.status).to.be.equal(201);
-          db.households.find(function(err, h) {
+          db.entities.find({
+            entityType: 'household'
+          }, function(err, h) {
             expect(h.length).to.equal(4);
             done();
           });
@@ -113,7 +115,9 @@ describe('api/household Routes', function() {
         .end(function(err, res) {
           expect(!!err).to.be.false;
           expect(res.status).to.be.equal(200);
-          db.households.find(function(err, h) {
+          db.entities.find({
+            entityType: 'household'
+          }, function(err, h) {
             expect(h.length).to.equal(3);
             done();
           });
@@ -132,7 +136,9 @@ describe('api/household Routes', function() {
           phone: '(414) 995-9875'
         })
         .end(function() {
-          db.households.findOne({_id: new ObjectId(myFavoriteHousehold._id)}, function (err, h) {
+          db.entities.findOne({
+            _id: new ObjectId(myFavoriteHousehold._id)
+          }, function(err, h) {
             expect(h.name).to.equal('My Other Condo');
             expect(h.addressLine1).to.equal('42395 Secret St.');
             done();
@@ -140,7 +146,7 @@ describe('api/household Routes', function() {
         });
     });
 
-    it('returns 404 if the household does not exist', function(done){
+    it('returns 404 if the household does not exist', function(done) {
       request(app)
         .post('/api/households/' + '54133902bc88a8241ac17f9d')
         .send({
@@ -151,13 +157,13 @@ describe('api/household Routes', function() {
           postal: '55395',
           phone: '(414) 995-9875'
         })
-        .end(function(err, res){
+        .end(function(err, res) {
           expect(res.status).to.equal(404);
           done();
         });
     });
 
-    it('requires a name', function(done){
+    it('requires a name', function(done) {
       request(app)
         .post('/api/households')
         .send({
@@ -167,14 +173,14 @@ describe('api/household Routes', function() {
           postal: '55395',
           phone: '(414) 995-9875'
         })
-        .end(function(err, res){
+        .end(function(err, res) {
           expect(res.status).to.equal(400);
           expect(res.body.reason).to.equal('Error: Name is required');
           done();
         });
     });
 
-    it('requires an address (line 1)', function(done){
+    it('requires an address (line 1)', function(done) {
       request(app)
         .post('/api/households')
         .send({
@@ -184,14 +190,14 @@ describe('api/household Routes', function() {
           postal: '55395',
           phone: '(414) 995-9875'
         })
-        .end(function(err, res){
+        .end(function(err, res) {
           expect(res.status).to.equal(400);
           expect(res.body.reason).to.equal('Error: Address line 1 is required');
           done();
         });
     });
 
-    it('requires city', function(done){
+    it('requires city', function(done) {
       request(app)
         .post('/api/households')
         .send({
@@ -201,14 +207,14 @@ describe('api/household Routes', function() {
           postal: '55395',
           phone: '(414) 995-9875'
         })
-        .end(function(err, res){
+        .end(function(err, res) {
           expect(res.status).to.equal(400);
           expect(res.body.reason).to.equal('Error: City is required');
           done();
         });
     });
 
-    it('requires state', function(done){
+    it('requires state', function(done) {
       request(app)
         .post('/api/households')
         .send({
@@ -218,14 +224,14 @@ describe('api/household Routes', function() {
           postal: '55395',
           phone: '(414) 995-9875'
         })
-        .end(function(err, res){
+        .end(function(err, res) {
           expect(res.status).to.equal(400);
           expect(res.body.reason).to.equal('Error: State is required');
           done();
         });
     });
 
-    it('requires postal code', function(done){
+    it('requires postal code', function(done) {
       request(app)
         .post('/api/households')
         .send({
@@ -235,7 +241,7 @@ describe('api/household Routes', function() {
           city: 'Hartland',
           phone: '(414) 995-9875'
         })
-        .end(function(err, res){
+        .end(function(err, res) {
           expect(res.status).to.equal(400);
           expect(res.body.reason).to.equal('Error: Postal code is required');
           done();
@@ -245,21 +251,28 @@ describe('api/household Routes', function() {
 
 
   function loadData(done) {
-    db.households.remove(function() {
-      db.households.insert([{
+    db.entities.remove(function() {
+      db.entities.insert([{
         name: 'Old House',
         addressLine1: '805 South Harrison St.',
         city: 'Lancaster',
         state: 'WI',
         postal: '53813',
-        phone: '(608) 723-8849'
+        phone: '(608) 723-8849',
+        entityType: 'household'
+      }, {
+        name: 'Scion Xb',
+        year: 2010,
+        vin: '1885940059-293',
+        entityType: 'vehicle'
       }, {
         name: 'Newer House',
         addressLine1: '1432 Freaky Dr.',
         city: 'Watertown',
         state: 'WI',
         postal: '53094',
-        phone: '(920) 206-1234'
+        phone: '(920) 206-1234',
+        entityType: 'household'
       }, {
         name: 'Condo Life',
         addressLine1: '1250 Wedgewood Dr.',
@@ -267,9 +280,10 @@ describe('api/household Routes', function() {
         city: 'Waukesha',
         state: 'WI',
         postal: '53186',
-        phone: '(262) 547-2026'
+        phone: '(262) 547-2026',
+        entityType: 'household'
       }], function() {
-        db.households.findOne({
+        db.entities.findOne({
           name: 'Condo Life'
         }, function(err, e) {
           myFavoriteHousehold = e;
@@ -280,7 +294,7 @@ describe('api/household Routes', function() {
   }
 
   function removeData(done) {
-    db.households.remove(function() {
+    db.entities.remove(function() {
       done();
     });
   }
