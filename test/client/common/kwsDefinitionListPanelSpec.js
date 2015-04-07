@@ -131,7 +131,7 @@
         expect(scope.lists[0][1].editTemplate).to.equal('{{kwsModel.lastName}}, {{kwsModel.firstName}}');
       });
 
-      it('is not set if the line is not used in Editf mode', function() {
+      it('is not set if the line is not used in Edit mode', function() {
         expect(scope.lists[0][2].editTemplate).to.be.undefined;
       });
     });
