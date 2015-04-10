@@ -20,6 +20,7 @@ function redirectToHttps(req, res, next) {
 module.exports = function(app) {
   app.get('/api/accounts', redirectToHttps, authentication.requiresApiLogin, accounts.get);
   app.get('/api/accounts/:id', redirectToHttps, authentication.requiresApiLogin, accounts.getOne);
+  app.post('/api/accounts/:id?', redirectToHttps, authentication.requiresApiLogin, accounts.save);
 
   app.get('/api/events', redirectToHttps, authentication.requiresApiLogin, events.get);
   app.post('/api/events/:id?', redirectToHttps, authentication.requiresApiLogin, events.save);

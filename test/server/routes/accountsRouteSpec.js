@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var request = require('supertest');
 var proxyquire = require('proxyquire');
 var db = require('../../../server/config/database');
+var ObjectId = require('mongojs').ObjectId;
 
 describe('api/accounts Routes', function() {
   var app;
@@ -110,6 +111,114 @@ describe('api/accounts Routes', function() {
     it('returns a 404 status if the account does not exist', function(done){
       request(app)
         .get('/api/accounts/' + myCar._id.toString())
+        .end(function(err, res) {
+          expect(res.status).to.equal(404);
+          done();
+        });
+    });
+  });
+
+  describe('POST', function() {
+    it('requires an API login', function(done) {
+      request(app)
+        .post('/api/accounts')
+        .send({
+          name: 'Another Car Loan',
+          bank: 'Car Chase Bank',
+          accountNumber: '132499503-43',
+          accountType: 'loan',
+          balanceType: 'liability',
+          amount: 5049.83,
+          entityRid: myCar._id
+        })
+        .end(function() {
+          expect(requiresApiLoginCalled).to.be.true;
+          done();
+        });
+    });
+
+    it('saves new accounts', function(done) {
+      request(app)
+        .post('/api/accounts')
+        .send({
+          name: 'Another Car Loan',
+          bank: 'Car Chase Bank',
+          accountNumber: '132499503-43',
+          accountType: 'loan',
+          balanceType: 'liability',
+          amount: 5049.83,
+          entityRid: myCar._id
+        })
+        .end(function(err, res) {
+          expect(!!err).to.be.false;
+          expect(res.status).to.be.equal(201);
+          db.accounts.find(function(err, h) {
+            expect(h.length).to.equal(4);
+            done();
+          });
+        });
+    });
+
+    it('does not add new accounts when updating existing accounts', function(done) {
+      request(app)
+        .post('/api/accounts/' + myCarLoan._id)
+        .send({
+          name: 'Another Car Loan',
+          bank: 'Car Chase Bank',
+          accountNumber: '132499503-43',
+          accountType: 'loan',
+          balanceType: 'liability',
+          amount: 5049.83,
+          entityRid: myCar._id
+        })
+        .end(function(err, res) {
+          expect(!!err).to.be.false;
+          expect(res.status).to.be.equal(200);
+          db.accounts.find(function(err, h) {
+            expect(h.length).to.equal(3);
+            done();
+          });
+        });
+    });
+
+    it('updates the specified household', function(done) {
+      request(app)
+        .post('/api/accounts/' + myCarLoan._id)
+        .send({
+          name: 'Another Car Loan',
+          bank: 'Car Chase Bank',
+          accountNumber: '132499503-43',
+          accountType: 'loan',
+          balanceType: 'liability',
+          amount: 5049.83,
+          entityRid: myCar._id
+        })
+        .end(function() {
+          db.accounts.findOne({
+            _id: new ObjectId(myCarLoan._id)
+          }, function(err, a) {
+            expect(a.name).to.equal('Another Car Loan');
+            expect(a.bank).to.equal('Car Chase Bank');
+            expect(a.accountNumber).to.equal('132499503-43');
+            expect(a.entityRid).to.deep.equal(myCar._id);
+            expect(a.amount).to.equal(5049.83);
+            done();
+          });
+        });
+    });
+
+    it('returns 404 if the account does not exist', function(done) {
+      request(app)
+        .post('/api/accounts/' + '54133902bc88a8241ac17f9d')
+        .send({
+          name: 'Another Car Loan',
+          bank: 'Car Chase Bank',
+          accountNumber: '132499503-43',
+          accountType: 'loan',
+          balanceType: 'liability',
+          amount: 5049.83,
+          entityRid: myCar._id
+        })
         .end(function(err, res) {
           expect(res.status).to.equal(404);
           done();
