@@ -108,7 +108,7 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('returns a 404 status if the account does not exist', function(done){
+    it('returns a 404 status if the account does not exist', function(done) {
       request(app)
         .get('/api/accounts/' + myCar._id.toString())
         .end(function(err, res) {
@@ -209,7 +209,7 @@ describe('api/accounts Routes', function() {
 
     it('returns 404 if the account does not exist', function(done) {
       request(app)
-        .post('/api/accounts/' + '54133902bc88a8241ac17f9d')
+        .post('/api/accounts/54133902bc88a8241ac17f9d')
         .send({
           name: 'Another Car Loan',
           bank: 'Car Chase Bank',
@@ -222,6 +222,62 @@ describe('api/accounts Routes', function() {
         .end(function(err, res) {
           expect(res.status).to.equal(404);
           done();
+        });
+    });
+  });
+
+  describe('DELETE', function() {
+    it('requires an API login', function(done) {
+      request(app)
+        .delete('/api/accounts/' + mySecondMortgage._id.toString())
+        .send()
+        .end(function() {
+          expect(requiresApiLoginCalled).to.be.true;
+          done();
+        });
+    });
+
+    it('removes the specified account', function(done) {
+      request(app)
+        .delete('/api/accounts/' + mySecondMortgage._id.toString())
+        .send()
+        .end(function() {
+          db.accounts.find(function(err, a) {
+            expect(a.length).to.equal(2);
+            a.forEach(function(item) {
+              expect(item._id).to.not.deep.equal(mySecondMortgage._id);
+            });
+            done();
+          });
+        });
+    });
+
+    it('removes events associated with specified account', function(done) {
+      request(app)
+        .delete('/api/accounts/' + mySecondMortgage._id.toString())
+        .send()
+        .end(function() {
+          db.events.find(function(err, a) {
+            expect(a.length).to.equal(3);
+            a.forEach(function(item) {
+              expect(item.accountRid).to.not.deep.equal(mySecondMortgage._id);
+            });
+            done();
+          });
+        });
+
+    });
+
+    it('returns a status of 404 if the specified account does not exist', function(done) {
+      request(app)
+        .delete('/api/accounts/55293bd4b4b789415aa33dcf')
+        .send()
+        .end(function(err, res) {
+          expect(res.status).to.equal(404);
+          db.accounts.find(function(err, a) {
+            expect(a.length).to.equal(3);
+            done();
+          });
         });
     });
   });
@@ -313,13 +369,13 @@ describe('api/accounts Routes', function() {
       eventType: 'transaction',
       accountRid: myFirstMortgage._id
     }, {
-      name: '2st Mortgage, Trans #1',
+      name: '2nd Mortgage, Trans #1',
       principalAmount: -199.25,
       interestAmount: -101.25,
       eventType: 'transaction',
       accountRid: mySecondMortgage._id
     }, {
-      name: '2st Mortgage, Trans #2',
+      name: '2nd Mortgage, Trans #2',
       principalAmount: -198.65,
       interestAmount: -101.85,
       eventType: 'transaction',

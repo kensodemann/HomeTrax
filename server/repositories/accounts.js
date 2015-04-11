@@ -69,7 +69,30 @@ module.exports.save = function(req, res) {
   }
 };
 
-function dataIsValid(){
+module.exports.remove = function(req, res) {
+  actionIsValid(req).then(removeAccount, sendError);
+
+  function removeAccount() {
+    db.accounts.remove({_id: new ObjectId(req.params.id)}, function(err) {
+      if (!!err) {
+        return error.send(err, res);
+      }
+      db.events.remove({accountRid: new ObjectId(req.params.id)}, function(err) {
+        if (!!err) {
+          return error.send(err, res);
+        }
+        res.send();
+      });
+    });
+  }
+
+  function sendError(stat) {
+    res.status(stat);
+    res.end();
+  }
+};
+
+function dataIsValid() {
   return true;
 }
 
