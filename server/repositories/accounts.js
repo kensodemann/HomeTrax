@@ -6,20 +6,31 @@ var error = require('../services/error');
 var ObjectId = require('mongojs').ObjectId;
 var Q = require('q');
 
-module.exports.get = function(req, res) {
-  db.accounts.find({}, function(err, a) {
+function Accounts() {
+  this.collection = db.accounts;
+  this.criteria = {};
+}
+
+Accounts.prototype.get = function(req, res) {
+  var my = this;
+
+  my.collection.find(my.criteria, function(err, a) {
     if (err) {
       return error.send(err, res);
     }
-    assignBalances(a, function() {
+    my.postGetAction(a, function(err, a) {
+      if (err) {
+        return error.send(err, res);
+      }
       res.send(a);
     });
   });
 };
 
-module.exports.getOne = function(req, res) {
-  var id = new ObjectId(req.params.id);
-  db.accounts.findOne({_id: id}, function(err, a) {
+Accounts.prototype.getOne = function(req, res) {
+  var criteria = _.extend({}, this.criteria);
+  criteria._id = new ObjectId(req.params.id);
+  this.collection.findOne(criteria, function(err, a) {
     if (!!err) {
       return error.send(err, res);
     }
@@ -30,12 +41,37 @@ module.exports.getOne = function(req, res) {
   });
 };
 
-module.exports.save = function(req, res) {
+Accounts.prototype.save = function(req, res) {
+  var my = this;
+
   assignIdFromRequest();
-  convertReferenceIds();
-  if (dataIsValid(req, res)) {
-    actionIsValid(req).done(performSave, sendError);
-  }
+  my.preSaveAction(req, function(err) {
+    if (!!err) {
+      return error.send(err, res);
+    }
+
+    my.validate(req, function(err, msg) {
+      if (!!err) {
+        return error.send(err, res);
+      }
+      if (!!msg) {
+        return error.send(msg, res);
+      }
+
+      my.preCheckStatus(req, function(err, status) {
+        if (!!err) {
+          return error.send(err, res);
+        }
+        if (status === 200) {
+          performSave();
+        } else {
+          res.status(status);
+          res.end();
+        }
+      });
+    });
+  });
+
 
   function assignIdFromRequest() {
     if (req.params && req.params.id) {
@@ -45,14 +81,8 @@ module.exports.save = function(req, res) {
     }
   }
 
-  function convertReferenceIds() {
-    if (!!req.body.entityRid) {
-      req.body.entityRid = new ObjectId(req.body.entityRid);
-    }
-  }
-
   function performSave() {
-    db.accounts.save(req.body, function(err, a) {
+    my.collection.save(req.body, function(err, a) {
       if (!!err) {
         return error.send(err, res);
       }
@@ -62,22 +92,29 @@ module.exports.save = function(req, res) {
       res.send(a);
     });
   }
-
-  function sendError(stat) {
-    res.status(stat);
-    res.end();
-  }
 };
 
-module.exports.remove = function(req, res) {
-  actionIsValid(req).then(removeAccount, sendError);
+Accounts.prototype.remove = function(req, res) {
+  var my = this;
 
-  function removeAccount() {
-    db.accounts.remove({_id: new ObjectId(req.params.id)}, function(err) {
+  my.preCheckStatus(req, function(err, status) {
+    if (!!err) {
+      return error.send(err, res);
+    }
+    if (status === 200) {
+      removeItem();
+    } else {
+      res.status(status);
+      res.end();
+    }
+  });
+
+  function removeItem() {
+    my.preRemoveAction(req, function(err) {
       if (!!err) {
         return error.send(err, res);
       }
-      db.events.remove({accountRid: new ObjectId(req.params.id)}, function(err) {
+      my.collection.remove({_id: new ObjectId(req.params.id)}, function(err) {
         if (!!err) {
           return error.send(err, res);
         }
@@ -85,36 +122,39 @@ module.exports.remove = function(req, res) {
       });
     });
   }
+};
 
-  function sendError(stat) {
-    res.status(stat);
-    res.end();
+Accounts.prototype.preSaveAction = function(req, done) {
+  if (!!req.body.entityRid) {
+    req.body.entityRid = new ObjectId(req.body.entityRid);
+  }
+  done(null);
+};
+
+Accounts.prototype.preRemoveAction = function(req, done) {
+  db.events.remove({accountRid: new ObjectId(req.params.id)}, done);
+};
+
+Accounts.prototype.validate = function(req, done) {
+  done(null, null);
+};
+
+Accounts.prototype.preCheckStatus = function(req, done) {
+  var my = this;
+
+  if (!req.params || !req.params.id) {
+    done(null, 200);
+  }
+  else {
+    var criteria = _.extend({}, my.criteria);
+    criteria._id = new ObjectId(req.params.id);
+    my.collection.findOne(criteria, function(err, a) {
+      done(err, !!a ? 200 : 404);
+    });
   }
 };
 
-function dataIsValid() {
-  return true;
-}
-
-function actionIsValid(req) {
-  var dfd = Q.defer();
-  if (!req.params || !req.params.id) {
-    dfd.resolve(true);
-  }
-  else {
-    db.accounts.findOne({
-      _id: new ObjectId(req.params.id)
-    }, function(err, a) {
-      if (!a) {
-        return dfd.reject(404);
-      }
-      dfd.resolve(true);
-    });
-  }
-  return dfd.promise;
-}
-
-function assignBalances(accts, done) {
+Accounts.prototype.postGetAction = function(accts, done) {
   db.events.aggregate([{
     $group: {
       _id: "$accountRid",
@@ -133,6 +173,8 @@ function assignBalances(accts, done) {
         acct.interestPaid = ttls.interestPaid * -1;
       }
     });
-    done();
+    done(err, accts);
   });
-}
+};
+
+module.exports = new Accounts();

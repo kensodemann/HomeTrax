@@ -18,10 +18,14 @@ function redirectToHttps(req, res, next) {
 }
 
 module.exports = function(app) {
-  app.get('/api/accounts', redirectToHttps, authentication.requiresApiLogin, accounts.get);
-  app.get('/api/accounts/:id', redirectToHttps, authentication.requiresApiLogin, accounts.getOne);
-  app.post('/api/accounts/:id?', redirectToHttps, authentication.requiresApiLogin, accounts.save);
-  app.delete('/api/accounts/:id', redirectToHttps, authentication.requiresApiLogin, accounts.remove);
+  app.get('/api/accounts', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.get(req, res);});
+  app.get('/api/accounts/:id', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.getOne(req, res);});
+  app.post('/api/accounts/:id?', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.save(req, res);});
+  app.delete('/api/accounts/:id', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.remove(req, res);});
 
   app.get('/api/events', redirectToHttps, authentication.requiresApiLogin, events.get);
   app.post('/api/events/:id?', redirectToHttps, authentication.requiresApiLogin, events.save);
