@@ -1,95 +1,42 @@
 'use strict';
 
 var db = require('../config/database');
-var error = require('../services/error');
-var ObjectId = require('mongojs').ObjectId;
-var Q = require('q');
+var RepositoryBase = require('./RepositoryBase');
+var util = require('util');
 
-module.exports.get = function(req, res) {
-  db.entities.find({
-    entityType: 'household'
-  }, function(err, h) {
-    if (err) {
-      return error.send(err, res);
-    }
-    res.send(h);
-  });
-};
-
-module.exports.save = function(req, res) {
-  assignIdFromRequest();
-  setEntityType();
-  if (dataIsValid(req, res)) {
-    actionIsValid(req).done(yes, no);
-  }
-
-  function assignIdFromRequest() {
-    if (req.params && req.params.id) {
-      req.body._id = new ObjectId(req.params.id);
-    }
-  }
-
-  function setEntityType() {
-    req.body.entityType = 'household';
-  }
-
-  function yes() {
-    db.entities.save(req.body, function(err, h) {
-      if (err) {
-        error.send(err, res);
-      }
-      if (!req.params || !req.params.id) {
-        res.status(201);
-      }
-      res.send(h);
-    });
-  }
-
-  function no(stat) {
-    res.status(stat);
-    res.end();
-  }
-};
-
-function dataIsValid(req, res) {
-  var data = req.body;
-  if (!data.name) {
-    error.send(new Error('Name is required'), res);
-    return false;
-  }
-  if (!data.addressLine1) {
-    error.send(new Error('Address line 1 is required'), res);
-    return false;
-  }
-  if (!data.city) {
-    error.send(new Error('City is required'), res);
-    return false;
-  }
-  if (!data.state) {
-    error.send(new Error('State is required'), res);
-    return false;
-  }
-  if (!data.postal) {
-    error.send(new Error('Postal code is required'), res);
-    return false;
-  }
-  return true;
+function Households() {
+  RepositoryBase.call(this);
+  this.collection = db.entities;
+  this.criteria = {entityType: 'household'};
 }
 
-function actionIsValid(req) {
-  var dfd = Q.defer();
-  if (!req.params || !req.params.id) {
-    dfd.resolve(true);
+util.inherits(Households, RepositoryBase);
+
+Households.prototype.preSaveAction = function(req, done) {
+  req.body.entityType = 'household';
+  done(null);
+};
+
+Households.prototype.validate = function(req, done) {
+  if (!req.body) {
+    return done(null, new Error('Request is empty.'));
   }
-  else {
-    db.entities.findOne({
-      _id: new ObjectId(req.params.id)
-    }, function(err, h) {
-      if (!h) {
-        return dfd.reject(404);
-      }
-      dfd.resolve(true);
-    });
+  if (!req.body.name) {
+    return done(null, new Error('Name is required'));
   }
-  return dfd.promise;
-}
+  if (!req.body.addressLine1) {
+    return done(null, new Error('Address line 1 is required'));
+  }
+  if (!req.body.city) {
+    return done(null, new Error('City is required'));
+  }
+  if (!req.body.state) {
+    return done(null, new Error('State is required'));
+  }
+  if (!req.body.postal) {
+    return done(null, new Error('Postal code is required'));
+  }
+  done(null, null);
+};
+
+module.exports = new Households();

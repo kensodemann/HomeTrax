@@ -1,11 +1,19 @@
 'use strict';
 
+var _ = require('underscore');
 var db = require('../config/database');
-var error = require('../services/error');
-var Q = require('q');
 var ObjectId = require("mongojs").ObjectId;
+var RepositoryBase = require('./RepositoryBase');
+var util = require('util');
 
-module.exports.get = function(req, res) {
+function Events() {
+  RepositoryBase.call(this);
+  this.collection = db.events;
+}
+
+util.inherits(Events, RepositoryBase);
+
+Events.prototype.get = function(req, res) {
   db.events.find({
     $or: [{
       userId: new ObjectId(req.user._id)
@@ -19,105 +27,56 @@ module.exports.get = function(req, res) {
   });
 };
 
-module.exports.save = function(req, res) {
-  var e = req.body;
-  assignIdFromRequest(req, e);
-  assignUserId(e, req);
-  removeFields();
-  if (isValid(e, res)) {
-    determineIfActionIsValid(req).done(yes, no);
-  }
+Events.prototype.preSaveAction = function(req, done) {
+  req.body.userId = new ObjectId(req.user._id);
 
-  function removeFields() {
-    for (var p in e) {
-      if (e.hasOwnProperty(p)) {
-        if (p.match(/^_.*/) && p !== '_id') {
-          delete e[p];
-        }
+  for (var p in req.body) {
+    if (req.body.hasOwnProperty(p)) {
+      if (p.match(/^_.*/) && p !== '_id') {
+        delete req.body[p];
       }
     }
   }
 
-  function yes() {
-    db.events.save(e, function(err, ev) {
-      if (!req.params || !req.params.id) {
-        res.status(201);
-      }
-      res.send(ev);
-    });
-  }
-
-  function no(stat) {
-    res.status(stat);
-    res.end();
-  }
+  done(null);
 };
 
-module.exports.remove = function(req, res) {
-  determineIfActionIsValid(req).done(yes, no);
+Events.prototype.preCheckStatus = function(req, done) {
+  var my = this;
 
-  function yes() {
-    db.events.remove({
-      _id: new ObjectId(req.params.id)
-    }, true, function(err, e) {
-      res.send(e);
-    });
-  }
-
-  function no(stat) {
-    res.status(stat);
-    res.end();
-  }
-};
-
-function assignIdFromRequest(req, e) {
-  if (req.params && req.params.id) {
-    e._id = new ObjectId(req.params.id);
-  }
-}
-
-function assignUserId(e, req) {
-  e.userId = new ObjectId(req.user._id);
-}
-
-function determineIfActionIsValid(req) {
-  var dfd = Q.defer();
   if (!req.params || !req.params.id) {
-    dfd.resolve(true);
+    done(null, 200);
   }
   else {
-    db.events.findOne({
-      _id: new ObjectId(req.params.id)
-    }, function(err, evt) {
-      if (!evt) {
-        return dfd.reject(404);
+    var criteria = _.extend({}, my.criteria);
+    criteria._id = new ObjectId(req.params.id);
+    my.collection.findOne(criteria, function(err, item) {
+      var status = 404;
+      if (!!item) {
+        status = item.userId.toString() !== req.user._id.toString() ? 403 : 200;
       }
-      if (evt.userId.toString() !== req.user._id.toString()) {
-        return dfd.reject(403);
-      }
-      dfd.resolve(true);
+      done(err, status);
     });
   }
+};
 
-  return dfd.promise;
-}
+Events.prototype.validate = function(req, done) {
+  if (!req.body) {
+    return done(null, new Error('Request is empty.'));
+  }
+  if (!req.body.title) {
+    return done(null, new Error('Events must have a title.'));
+  }
+  if (!req.body.category) {
+    return done(null, new Error('Events must have a category.'));
+  }
+  if (!req.body.start) {
+    return done(null, new Error('Events must have a start date.'));
+  }
+  if (req.body.end && req.body.end < req.body.start) {
+    return done(null, new Error('Start date must be on or before the end date.'));
+  }
+  done(null, null);
+};
 
-function isValid(evt, res) {
-  if (!evt.title) {
-    error.send(new Error('Events must have a title.'), res);
-    return false;
-  }
-  if (!evt.category) {
-    error.send(new Error('Events must have a category.'), res);
-    return false;
-  }
-  if (!evt.start) {
-    error.send(new Error('Events must have a start date.'), res);
-    return false;
-  }
-  if (evt.end && evt.end < evt.start) {
-    error.send(new Error('Start date must be on or before the end date.'), res);
-    return false;
-  }
-  return true;
-}
+module.exports = new Events();

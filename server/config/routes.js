@@ -18,31 +18,45 @@ function redirectToHttps(req, res, next) {
 }
 
 module.exports = function(app) {
-  app.get('/api/accounts', redirectToHttps, authentication.requiresApiLogin, accounts.get);
-  app.get('/api/accounts/:id', redirectToHttps, authentication.requiresApiLogin, accounts.getOne);
-  app.post('/api/accounts/:id?', redirectToHttps, authentication.requiresApiLogin, accounts.save);
-  app.delete('/api/accounts/:id', redirectToHttps, authentication.requiresApiLogin, accounts.remove);
+  app.get('/api/accounts', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.get(req, res);});
+  app.get('/api/accounts/:id', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.getOne(req, res);});
+  app.post('/api/accounts/:id?', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.save(req, res);});
+  app.delete('/api/accounts/:id', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.remove(req, res);});
 
-  app.get('/api/events', redirectToHttps, authentication.requiresApiLogin, events.get);
-  app.post('/api/events/:id?', redirectToHttps, authentication.requiresApiLogin, events.save);
-  app.delete('/api/events/:id', redirectToHttps, authentication.requiresApiLogin, events.remove);
+  app.get('/api/events', redirectToHttps, authentication.requiresApiLogin, function(req, res) {events.get(req, res);});
+  app.post('/api/events/:id?', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {events.save(req, res);});
+  app.delete('/api/events/:id', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {events.remove(req, res);});
 
-  app.get('/api/eventCategories', redirectToHttps, authentication.requiresApiLogin, eventCategories.get);
-  app.post('/api/eventCategories/:id?', redirectToHttps, authentication.requiresApiLogin, eventCategories.save);
+  app.get('/api/eventCategories', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {eventCategories.get(req, res);});
+  app.post('/api/eventCategories/:id?', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {eventCategories.save(req, res);});
 
-  app.get('/api/households', redirectToHttps, authentication.requiresApiLogin, households.get);
-  app.post('/api/households/:id?', redirectToHttps, authentication.requiresApiLogin, households.save);
+  app.get('/api/households', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {households.get(req, res);});
+  app.post('/api/households/:id?', redirectToHttps, authentication.requiresApiLogin,
+    function(req, res) {households.save(req, res);});
 
-  app.get('/api/users', redirectToHttps, authentication.requiresRole('admin'), users.get);
-  app.get('/api/users/:id', redirectToHttps, authentication.requiresRoleOrIsCurrentUser('admin'), users.getById);
-  app.post('/api/users', authentication.requiresRole('admin'), users.add);
-  app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'), users.update);
+  app.get('/api/users', redirectToHttps, authentication.requiresRole('admin'),
+    function(req, res) {users.get(req, res);});
+  app.get('/api/users/:id', redirectToHttps, authentication.requiresRoleOrIsCurrentUser('admin'),
+    function(req, res) {users.getById(req, res);});
+  app.post('/api/users', authentication.requiresRole('admin'), function(req, res) {users.add(req, res);});
+  app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+    function(req, res) {users.update(req, res);});
 
-  app.put('/api/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'), users.changePassword);
+  app.put('/api/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+    function(req, res) {users.changePassword(req, res);});
 
-  app.get('/api/versions', redirectToHttps, versions.get);
+  app.get('/api/versions', redirectToHttps, function(req, res) {versions.get(req, res);});
 
-  app.post('/login', redirectToHttps, authentication.authenticate);
+  app.post('/login', redirectToHttps, function(req, res) {authentication.authenticate(req, res);});
   app.post('/logout', function(req, res) {
     req.logout();
     res.end();
