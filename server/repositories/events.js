@@ -2,7 +2,6 @@
 
 var _ = require('underscore');
 var db = require('../config/database');
-var error = require('../services/error');
 var ObjectId = require("mongojs").ObjectId;
 var RepositoryBase = require('./RepositoryBase');
 var util = require('util');
