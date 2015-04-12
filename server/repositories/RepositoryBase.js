@@ -3,7 +3,6 @@
 var _ = require('underscore');
 var error = require('../services/error');
 var ObjectId = require('mongojs').ObjectId;
-var Q = require('q');
 
 function RepositoryBase() {
   this.collection = {};
