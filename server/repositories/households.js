@@ -1,6 +1,8 @@
 'use strict';
 
+var authentication = require('../services/authentication');
 var db = require('../config/database');
+var redirect = require('../services/redirect');
 var RepositoryBase = require('./RepositoryBase');
 var util = require('util');
 
@@ -39,4 +41,11 @@ Households.prototype.validate = function(req, done) {
   done(null, null);
 };
 
-module.exports = new Households();
+var repository = new Households();
+
+module.exports = function(app){
+  app.get('/api/households', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.get(req, res);});
+  app.post('/api/households/:id?', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.save(req, res);});
+};

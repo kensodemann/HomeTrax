@@ -1,7 +1,6 @@
 'use strict';
 
 var authentication = require('../services/authentication');
-var households = require('../repositories/households');
 var redirect = require('../services/redirect');
 var users = require('../repositories/users');
 var versions = require('../repositories/versions');
@@ -10,11 +9,7 @@ module.exports = function(app) {
   require('../repositories/accounts')(app);
   require('../repositories/eventCategories')(app);
   require('../repositories/events')(app);
-
-  app.get('/api/households', redirect.toHttps, authentication.requiresApiLogin,
-    function(req, res) {households.get(req, res);});
-  app.post('/api/households/:id?', redirect.toHttps, authentication.requiresApiLogin,
-    function(req, res) {households.save(req, res);});
+  require('../repositories/households')(app);
 
   app.get('/api/users', redirect.toHttps, authentication.requiresRole('admin'),
     function(req, res) {users.get(req, res);});
