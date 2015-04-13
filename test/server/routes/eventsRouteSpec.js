@@ -38,7 +38,7 @@ describe('api/events Routes', function() {
 
   beforeEach(function() {
     requiresApiLoginCalled = false;
-    proxyquire('../../../server/config/routes', {
+    proxyquire('../../../server/repositories/events', {
       '../services/authentication': authStub
     })(app);
   });

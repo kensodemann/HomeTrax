@@ -1,8 +1,10 @@
 'use strict';
 
+var authentication = require('../services/authentication');
 var _ = require('underscore');
 var db = require('../config/database');
 var ObjectId = require("mongojs").ObjectId;
+var redirect = require('../services/redirect');
 var RepositoryBase = require('./RepositoryBase');
 var util = require('util');
 
@@ -79,4 +81,12 @@ Events.prototype.validate = function(req, done) {
   done(null, null);
 };
 
-module.exports = new Events();
+var repository = new Events();
+
+module.exports = function(app){
+  app.get('/api/events', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {repository.get(req, res);});
+  app.post('/api/events/:id?', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.save(req, res);});
+  app.delete('/api/events/:id', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.remove(req, res);});
+};
