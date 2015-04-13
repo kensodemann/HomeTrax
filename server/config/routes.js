@@ -2,7 +2,6 @@
 
 var authentication = require('../services/authentication');
 var events = require('../repositories/events');
-var eventCategories = require('../repositories/eventCategories');
 var households = require('../repositories/households');
 var redirect = require('../services/redirect');
 var users = require('../repositories/users');
@@ -10,17 +9,13 @@ var versions = require('../repositories/versions');
 
 module.exports = function(app) {
   require('../repositories/accounts')(app);
+  require('../repositories/eventCategories')(app);
 
   app.get('/api/events', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {events.get(req, res);});
   app.post('/api/events/:id?', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {events.save(req, res);});
   app.delete('/api/events/:id', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {events.remove(req, res);});
-
-  app.get('/api/eventCategories', redirect.toHttps, authentication.requiresApiLogin,
-    function(req, res) {eventCategories.get(req, res);});
-  app.post('/api/eventCategories/:id?', redirect.toHttps, authentication.requiresApiLogin,
-    function(req, res) {eventCategories.save(req, res);});
 
   app.get('/api/households', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {households.get(req, res);});

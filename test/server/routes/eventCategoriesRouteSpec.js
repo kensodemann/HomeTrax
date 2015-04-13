@@ -29,7 +29,7 @@ describe('api/eventCategories Routes', function() {
 
   beforeEach(function() {
     requiresApiLoginCalled = false;
-    proxyquire('../../../server/config/routes', {
+    proxyquire('../../../server/repositories/eventCategories', {
       '../services/authentication': authStub
     })(app);
   });

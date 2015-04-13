@@ -1,6 +1,8 @@
 'use strict';
 
+var authentication = require('../services/authentication');
 var db = require('../config/database');
+var redirect = require('../services/redirect');
 var RepositoryBase = require("./RepositoryBase");
 var util = require("util");
 
@@ -11,4 +13,11 @@ function EventCategories(){
 
 util.inherits(EventCategories, RepositoryBase);
 
-module.exports = new EventCategories();
+var repository = new EventCategories();
+
+module.exports = function(app){
+  app.get('/api/eventCategories', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.get(req, res);});
+  app.post('/api/eventCategories/:id?', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.save(req, res);});
+};
