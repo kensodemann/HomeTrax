@@ -33,10 +33,9 @@ describe('api/accounts Routes', function() {
 
   beforeEach(function() {
     requiresApiLoginCalled = false;
-    var repo = proxyquire('../../../server/repositories/accounts', {
+    proxyquire('../../../server/repositories/accounts', {
       '../services/authentication': authStub
-    });
-    repo.init(app);
+    })(app);
   });
 
   beforeEach(function(done) {

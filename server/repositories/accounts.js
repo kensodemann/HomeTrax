@@ -56,7 +56,7 @@ Accounts.prototype.postGetAction = function(accts, done) {
 
 var accounts = new Accounts();
 
-module.exports.init = function(app) {
+module.exports = function(app) {
   app.get('/api/accounts', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {accounts.get(req, res);});
   app.get('/api/accounts/:id', redirect.toHttps, authentication.requiresApiLogin,
