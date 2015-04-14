@@ -3,13 +3,13 @@
 var authentication = require('../services/authentication');
 var redirect = require('../services/redirect');
 var users = require('../repositories/users');
-var versions = require('../repositories/versions');
 
 module.exports = function(app) {
   require('../repositories/accounts')(app);
   require('../repositories/eventCategories')(app);
   require('../repositories/events')(app);
   require('../repositories/households')(app);
+  require('../repositories/versions')(app);
 
   app.get('/api/users', redirect.toHttps, authentication.requiresRole('admin'),
     function(req, res) {users.get(req, res);});
@@ -21,8 +21,6 @@ module.exports = function(app) {
 
   app.put('/api/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
     function(req, res) {users.changePassword(req, res);});
-
-  app.get('/api/versions', redirect.toHttps, function(req, res) {versions.get(req, res);});
 
   app.post('/login', redirect.toHttps, function(req, res) {authentication.authenticate(req, res);});
   app.post('/logout', function(req, res) {
