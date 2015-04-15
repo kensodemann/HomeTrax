@@ -1,8 +1,10 @@
 'use strict';
 
 var _ = require('underscore');
+var authentication = require('../services/authentication');
 var db = require('../config/database');
 var ObjectId = require('mongojs').ObjectId;
+var redirect = require('../services/redirect');
 var RepositoryBase = require('./RepositoryBase');
 var util = require('util');
 
@@ -52,4 +54,15 @@ Accounts.prototype.postGetAction = function(accts, done) {
   });
 };
 
-module.exports = new Accounts();
+var accounts = new Accounts();
+
+module.exports = function(app) {
+  app.get('/api/accounts', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.get(req, res);});
+  app.get('/api/accounts/:id', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.getOne(req, res);});
+  app.post('/api/accounts/:id?', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.save(req, res);});
+  app.delete('/api/accounts/:id', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {accounts.remove(req, res);});
+};

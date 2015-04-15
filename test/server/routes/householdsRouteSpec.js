@@ -30,7 +30,7 @@ describe('api/household Routes', function() {
 
   beforeEach(function() {
     requiresApiLoginCalled = false;
-    proxyquire('../../../server/config/routes', {
+    proxyquire('../../../server/repositories/households', {
       '../services/authentication': authStub
     })(app);
   });

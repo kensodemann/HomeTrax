@@ -33,7 +33,7 @@ describe('api/accounts Routes', function() {
 
   beforeEach(function() {
     requiresApiLoginCalled = false;
-    proxyquire('../../../server/config/routes', {
+    proxyquire('../../../server/repositories/accounts', {
       '../services/authentication': authStub
     })(app);
   });

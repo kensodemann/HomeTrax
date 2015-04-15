@@ -6,17 +6,7 @@ var db = require('../config/database');
 var encryption = require('../services/encryption');
 var error = require('../services/error');
 var ObjectId = require("mongojs").ObjectId;
-
-module.exports.init = init;
-module.exports.get = get;
-module.exports.getById = getById;
-module.exports.add = add;
-module.exports.update = update;
-module.exports.changePassword = changePassword;
-
-function init(app) {
-
-}
+var redirect = require('../services/redirect');
 
 //noinspection JSUnusedLocalSymbols
 function get(req, res) {
@@ -208,3 +198,16 @@ function updateUserPassword(id, passwordData, res) {
     res.send();
   });
 }
+
+module.exports = function(app){
+  app.get('/api/users', redirect.toHttps, authentication.requiresRole('admin'),
+    function(req, res) {get(req, res);});
+  app.get('/api/users/:id', redirect.toHttps, authentication.requiresRoleOrIsCurrentUser('admin'),
+    function(req, res) {getById(req, res);});
+  app.post('/api/users', authentication.requiresRole('admin'), function(req, res) {add(req, res);});
+  app.put('/api/users/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+    function(req, res) {update(req, res);});
+
+  app.put('/api/changepassword/:id', authentication.requiresRoleOrIsCurrentUser('admin'),
+    function(req, res) {changePassword(req, res);});
+};

@@ -36,7 +36,7 @@ describe('api/changepassword Route', function() {
         }
       };
 
-      proxyquire('../../../server/config/routes', {
+      proxyquire('../../../server/repositories/users', {
         '../services/authentication': authStub
       })(app);
 
