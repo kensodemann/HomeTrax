@@ -1,2 +1,95 @@
 .container
-	h2 This is where the financial data will go...
+	.jumbotron
+		h2.text-center Financial Summary
+	.container-fluid
+		.row
+			.col-md-8
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Accounts
+							button.btn.btn-xs.pull-right
+								span.glyphicon.glyphicon-plus
+					.panel-body
+						h4 Liabilities
+						table.table
+							thead
+								tr
+									th Account
+									th Principal Paid
+									th Interest Paid
+									th Balance
+							tbody
+								tr
+									td
+										a(href="") 1st Mortgage
+									td $40,0295.23
+									td $60,0395.58
+									td $100,409.82
+								tr
+									td
+										a(href="") 2nd Mortgage
+									td $12,485.95
+									td $8,400.50
+									td $5,4005.39
+						h4 Assets
+						table.table
+							thead
+								tr
+									th Account
+									th Net Activity
+									th Interest Earned
+									th Balance
+							tbody
+								tr
+									td
+										a(href="") Savings
+									td $40,0295.23
+									td $60,0395.58
+									td $100,409.82
+								tr
+									td
+										a(href="") 401k
+									td $12,485.95
+									td $8,400.50
+									td $2,0395.99
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Balance
+					.panel-body
+						dl.dl-horizontal
+							dt Total Assets:
+							dd $485,338.72
+							dt Total Liabilities:
+							dd $138,009.38
+							dt Net Worth:
+							dd $347,329.34
+
+		.row
+			.col-md-8
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Net Worth over Time
+					.panel-body
+						div A graph will go here, data modeling and keeping it up to date is TBD.
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Upcoming
+					.panel-body
+						table.table
+							thead
+								tr
+									th What
+									th When
+							tbody
+								tr
+									td Pay Day (Ken)
+									td 5/1/2015
+								tr
+									td Mortgage Payment
+									td 5/1/2015
+								tr
+									td Car Payment
+									td 5/15/2015
+
