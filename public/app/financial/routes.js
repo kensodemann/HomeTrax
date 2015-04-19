@@ -3,7 +3,7 @@
 
   angular.module('app.financial').constant('financialRoutes', [{
     path: '/financialSummary',
-    templateUrl: '/partials/financial/templates/financialSummary',
+    templateUrl: '/partials/financial/summary/template',
     controller: 'financialSummaryController',
     resolve: {
       authorized: /* @ngInject */ function(authService) {

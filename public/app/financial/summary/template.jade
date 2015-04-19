@@ -7,7 +7,7 @@
 				.panel.panel-default
 					.panel-heading
 						h3.panel-title Accounts
-							button.btn.btn-xs.pull-right
+							button.btn.btn-xs.pull-right(ng-click="ctrl.addAccountClicked()", data-placement="left", bs-tooltip="ctrl.addAccountTooltip")
 								span.glyphicon.glyphicon-plus
 					.panel-body
 						h4 Liabilities
