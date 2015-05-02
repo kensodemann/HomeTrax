@@ -17,6 +17,8 @@ describe('api/accounts Routes', function() {
   var myCarLoan;
   var myFirstMortgage;
   var mySecondMortgage;
+  var myChecking;
+  var mySavings;
 
   var authStub = {
     requiresApiLogin: function(req, res, next) {
@@ -61,20 +63,33 @@ describe('api/accounts Routes', function() {
         .get('/api/accounts')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
-          expect(res.body.length).to.equal(3);
+          expect(res.body.length).to.equal(5);
           done();
         });
     });
 
-    it('includes sums and counts', function(done) {
+    it('includes sums and counts, sums negated for liability account', function(done) {
       request(app)
         .get('/api/accounts')
         .end(function(err, res) {
           var accounts = res.body;
           var acct = findAccount(accounts, mySecondMortgage);
-          expect(acct.principalPaid).to.equal(397.9);
-          expect(acct.interestPaid).to.equal(203.1);
+          expect(acct.principalPaid).to.be.closeTo(397.9, 0.001);
+          expect(acct.interestPaid).to.be.closeTo(203.1, 0.001);
           expect(acct.numberOfTransactions).to.equal(2);
+          done();
+        });
+    });
+
+    it('includes sums and counts, sums not negated for asset account', function(done) {
+      request(app)
+        .get('/api/accounts')
+        .end(function(err, res) {
+          var accounts = res.body;
+          var acct = findAccount(accounts, myChecking);
+          expect(acct.principalPaid).to.be.closeTo(345.36, 0.001);
+          expect(acct.interestPaid).to.be.closeTo(0.09, 0.001);
+          expect(acct.numberOfTransactions).to.equal(6);
           done();
         });
     });
@@ -153,7 +168,7 @@ describe('api/accounts Routes', function() {
           expect(!!err).to.be.false;
           expect(res.status).to.be.equal(201);
           db.accounts.find(function(err, h) {
-            expect(h.length).to.equal(4);
+            expect(h.length).to.equal(6);
             done();
           });
         });
@@ -175,7 +190,7 @@ describe('api/accounts Routes', function() {
           expect(!!err).to.be.false;
           expect(res.status).to.be.equal(200);
           db.accounts.find(function(err, h) {
-            expect(h.length).to.equal(3);
+            expect(h.length).to.equal(5);
             done();
           });
         });
@@ -243,7 +258,7 @@ describe('api/accounts Routes', function() {
         .send()
         .end(function() {
           db.accounts.find(function(err, a) {
-            expect(a.length).to.equal(2);
+            expect(a.length).to.equal(4);
             a.forEach(function(item) {
               expect(item._id).to.not.deep.equal(mySecondMortgage._id);
             });
@@ -257,9 +272,9 @@ describe('api/accounts Routes', function() {
         .delete('/api/accounts/' + mySecondMortgage._id.toString())
         .send()
         .end(function() {
-          db.events.find(function(err, a) {
-            expect(a.length).to.equal(3);
-            a.forEach(function(item) {
+          db.events.find(function(err, evts) {
+            expect(evts.length).to.equal(13);
+            evts.forEach(function(item) {
               expect(item.accountRid).to.not.deep.equal(mySecondMortgage._id);
             });
             done();
@@ -275,7 +290,7 @@ describe('api/accounts Routes', function() {
         .end(function(err, res) {
           expect(res.status).to.equal(404);
           db.accounts.find(function(err, a) {
-            expect(a.length).to.equal(3);
+            expect(a.length).to.equal(5);
             done();
           });
         });
@@ -314,36 +329,56 @@ describe('api/accounts Routes', function() {
 
   function loadAccounts(done) {
     db.accounts.save({
-      name: 'Mortgage',
-      bank: 'Eastern World Bank',
-      accountNumber: '1399405-2093',
-      accountType: 'loan',
-      balanceType: 'liability',
-      amount: 176940.43,
-      entityRid: myHouse._id
+      name: 'Savings',
+      bank: 'Middle Town Savings',
+      accountNumber: '99948594-091',
+      accountType: 'savings',
+      balanceType: 'asset',
+      amount: 1000.00
     }, function(err, a) {
-      myFirstMortgage = a;
+      mySavings = a;
       db.accounts.save({
-        name: 'Second Mortgage',
-        bank: 'Western State Bank',
-        accountNumber: '38984905-39',
-        accountType: 'loan',
-        balanceType: 'liability',
-        amount: 30495.78,
-        entityRid: myHouse._id
+        name: 'Checking',
+        bank: 'South Central Park Bank',
+        accountNumber: '3994050-395',
+        accountType: 'checking',
+        balanceType: 'asset',
+        amount: 4234.79
       }, function(err, a) {
-        mySecondMortgage = a;
+        myChecking = a;
         db.accounts.save({
-          name: 'Car Loan',
-          bank: 'Northern City Bank',
-          accountNumber: '899348509a-83c',
+          name: 'Mortgage',
+          bank: 'Eastern World Bank',
+          accountNumber: '1399405-2093',
           accountType: 'loan',
           balanceType: 'liability',
-          amount: 13953.00,
-          entityRid: myCar._id
+          amount: 176940.43,
+          entityRid: myHouse._id
         }, function(err, a) {
-          myCarLoan = a;
-          done();
+          myFirstMortgage = a;
+          db.accounts.save({
+            name: 'Second Mortgage',
+            bank: 'Western State Bank',
+            accountNumber: '38984905-39',
+            accountType: 'loan',
+            balanceType: 'liability',
+            amount: 30495.78,
+            entityRid: myHouse._id
+          }, function(err, a) {
+            mySecondMortgage = a;
+            db.accounts.save({
+              name: 'Car Loan',
+              bank: 'Northern City Bank',
+              accountNumber: '899348509a-83c',
+              accountType: 'loan',
+              balanceType: 'liability',
+              amount: 13953.00,
+              entityRid: myCar._id
+            }, function(err, a) {
+              myCarLoan = a;
+              done();
+            });
+          });
         });
       });
     });
@@ -380,6 +415,74 @@ describe('api/accounts Routes', function() {
       interestAmount: -101.85,
       eventType: 'transaction',
       accountRid: mySecondMortgage._id
+    }, {
+      name: '2nd Mortgage, non-Trans #A',
+      principalAmount: -199.25,
+      interestAmount: -101.25,
+      eventType: 'NotATransaction',
+      accountRid: mySecondMortgage._id
+    }, {
+      name: 'Savings Monthly Deposit #1',
+      principalAmount: 1000.00,
+      interestAmount: 0.12,
+      eventType: 'transaction',
+      accountRid: mySavings._id
+    }, {
+      name: 'Savings Monthly Deposit #2',
+      principalAmount: 1000.00,
+      interestAmount: 0.13,
+      eventType: 'transaction',
+      accountRid: mySavings._id
+    }, {
+      name: 'Savings - Something else',
+      principalAmount: 1000.00,
+      interestAmount: 0.13,
+      description: 'This is some other sort of event',
+      eventType: 'SomethingElse',
+      accountRid: mySavings._id
+    }, {
+      name: 'Checking Deposit #1',
+      principalAmount: 200.00,
+      interestAmount: 0.01,
+      eventType: 'transaction',
+      accountRid: myChecking._id
+    }, {
+      name: 'Checking Withdrawl #1',
+      principalAmount: -3.50,
+      interestAmount: 0.02,
+      eventType: 'transaction',
+      accountRid: myChecking._id
+    }, {
+      name: 'Checking Deposit #2',
+      principalAmount: 300.00,
+      interestAmount: 0.05,
+      eventType: 'transaction',
+      accountRid: myChecking._id
+    }, {
+      name: 'Checking Withdrawl #2',
+      principalAmount: -42.04,
+      interestAmount: 0,
+      eventType: 'transaction',
+      accountRid: myChecking._id
+    }, {
+      name: 'Checking Something Else',
+      principalAmount: 1000.00,
+      interestAmount: 0.13,
+      description: 'I am something else',
+      eventType: 'WhooopDeeHoo',
+      accountRid: myChecking._id
+    }, {
+      name: 'Checking Deposit #3',
+      principalAmount: 13.94,
+      interestAmount: 0.01,
+      eventType: 'transaction',
+      accountRid: myChecking._id
+    }, {
+      name: 'Checking Withdrawl #3',
+      principalAmount: -123.04,
+      interestAmount: 0,
+      eventType: 'transaction',
+      accountRid: myChecking._id
     }], function() {
       done();
     });
