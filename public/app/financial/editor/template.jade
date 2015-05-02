@@ -1,0 +1,41 @@
+.modal(tabindex="-1" role="dialog")
+	.modal-dialog
+		.modal-content
+			form.form-horizontal(name="financialAccountEditor")
+				.modal-header
+					button.close(type="button", ng-click="$hide()", aria-hidden="true") &times;
+					h4.modal-title {{controller.title}}
+				.modal-body
+					fieldset
+						.form-group
+							label.col-md-3.control-label(for='accoutType') Type of Account
+							.col-md-9
+								select.form-control(ng-model="controller.accountType", ng-options="item as item.name for item in controller.accountTypes")
+						.form-group
+							label.col-md-3.control-label(for='name') Name
+							.col-md-9
+								input.form-control(name='name', type='text', ng-model='controller.name', required)
+								.error-container(ng-show='financialAccountEditor.name.$invalid')
+									small.text-danger(ng-show='financialAccountEditor.name.$error.required') Required
+						.form-group
+							label.col-md-3.control-label(for='bank') Bank Name
+							.col-md-9
+								input.form-control(name='bank', type='text', ng-model='controller.bank', required)
+								.error-container(ng-show='financialAccountEditor.bank.$invalid')
+									small.text-danger(ng-show='financialAccountEditor.bank.$error.required') Required
+						.form-group
+							label.col-md-3.control-label(for='accountNumber') Account #
+							.col-md-9
+								input.form-control(name='accountNumber', type='text', ng-model='controller.accountNumber', required)
+								.error-container(ng-show='financialAccountEditor.accountNumber.$invalid')
+									small.text-danger(ng-show='financialAccountEditor.accountNumber.$error.required') Required
+						.form-group
+							label.col-md-3.control-label(for='amount') Opening Balance
+							.col-md-9
+								input.form-control(name='amount', type='text', ng-model='controller.amount', required)
+								.error-container(ng-show='financialAccountEditor.amount.$invalid')
+									small.text-danger(ng-show='financialAccountEditor.amount.$error.required') Required
+				.modal-footer
+					button.btn.btn-default.pull-left(type='button', ng-click="controller.remove()", ng-show="controller.mode === 'edit'") Remove
+					button.btn.btn-default(type='button', ng-click="$hide()") Cancel
+					button.btn.btn-primary(type='submit', ng-click='controller.save()', ng-disabled="financialAccountEditor.$invalid || errorMessage") Save

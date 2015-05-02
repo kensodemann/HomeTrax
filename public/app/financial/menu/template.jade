@@ -1,0 +1,3 @@
+ul.nav.navbar-nav(ng-controller="financialMenuController as controller")
+	li(ng-show="controller.identity.isAuthenticated()")
+		a(href="/financialSummary") Financial
