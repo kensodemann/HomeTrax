@@ -5,10 +5,11 @@
 
   function financialDataService(FinancialAccount) {
     var service = {
-      init: function() {
+      load: function() {
         if (!service.allAccounts){
           service.allAccounts = FinancialAccount.query();
         }
+        return service.allAccounts.$promise;
       }
     };
 
