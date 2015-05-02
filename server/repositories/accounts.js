@@ -33,6 +33,8 @@ Accounts.prototype.validate = function(req, done) {
 
 Accounts.prototype.postGetAction = function(accts, done) {
   db.events.aggregate([{
+    $match: {eventType: 'transaction'}
+  }, {
     $group: {
       _id: "$accountRid",
       numberOfTransactions: {$sum: 1},

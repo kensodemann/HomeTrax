@@ -380,6 +380,12 @@ describe('api/accounts Routes', function() {
       interestAmount: -101.85,
       eventType: 'transaction',
       accountRid: mySecondMortgage._id
+    }, {
+      name: '2nd Mortgage, non-Trans #A',
+      principalAmount: -199.25,
+      interestAmount: -101.25,
+      eventType: 'NotATransaction',
+      accountRid: mySecondMortgage._id
     }], function() {
       done();
     });
