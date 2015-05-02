@@ -44,12 +44,12 @@ Accounts.prototype.postGetAction = function(accts, done) {
   }], function(err, e) {
     accts.forEach(function(acct) {
       var ttls = _.find(e, function(item) {
-        return e._id === item.entityRid;
+        return item._id.toString() === acct._id.toString();
       });
       if (!!ttls) {
         acct.numberOfTransactions = ttls.numberOfTransactions;
-        acct.principalPaid = ttls.principalPaid * -1;
-        acct.interestPaid = ttls.interestPaid * -1;
+        acct.principalPaid = ttls.principalPaid * ((acct.balanceType === 'liability') ? -1 : 1);
+        acct.interestPaid = ttls.interestPaid * ((acct.balanceType === 'liability') ? -1 : 1);
       }
     });
     done(err, accts);
