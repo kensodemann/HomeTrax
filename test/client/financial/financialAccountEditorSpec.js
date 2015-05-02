@@ -72,7 +72,7 @@
 
       it('uses the correct template', function() {
         var config = mockModalConstructor.getCall(0).args[0];
-        expect(config.template).to.equal('/partials/financial/editor/template');
+        expect(config.template).to.equal('/partials/financial/accountEditor/template');
       });
 
       it('is initially hidden', function() {
