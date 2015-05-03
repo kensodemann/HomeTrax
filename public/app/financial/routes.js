@@ -7,7 +7,7 @@
     controller: 'financialSummaryController',
     resolve: {
       authorized: /* @ngInject */ function(authService) {
-        return authService.currentUserAuthorizedForRoute('');
+        return authService.currentUserAuthorizedForRole('');
       }
     }
   }, {
@@ -16,7 +16,7 @@
     controller: 'financialDetailsController',
     resolve: {
       authorized: /* @ngInject */ function(authService) {
-        return authService.currentUserAuthorizedForRoute('');
+        return authService.currentUserAuthorizedForRole('');
       }
     }
   }]);

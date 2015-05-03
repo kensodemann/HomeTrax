@@ -8,7 +8,7 @@
     controller: 'mainCtrl',
     resolve: {
       authorized: /* @ngInject */ function(authService) {
-        return authService.currentUserAuthorizedForRoute('');
+        return authService.currentUserAuthorizedForRole('');
       }
     }
   }, {
