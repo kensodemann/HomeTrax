@@ -63,7 +63,7 @@ describe('api/events Routes', function() {
         .get('/api/events')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
-          expect(res.body.length).to.equal(3);
+          expect(res.body.length).to.equal(19);
           res.body.forEach(function(e) {
             if (e.private) {
               expect(e.userId.toString()).to.equal('53a4dd887c6dc30000bee3af');
@@ -101,7 +101,7 @@ describe('api/events Routes', function() {
         .end(function(err, res) {
           expect(res.status).to.be.equal(201);
           db.events.find(function(err, events) {
-            expect(events.length).to.equal(5);
+            expect(events.length).to.equal(21);
             done();
           });
         });
@@ -186,7 +186,7 @@ describe('api/events Routes', function() {
           db.events.findOne({_id: myPublicEvent._id}, function(err, evt) {
             expect(evt.title).to.equal('Do Something Else');
             db.events.find(function(err, evts) {
-              expect(evts.length).to.equal(4);
+              expect(evts.length).to.equal(20);
               done();
             });
           });
@@ -210,7 +210,7 @@ describe('api/events Routes', function() {
           db.events.findOne({_id: otherUserPublicEvent._id}, function(err, evt) {
             expect(evt.title).to.equal('Have Sex');
             db.events.find(function(err, evts) {
-              expect(evts.length).to.equal(4);
+              expect(evts.length).to.equal(20);
               done();
             });
           });
@@ -232,7 +232,7 @@ describe('api/events Routes', function() {
         .end(function(err, res) {
           expect(res.status).to.equal(404);
           db.events.find(function(err, evts) {
-            expect(evts.length).to.equal(4);
+            expect(evts.length).to.equal(20);
             done();
           });
         });
@@ -328,7 +328,7 @@ describe('api/events Routes', function() {
         .end(function(err, res) {
           expect(res.status).to.equal(200);
           db.events.find(function(err, evts) {
-            expect(evts.length).to.equal(3);
+            expect(evts.length).to.equal(19);
             db.events.findOne({_id: myPrivateEvent._id}, function(err, evt) {
               expect(!!evt).to.be.false;
               done();
@@ -343,7 +343,7 @@ describe('api/events Routes', function() {
         .end(function(err, res) {
           expect(res.status).to.equal(404);
           db.events.find(function(err, evts) {
-            expect(evts.length).to.equal(4);
+            expect(evts.length).to.equal(20);
             done();
           });
         });
@@ -355,7 +355,7 @@ describe('api/events Routes', function() {
         .end(function(err, res) {
           expect(res.status).to.equal(403);
           db.events.find(function(err, evts) {
-            expect(evts.length).to.equal(4);
+            expect(evts.length).to.equal(20);
             done();
           });
         });
@@ -371,7 +371,8 @@ describe('api/events Routes', function() {
         end: '2014-06-20T13:00:00',
         category: 'Health & Fitness',
         private: false,
-        userId: new ObjectId('53a4dd887c6dc30000bee3af')
+        userId: new ObjectId('53a4dd887c6dc30000bee3af'),
+        eventType: 'calendar'
       }, {
         title: 'Fart',
         allDay: false,
@@ -379,14 +380,16 @@ describe('api/events Routes', function() {
         end: '2014-06-20T13:05:00',
         category: 'Health & Fitness',
         private: true,
-        userId: new ObjectId('53a4dd887c6dc30000bee3af')
+        userId: new ObjectId('53a4dd887c6dc30000bee3af'),
+        eventType: 'calendar'
       }, {
         title: 'Have Sex',
         allDay: false,
         start: '2014-06-22T16:00:00',
         end: '2014-06-22T18:45:00',
         category: 'Recreation',
-        userId: new ObjectId('53a4dd887c6dc30000bee3ae')
+        userId: new ObjectId('53a4dd887c6dc30000bee3ae'),
+        eventType: 'calendar'
       }, {
         title: 'Sleep',
         allDay: false,
@@ -394,7 +397,106 @@ describe('api/events Routes', function() {
         end: '2014-06-20T13:00:00',
         category: 'Health & Fitness',
         private: true,
-        userId: new ObjectId('53a4dd887c6dc30000bee3ae')
+        userId: new ObjectId('53a4dd887c6dc30000bee3ae'),
+        eventType: 'calendar'
+      }, {
+        name: '1st Mortgage, Trans #1',
+        principalAmount: -943.93,
+        interestAmount: -394.82,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55081')
+      }, {
+        name: '1st Mortgage, Trans #2',
+        principalAmount: -944.90,
+        interestAmount: -393.95,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55081')
+      }, {
+        name: '1st Mortgage, Trans #3',
+        principalAmount: -945.62,
+        interestAmount: -393.13,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55081')
+      }, {
+        name: '2nd Mortgage, Trans #1',
+        principalAmount: -199.25,
+        interestAmount: -101.25,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55082')
+      }, {
+        name: '2nd Mortgage, Trans #2',
+        principalAmount: -198.65,
+        interestAmount: -101.85,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55082')
+      }, {
+        name: '2nd Mortgage, non-Trans #A',
+        principalAmount: -199.25,
+        interestAmount: -101.25,
+        eventType: 'NotATransaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55082')
+      }, {
+        name: 'Savings Monthly Deposit #1',
+        principalAmount: 1000.00,
+        interestAmount: 0.12,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55083')
+      }, {
+        name: 'Savings Monthly Deposit #2',
+        principalAmount: 1000.00,
+        interestAmount: 0.13,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55083')
+      }, {
+        name: 'Savings - Something else',
+        principalAmount: 1000.00,
+        interestAmount: 0.13,
+        description: 'This is some other sort of event',
+        eventType: 'SomethingElse',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55083')
+      }, {
+        name: 'Checking Deposit #1',
+        principalAmount: 200.00,
+        interestAmount: 0.01,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55084')
+      }, {
+        name: 'Checking Withdrawl #1',
+        principalAmount: -3.50,
+        interestAmount: 0.02,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55084')
+      }, {
+        name: 'Checking Deposit #2',
+        principalAmount: 300.00,
+        interestAmount: 0.05,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55084')
+      }, {
+        name: 'Checking Withdrawl #2',
+        principalAmount: -42.04,
+        interestAmount: 0,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55084')
+      }, {
+        name: 'Checking Something Else',
+        principalAmount: 1000.00,
+        interestAmount: 0.13,
+        description: 'I am something else',
+        eventType: 'WhooopDeeHoo',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55084')
+      }, {
+        name: 'Checking Deposit #3',
+        principalAmount: 13.94,
+        interestAmount: 0.01,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55084')
+      }, {
+        name: 'Checking Withdrawl #3',
+        principalAmount: -123.04,
+        interestAmount: 0,
+        eventType: 'transaction',
+        accountRid: new ObjectId('54b2e3cd201ada8417b55084')
       }], function(err, events) {
         myPublicEvent = events[0];
         myPrivateEvent = events[1];
