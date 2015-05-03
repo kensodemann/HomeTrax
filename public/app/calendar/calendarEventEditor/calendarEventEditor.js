@@ -2,9 +2,9 @@
 (function() {
   'use strict';
 
-  angular.module('app.calendar').factory('eventEditor', eventEditor);
+  angular.module('app.calendar').factory('calendarEventEditor', CalendarEventEditor);
 
-  function eventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, users, identity, colors) {
+  function CalendarEventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, users, identity, colors) {
     var exports = {
       initialize: initialize,
       open: open
@@ -19,7 +19,7 @@
     };
 
     var editor = $modal({
-      template: '/partials/calendar/templates/eventEditor',
+      template: '/partials/calendar/calendarEventEditor/template',
       backdrop: 'static',
       scope: editorScope,
       show: false

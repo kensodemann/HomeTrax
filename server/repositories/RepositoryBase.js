@@ -11,8 +11,13 @@ function RepositoryBase() {
 
 RepositoryBase.prototype.get = function(req, res) {
   var my = this;
+  var criteria = {};
 
-  my.collection.find(my.criteria, function(err, item) {
+  _.extend(criteria, my.criteria);
+  _.extend(criteria, req.query);
+
+
+  my.collection.find(criteria, function(err, item) {
     if (err) {
       return error.send(err, res);
     }
