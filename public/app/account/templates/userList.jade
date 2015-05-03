@@ -5,8 +5,8 @@ div.container
 				th First Name
 				th Last Name
 				th Username
-		tbody(ng-repeat="user in ctrl.users")
-			tr
+		tbody
+			tr(ng-repeat="user in ctrl.users")
 				td {{user.firstName}}
 				td {{user.lastName}}
 				td
