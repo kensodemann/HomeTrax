@@ -3,6 +3,7 @@
 
   describe('financialDetailsController', function() {
     var $controllerConstructor;
+    var mockRouteParams;
 
     beforeEach(module('app.financial'));
 
@@ -10,8 +11,14 @@
       $controllerConstructor = $controller;
     }));
 
+    beforeEach(function() {
+      mockRouteParams = {};
+    });
+
     function createController() {
-      return $controllerConstructor('financialDetailsController', {});
+      return $controllerConstructor('financialDetailsController', {
+        $routeParams: mockRouteParams
+      });
     }
 
     it('exists', function() {

@@ -10,5 +10,14 @@
         return authService.currentUserAuthorizedForRoute('');
       }
     }
+  }, {
+    path: '/financialDetails/:id',
+    templateUrl: '/partials/financial/details/template',
+    controller: 'financialDetailsController',
+    resolve: {
+      authorized: /* @ngInject */ function(authService) {
+        return authService.currentUserAuthorizedForRoute('');
+      }
+    }
   }]);
 })();

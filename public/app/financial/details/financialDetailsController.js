@@ -3,8 +3,14 @@
 
   angular.module('app.financial').controller('financialDetailsController', FinancialDetailsController);
 
-  function FinancialDetailsController() {
-    var controller = {};
+  function FinancialDetailsController($routeParams) {
+    var controller = {
+      activate: function(){
+        controller.passedId = $routeParams.id;
+      }
+    };
+
+    controller.activate();
 
     return controller;
   }
