@@ -16,7 +16,7 @@ function Events() {
 util.inherits(Events, RepositoryBase);
 
 Events.prototype.get = function(req, res) {
-  db.events.find({
+  this.criteria = {
     $or: [{
       userId: new ObjectId(req.user._id)
     }, {
@@ -24,9 +24,8 @@ Events.prototype.get = function(req, res) {
     }, {
       private: null
     }]
-  }, function(err, events) {
-    res.send(events);
-  });
+  };
+  return RepositoryBase.prototype.get.call(this, req, res);
 };
 
 Events.prototype.preSaveAction = function(req, done) {

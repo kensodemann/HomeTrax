@@ -72,6 +72,21 @@ describe('api/events Routes', function() {
           done();
         });
     });
+
+    it('can be limited by event type', function(done) {
+      request(app)
+        .get('/api/events?eventType=miscellaneous')
+        .end(function(err, res) {
+          expect(res.status).to.equal(200);
+          expect(res.body.length).to.equal(3);
+          res.body.forEach(function(e) {
+            if (e.private) {
+              expect(e.userId.toString()).to.equal('53a4dd887c6dc30000bee3af');
+            }
+          });
+          done();
+        });
+    });
   });
 
   describe('POST', function() {
@@ -372,7 +387,7 @@ describe('api/events Routes', function() {
         category: 'Health & Fitness',
         private: false,
         userId: new ObjectId('53a4dd887c6dc30000bee3af'),
-        eventType: 'calendar'
+        eventType: 'miscellaneous'
       }, {
         title: 'Fart',
         allDay: false,
@@ -381,7 +396,7 @@ describe('api/events Routes', function() {
         category: 'Health & Fitness',
         private: true,
         userId: new ObjectId('53a4dd887c6dc30000bee3af'),
-        eventType: 'calendar'
+        eventType: 'miscellaneous'
       }, {
         title: 'Have Sex',
         allDay: false,
@@ -389,7 +404,7 @@ describe('api/events Routes', function() {
         end: '2014-06-22T18:45:00',
         category: 'Recreation',
         userId: new ObjectId('53a4dd887c6dc30000bee3ae'),
-        eventType: 'calendar'
+        eventType: 'miscellaneous'
       }, {
         title: 'Sleep',
         allDay: false,
@@ -398,7 +413,7 @@ describe('api/events Routes', function() {
         category: 'Health & Fitness',
         private: true,
         userId: new ObjectId('53a4dd887c6dc30000bee3ae'),
-        eventType: 'calendar'
+        eventType: 'miscellaneous'
       }, {
         name: '1st Mortgage, Trans #1',
         principalAmount: -943.93,
