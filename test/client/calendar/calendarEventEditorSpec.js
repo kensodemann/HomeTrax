@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  describe('eventEditor', function() {
+  describe('calendarEventEditor', function() {
     var serviceUnderTest;
 
     var mockBloodhound;
@@ -172,12 +172,12 @@
       }
     });
 
-    beforeEach(inject(function($q, $rootScope, eventEditor) {
+    beforeEach(inject(function($q, $rootScope, calendarEventEditor) {
       askDfd = $q.defer();
       mockMessageDialogService.ask.returns(askDfd.promise);
       usersGetDfd = $q.defer();
       mockUsers.get.returns(usersGetDfd.promise);
-      serviceUnderTest = eventEditor;
+      serviceUnderTest = calendarEventEditor;
       rootScope = $rootScope;
     }));
 
@@ -210,7 +210,7 @@
 
       it('uses the correct template', function() {
         var config = mockModalConstructor.getCall(0).args[0];
-        expect(config.template).to.equal('/partials/calendar/templates/eventEditor');
+        expect(config.template).to.equal('/partials/calendar/calendarEventEditor/template');
       });
 
       it('is initially hidden', function() {
