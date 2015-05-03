@@ -11,7 +11,7 @@
 
     function loadEvents() {
       var dfd = $q.defer();
-      evts = CalendarEvent.query({}, function() {
+      evts = CalendarEvent.query({eventType: 'miscellaneous'}, function() {
         dfd.resolve(true);
       }, function() {
         dfd.resolve(false);

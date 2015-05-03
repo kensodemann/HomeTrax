@@ -39,6 +39,7 @@
       it('queries the CalendarEvent resource', function() {
         serviceUnderTest.load();
         expect(mockCalendarEvent.query.calledOnce).to.be.true;
+        expect(mockCalendarEvent.query.calledWith({eventType: 'miscellaneous'})).to.be.true;
       });
 
       it('queries the EventCategory resource', function() {
