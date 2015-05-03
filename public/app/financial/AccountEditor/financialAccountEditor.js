@@ -10,7 +10,7 @@
 
     var editorScope = $rootScope.$new(true);
     var editor = $modal({
-      template: '/partials/financial/editor/template',
+      template: '/partials/financial/accountEditor/template',
       backdrop: 'static',
       scope: editorScope,
       show: false

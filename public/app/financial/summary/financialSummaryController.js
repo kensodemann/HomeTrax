@@ -5,15 +5,41 @@
     .controller('financialSummaryController', FinancialSummaryController);
 
   function FinancialSummaryController(financialAccountEditor, FinancialAccount) {
-    var controller = this;
+    var controller = {
+      activate: function() {
+        getAccounts();
+      },
 
-    controller.addAccountClicked = function() {
-      var acct = new FinancialAccount();
-      financialAccountEditor.open(acct, 'create');
+      addAccountClicked: function() {
+        var acct = new FinancialAccount();
+        financialAccountEditor.open(acct, 'create');
+      },
+
+      addAccountTooltip: {
+        title: "Add a new account"
+      },
+
+      liabilityAccounts: [],
+      assetAccounts: []
     };
 
-    controller.addAccountTooltip = {
-      title: "Add a new account"
-    };
+    controller.activate();
+
+    return controller;
+
+    function getAccounts() {
+      FinancialAccount.query(function(accts) {
+        controller.liabilityAccounts = $.grep(accts, isLiabilityAccount);
+        controller.assetAccounts = $.grep(accts, isAssetAccount);
+      });
+    }
+
+    function isLiabilityAccount(acct){
+      return acct.balanceType === 'liability';
+    }
+
+    function isAssetAccount(acct){
+      return acct.balanceType === 'asset';
+    }
   }
 }());

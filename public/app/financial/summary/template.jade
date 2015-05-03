@@ -19,18 +19,12 @@
 									th Interest Paid
 									th Balance
 							tbody
-								tr
+								tr(ng-repeat="acct in ctrl.liabilityAccounts")
 									td
-										a(href="") 1st Mortgage
-									td $40,0295.23
-									td $60,0395.58
-									td $100,409.82
-								tr
-									td
-										a(href="") 2nd Mortgage
-									td $12,485.95
-									td $8,400.50
-									td $5,4005.39
+										a(href="") {{acct.name}}
+									td {{acct.principalPaid | currency}}
+									td {{acct.interestPaid | currency}}
+									td {{acct.amount + acct.principalPaid | currency}}
 						h4 Assets
 						table.table
 							thead
@@ -40,18 +34,12 @@
 									th Interest Earned
 									th Balance
 							tbody
-								tr
+								tr(ng-repeat="acct in ctrl.assetAccounts")
 									td
-										a(href="") Savings
-									td $40,0295.23
-									td $60,0395.58
-									td $100,409.82
-								tr
-									td
-										a(href="") 401k
-									td $12,485.95
-									td $8,400.50
-									td $2,0395.99
+										a(href="") {{acct.name}}
+									td {{acct.principalPaid | currency}}
+									td {{acct.interestPaid | currency}}
+									td {{acct.amount + acct.principalPaid | currency}}
 			.col-md-4
 				.panel.panel-default
 					.panel-heading
