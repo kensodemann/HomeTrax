@@ -21,7 +21,7 @@
 							tbody
 								tr(ng-repeat="acct in ctrl.liabilityAccounts")
 									td
-										a(href="") {{acct.name}}
+										a(href="financialDetails/{{acct._id}}") {{acct.name}}
 									td {{acct.principalPaid | currency}}
 									td {{acct.interestPaid | currency}}
 									td {{acct.amount + acct.principalPaid | currency}}
@@ -36,7 +36,7 @@
 							tbody
 								tr(ng-repeat="acct in ctrl.assetAccounts")
 									td
-										a(href="") {{acct.name}}
+										a(href="financialDetails/{{acct._id}}") {{acct.name}}
 									td {{acct.principalPaid | currency}}
 									td {{acct.interestPaid | currency}}
 									td {{acct.amount + acct.principalPaid | currency}}
