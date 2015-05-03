@@ -1,11 +1,5 @@
 .container
-	.jumbotron
-		h2.text-center Account Name
-			button.btn.btn-xs.pull-right
-				span.glyphicon.glyphicon-pencil
-		h3.text-center Account Number
-		h3.text-center Bank Name
-		div.text-center This should be a kws-page-header
+	kws-page-header(kws-lines="ctrl.headerLines", kws-model="ctrl.account")
 	.container-fluid
 		.row
 			.col-md-12 First row is perminant editor, subsequent rows can be edited in place or deleted. The add button will only be enabled if date, description, and at least one amount is filled in. Also, there needs to be some space between the edit and delete buttons.
