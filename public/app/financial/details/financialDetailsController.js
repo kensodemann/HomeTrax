@@ -13,19 +13,27 @@
         });
       },
 
+      addTransaction: function() {
+        var newEvent = new HomeAppEvent();
+        newEvent.eventType = 'transaction';
+        newEvent.editMode = true;
+        controller.editMode = true;
+        controller.transactions.unshift(newEvent);
+      },
+
       headerLines: [{
         label: 'Name:',
         columnName: 'name',
         modes: 'EV'
-      },{
+      }, {
         label: 'Bank Name:',
         columnName: 'bank',
         modes: 'EV'
-      },{
+      }, {
         label: 'Account #:',
         columnName: 'accountNumber',
         modes: 'EV'
-      },{
+      }, {
         label: 'Opening Balance:',
         columnName: 'amount',
         modes: 'E'
