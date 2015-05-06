@@ -3,10 +3,14 @@
 
   angular.module('app.financial').controller('financialDetailsController', FinancialDetailsController);
 
-  function FinancialDetailsController($routeParams, FinancialAccount) {
+  function FinancialDetailsController($routeParams, FinancialAccount, HomeAppEvent) {
     var controller = {
       activate: function() {
         controller.account = FinancialAccount.get({id: $routeParams.id});
+        controller.transactions = HomeAppEvent.query({
+          accountRid: $routeParams.id,
+          eventType: 'transaction'
+        });
       },
 
       headerLines: [{
