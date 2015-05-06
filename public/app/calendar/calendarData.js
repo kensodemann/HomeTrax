@@ -3,7 +3,7 @@
 
   angular.module('app.calendar').factory('calendarData', CalendarData);
 
-  function CalendarData($q, CalendarEvent, EventCategory, identity) {
+  function CalendarData($q, HomeAppEvent, EventCategory, identity) {
     var evts;
     var evtCats = [];
     var mineOnly;
@@ -11,7 +11,7 @@
 
     function loadEvents() {
       var dfd = $q.defer();
-      evts = CalendarEvent.query({eventType: 'miscellaneous'}, function() {
+      evts = HomeAppEvent.query({eventType: 'miscellaneous'}, function() {
         dfd.resolve(true);
       }, function() {
         dfd.resolve(false);
@@ -72,7 +72,7 @@
       },
 
       newEvent: function(day) {
-        var event = new CalendarEvent();
+        var event = new HomeAppEvent();
         event.start = moment(day.hour(8));
         event.end = moment(day.hour(9));
         event.allDay = false;

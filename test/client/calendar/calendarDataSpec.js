@@ -2,7 +2,7 @@
   'use strict';
 
   describe('calendarData', function() {
-    var mockCalendarEvent;
+    var mockHomeAppEvent;
     var mockEventCategory;
     var mockIdentity;
     var scope;
@@ -11,8 +11,8 @@
     beforeEach(module('app.calendar'));
 
     beforeEach(function() {
-      mockCalendarEvent = sinon.stub().returns(Object);
-      mockCalendarEvent.query = sinon.stub();
+      mockHomeAppEvent = sinon.stub().returns(Object);
+      mockHomeAppEvent.query = sinon.stub();
       mockEventCategory = sinon.stub({
         query: function() {
         }
@@ -20,7 +20,7 @@
       mockIdentity = sinon.stub({});
 
       module(function($provide) {
-        $provide.value('CalendarEvent', mockCalendarEvent);
+        $provide.value('HomeAppEvent', mockHomeAppEvent);
         $provide.value('EventCategory', mockEventCategory);
         $provide.value('identity', mockIdentity);
       });
@@ -36,10 +36,10 @@
     });
 
     describe('Loading the data', function() {
-      it('queries the CalendarEvent resource', function() {
+      it('queries the HomeAppEvent resource', function() {
         serviceUnderTest.load();
-        expect(mockCalendarEvent.query.calledOnce).to.be.true;
-        expect(mockCalendarEvent.query.calledWith({eventType: 'miscellaneous'})).to.be.true;
+        expect(mockHomeAppEvent.query.calledOnce).to.be.true;
+        expect(mockHomeAppEvent.query.calledWith({eventType: 'miscellaneous'})).to.be.true;
       });
 
       it('queries the EventCategory resource', function() {
@@ -52,7 +52,7 @@
           expect(res).to.be.true;
           done();
         });
-        mockCalendarEvent.query.callArg(1);
+        mockHomeAppEvent.query.callArg(1);
         mockEventCategory.query.callArg(1);
         scope.$digest();
       });
@@ -62,7 +62,7 @@
           expect(res).to.be.false;
           done();
         });
-        mockCalendarEvent.query.callArg(2);
+        mockHomeAppEvent.query.callArg(2);
         mockEventCategory.query.callArg(1);
         scope.$digest();
       });
@@ -72,7 +72,7 @@
           expect(res).to.be.false;
           done();
         });
-        mockCalendarEvent.query.callArg(1);
+        mockHomeAppEvent.query.callArg(1);
         mockEventCategory.query.callArg(2);
         scope.$digest();
       });
@@ -124,7 +124,7 @@
 
       function loadCategories() {
         serviceUnderTest.load();
-        mockCalendarEvent.query.callArg(1);
+        mockHomeAppEvent.query.callArg(1);
         mockEventCategory.query.callArgWith(1, cats);
       }
     });
@@ -233,7 +233,7 @@
       }
 
       function setupQueryData() {
-        mockCalendarEvent.query.returns([
+        mockHomeAppEvent.query.returns([
           {
             _id: 1,
             name: 'first event',
