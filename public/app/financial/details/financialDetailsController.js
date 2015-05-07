@@ -21,6 +21,12 @@
         controller.transactions.unshift(newEvent);
       },
 
+      editTransaction: function(trans) {
+        copyToTransactionEditor(trans);
+        trans.editMode = true;
+        controller.editMode = true;
+      },
+
       headerLines: [{
         label: 'Name:',
         columnName: 'name',
@@ -43,6 +49,15 @@
     controller.activate();
 
     return controller;
+
+    function copyToTransactionEditor(trans){
+      controller.transactionEditor = {
+        description: trans.description,
+        date: trans.transactionDate,
+        principal: trans.principalAmount,
+        interest: trans.interestAmount
+      };
+    }
   }
 }());
   

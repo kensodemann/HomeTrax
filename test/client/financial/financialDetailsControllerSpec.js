@@ -74,24 +74,24 @@
         expect(mockHomeAppEvent.eventType).to.equal('transaction');
       });
 
-      it('adds the new event to the front of the transaction list', function(){
+      it('adds the new event to the front of the transaction list', function() {
         controller.addTransaction();
         expect(controller.transactions.length).to.equal(4);
         expect(controller.transactions[0]).to.equal(mockHomeAppEvent);
       });
 
-      it('puts the new event in edit mode', function(){
+      it('puts the new event in edit mode', function() {
         controller.addTransaction();
         expect(mockHomeAppEvent.editMode).to.be.true;
       });
 
-      it('puts the controller in edit mode', function(){
+      it('puts the controller in edit mode', function() {
         controller.addTransaction();
         expect(controller.editMode).to.be.true;
       });
     });
 
-    describe('updating a transaction', function(){
+    describe('updating a transaction', function() {
       var controller;
       beforeEach(function() {
         controller = createController();
@@ -119,7 +119,25 @@
         }];
       });
 
+      it('puts the new event in edit mode', function() {
+        controller.editTransaction(controller.transactions[1]);
+        expect(controller.transactions[1].editMode).to.be.true;
+      });
 
+      it('puts the controller in edit mode', function() {
+        controller.editTransaction(controller.transactions[1]);
+        expect(controller.editMode).to.be.true;
+      });
+
+      it('copies the model data to the editor model', function() {
+        controller.editTransaction(controller.transactions[1]);
+        expect(controller.transactionEditor).to.deep.equal({
+          description: 'Deposit #1',
+          date: '2015-03-14',
+          principal: 7384.09,
+          interest: 0.05
+        });
+      });
     });
   });
 }());
