@@ -13,16 +13,32 @@
 							th Principal Amount
 							th Interest
 							th
-								button.btn.btn-xs.pull-right
+								button.btn.btn-xs.pull-right(ng-click="ctrl.addTransaction()", ng-disabled="ctrl.editMode")
 									span.glyphicon.glyphicon-plus
 					tbody
-						tr
-							td 1/15/2015
-							td Some sort of text or something
-							td $1,450.49
-							td $0.53
+						tr(ng-repeat="trans in ctrl.transactions")
 							td
-								button.btn.btn-xs.pull-right
+								span(ng-hide="trans.editMode") {{trans.transactionDate}}
+								span(ng-show="trans.editMode")
+									input.form-control(type='text', ng-model='ctrl.transactionModel.date', bs-datepicker, required)
+							td
+								span(ng-hide="trans.editMode") {{trans.description}}
+								span(ng-show="trans.editMode")
+									input.form-control(type='text', ng-model='ctrl.transactionEditor.description', required)
+							td
+								span(ng-hide="trans.editMode") {{trans.principalAmount}}
+								span(ng-show="trans.editMode")
+									input.form-control(type='text', ng-model='ctrl.transactionEditor.principal', required)
+							td
+								span(ng-hide="trans.editMode") {{trans.interestAmount}}
+								span(ng-show="trans.editMode")
+									input.form-control(type='text', ng-model='ctrl.transactionEditor.interest', required)
+							td
+								button.btn.btn-xs.pull-right(ng-hide="trans.editMode", ng-disabled="ctrl.editMode")
 									span.glyphicon.glyphicon-minus
-								button.btn.btn-xs.pull-right
+								button.btn.btn-xs.pull-right(ng-hide="trans.editMode", ng-disabled="ctrl.editMode")
 									span.glyphicon.glyphicon-pencil
+								button.btn.btn-xs.pull-right(ng-show="trans.editMode")
+									span.glyphicon.glyphicon-ok
+								button.btn.btn-xs.pull-right(ng-show="trans.editMode")
+									span.glyphicon.glyphicon-remove
