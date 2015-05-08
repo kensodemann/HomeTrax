@@ -4,7 +4,7 @@
 
   angular.module('app.calendar').factory('calendarEventEditor', CalendarEventEditor);
 
-  function CalendarEventEditor($rootScope, $window, $modal, EventCategory, messageDialogService, users, identity, colors) {
+  function CalendarEventEditor($rootScope, $window, $modal, EventCategory, eventTypes, messageDialogService, users, identity, colors) {
     var exports = {
       initialize: initialize,
       open: open
@@ -147,7 +147,7 @@
         eventResource.private = m.isPrivate;
         eventResource.user = m.user;
         eventResource.color = m.color;
-        eventResource.eventType = 'miscellaneous';
+        eventResource.eventType = eventTypes.miscellaneous;
 
         function lookupCategory(category) {
           if (category) {

@@ -3,19 +3,19 @@
 
   angular.module('app.financial').controller('financialDetailsController', FinancialDetailsController);
 
-  function FinancialDetailsController($routeParams, FinancialAccount, HomeAppEvent) {
+  function FinancialDetailsController($routeParams, FinancialAccount, HomeAppEvent, eventTypes) {
     var controller = {
       activate: function() {
         controller.account = FinancialAccount.get({id: $routeParams.id});
         controller.transactions = HomeAppEvent.query({
           accountRid: $routeParams.id,
-          eventType: 'transaction'
+          eventType: eventTypes.transaction
         });
       },
 
       addTransaction: function() {
         var newEvent = new HomeAppEvent();
-        newEvent.eventType = 'transaction';
+        newEvent.eventType = eventTypes.transaction;
         newEvent.editMode = true;
         controller.editMode = true;
         controller.transactions.unshift(newEvent);
