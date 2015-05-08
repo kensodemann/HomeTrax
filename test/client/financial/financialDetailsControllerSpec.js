@@ -139,5 +139,89 @@
         });
       });
     });
+
+    describe('saving a transaction', function() {
+      var controller;
+      beforeEach(function() {
+        controller = createController();
+        controller.transactions = [{
+          _id: 42,
+          description: 'Withdrawl #1',
+          transactionDate: '2015-01-15',
+          principalAmount: -123.04,
+          interestAmount: 0,
+          eventType: 'transaction'
+        }, {
+          _id: 73,
+          description: 'Deposit #1',
+          transactionDate: '2015-03-14',
+          principalAmount: 7384.09,
+          interestAmount: 0.05,
+          eventType: 'transaction',
+          $save: sinon.stub()
+        }, {
+          _id: 314159,
+          description: 'Deposit #2',
+          transactionDate: '2015-04-25',
+          principalAmount: 1125.89,
+          interestAmount: 0.09,
+          eventType: 'transaction'
+        }];
+        controller.editTransaction(controller.transactions[1]);
+      });
+
+      it('copies the data from the editor model to the resource', function() {
+        controller.transactionEditor = {
+          description: 'Historical Deposit #12',
+          date: '2012-06-17',
+          principal: 44395.93,
+          interest: 0.12
+        };
+        controller.saveTransaction(controller.transactions[1]);
+        expect(controller.transactions[1].description).to.equal('Historical Deposit #12');
+        expect(controller.transactions[1].transactionDate).to.equal('2012-06-17');
+        expect(controller.transactions[1].principalAmount).to.equal(44395.93);
+        expect(controller.transactions[1].interestAmount).to.equal(0.12);
+      });
+
+      it(' removes the editMode flag from the resource', function() {
+        controller.transactions[1].editMode = true;
+        controller.saveTransaction(controller.transactions[1]);
+        expect(controller.transactions[1].editMode).to.be.undefined;
+      });
+
+      it('calls $save on the resource', function() {
+        controller.saveTransaction(controller.transactions[1]);
+        expect(controller.transactions[1].$save.calledOnce).to.be.true;
+      });
+
+      it('takes the controller out of edit mode if the save succeeds', function() {
+        controller.saveTransaction(controller.transactions[1]);
+        controller.transactions[1].$save.yield();
+        expect(!!controller.editMode).to.be.false;
+      });
+
+      it('leaves the controller in edit mode and puts the resource back into edit mode if the save fails', function() {
+        controller.saveTransaction(controller.transactions[1]);
+        controller.transactions[1].$save.callArg(1);
+        expect(!!controller.editMode).to.be.true;
+      });
+
+      it('restores the data to the model if the save fails', function() {
+        controller.transactionEditor = {
+          description: 'Historical Deposit #12',
+          date: '2012-06-17',
+          principal: 44395.93,
+          interest: 0.12
+        };
+        controller.saveTransaction(controller.transactions[1]);
+        controller.transactions[1].$save.callArg(1);
+        expect(controller.transactions[1].description).to.equal('Deposit #1');
+        expect(controller.transactions[1].transactionDate).to.equal('2015-03-14');
+        expect(controller.transactions[1].principalAmount).to.equal(7384.09);
+        expect(controller.transactions[1].interestAmount).to.equal(0.05);
+        expect(controller.transactions[1].editMode).to.be.true;
+      });
+    });
   });
 }());
