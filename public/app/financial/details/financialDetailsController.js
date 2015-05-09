@@ -16,6 +16,7 @@
       addTransaction: function() {
         var newEvent = new HomeAppEvent();
         newEvent.eventType = eventTypes.transaction;
+        newEvent.accountRid = controller.account._id;
         newEvent.editMode = true;
         controller.editMode = true;
         controller.transactions.unshift(newEvent);

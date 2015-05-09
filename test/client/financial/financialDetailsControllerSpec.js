@@ -64,14 +64,16 @@
     describe('adding a transaction', function() {
       var controller;
       beforeEach(function() {
+        mockFinancialAccount.get.returns({_id: 73});
         controller = createController();
         controller.transactions = [{}, {}, {}];
       });
 
-      it('creates a new transaction event', function() {
+      it('creates a new transaction event for the current account', function() {
         controller.addTransaction();
         expect(mockHomeAppEventConstructor.calledOnce).to.be.true;
         expect(mockHomeAppEvent.eventType).to.equal('transaction');
+        expect(mockHomeAppEvent.accountRid).to.equal(73);
       });
 
       it('adds the new event to the front of the transaction list', function() {
