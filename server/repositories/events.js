@@ -32,7 +32,7 @@ Events.prototype.get = function(req, res) {
 Events.prototype.preSaveAction = function(req, done) {
   req.body.userId = new ObjectId(req.user._id);
   removeBackupProperties(req);
-  makeObjectIds(req);
+  makeTypesConsistent(req);
   done(null);
 };
 
@@ -46,9 +46,15 @@ function removeBackupProperties(req) {
   }
 }
 
-function makeObjectIds(req) {
+function makeTypesConsistent(req) {
   if (!!req.body.accountRid) {
     req.body.acountRid = new ObjectId(req.body.accountRid);
+  }
+  if (!!req.body.principalAmount) {
+    req.body.principalAmount = Number(req.body.principalAmount);
+  }
+  if (!!req.body.interestAmount) {
+    req.body.interestAmount = Number(req.body.interestAmount);
   }
 }
 

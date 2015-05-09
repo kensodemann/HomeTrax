@@ -55,8 +55,8 @@ Accounts.prototype.postGetAction = function(accts, done) {
       });
       if (!!ttls) {
         acct.numberOfTransactions = ttls.numberOfTransactions;
-        acct.principalPaid = ttls.principalPaid * ((acct.balanceType === 'liability') ? -1 : 1);
-        acct.interestPaid = ttls.interestPaid * ((acct.balanceType === 'liability') ? -1 : 1);
+        acct.principalPaid = ttls.principalPaid;
+        acct.interestPaid = ttls.interestPaid;
       }
     });
     done(err, accts);

@@ -68,7 +68,7 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('includes sums and counts, sums negated for liability account', function(done) {
+    it('includes sums and counts for liability account', function(done) {
       request(app)
         .get('/api/accounts')
         .end(function(err, res) {
@@ -81,7 +81,7 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('includes sums and counts, sums not negated for asset account', function(done) {
+    it('includes sums and counts for asset account', function(done) {
       request(app)
         .get('/api/accounts')
         .end(function(err, res) {
@@ -386,39 +386,39 @@ describe('api/accounts Routes', function() {
 
   function loadEvents(done) {
     db.events.insert([{
-      description: '1st Mortgage, Trans #1',
-      principalAmount: -943.93,
-      interestAmount: -394.82,
+      description: '1st Mortgage, Payment #1',
+      principalAmount: 943.93,
+      interestAmount: 394.82,
       eventType: 'transaction',
       accountRid: myFirstMortgage._id
     }, {
-      description: '1st Mortgage, Trans #2',
-      principalAmount: -944.90,
-      interestAmount: -393.95,
+      description: '1st Mortgage, Payment #2',
+      principalAmount: 944.90,
+      interestAmount: 393.95,
       eventType: 'transaction',
       accountRid: myFirstMortgage._id
     }, {
-      name: '1st Mortgage, Trans #3',
-      principalAmount: -945.62,
-      interestAmount: -393.13,
+      name: '1st Mortgage, Payment #3',
+      principalAmount: 945.62,
+      interestAmount: 393.13,
       eventType: 'transaction',
       accountRid: myFirstMortgage._id
     }, {
-      name: '2nd Mortgage, Trans #1',
-      principalAmount: -199.25,
-      interestAmount: -101.25,
+      name: '2nd Mortgage, Payment #1',
+      principalAmount: 199.25,
+      interestAmount: 101.25,
       eventType: 'transaction',
       accountRid: mySecondMortgage._id
     }, {
-      name: '2nd Mortgage, Trans #2',
-      principalAmount: -198.65,
-      interestAmount: -101.85,
+      name: '2nd Mortgage, Payment #2',
+      principalAmount: 198.65,
+      interestAmount: 101.85,
       eventType: 'transaction',
       accountRid: mySecondMortgage._id
     }, {
       description: '2nd Mortgage, non-Trans #A',
-      principalAmount: -199.25,
-      interestAmount: -101.25,
+      principalAmount: 199.25,
+      interestAmount: 101.25,
       eventType: 'NotATransaction',
       accountRid: mySecondMortgage._id
     }, {
