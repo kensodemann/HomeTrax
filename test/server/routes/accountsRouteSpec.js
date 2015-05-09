@@ -68,30 +68,57 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('includes sums and counts, sums negated for liability account', function(done) {
-      request(app)
-        .get('/api/accounts')
-        .end(function(err, res) {
-          var accounts = res.body;
-          var acct = findAccount(accounts, mySecondMortgage);
-          expect(acct.principalPaid).to.be.closeTo(397.9, 0.001);
-          expect(acct.interestPaid).to.be.closeTo(203.1, 0.001);
-          expect(acct.numberOfTransactions).to.equal(2);
-          done();
-        });
+    describe('liability accounts', function() {
+      it('include sums and counts', function(done) {
+        request(app)
+          .get('/api/accounts')
+          .end(function(err, res) {
+            var accounts = res.body;
+            var acct = findAccount(accounts, mySecondMortgage);
+            expect(acct.principalPaid).to.be.closeTo(397.9, 0.001);
+            expect(acct.interestPaid).to.be.closeTo(203.1, 0.001);
+            expect(acct.numberOfTransactions).to.equal(2);
+            done();
+          });
+      });
+
+      it('subtracts payments from the amount to get the balance', function(done) {
+        request(app)
+          .get('/api/accounts')
+          .end(function(err, res) {
+            var accounts = res.body;
+            var acct = findAccount(accounts, mySecondMortgage);
+            expect(acct.balance).to.be.closeTo(acct.amount - 397.9, 0.001);
+            done();
+          });
+      });
     });
 
-    it('includes sums and counts, sums not negated for asset account', function(done) {
-      request(app)
-        .get('/api/accounts')
-        .end(function(err, res) {
-          var accounts = res.body;
-          var acct = findAccount(accounts, myChecking);
-          expect(acct.principalPaid).to.be.closeTo(345.36, 0.001);
-          expect(acct.interestPaid).to.be.closeTo(0.09, 0.001);
-          expect(acct.numberOfTransactions).to.equal(6);
-          done();
-        });
+
+    describe('asset accounts', function() {
+      it('includes sums and counts for asset account', function(done) {
+        request(app)
+          .get('/api/accounts')
+          .end(function(err, res) {
+            var accounts = res.body;
+            var acct = findAccount(accounts, myChecking);
+            expect(acct.principalPaid).to.be.closeTo(345.36, 0.001);
+            expect(acct.interestPaid).to.be.closeTo(0.09, 0.001);
+            expect(acct.numberOfTransactions).to.equal(6);
+            done();
+          });
+      });
+
+      it('adds net to the amount to get the balance', function(done) {
+        request(app)
+          .get('/api/accounts')
+          .end(function(err, res) {
+            var accounts = res.body;
+            var acct = findAccount(accounts, myChecking);
+            expect(acct.balance).to.be.closeTo(acct.amount + 345.36, 0.001);
+            done();
+          });
+      });
     });
 
     function findAccount(accounts, acct) {
@@ -386,39 +413,39 @@ describe('api/accounts Routes', function() {
 
   function loadEvents(done) {
     db.events.insert([{
-      description: '1st Mortgage, Trans #1',
-      principalAmount: -943.93,
-      interestAmount: -394.82,
+      description: '1st Mortgage, Payment #1',
+      principalAmount: 943.93,
+      interestAmount: 394.82,
       eventType: 'transaction',
       accountRid: myFirstMortgage._id
     }, {
-      description: '1st Mortgage, Trans #2',
-      principalAmount: -944.90,
-      interestAmount: -393.95,
+      description: '1st Mortgage, Payment #2',
+      principalAmount: 944.90,
+      interestAmount: 393.95,
       eventType: 'transaction',
       accountRid: myFirstMortgage._id
     }, {
-      name: '1st Mortgage, Trans #3',
-      principalAmount: -945.62,
-      interestAmount: -393.13,
+      name: '1st Mortgage, Payment #3',
+      principalAmount: 945.62,
+      interestAmount: 393.13,
       eventType: 'transaction',
       accountRid: myFirstMortgage._id
     }, {
-      name: '2nd Mortgage, Trans #1',
-      principalAmount: -199.25,
-      interestAmount: -101.25,
+      name: '2nd Mortgage, Payment #1',
+      principalAmount: 199.25,
+      interestAmount: 101.25,
       eventType: 'transaction',
       accountRid: mySecondMortgage._id
     }, {
-      name: '2nd Mortgage, Trans #2',
-      principalAmount: -198.65,
-      interestAmount: -101.85,
+      name: '2nd Mortgage, Payment #2',
+      principalAmount: 198.65,
+      interestAmount: 101.85,
       eventType: 'transaction',
       accountRid: mySecondMortgage._id
     }, {
       description: '2nd Mortgage, non-Trans #A',
-      principalAmount: -199.25,
-      interestAmount: -101.25,
+      principalAmount: 199.25,
+      interestAmount: 101.25,
       eventType: 'NotATransaction',
       accountRid: mySecondMortgage._id
     }, {

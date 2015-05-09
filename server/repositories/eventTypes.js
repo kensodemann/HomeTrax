@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = {
-  miscellaneous: 'miscellaneou',
+  miscellaneous: 'miscellaneous',
   transaction: 'transaction'
 };
