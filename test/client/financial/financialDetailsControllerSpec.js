@@ -176,8 +176,8 @@
         controller.transactionEditor = {
           description: 'Historical Deposit #12',
           date: '2012-06-17',
-          principal: 44395.93,
-          interest: 0.12
+          principal: '44395.93',
+          interest: '0.12'
         };
         controller.saveTransaction(controller.transactions[1]);
         expect(controller.transactions[1].description).to.equal('Historical Deposit #12');

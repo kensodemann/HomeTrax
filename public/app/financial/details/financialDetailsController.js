@@ -79,8 +79,8 @@
     function copyFromTransactionEditor(trans) {
       trans.description = controller.transactionEditor.description;
       trans.transactionDate = controller.transactionEditor.date;
-      trans.principalAmount = controller.transactionEditor.principal;
-      trans.interestAmount = controller.transactionEditor.interest;
+      trans.principalAmount = Number(controller.transactionEditor.principal);
+      trans.interestAmount = Number(controller.transactionEditor.interest);
     }
   }
 }());
