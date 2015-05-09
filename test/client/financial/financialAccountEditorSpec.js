@@ -144,13 +144,23 @@
     describe('Saving the account', function() {
       var mockAccount;
       var controller;
+      var theSaveCompleted;
+      var savedAccount;
+
       beforeEach(function() {
+        theSaveCompleted = false;
+        savedAccount = undefined;
         mockAccount = sinon.stub({
           $save: function() {}
         });
         controller = getEditorController();
-        finacialAccountEditor.open(mockAccount, "itDontMatterNone");
+        finacialAccountEditor.open(mockAccount, "itDontMatterNone", saveCompleted);
       });
+
+      function saveCompleted(acct){
+        theSaveCompleted = true;
+        savedAccount = acct;
+      }
 
       it('copies the data from the editor controller to the account resource', function() {
         controller.name = 'Bill & Ted';
@@ -178,6 +188,13 @@
         controller.save();
         mockAccount.$save.yield();
         expect(mockModal.hide.calledOnce).to.be.true;
+      });
+
+      it('calls the save callback with the new account if the save succeeds', function(){
+        controller.save();
+        mockAccount.$save.yield(mockAccount);
+        expect(theSaveCompleted).to.be.true;
+        expect(savedAccount).to.equal(mockAccount);
       });
 
       it('sets the error text and leaves the editor open if the save fails', function() {
