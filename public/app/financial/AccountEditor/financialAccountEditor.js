@@ -15,18 +15,20 @@
       scope: editorScope,
       show: false
     });
+    var saved;
 
     createEditorScope();
 
     return service;
 
 
-    function open(account, mode) {
+    function open(account, mode, saveCallback) {
       setTitle(mode);
       copyAccount(account);
       editor.$promise.then(function() {
         editor.show();
       });
+      saved = saveCallback;
     }
 
     function setTitle(mode) {
@@ -65,8 +67,9 @@
       copyEnteredData();
       editorScope.account.$save(success, error);
 
-      function success() {
+      function success(acct) {
         editor.hide();
+        saved(acct);
       }
 
       function error(response) {
