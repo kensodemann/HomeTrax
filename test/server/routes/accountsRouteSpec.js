@@ -68,30 +68,57 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('includes sums and counts for liability account', function(done) {
-      request(app)
-        .get('/api/accounts')
-        .end(function(err, res) {
-          var accounts = res.body;
-          var acct = findAccount(accounts, mySecondMortgage);
-          expect(acct.principalPaid).to.be.closeTo(397.9, 0.001);
-          expect(acct.interestPaid).to.be.closeTo(203.1, 0.001);
-          expect(acct.numberOfTransactions).to.equal(2);
-          done();
-        });
+    describe('liability accounts', function() {
+      it('include sums and counts', function(done) {
+        request(app)
+          .get('/api/accounts')
+          .end(function(err, res) {
+            var accounts = res.body;
+            var acct = findAccount(accounts, mySecondMortgage);
+            expect(acct.principalPaid).to.be.closeTo(397.9, 0.001);
+            expect(acct.interestPaid).to.be.closeTo(203.1, 0.001);
+            expect(acct.numberOfTransactions).to.equal(2);
+            done();
+          });
+      });
+
+      it('subtracts payments from the amount to get the balance', function(done) {
+        request(app)
+          .get('/api/accounts')
+          .end(function(err, res) {
+            var accounts = res.body;
+            var acct = findAccount(accounts, mySecondMortgage);
+            expect(acct.balance).to.be.closeTo(acct.amount - 397.9, 0.001);
+            done();
+          });
+      });
     });
 
-    it('includes sums and counts for asset account', function(done) {
-      request(app)
-        .get('/api/accounts')
-        .end(function(err, res) {
-          var accounts = res.body;
-          var acct = findAccount(accounts, myChecking);
-          expect(acct.principalPaid).to.be.closeTo(345.36, 0.001);
-          expect(acct.interestPaid).to.be.closeTo(0.09, 0.001);
-          expect(acct.numberOfTransactions).to.equal(6);
-          done();
-        });
+
+    describe('asset accounts', function() {
+      it('includes sums and counts for asset account', function(done) {
+        request(app)
+          .get('/api/accounts')
+          .end(function(err, res) {
+            var accounts = res.body;
+            var acct = findAccount(accounts, myChecking);
+            expect(acct.principalPaid).to.be.closeTo(345.36, 0.001);
+            expect(acct.interestPaid).to.be.closeTo(0.09, 0.001);
+            expect(acct.numberOfTransactions).to.equal(6);
+            done();
+          });
+      });
+
+      it('adds net to the amount to get the balance', function(done) {
+        request(app)
+          .get('/api/accounts')
+          .end(function(err, res) {
+            var accounts = res.body;
+            var acct = findAccount(accounts, myChecking);
+            expect(acct.balance).to.be.closeTo(acct.amount + 345.36, 0.001);
+            done();
+          });
+      });
     });
 
     function findAccount(accounts, acct) {

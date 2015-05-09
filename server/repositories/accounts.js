@@ -2,6 +2,7 @@
 
 var _ = require('underscore');
 var authentication = require('../services/authentication');
+var balanceTypes = require('./balanceTypes');
 var db = require('../config/database');
 var ObjectId = require('mongojs').ObjectId;
 var redirect = require('../services/redirect');
@@ -57,7 +58,17 @@ Accounts.prototype.postGetAction = function(accts, done) {
         acct.numberOfTransactions = ttls.numberOfTransactions;
         acct.principalPaid = ttls.principalPaid;
         acct.interestPaid = ttls.interestPaid;
+      } else {
+        acct.numberOfTransactions = 0;
+        acct.principalPaid = 0;
+        acct.interestPaid = 0;
       }
+      if (acct.balanceType === balanceTypes.liability) {
+        acct.balance = acct.amount - acct.principalPaid;
+      } else {
+        acct.balance = acct.amount + acct.principalPaid;
+      }
+
     });
     done(err, accts);
   });
