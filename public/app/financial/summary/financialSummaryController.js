@@ -15,6 +15,9 @@
         financialAccountEditor.open(acct, 'create', accountAdded);
 
         function accountAdded(acct) {
+          acct.balance = acct.amount;
+          acct.principalPaid = 0;
+          acct.interestPaid = 0;
           if (acct.balanceType === balanceTypes.asset) {
             controller.assetAccounts.push(acct);
           } else {
