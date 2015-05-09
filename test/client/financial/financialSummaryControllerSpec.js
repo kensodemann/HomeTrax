@@ -72,6 +72,22 @@
         expect(mockFinancialAccountEditor.open.calledOnce).to.be.true;
         expect(mockFinancialAccountEditor.open.calledWith(mockFinancialAccount, 'create')).to.be.true;
       });
+
+      it('adds the account to the asset list if it is an asset account', function(){
+        var controller = createController();
+        controller.addAccountClicked();
+        mockFinancialAccountEditor.open.callArgWith(2, {name:'bob', balanceType: 'liability'});
+        expect(controller.assetAccounts.length).to.equal(0);
+        expect(controller.liabilityAccounts.length).to.equal(1);
+      });
+
+      it('adds the account to the asset list if it is an asset account', function(){
+        var controller = createController();
+        controller.addAccountClicked();
+        mockFinancialAccountEditor.open.callArgWith(2, {name:'brian', balanceType: 'asset'});
+        expect(controller.assetAccounts.length).to.equal(1);
+        expect(controller.liabilityAccounts.length).to.equal(0);
+      });
     });
 
     function initializeTestData(){

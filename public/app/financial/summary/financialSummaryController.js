@@ -4,7 +4,7 @@
   angular.module('app.financial')
     .controller('financialSummaryController', FinancialSummaryController);
 
-  function FinancialSummaryController(financialAccountEditor, FinancialAccount) {
+  function FinancialSummaryController(financialAccountEditor, FinancialAccount, balanceTypes) {
     var controller = {
       activate: function() {
         getAccounts();
@@ -12,7 +12,15 @@
 
       addAccountClicked: function() {
         var acct = new FinancialAccount();
-        financialAccountEditor.open(acct, 'create');
+        financialAccountEditor.open(acct, 'create', accountAdded);
+
+        function accountAdded(acct) {
+          if (acct.balanceType === balanceTypes.asset) {
+            controller.assetAccounts.push(acct);
+          } else {
+            controller.liabilityAccounts.push(acct);
+          }
+        }
       },
 
       addAccountTooltip: {
@@ -34,12 +42,12 @@
       });
     }
 
-    function isLiabilityAccount(acct){
-      return acct.balanceType === 'liability';
+    function isLiabilityAccount(acct) {
+      return acct.balanceType === balanceTypes.liability;
     }
 
-    function isAssetAccount(acct){
-      return acct.balanceType === 'asset';
+    function isAssetAccount(acct) {
+      return acct.balanceType === balanceTypes.asset;
     }
   }
 }());
