@@ -32,6 +32,7 @@ Events.prototype.get = function(req, res) {
 Events.prototype.preSaveAction = function(req, done) {
   req.body.userId = new ObjectId(req.user._id);
   removeBackupProperties(req);
+  makeObjectIds(req);
   done(null);
 };
 
@@ -42,6 +43,12 @@ function removeBackupProperties(req) {
         delete req.body[p];
       }
     }
+  }
+}
+
+function makeObjectIds(req) {
+  if (!!req.body.accountRid) {
+    req.body.acountRid = new ObjectId(req.body.accountRid);
   }
 }
 
