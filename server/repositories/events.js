@@ -2,6 +2,7 @@
 
 var authentication = require('../services/authentication');
 var _ = require('underscore');
+var eventTypes = require('./eventTypes');
 var db = require('../config/database');
 var ObjectId = require("mongojs").ObjectId;
 var redirect = require('../services/redirect');
@@ -30,7 +31,11 @@ Events.prototype.get = function(req, res) {
 
 Events.prototype.preSaveAction = function(req, done) {
   req.body.userId = new ObjectId(req.user._id);
+  removeBackupProperties(req);
+  done(null);
+};
 
+function removeBackupProperties(req) {
   for (var p in req.body) {
     if (req.body.hasOwnProperty(p)) {
       if (p.match(/^_.*/) && p !== '_id') {
@@ -38,9 +43,7 @@ Events.prototype.preSaveAction = function(req, done) {
       }
     }
   }
-
-  done(null);
-};
+}
 
 Events.prototype.preCheckStatus = function(req, done) {
   var my = this;
@@ -65,6 +68,25 @@ Events.prototype.validate = function(req, done) {
   if (!req.body) {
     return done(null, new Error('Request is empty.'));
   }
+
+  if (req.body.eventType === eventTypes.transaction) {
+    validateTransactionEvent(req, done);
+  } else {
+    validateMiscellaneousEvent(req, done);
+  }
+};
+
+function validateTransactionEvent(req, done) {
+  if (!req.body.description) {
+    return done(null, new Error('Transactions must have a description.'));
+  }
+  if (!req.body.transactionDate) {
+    return done(null, new Error('Transactions must have a transaction date.'));
+  }
+  done(null, null);
+}
+
+function validateMiscellaneousEvent(req, done) {
   if (!req.body.title) {
     return done(null, new Error('Events must have a title.'));
   }
@@ -78,12 +100,13 @@ Events.prototype.validate = function(req, done) {
     return done(null, new Error('Start date must be on or before the end date.'));
   }
   done(null, null);
-};
+}
 
 var repository = new Events();
 
-module.exports = function(app){
-  app.get('/api/events', redirect.toHttps, authentication.requiresApiLogin, function(req, res) {repository.get(req, res);});
+module.exports = function(app) {
+  app.get('/api/events', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.get(req, res);});
   app.post('/api/events/:id?', redirect.toHttps, authentication.requiresApiLogin,
     function(req, res) {repository.save(req, res);});
   app.delete('/api/events/:id', redirect.toHttps, authentication.requiresApiLogin,
