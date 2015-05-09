@@ -83,7 +83,7 @@
       acct.accountNumber = controller.accountNumber;
       acct.accountType = controller.accountType.accountType;
       acct.balanceType = controller.accountType.balanceType;
-      acct.amount = controller.amount;
+      acct.amount = Number(controller.amount);
     }
   }
 }());
