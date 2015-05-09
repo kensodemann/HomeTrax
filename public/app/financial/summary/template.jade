@@ -24,7 +24,7 @@
 										a(href="financialDetails/{{acct._id}}") {{acct.name}}
 									td {{acct.principalPaid | currency}}
 									td {{acct.interestPaid | currency}}
-									td {{acct.amount - acct.principalPaid | currency}}
+									td {{acct.balance | currency}}
 						h4 Assets
 						table.table
 							thead
@@ -39,7 +39,7 @@
 										a(href="financialDetails/{{acct._id}}") {{acct.name}}
 									td {{acct.principalPaid | currency}}
 									td {{acct.interestPaid | currency}}
-									td {{acct.amount + acct.principalPaid | currency}}
+									td {{acct.balance | currency}}
 			.col-md-4
 				.panel.panel-default
 					.panel-heading
