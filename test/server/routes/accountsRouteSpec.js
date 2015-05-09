@@ -386,13 +386,13 @@ describe('api/accounts Routes', function() {
 
   function loadEvents(done) {
     db.events.insert([{
-      name: '1st Mortgage, Trans #1',
+      description: '1st Mortgage, Trans #1',
       principalAmount: -943.93,
       interestAmount: -394.82,
       eventType: 'transaction',
       accountRid: myFirstMortgage._id
     }, {
-      name: '1st Mortgage, Trans #2',
+      description: '1st Mortgage, Trans #2',
       principalAmount: -944.90,
       interestAmount: -393.95,
       eventType: 'transaction',
@@ -416,19 +416,19 @@ describe('api/accounts Routes', function() {
       eventType: 'transaction',
       accountRid: mySecondMortgage._id
     }, {
-      name: '2nd Mortgage, non-Trans #A',
+      description: '2nd Mortgage, non-Trans #A',
       principalAmount: -199.25,
       interestAmount: -101.25,
       eventType: 'NotATransaction',
       accountRid: mySecondMortgage._id
     }, {
-      name: 'Savings Monthly Deposit #1',
+      description: 'Savings Monthly Deposit #1',
       principalAmount: 1000.00,
       interestAmount: 0.12,
       eventType: 'transaction',
       accountRid: mySavings._id
     }, {
-      name: 'Savings Monthly Deposit #2',
+      description: 'Savings Monthly Deposit #2',
       principalAmount: 1000.00,
       interestAmount: 0.13,
       eventType: 'transaction',
@@ -441,25 +441,25 @@ describe('api/accounts Routes', function() {
       eventType: 'SomethingElse',
       accountRid: mySavings._id
     }, {
-      name: 'Checking Deposit #1',
+      description: 'Checking Deposit #1',
       principalAmount: 200.00,
       interestAmount: 0.01,
       eventType: 'transaction',
       accountRid: myChecking._id
     }, {
-      name: 'Checking Withdrawl #1',
+      description: 'Checking Withdrawl #1',
       principalAmount: -3.50,
       interestAmount: 0.02,
       eventType: 'transaction',
       accountRid: myChecking._id
     }, {
-      name: 'Checking Deposit #2',
+      description: 'Checking Deposit #2',
       principalAmount: 300.00,
       interestAmount: 0.05,
       eventType: 'transaction',
       accountRid: myChecking._id
     }, {
-      name: 'Checking Withdrawl #2',
+      description: 'Checking Withdrawl #2',
       principalAmount: -42.04,
       interestAmount: 0,
       eventType: 'transaction',
@@ -472,13 +472,13 @@ describe('api/accounts Routes', function() {
       eventType: 'WhooopDeeHoo',
       accountRid: myChecking._id
     }, {
-      name: 'Checking Deposit #3',
+      description: 'Checking Deposit #3',
       principalAmount: 13.94,
       interestAmount: 0.01,
       eventType: 'transaction',
       accountRid: myChecking._id
     }, {
-      name: 'Checking Withdrawl #3',
+      description: 'Checking Withdrawl #3',
       principalAmount: -123.04,
       interestAmount: 0,
       eventType: 'transaction',

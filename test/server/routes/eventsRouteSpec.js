@@ -141,7 +141,7 @@ describe('api/events Routes', function() {
           });
         });
     });
-    
+
     it('returns the _id when saving new data', function(done) {
       request(app)
         .post('/api/events')
@@ -159,7 +159,7 @@ describe('api/events Routes', function() {
           done();
         });
     });
-    
+
     it('strips fields starting with _ except _id ', function(done) {
       request(app)
         .post('/api/events')
@@ -208,30 +208,6 @@ describe('api/events Routes', function() {
         });
     });
 
-    it("Does not allow modifications to other user's events", function(done) {
-      request(app)
-        .post('/api/events/' + otherUserPublicEvent._id.toString())
-        .send({
-          title: 'Do Something Else',
-          allDay: false,
-          start: '2014-06-20T12:00:00',
-          end: '2014-06-20T13:00:00',
-          category: 'Health & Fitness',
-          private: false,
-          userId: new ObjectId('53a4dd887c6dc30000bee3af')
-        })
-        .end(function(err, res) {
-          expect(res.status).to.equal(403);
-          db.events.findOne({_id: otherUserPublicEvent._id}, function(err, evt) {
-            expect(evt.title).to.equal('Have Sex');
-            db.events.find(function(err, evts) {
-              expect(evts.length).to.equal(20);
-              done();
-            });
-          });
-        });
-    });
-
     it("does not allow modifications to non existent events", function(done) {
       request(app)
         .post('/api/events/53a4dd887c6dc30000bee3af')
@@ -253,77 +229,145 @@ describe('api/events Routes', function() {
         });
     });
 
-    it('does not allow the start date to be greater than the end date', function(done) {
-      request(app)
-        .post('/api/events/' + myPublicEvent._id.toString())
-        .send({
-          title: 'Do Something Else',
-          allDay: false,
-          start: '2014-06-20T12:00:00',
-          end: '2014-06-20T11:00:00',
-          category: 'Health & Fitness',
-          private: false,
-          userId: new ObjectId('53a4dd887c6dc30000bee3af')
-        })
-        .end(function(err, res) {
-          expect(res.status).to.equal(400);
-          expect(res.body.reason).to.equal('Error: Start date must be on or before the end date.');
-          done();
-        });
+
+    describe('saving transaction type events', function(){
+      it('does not allow saving an event without a description', function(done) {
+        request(app)
+          .post('/api/events')
+          .send({
+            description: '',
+            transactionDate: '2014-06-20T13:00:00',
+            principalAmount: 1234,
+            interestAmount: 0.01,
+            eventType: 'transaction'
+          })
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: Transactions must have a description.');
+            done();
+          });
+      });
+
+      it('does not allow saving an event without a transaction date', function(done) {
+        request(app)
+          .post('/api/events')
+          .send({
+            description: 'something',
+            transactionDate: '',
+            principalAmount: 1234,
+            interestAmount: 0.01,
+            eventType: 'transaction'
+          })
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: Transactions must have a transaction date.');
+            done();
+          });
+      });
     });
 
-    it('does not allow the start date to be greater than the end date', function(done) {
-      request(app)
-        .post('/api/events')
-        .send({
-          title: '',
-          allDay: false,
-          start: '2014-06-20T12:00:00',
-          end: '2014-06-20T13:00:00',
-          category: 'Health & Fitness',
-          private: false
-        })
-        .end(function(err, res) {
-          expect(res.status).to.equal(400);
-          expect(res.body.reason).to.equal('Error: Events must have a title.');
-          done();
-        });
-    });
+    describe('saving miscellaneous type events', function() {
+      it("Does not allow modifications to other user's events", function(done) {
+        request(app)
+          .post('/api/events/' + otherUserPublicEvent._id.toString())
+          .send({
+            title: 'Do Something Else',
+            allDay: false,
+            start: '2014-06-20T12:00:00',
+            end: '2014-06-20T13:00:00',
+            category: 'Health & Fitness',
+            private: false,
+            eventType: 'miscellaneous',
+            userId: new ObjectId('53a4dd887c6dc30000bee3af')
+          })
+          .end(function(err, res) {
+            expect(res.status).to.equal(403);
+            db.events.findOne({_id: otherUserPublicEvent._id}, function(err, evt) {
+              expect(evt.title).to.equal('Have Sex');
+              db.events.find(function(err, evts) {
+                expect(evts.length).to.equal(20);
+                done();
+              });
+            });
+          });
+      });
 
-    it('does not allow saving an event without a start date', function(done) {
-      request(app)
-        .post('/api/events')
-        .send({
-          title: 'Do Something Else',
-          allDay: false,
-          start: '',
-          end: '2014-06-20T13:00:00',
-          category: 'Health & Fitness',
-          private: false
-        })
-        .end(function(err, res) {
-          expect(res.status).to.equal(400);
-          expect(res.body.reason).to.equal('Error: Events must have a start date.');
-          done();
-        });
-    });
+      it('does not allow the start date to be greater than the end date', function(done) {
+        request(app)
+          .post('/api/events/' + myPublicEvent._id.toString())
+          .send({
+            title: 'Do Something Else',
+            allDay: false,
+            start: '2014-06-20T12:00:00',
+            end: '2014-06-20T11:00:00',
+            category: 'Health & Fitness',
+            private: false,
+            eventType: 'miscellaneous',
+            userId: new ObjectId('53a4dd887c6dc30000bee3af')
+          })
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: Start date must be on or before the end date.');
+            done();
+          });
+      });
 
-    it('does not allow saving an event without a category', function(done) {
-      request(app)
-        .post('/api/events')
-        .send({
-          title: 'Do Something Else',
-          allDay: false,
-          start: '2014-06-20T12:00:00',
-          end: '2014-06-20T13:00:00',
-          category: '',
-          private: false
-        })
-        .end(function(err, res) {
-          expect(res.status).to.equal(400);
-          expect(res.body.reason).to.equal('Error: Events must have a category.');
-          done();
-        });
+      it('does not allow the start date to be greater than the end date', function(done) {
+        request(app)
+          .post('/api/events')
+          .send({
+            title: '',
+            allDay: false,
+            start: '2014-06-20T12:00:00',
+            end: '2014-06-20T13:00:00',
+            category: 'Health & Fitness',
+            eventType: 'miscellaneous',
+            private: false
+          })
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: Events must have a title.');
+            done();
+          });
+      });
+
+      it('does not allow saving an event without a start date', function(done) {
+        request(app)
+          .post('/api/events')
+          .send({
+            title: 'Do Something Else',
+            allDay: false,
+            start: '',
+            end: '2014-06-20T13:00:00',
+            category: 'Health & Fitness',
+            eventType: 'miscellaneous',
+            private: false
+          })
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: Events must have a start date.');
+            done();
+          });
+      });
+
+      it('does not allow saving an event without a category', function(done) {
+        request(app)
+          .post('/api/events')
+          .send({
+            title: 'Do Something Else',
+            allDay: false,
+            start: '2014-06-20T12:00:00',
+            end: '2014-06-20T13:00:00',
+            category: '',
+            eventType: 'miscellaneous',
+            private: false
+          })
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: Events must have a category.');
+            done();
+          });
+      });
     });
   });
 
@@ -364,16 +408,18 @@ describe('api/events Routes', function() {
         });
     });
 
-    it('returns 403 if item belongs to someone else', function(done) {
-      request(app)
-        .delete('/api/events/' + otherUserPublicEvent._id.toString())
-        .end(function(err, res) {
-          expect(res.status).to.equal(403);
-          db.events.find(function(err, evts) {
-            expect(evts.length).to.equal(20);
-            done();
+    describe('deleting miscellaneous events', function() {
+      it('returns 403 if item belongs to someone else', function(done) {
+        request(app)
+          .delete('/api/events/' + otherUserPublicEvent._id.toString())
+          .end(function(err, res) {
+            expect(res.status).to.equal(403);
+            db.events.find(function(err, evts) {
+              expect(evts.length).to.equal(20);
+              done();
+            });
           });
-        });
+      });
     });
   });
 

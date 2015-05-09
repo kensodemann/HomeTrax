@@ -17,11 +17,18 @@ function Accounts() {
 util.inherits(Accounts, RepositoryBase);
 
 Accounts.prototype.preSaveAction = function(req, done) {
+  makeTypesConsistent(req);
+  done(null);
+};
+
+function makeTypesConsistent(req) {
   if (!!req.body.entityRid) {
     req.body.entityRid = new ObjectId(req.body.entityRid);
   }
-  done(null);
-};
+  if (!!req.body.amount) {
+    req.body.amount = Number(req.body.amount);
+  }
+}
 
 Accounts.prototype.preRemoveAction = function(req, done) {
   db.events.remove({accountRid: new ObjectId(req.params.id)}, done);
