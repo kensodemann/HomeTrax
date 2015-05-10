@@ -1,8 +1,12 @@
 .container
-	kws-page-header(kws-lines="ctrl.headerLines", kws-model="ctrl.account")
+	.jumbotron
+		button.btn.btn-xs.pull-right(ng-click="ctrl.editAccount()")
+			span.glyphicon.glyphicon-pencil
+		.clearfix
+			h2.text-center {{ctrl.account.name}}
+			div.text-center {{ctrl.account.bank}}
+			div.text-center {{ctrl.account.accountNumber}}
 	.container-fluid
-		.row
-			.col-md-12 First row is perminant editor, subsequent rows can be edited in place or deleted. The add button will only be enabled if date, description, and at least one amount is filled in. Also, there needs to be some space between the edit and delete buttons.
 		.row
 			.col-md-12
 				table.table

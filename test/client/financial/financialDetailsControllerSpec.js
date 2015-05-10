@@ -3,21 +3,32 @@
 
   describe('financialDetailsController', function() {
     var $controllerConstructor;
+
+    var editorModes;
+
     var mockFinancialAccount;
+    var mockFinancialAccountEditor;
     var mockHomeAppEvent;
     var mockHomeAppEventConstructor;
     var mockRouteParams;
 
     beforeEach(module('app.financial'));
 
-    beforeEach(inject(function($controller) {
+    beforeEach(inject(function($controller, _editorModes_) {
       $controllerConstructor = $controller;
+      editorModes = _editorModes_;
     }));
 
     beforeEach(function() {
       mockRouteParams = {};
       mockFinancialAccount = sinon.stub({
         get: function() {}
+      });
+    });
+
+    beforeEach(function() {
+      mockFinancialAccountEditor = sinon.stub({
+        open: function() {}
       });
     });
 
@@ -33,6 +44,7 @@
       return $controllerConstructor('financialDetailsController', {
         $routeParams: mockRouteParams,
         FinancialAccount: mockFinancialAccount,
+        financialAccountEditor: mockFinancialAccountEditor,
         HomeAppEvent: mockHomeAppEventConstructor
       });
     }
@@ -223,6 +235,46 @@
         expect(controller.transactions[1].principalAmount).to.equal(7384.09);
         expect(controller.transactions[1].interestAmount).to.equal(0.05);
         expect(controller.transactions[1].editMode).to.be.true;
+      });
+    });
+
+    describe('editing the account', function() {
+      var account;
+      var controller;
+      beforeEach(function() {
+        account = {
+          _id: 42,
+          name: 'The Ultimate Account',
+          otherInfo: 'This is random other information that may be on the account'
+        };
+        mockFinancialAccount.get.returns(account);
+
+        controller = createController();
+        controller.editAccount();
+      });
+
+      it('opens the event editor', function() {
+        expect(mockFinancialAccountEditor.open.calledOnce).to.be.true;
+        expect(mockFinancialAccountEditor.open.calledWith({
+          _id: 42,
+          name: 'The Ultimate Account',
+          otherInfo: 'This is random other information that may be on the account'
+        }, editorModes.modify)).to.be.true;
+      });
+
+      it('is performed on a copy of the account', function() {
+        expect(mockFinancialAccountEditor.open.getCall(0).args[0]).to.deep.equal(account);
+        expect(mockFinancialAccountEditor.open.getCall(0).args[0]).to.not.equal(account);
+      });
+
+      it('copies changes back', function() {
+        mockFinancialAccountEditor.open.callArgWith(2, {
+          _id: 42,
+          name: 'I am the best number, ever',
+          otherInfo: 'No matter what 73 tries to tell you'
+        });
+        expect(account.name).to.equal('I am the best number, ever');
+        expect(account.otherInfo).to.equal('No matter what 73 tries to tell you');
       });
     });
   });

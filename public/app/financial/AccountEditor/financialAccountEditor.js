@@ -3,7 +3,7 @@
 
   angular.module('app.financial').factory('financialAccountEditor', FinancialAccountEditor);
 
-  function FinancialAccountEditor($rootScope, $modal, financialAccountTypes) {
+  function FinancialAccountEditor($rootScope, $modal, financialAccountTypes, editorModes) {
     var service = {
       open: open
     };
@@ -32,7 +32,7 @@
     }
 
     function setTitle(mode) {
-      if (mode === 'edit') {
+      if (mode === editorModes.modify) {
         editorScope.controller.title = 'Modify Account';
       } else {
         editorScope.controller.title = 'New Account';

@@ -3,7 +3,8 @@
   'use strict';
 
   describe('calendarEventEditor', function() {
-    var serviceUnderTest;
+    var calendarEventEditor;
+    var editorModes;
 
     var mockBloodhound;
     var mockBloodhoundConstructor;
@@ -172,17 +173,18 @@
       }
     });
 
-    beforeEach(inject(function($q, $rootScope, calendarEventEditor) {
+    beforeEach(inject(function($q, $rootScope, _editorModes_, _calendarEventEditor_) {
       askDfd = $q.defer();
       mockMessageDialogService.ask.returns(askDfd.promise);
       usersGetDfd = $q.defer();
       mockUsers.get.returns(usersGetDfd.promise);
-      serviceUnderTest = calendarEventEditor;
+      editorModes = _editorModes_;
+      calendarEventEditor = _calendarEventEditor_;
       rootScope = $rootScope;
     }));
 
     it('Should exist', function() {
-      expect(serviceUnderTest).to.not.be.undefined;
+      expect(calendarEventEditor).to.not.be.undefined;
     });
 
     function getEditorScope() {
@@ -235,32 +237,32 @@
       });
 
       it('does not show the dialog if it is not ready', function() {
-        serviceUnderTest.open(testEvent, 'anything');
+        calendarEventEditor.open(testEvent, 'anything');
         expect(mockModal.show.called).to.be.false;
       });
 
       it('shows the dialog if it is ready', function() {
-        serviceUnderTest.open(testEvent, 'anything');
+        calendarEventEditor.open(testEvent, 'anything');
         mockModal.$promise.then.yield();
         expect(mockModal.show.calledOnce).to.be.true;
       });
 
       it('sets the title to Edit Event if the mode is "edit"', function() {
         var ctrl = getEditorCtrl();
-        serviceUnderTest.open(testEvent, 'edit');
+        calendarEventEditor.open(testEvent, editorModes.modify);
         expect(ctrl.title).to.equal('Edit Event');
       });
 
       it('sets the title to New Event if the mode is "create"', function() {
         var ctrl = getEditorCtrl();
-        serviceUnderTest.open(testEvent, 'create');
+        calendarEventEditor.open(testEvent, editorModes.create);
         expect(ctrl.title).to.equal('New Event');
       });
 
       it('copies the passed event to the editor model', function() {
         var ctrl = getEditorCtrl();
         var zoneOffset = moment().zone() * 60000;
-        serviceUnderTest.open(testEvent, 'anything');
+        calendarEventEditor.open(testEvent, 'anything');
         expect(ctrl.model.title).to.equal('AA Meeting');
         expect(ctrl.model.isAllDayEvent).to.be.false;
         expect(ctrl.model.start).to.equal(moment('2014-12-01T01:00:00.000Z').valueOf() + zoneOffset);
@@ -271,7 +273,7 @@
 
       it("uses the user's default color for calendar events", function() {
         var ctrl = getEditorCtrl();
-        serviceUnderTest.open(testEvent, 'anything');
+        calendarEventEditor.open(testEvent, 'anything');
         expect(mockColors.getColor.calledOnce).to.be.true;
         expect(mockColors.getColor.calledWithExactly(mockColors.calendar)).to.be.true;
         expect(ctrl.model.color).to.equal('#121212');
@@ -283,7 +285,7 @@
         testEvent.end = moment("2014-12-03T00:00:00.000Z");
         var ctrl = getEditorCtrl();
         var zoneOffset = moment().zone() * 60000;
-        serviceUnderTest.open(testEvent, 'anything');
+        calendarEventEditor.open(testEvent, 'anything');
         expect(ctrl.model.isAllDayEvent).to.be.true;
         expect(ctrl.model.start).to.equal(moment('2014-12-01T00:00:00.000Z').valueOf() + zoneOffset);
         expect(ctrl.model.end).to.equal(moment('2014-12-02T00:00:00.000Z').valueOf() + zoneOffset);
@@ -292,14 +294,14 @@
       it('allows editing if the event has no userId', function() {
         var ctrl = getEditorCtrl();
         testEvent.userId = undefined;
-        serviceUnderTest.open(testEvent, 'anything');
+        calendarEventEditor.open(testEvent, 'anything');
         expect(ctrl.isReadonly).to.be.false;
       });
 
       it("allows editing if the event's userId matches the identity", function() {
         var ctrl = getEditorCtrl();
         mockIdentity.currentUser._id = testEvent.userId;
-        serviceUnderTest.open(testEvent, 'anything');
+        calendarEventEditor.open(testEvent, 'anything');
         expect(ctrl.isReadonly).to.be.false;
       });
 
@@ -311,13 +313,13 @@
 
         it('cannot be edited by the current user', function() {
           mockIdentity.currentUser._id = '4273';
-          serviceUnderTest.open(testEvent, 'anything');
+          calendarEventEditor.open(testEvent, 'anything');
           expect(ctrl.isReadonly).to.be.true;
         });
 
         it("displays a message with the ownwer's name if the owner exists", function() {
           mockIdentity.currentUser._id = '4273';
-          serviceUnderTest.open(testEvent, 'anything');
+          calendarEventEditor.open(testEvent, 'anything');
           usersGetDfd.resolve({
             firstName: 'Jackie',
             lastName: 'Jones'
@@ -328,7 +330,7 @@
 
         it("displays a message with a generic name if the owner does not exist", function() {
           mockIdentity.currentUser._id = '4273';
-          serviceUnderTest.open(testEvent, 'anything');
+          calendarEventEditor.open(testEvent, 'anything');
           usersGetDfd.resolve();
           rootScope.$digest();
           expect(ctrl.eventOwnerName).to.equal('another user');
@@ -337,12 +339,12 @@
 
       describe('Event Category Autocompletion', function() {
         it('gets a list of event categories', function() {
-          serviceUnderTest.open(testEvent, 'anything');
+          calendarEventEditor.open(testEvent, 'anything');
           expect(mockEventCategory.query.calledOnce).to.be.true;
         });
 
         it('constructs a bloodhound instance', function() {
-          serviceUnderTest.open(testEvent, 'anything');
+          calendarEventEditor.open(testEvent, 'anything');
           expect(mockBloodhoundConstructor.calledOnce).to.be.true;
           var x = mockBloodhoundConstructor.firstCall.args[0];
           expect(x.queryTokenizer).to.equal('whitespace');
@@ -350,13 +352,13 @@
         });
 
         it('initializes the bloodhound instance when the category query returns', function() {
-          serviceUnderTest.open(testEvent, 'anything');
+          calendarEventEditor.open(testEvent, 'anything');
           mockEventCategory.query.yield();
           expect(mockBloodhound.initialize.calledOnce).to.be.true;
         });
 
         it('sets up the category suggestions', function() {
-          serviceUnderTest.open(testEvent, 'anything');
+          calendarEventEditor.open(testEvent, 'anything');
           var ctrl = getEditorCtrl();
           expect(ctrl.categories.displayKey).to.equal('name');
         });
@@ -369,7 +371,7 @@
       beforeEach(function() {
         zoneOffset = moment().zone() * 60000;
         editor = getEditorScope();
-        serviceUnderTest.open({
+        calendarEventEditor.open({
           title: 'Eat Something',
           allDay: false,
           start: moment('2014-06-20T12:00:00'),
@@ -431,8 +433,8 @@
       var zoneOffset;
       beforeEach(function() {
         zoneOffset = moment().zone() * 60000;
-        serviceUnderTest.initialize(mockCalendar);
-        serviceUnderTest.open(mockCalendarEvent);
+        calendarEventEditor.initialize(mockCalendar);
+        calendarEventEditor.open(mockCalendarEvent);
         ctrl = getEditorCtrl();
         ctrl.model = {};
         ctrl.model.title = 'Eat Something';
@@ -539,8 +541,8 @@
       var ctrl;
       var scope;
       beforeEach(function() {
-        serviceUnderTest.initialize(mockCalendar);
-        serviceUnderTest.open(mockCalendarEvent);
+        calendarEventEditor.initialize(mockCalendar);
+        calendarEventEditor.open(mockCalendarEvent);
         ctrl = getEditorCtrl();
         scope = getEditorScope();
       });
