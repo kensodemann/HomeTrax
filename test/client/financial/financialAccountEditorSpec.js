@@ -3,6 +3,8 @@
 
   describe('financialAccountEditor', function() {
     var financialAccountTypes;
+    var editorModes;
+
     var mockModal;
     var mockModalConstructor;
     var finacialAccountEditor;
@@ -39,10 +41,11 @@
       return getEditorScope().controller;
     }
 
-    beforeEach(inject(function($rootScope, _financialAccountEditor_, _financialAccountTypes_) {
+    beforeEach(inject(function($rootScope, _financialAccountEditor_, _financialAccountTypes_, _editorModes_) {
       scope = $rootScope;
       financialAccountTypes = _financialAccountTypes_;
       finacialAccountEditor = _financialAccountEditor_;
+      editorModes = _editorModes_;
     }));
 
 
@@ -105,15 +108,15 @@
         expect(mockModal.show.calledOnce).to.be.true;
       });
 
-      it('sets the title to Modify Account if the mode is "edit"', function() {
+      it('sets the title to Modify Account if the mode is modify', function() {
         var controller = getEditorController();
-        finacialAccountEditor.open({}, 'edit');
+        finacialAccountEditor.open({}, editorModes.modify);
         expect(controller.title).to.equal('Modify Account');
       });
 
       it('sets the title to New Account if the mode is "create"', function() {
         var controller = getEditorController();
-        finacialAccountEditor.open({}, 'create');
+        finacialAccountEditor.open({}, editorModes.create);
         expect(controller.title).to.equal('New Account');
       });
 

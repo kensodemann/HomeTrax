@@ -4,7 +4,8 @@
 
   angular.module('app.calendar').factory('calendarEventEditor', CalendarEventEditor);
 
-  function CalendarEventEditor($rootScope, $window, $modal, EventCategory, eventTypes, messageDialogService, users, identity, colors) {
+  function CalendarEventEditor($rootScope, $window, $modal, EventCategory, eventTypes, messageDialogService,
+                               users, identity, colors, editorModes) {
     var exports = {
       initialize: initialize,
       open: open
@@ -88,7 +89,7 @@
         var ctrl = editorScope.ctrl;
 
         ctrl.mode = mode;
-        ctrl.title = (mode === 'create') ? 'New Event' : 'Edit Event';
+        ctrl.title = (mode === editorModes.create) ? 'New Event' : 'Edit Event';
         ctrl.isReadonly = !!event.userId &&
           event.userId.toString() !== identity.currentUser._id.toString();
         if (ctrl.isReadonly) {

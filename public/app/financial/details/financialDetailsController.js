@@ -3,7 +3,8 @@
 
   angular.module('app.financial').controller('financialDetailsController', FinancialDetailsController);
 
-  function FinancialDetailsController($routeParams, FinancialAccount, HomeAppEvent, eventTypes) {
+  function FinancialDetailsController($routeParams, FinancialAccount, financialAccountEditor, HomeAppEvent,
+                                      eventTypes, editorModes) {
     var controller = {
       activate: function() {
         controller.account = FinancialAccount.get({id: $routeParams.id});
@@ -44,23 +45,15 @@
         }
       },
 
-      headerLines: [{
-        label: 'Name:',
-        columnName: 'name',
-        modes: 'EV'
-      }, {
-        label: 'Bank Name:',
-        columnName: 'bank',
-        modes: 'EV'
-      }, {
-        label: 'Account #:',
-        columnName: 'accountNumber',
-        modes: 'EV'
-      }, {
-        label: 'Opening Balance:',
-        columnName: 'amount',
-        modes: 'E'
-      }]
+      editAccount: function() {
+        var account = {};
+        $.extend(account, controller.account);
+        financialAccountEditor.open(account, editorModes.modify, copyChanges);
+
+        function copyChanges(acct) {
+          $.extend(controller.account, acct);
+        }
+      }
     };
 
     controller.activate();
