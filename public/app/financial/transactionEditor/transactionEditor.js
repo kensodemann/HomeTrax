@@ -4,33 +4,32 @@
   angular.module('app.financial')
     .factory('transactionEditor', TransactionEditor);
 
-  function TransactionEditor($rootScope, $modal, editorModes) {
-    var service = {
-      open:open
+  function TransactionEditor($modal, Editor) {
+    var editor = new Editor($modal, '/partials/financial/transactionEditor/template', 'Transaction');
+
+    editor.copyToController = function(model) {
+      var controller = editor.editorScope.controller;
+      controller.transactionDate = model.transactionDate;
+      controller.description = model.description;
+      controller.principalAmount = model.principalAmount;
+      controller.interestAmount = model.interestAmount;
+      Editor.prototype.copyToController.call(editor, model);
     };
 
-    var editorScope = $rootScope.$new(true);
-    var editor = $modal({
-      template: '/partials/financial/transactionEditor/template',
-      backdrop: 'static',
-      scope: editorScope,
-      show: false
-    });
-    var saved;
+    editor.copyToResourceModel = function(){
+      var model = editor.editorScope.model;
+      var controller = editor.editorScope.controller;
 
-    createEditorScope();
+      model.transactionDate = controller.transactionDate;
+      model.description = controller.description;
+      model.principalAmount = Number(controller.principalAmount);
+      model.interestAmount = Number(controller.interestAmount);
+    };
 
-    return service;
-
-    function open(){
-      editor.$promise.then(function() {
-        editor.show();
-      });
-    }
-
-    function createEditorScope() {
-      editorScope.controller = {
-      };
-    }
+    return {
+      open: function(transaction, mode, saveCallback) {
+        editor.open(transaction, mode, saveCallback);
+      }
+    };
   }
 }());
