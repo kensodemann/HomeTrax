@@ -3,90 +3,43 @@
 
   angular.module('app.financial').factory('financialAccountEditor', FinancialAccountEditor);
 
-  function FinancialAccountEditor($rootScope, $modal, financialAccountTypes, editorModes) {
-    var service = {
-      open: open
+  function FinancialAccountEditor($modal, Editor, financialAccountTypes) {
+    var editor = new Editor($modal, '/partials/financial/accountEditor/template', 'Account');
+    editor.editorScope.controller.accountTypes = financialAccountTypes;
+
+    editor.copyToController = function(model) {
+      var controller = editor.editorScope.controller;
+      controller.name = model.name;
+      controller.bank = model.bank;
+      controller.accountNumber = model.accountNumber;
+      controller.accountType = findAccountType(model.accountType);
+      controller.amount = model.amount;
+      Editor.prototype.copyToController.call(editor, model);
     };
 
-    var editorScope = $rootScope.$new(true);
-    var editor = $modal({
-      template: '/partials/financial/accountEditor/template',
-      backdrop: 'static',
-      scope: editorScope,
-      show: false
-    });
-    var saved;
+    editor.copyToResourceModel = function(){
+      var model = editor.editorScope.model;
+      var controller = editor.editorScope.controller;
 
-    createEditorScope();
+      model.name = controller.name;
+      model.bank = controller.bank;
+      model.accountNumber = controller.accountNumber;
+      model.accountType = controller.accountType.accountType;
+      model.balanceType = controller.accountType.balanceType;
+      model.amount = Number(controller.amount);
+    };
 
-    return service;
-
-
-    function open(account, mode, saveCallback) {
-      setTitle(mode);
-      copyAccount(account);
-      editor.$promise.then(function() {
-        editor.show();
-      });
-      saved = saveCallback;
-    }
-
-    function setTitle(mode) {
-      if (mode === editorModes.modify) {
-        editorScope.controller.title = 'Modify Account';
-      } else {
-        editorScope.controller.title = 'New Account';
+    return {
+      open: function(account, mode, saveCallback) {
+        editor.open(account, mode, saveCallback);
       }
-    }
-
-    function copyAccount(account) {
-      editorScope.controller.name = account.name;
-      editorScope.controller.bank = account.bank;
-      editorScope.controller.accountNumber = account.accountNumber;
-      editorScope.controller.accountType = findAccountType(account.accountType);
-      editorScope.controller.amount = account.amount;
-      editorScope.account = account;
-    }
+    };
 
     function findAccountType(t) {
       var matching = $.grep(financialAccountTypes, function(acctType) {
         return acctType.accountType === t;
       });
       return matching.length > 0 ? matching[0] : financialAccountTypes[0];
-    }
-
-
-    function createEditorScope() {
-      editorScope.controller = {
-        accountTypes: financialAccountTypes,
-        save: save
-      };
-    }
-
-    function save() {
-      copyEnteredData();
-      editorScope.account.$save(success, error);
-
-      function success(acct) {
-        editor.hide();
-        saved(acct);
-      }
-
-      function error(response) {
-        editorScope.controller.errorMessage = response.data.reason;
-      }
-    }
-
-    function copyEnteredData() {
-      var acct = editorScope.account;
-      var controller = editorScope.controller;
-
-      acct.name = controller.name;
-      acct.bank = controller.bank;
-      acct.accountNumber = controller.accountNumber;
-      acct.accountType = controller.accountType.accountType;
-      acct.balanceType = controller.accountType.balanceType;
-      acct.amount = Number(controller.amount);
     }
   }
 }());
