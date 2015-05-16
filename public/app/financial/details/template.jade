@@ -17,32 +17,16 @@
 							th Principal Amount
 							th Interest
 							th
-								button.btn.btn-xs.pull-right(ng-click="ctrl.addTransaction()", ng-disabled="ctrl.editMode")
+								button.btn.btn-xs.pull-right(ng-click="ctrl.addTransaction()")
 									span.glyphicon.glyphicon-plus
 					tbody
 						tr(ng-repeat="trans in ctrl.transactions")
+							td {{trans.transactionDate}}
+							td {{trans.description}}
+							td {{trans.principalAmount}}
+							td {{trans.interestAmount}}
 							td
-								span(ng-hide="trans.editMode") {{trans.transactionDate}}
-								span(ng-show="trans.editMode")
-									input.form-control(type='text', ng-model='ctrl.transactionEditor.date', bs-datepicker, required)
-							td
-								span(ng-hide="trans.editMode") {{trans.description}}
-								span(ng-show="trans.editMode")
-									input.form-control(type='text', ng-model='ctrl.transactionEditor.description', required)
-							td
-								span(ng-hide="trans.editMode") {{trans.principalAmount}}
-								span(ng-show="trans.editMode")
-									input.form-control(type='text', ng-model='ctrl.transactionEditor.principal', required)
-							td
-								span(ng-hide="trans.editMode") {{trans.interestAmount}}
-								span(ng-show="trans.editMode")
-									input.form-control(type='text', ng-model='ctrl.transactionEditor.interest', required)
-							td
-								button.btn.btn-xs.pull-right(ng-hide="trans.editMode", ng-disabled="ctrl.editMode")
-									span.glyphicon.glyphicon-minus
-								button.btn.btn-xs.pull-right(ng-hide="trans.editMode", ng-disabled="ctrl.editMode", ng-click="ctrl.editTransaction(trans)")
+								button.btn.btn-xs.pull-right(ng-click="ctrl.editTransaction(trans)")
 									span.glyphicon.glyphicon-pencil
-								button.btn.btn-xs.pull-right(ng-show="trans.editMode", ng-click="ctrl.saveTransaction(trans)")
-									span.glyphicon.glyphicon-ok
-								button.btn.btn-xs.pull-right(ng-show="trans.editMode")
-									span.glyphicon.glyphicon-remove
+								button.btn.btn-xs.pull-right
+									span.glyphicon.glyphicon-minus
