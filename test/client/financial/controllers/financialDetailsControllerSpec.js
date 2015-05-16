@@ -4,21 +4,20 @@
   describe('financialDetailsController', function() {
     var $controllerConstructor;
 
+    var askDfd;
+    var scope;
+
     var editorModes;
 
     var mockFinancialAccount;
     var mockFinancialAccountEditor;
     var mockHomeAppEvent;
     var mockHomeAppEventConstructor;
-    var mockTransactionEditor;
+    var mockMessageDialogService;
     var mockRouteParams;
+    var mockTransactionEditor;
 
     beforeEach(module('app.financial'));
-
-    beforeEach(inject(function($controller, _editorModes_) {
-      $controllerConstructor = $controller;
-      editorModes = _editorModes_;
-    }));
 
     beforeEach(function() {
       mockRouteParams = {};
@@ -47,13 +46,28 @@
       mockHomeAppEventConstructor.query = sinon.stub();
     });
 
+    beforeEach(function() {
+      mockMessageDialogService = sinon.stub({
+        ask: function() {}
+      });
+    });
+
+    beforeEach(inject(function($rootScope, $q, $controller, _editorModes_) {
+      $controllerConstructor = $controller;
+      editorModes = _editorModes_;
+      askDfd = $q.defer();
+      mockMessageDialogService.ask.returns(askDfd.promise);
+      scope = $rootScope.$new(true);
+    }));
+
     function createController() {
       return $controllerConstructor('financialDetailsController', {
         $routeParams: mockRouteParams,
         FinancialAccount: mockFinancialAccount,
         financialAccountEditor: mockFinancialAccountEditor,
         transactionEditor: mockTransactionEditor,
-        HomeAppEvent: mockHomeAppEventConstructor
+        HomeAppEvent: mockHomeAppEventConstructor,
+        messageDialogService: mockMessageDialogService
       });
     }
 
@@ -144,6 +158,92 @@
         controller.editTransaction(controller.transactions[1]);
         expect(mockTransactionEditor.open.calledOnce).to.be.true;
         expect(mockTransactionEditor.open.calledWith(controller.transactions[1], editorModes.edit)).to.be.true;
+      });
+    });
+
+    describe('deleting a transaction', function() {
+      var controller;
+      beforeEach(function() {
+        controller = createController();
+        controller.transactions = [{
+          _id: 42,
+          description: 'Withdrawl #1',
+          transactionDate: '2015-01-15',
+          principalAmount: -123.04,
+          interestAmount: 0,
+          eventType: 'transaction'
+        }, {
+          _id: 73,
+          description: 'Deposit #1',
+          transactionDate: '2015-03-14',
+          principalAmount: 7384.09,
+          interestAmount: 0.05,
+          eventType: 'transaction'
+        }, {
+          _id: 314159,
+          description: 'Deposit #2',
+          transactionDate: '2015-04-25',
+          principalAmount: 1125.89,
+          interestAmount: 0.09,
+          eventType: 'transaction',
+          $delete: sinon.stub()
+        }, {
+          _id: 3994850,
+          description: 'Deposit #3',
+          transactionDate: '2015-05-15',
+          principalAmount: 1399.89,
+          interestAmount: 0.08,
+          eventType: 'transaction'
+        }];
+      });
+
+      it('asks the user first', function(){
+        controller.deleteTransaction(controller.transactions[2]);
+        expect(mockMessageDialogService.ask.calledOnce).to.be.true;
+        expect(mockMessageDialogService.ask.calledWith('Are you sure you want to delete this transaction?', 'Delete Transaction')).to.be.true;
+      });
+
+      it('does not call delete on the transaction if the user responds no', function(){
+        controller.deleteTransaction(controller.transactions[2]);
+        askDfd.resolve(false);
+        scope.$digest();
+        expect(controller.transactions[2].$delete.called).to.be.false;
+      });
+
+      it('calls delete on the transaction if the user responds yes', function(){
+        controller.deleteTransaction(controller.transactions[2]);
+        askDfd.resolve(true);
+        scope.$digest();
+        expect(controller.transactions[2].$delete.calledOnce).to.be.true;
+      });
+
+      it('removes the transaction from the list after the delete succeeds', function(){
+        controller.deleteTransaction(controller.transactions[2]);
+        askDfd.resolve(true);
+        scope.$digest();
+        controller.transactions[2].$delete.yield();
+        expect(controller.transactions).to.deep.equal([{
+          _id: 42,
+          description: 'Withdrawl #1',
+          transactionDate: '2015-01-15',
+          principalAmount: -123.04,
+          interestAmount: 0,
+          eventType: 'transaction'
+        }, {
+          _id: 73,
+          description: 'Deposit #1',
+          transactionDate: '2015-03-14',
+          principalAmount: 7384.09,
+          interestAmount: 0.05,
+          eventType: 'transaction'
+        }, {
+          _id: 3994850,
+          description: 'Deposit #3',
+          transactionDate: '2015-05-15',
+          principalAmount: 1399.89,
+          interestAmount: 0.08,
+          eventType: 'transaction'
+        }]);
       });
     });
 
