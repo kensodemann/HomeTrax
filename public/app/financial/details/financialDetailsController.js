@@ -25,7 +25,7 @@
       },
 
       editTransaction: function(trans) {
-
+        transactionEditor.open(trans, editorModes.edit);
       },
 
       editAccount: function() {
