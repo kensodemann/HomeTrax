@@ -14,7 +14,7 @@
 								.error-container(ng-show='transactionEditor.transactionDate.$invalid')
 									small.text-danger(ng-show='transactionEditor.transactionDate.$error.required') Required
 						.form-group
-							label.col-md-3.control-label(for='description') Bank Name
+							label.col-md-3.control-label(for='description') Description
 							.col-md-9
 								input.form-control(name='description', type='text', ng-model='controller.description', required)
 								.error-container(ng-show='transactionEditor.description.$invalid')

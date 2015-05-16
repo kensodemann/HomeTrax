@@ -4,7 +4,7 @@
   angular.module('app.financial').controller('financialDetailsController', FinancialDetailsController);
 
   function FinancialDetailsController($routeParams, FinancialAccount, financialAccountEditor, HomeAppEvent,
-                                      eventTypes, editorModes) {
+                                      eventTypes, transactionEditor, editorModes) {
     var controller = {
       activate: function() {
         controller.account = FinancialAccount.get({id: $routeParams.id});
@@ -15,34 +15,17 @@
       },
 
       addTransaction: function() {
-        var newEvent = new HomeAppEvent();
-        newEvent.eventType = eventTypes.transaction;
-        newEvent.accountRid = controller.account._id;
-        newEvent.editMode = true;
-        controller.editMode = true;
-        controller.transactions.unshift(newEvent);
+        var newEvent = new HomeAppEvent({
+          eventType: eventTypes.transaction,
+          accountRid: controller.account._id
+        });
+        transactionEditor.open(newEvent, editorModes.create, function() {
+          controller.transactions.unshift(newEvent);
+        });
       },
 
       editTransaction: function(trans) {
-        copyToTransactionEditor(trans);
-        trans.editMode = true;
-        controller.editMode = true;
-      },
 
-      saveTransaction: function(trans) {
-        var backup = {};
-        $.extend(backup, trans);
-        trans.editMode = undefined;
-        copyFromTransactionEditor(trans);
-        trans.$save(success, error);
-
-        function success() {
-          controller.editMode = false;
-        }
-
-        function error() {
-          $.extend(trans, backup);
-        }
       },
 
       editAccount: function() {
@@ -59,22 +42,6 @@
     controller.activate();
 
     return controller;
-
-    function copyToTransactionEditor(trans) {
-      controller.transactionEditor = {
-        description: trans.description,
-        date: trans.transactionDate,
-        principal: trans.principalAmount,
-        interest: trans.interestAmount
-      };
-    }
-
-    function copyFromTransactionEditor(trans) {
-      trans.description = controller.transactionEditor.description;
-      trans.transactionDate = controller.transactionEditor.date;
-      trans.principalAmount = Number(controller.transactionEditor.principal);
-      trans.interestAmount = Number(controller.transactionEditor.interest);
-    }
   }
 }());
   
