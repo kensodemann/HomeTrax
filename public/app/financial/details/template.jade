@@ -21,10 +21,10 @@
 									span.glyphicon.glyphicon-plus
 					tbody
 						tr(ng-repeat="trans in ctrl.transactions")
-							td {{trans.transactionDate}}
+							td {{trans.transactionDate | date}}
 							td {{trans.description}}
-							td {{trans.principalAmount}}
-							td {{trans.interestAmount}}
+							td {{trans.principalAmount | currency}}
+							td {{trans.interestAmount | currency}}
 							td
 								button.btn.btn-xs.pull-right(ng-click="ctrl.editTransaction(trans)")
 									span.glyphicon.glyphicon-pencil
