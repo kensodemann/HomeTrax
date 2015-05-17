@@ -83,13 +83,9 @@ module.exports = function(grunt) {
     // Build
     sass: {
       dist: {
-        files: [{
-          expand: true,
-          cwd: 'public/css',
-          src: ['*.scss'],
-          dest: 'public/css/dist',
-          ext: '.css'
-        }]
+        files: {
+          'public/dist/<%= pkg.name %>.css': 'public/style/homeApp.scss'
+        }
       }
     },
 
@@ -119,10 +115,6 @@ module.exports = function(grunt) {
         },
         src: ['public/app/app.js', 'public/**/app.*.js', 'public/app/**/*.js'],
         dest: 'public/dist/<%= pkg.name %>.js'
-      },
-      css: {
-        src: ['public/css/dist/theme.css', 'public/css/dist/**/*.css', 'public/css/dist/site.css'],
-        dest: 'public/dist/<%= pkg.name %>.css'
       }
     },
     ngAnnotate: {
@@ -181,6 +173,7 @@ module.exports = function(grunt) {
   // Tasks
   grunt.registerTask('default', ['clean', 'preprocess:dev', 'sass', 'karma', 'mochaTest', 'jshint', 'concat']);
   grunt.registerTask('build', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
-  grunt.registerTask('openShiftBuild', ['clean', 'preprocess:dist', 'sass', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
+  grunt.registerTask('openShiftBuild',
+    ['clean', 'preprocess:dist', 'sass', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
   grunt.registerTask('dev', ['default', 'watch']);
 };
