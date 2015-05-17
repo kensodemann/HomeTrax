@@ -13,20 +13,22 @@
 					thead
 						tr
 							th Date
-							th Description
-							th Principal Amount
-							th Interest
+							th.description Description
+							th.text-right Principal Amount
+							th.text-right Interest
 							th
-								button.btn.btn-xs.pull-right(ng-click="ctrl.addTransaction()")
-									span.glyphicon.glyphicon-plus
+								.btn-area.pull-right
+									button.btn.btn-xs.pull-right(ng-click="ctrl.addTransaction()")
+										span.glyphicon.glyphicon-plus
 					tbody
 						tr(ng-repeat="trans in ctrl.transactions")
-							td {{trans.transactionDate}}
-							td {{trans.description}}
-							td {{trans.principalAmount}}
-							td {{trans.interestAmount}}
+							td {{trans.transactionDate | date}}
+							td.description {{trans.description}}
+							td.text-right {{trans.principalAmount | currency}}
+							td.text-right {{trans.interestAmount | currency}}
 							td
-								button.btn.btn-xs.pull-right(ng-click="ctrl.editTransaction(trans)")
-									span.glyphicon.glyphicon-pencil
-								button.btn.btn-xs.pull-right(ng-click="ctrl.deleteTransaction(trans)")
-									span.glyphicon.glyphicon-minus
+								.btn-area.pull-right
+									button.btn.btn-xs(ng-click="ctrl.deleteTransaction(trans)")
+										span.glyphicon.glyphicon-minus
+									button.btn.btn-xs(ng-click="ctrl.editTransaction(trans)")
+										span.glyphicon.glyphicon-pencil

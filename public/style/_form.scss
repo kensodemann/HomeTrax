@@ -1,13 +1,5 @@
 @import "variables";
 
-body {
-  padding-top: 61px;
-}
-
-.navbar-right {
-  padding-right: 2em;
-}
-
 .checkbox-group {
   padding-left: 14px;
 }
@@ -45,42 +37,4 @@ body {
 
 .ng-invalid {
   border-color: #f00 !important;
-}
-
-.btn-area .btn + .btn {
-  margin-left: 5px;
-  margin-bottom: 0;
-}
-
-.msg-dlg-ico {
-  vertical-align: middle;
-  margin: 0 10px;
-}
-
-.aside .aside-dialog .aside-header {
-  background-color: $brand-info;
-}
-
-.options-row {
-  margin-bottom: 12px;
-}
-
-.view-section {
-  border: 1px solid #000000;
-  padding: 0.5em;
-}
-
-.container .jumbotron {
-  padding: 10px;
-  h2 {
-    margin: 5px;
-  }
-}
-
-.tab-pane {
-  padding-top: 15px;
-}
-
-.editor {
-  padding: 10px;
 }
