@@ -4,8 +4,8 @@ node_modules/*
 *.html
 public/dist/
 public/vendor/
-public/css/*
-!public/css/*.scss
+public/style/*
+!public/style/*.scss
 
 server/includes/scripts.jade
 server/includes/layout.jade
