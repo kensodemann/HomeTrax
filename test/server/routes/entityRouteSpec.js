@@ -70,6 +70,173 @@ describe('api/entities routes', function() {
     });
   });
 
+  describe('POST', function() {
+    it('requires an API login call', function(done) {
+      request(app)
+        .post('/api/entities')
+        .send({
+          name: 'Some Entity',
+          entityType: 'somethingIMadeUp'
+        })
+        .end(function() {
+          expect(requiresApiLoginCalled).to.be.true;
+          done();
+        });
+    });
+
+    it('saves new entities', function(done) {
+      request(app)
+        .post('/api/entities')
+        .send({
+          name: 'VW Bug',
+          year: 1960,
+          vin: '199495903-32',
+          entityType: 'vehicle'
+        })
+        .end(function(err, res) {
+          expect(!!err).to.be.false;
+          expect(res.status).to.equal(201);
+          db.entities.find({}, function(err, ents) {
+            expect(ents.length).to.equal(7);
+            done();
+          });
+        });
+    });
+
+    it('does not add entities when updating and existing one', function(done) {
+      request(app)
+        .post('/api/entities/' + myFavoriteEntity._id)
+        .send({
+          name: 'vW Bug',
+          year: 1960,
+          vin: '199495903-32',
+          entityType: 'vehicle'
+        })
+        .end(function(err, res) {
+          expect(!!err).to.be.false;
+          expect(res.status).to.equal(200);
+          db.entities.find({}, function(err, ents) {
+            expect(ents.length).to.equal(6);
+            done();
+          });
+        });
+    });
+
+    it('updates the specified entity', function(done) {
+      request(app)
+        .post('/api/entities/' + myFavoriteEntity._id)
+        .send({
+          name: 'VW Bug',
+          year: 1960,
+          vin: '199495903-32',
+          entityType: 'vehicle'
+        })
+        .end(function() {
+          db.entities.findOne({
+            _id: new ObjectId(myFavoriteEntity._id)
+          }, function(err, ent) {
+            expect(ent.name).to.equal('VW Bug');
+            expect(ent.year).to.equal(1960);
+            expect(ent.vin).to.equal('199495903-32');
+            expect(ent.entityType).to.equal('vehicle');
+            done();
+          });
+        });
+    });
+
+    it('returns a 404 error status if the entity does not exist', function(done) {
+      request(app)
+        .post('/api/entities/54133902bc88a8241ac17f9d')
+        .send({
+          name: 'vW Bug',
+          year: 1960,
+          vin: '199495903-32',
+          entityType: 'vehicle'
+        })
+        .end(function(err, res) {
+          expect(res.status).to.equal(404);
+          done();
+        });
+    });
+  });
+
+  describe('vaildation', function() {
+    describe('household', function() {
+      var entity;
+      beforeEach(function() {
+        entity = {
+          name: 'My Love Shack',
+          addressLine1: '42395 Secret St.',
+          city: 'Milwaukee',
+          state: 'WI',
+          postal: '55395',
+          phone: '(414) 995-9875',
+          entityType: 'household'
+        };
+      });
+
+      it('requires a name', function(done) {
+        entity.name = undefined;
+        request(app)
+          .post('/api/entities')
+          .send(entity)
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: Name is required');
+            done();
+          });
+      });
+
+      it('requires an address (line 1)', function(done) {
+        entity.addressLine1 = undefined;
+        request(app)
+          .post('/api/entities')
+          .send(entity)
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: Address line 1 is required');
+            done();
+          });
+      });
+
+      it('requires city', function(done) {
+        entity.city = undefined;
+        request(app)
+          .post('/api/entities')
+          .send(entity)
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: City is required');
+            done();
+          });
+      });
+
+      it('requires state', function(done) {
+        entity.state = undefined;
+        request(app)
+          .post('/api/entities')
+          .send(entity)
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: State is required');
+            done();
+          });
+      });
+
+      it('requires postal code', function(done) {
+        entity.postal = undefined;
+        request(app)
+          .post('/api/entities')
+          .send(entity)
+          .end(function(err, res) {
+            expect(res.status).to.equal(400);
+            expect(res.body.reason).to.equal('Error: Postal code is required');
+            done();
+          });
+      });
+    });
+  });
+
   function loadData(done) {
     db.entities.remove(function() {
       db.entities.insert([{
