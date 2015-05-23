@@ -6,6 +6,7 @@ var redirect = require('../services/redirect');
 module.exports = function(app) {
   require('../repositories/accounts')(app);
   require('../repositories/eventCategories')(app);
+  require('../repositories/entities')(app);
   require('../repositories/events')(app);
   require('../repositories/households')(app);
   require('../repositories/users')(app);
