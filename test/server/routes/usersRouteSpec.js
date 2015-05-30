@@ -14,7 +14,8 @@ describe('api/users Routes', function() {
 
   beforeEach(function() {
     app = express();
-    app.use(bodyParser());
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.json());
   });
 
   describe('GET', function() {

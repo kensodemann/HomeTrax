@@ -20,7 +20,8 @@ describe('api/eventCategories Routes', function() {
 
   beforeEach(function() {
     app = express();
-    app.use(bodyParser());
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.json());
   });
 
   beforeEach(function(done) {
