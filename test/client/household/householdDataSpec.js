@@ -3,9 +3,9 @@
   'use strict';
 
   describe('householdData', function() {
-    var mockHousehold;
+    var mockEntity;
     var queryDfd;
-    var serviceUnderTest;
+    var householdData;
     var scope;
 
     var testData;
@@ -17,34 +17,35 @@
     });
 
     beforeEach(function() {
-      mockHousehold = sinon.stub({
+      mockEntity = sinon.stub({
         query: function() {}
       });
 
       module(function($provide) {
-        $provide.value('Household', mockHousehold);
+        $provide.value('Entity', mockEntity);
       });
     });
 
-    beforeEach(inject(function($rootScope, $q, householdData) {
+    beforeEach(inject(function($rootScope, $q, _householdData_) {
       scope = $rootScope;
       queryDfd = $q.defer();
-      mockHousehold.query.returns({$promise: queryDfd.promise});
-      serviceUnderTest = householdData;
+      mockEntity.query.returns({$promise: queryDfd.promise});
+      householdData = _householdData_;
     }));
 
     it('Should exist', function() {
-      expect(serviceUnderTest).to.not.be.undefined;
+      expect(householdData).to.not.be.undefined;
     });
 
     describe('Load', function() {
-      it('queries the resource', function() {
-        serviceUnderTest.load();
-        expect(mockHousehold.query.calledOnce).to.be.true;
+      it('queries the entity resource for household entities', function() {
+        householdData.load();
+        expect(mockEntity.query.calledOnce).to.be.true;
+        expect(mockEntity.query.calledWith({entityType: 'household'})).to.be.true;
       });
 
       it('resolves when the load is complete', function(done) {
-        serviceUnderTest.load().then(function() {
+        householdData.load().then(function() {
           done();
         });
         queryDfd.resolve({});
@@ -54,12 +55,12 @@
 
     describe('main household', function() {
       it('is initially not assigned', function() {
-        expect(!!serviceUnderTest.household).to.be.false;
+        expect(!!householdData.household).to.be.false;
       });
 
       it('is assigned to the last household loaded', function(done) {
-        serviceUnderTest.load().then(function() {
-          expect(serviceUnderTest.household).to.deep.equal({_id: 2, name: 'New House'});
+        householdData.load().then(function() {
+          expect(householdData.household).to.deep.equal({_id: 2, name: 'New House'});
           done();
         });
         queryDfd.resolve([{_id: 1, name: 'old house'},
@@ -68,8 +69,8 @@
       });
 
       it('remains unassigned if no households are loaded', function(done) {
-        serviceUnderTest.load().then(function() {
-          expect(!!serviceUnderTest.household).to.be.false;
+        householdData.load().then(function() {
+          expect(!!householdData.household).to.be.false;
           done();
         });
         queryDfd.resolve();

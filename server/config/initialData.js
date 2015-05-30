@@ -36,9 +36,6 @@ function createDefaultHousehold() {
       db.entities.save({
         name: 'My House',
         addressLine1: 'In the middle of my street',
-        city: 'change me',
-        state: 'WA',
-        postal: '12345',
         entityType: 'household'
       });
     }
