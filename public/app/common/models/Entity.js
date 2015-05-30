@@ -3,9 +3,7 @@
 
   angular.module('app.core').factory('Entity', Entity);
 
-  function Entity($resource) {
-    var millisecondsPerMinute = 60000;
-
+  function Entity($resource, dateUtilities) {
     return $resource('/api/entities/:id', {
       id: "@_id"
     }, {
@@ -26,7 +24,7 @@
       resp.forEach(function(item) {
         if (item.purchaseDate) {
           var d = new Date(item.purchaseDate);
-          item.purchaseDate = adjustDateForTimezone(d);
+          item.purchaseDate = dateUtilities.addTimezoneOffset(d);
         }
       });
       return resp;
@@ -36,26 +34,16 @@
       var resp = angular.fromJson(data);
       if (resp.purchaseDate) {
         var d = new Date(resp.purchaseDate);
-        resp.purchaseDate = adjustDateForTimezone(d);
+        resp.purchaseDate = dateUtilities.addTimezoneOffset(d);
       }
       return resp;
     }
 
     function transformRequest(data) {
       if (data.purchaseDate) {
-        data.purchaseDate = removeTimezoneOffset(data.purchaseDate);
+        data.purchaseDate = dateUtilities.removeTimezoneOffset(data.purchaseDate);
       }
       return angular.toJson(data);
-    }
-
-    function adjustDateForTimezone(d) {
-      var minutesFromUTC = d.getTimezoneOffset();
-      return new Date(d.getTime() + (minutesFromUTC * millisecondsPerMinute));
-    }
-
-    function removeTimezoneOffset(d) {
-      var minutesFromUTC = d.getTimezoneOffset();
-      return new Date(d.getTime() - (minutesFromUTC * millisecondsPerMinute));
     }
   }
 })();
