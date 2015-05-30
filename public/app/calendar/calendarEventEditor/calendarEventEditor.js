@@ -30,7 +30,7 @@
     var eventCategories;
     var eventResource;
     var currentCalendar;
-    var zoneOffset = moment().zone() * 60000;
+    var zoneOffset = moment().utcOffset() * 60000;
 
     return exports;
 
@@ -51,10 +51,10 @@
         editorScope.ctrl.model = {
           title: event.title,
           isAllDayEvent: !!event.allDay,
-          start: event.start.valueOf() + zoneOffset,
+          start: event.start.valueOf() - zoneOffset,
           end: moment(event.end)
             .subtract(!!event.allDay ? 1 : 0, 'd')
-            .valueOf() + zoneOffset,
+            .valueOf() - zoneOffset,
           category: event.category,
           isPrivate: !!event.private,
           color: colors.getColor(colors.calendar)
@@ -131,18 +131,18 @@
             .minute(0)
             .second(0)
             .millisecond(0)
-            .subtract(zoneOffset, 'ms');
+            .add(zoneOffset, 'ms');
           eventResource.end = moment(m.end)
             .hour(0)
             .minute(0)
             .second(0)
             .millisecond(0)
             .add(1, 'd')
-            .subtract(zoneOffset, 'ms');
+            .add(zoneOffset, 'ms');
         }
         else {
-          eventResource.start = moment(m.start - zoneOffset);
-          eventResource.end = moment(m.end - zoneOffset);
+          eventResource.start = moment(m.start + zoneOffset);
+          eventResource.end = moment(m.end + zoneOffset);
         }
         eventResource.category = (typeof m.category === 'object') ? m.category.name : lookupCategory(m.category);
         eventResource.private = m.isPrivate;
