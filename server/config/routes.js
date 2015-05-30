@@ -8,7 +8,6 @@ module.exports = function(app) {
   require('../repositories/eventCategories')(app);
   require('../repositories/entities')(app);
   require('../repositories/events')(app);
-  require('../repositories/households')(app);
   require('../repositories/users')(app);
   require('../repositories/versions')(app);
 

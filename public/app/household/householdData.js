@@ -3,21 +3,21 @@
 
   angular.module('app.household').factory('householdData', HouseholdData);
 
-  function HouseholdData(Household) {
-    var exports =  {
+  function HouseholdData(Entity) {
+    var exports = {
       load: loadData,
       household: undefined
     };
     return exports;
 
     function loadData() {
-      return Household.query().$promise.then(unpackData);
+      return Entity.query({entityType: 'household'}).$promise.then(unpackData);
 
-      function unpackData(h) {
-        if(h) {
-          exports.household = h[h.length - 1];
+      function unpackData(e) {
+        if (e) {
+          exports.household = e[e.length - 1];
         }
-        return h;
+        return e;
       }
     }
   }
