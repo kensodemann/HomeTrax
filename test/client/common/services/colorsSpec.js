@@ -1,11 +1,10 @@
-/* global beforeEach describe expect inject it */
 (function() {
   'use strict';
 
   describe('colors service', function() {
     var mockIdentity;
 
-    var serviceUnderTest;
+    var colors;
 
     beforeEach(module('app.core'));
 
@@ -26,55 +25,55 @@
       }
     });
 
-    beforeEach(inject(function(colors) {
-      serviceUnderTest = colors;
+    beforeEach(inject(function(_colors_) {
+      colors = _colors_;
     }));
 
     it('exists', function() {
-      expect(serviceUnderTest).to.not.be.undefined;
+      expect(colors).to.exist;
     });
 
     describe('getColor', function() {
       describe('user colors behavior', function() {
         it('returns proper value for calendar events', function() {
-          var c = serviceUnderTest.getColor(serviceUnderTest.calendar);
+          var c = colors.getColor(colors.calendar);
           expect(c).to.equal('#111111');
         });
         
         it('returns proper value for appointment events', function() {
-          var c = serviceUnderTest.getColor(serviceUnderTest.appointment);
+          var c = colors.getColor(colors.appointment);
           expect(c).to.equal('#222222');
         });
         
         it('returns proper value for task events', function() {
-          var c = serviceUnderTest.getColor(serviceUnderTest.task);
+          var c = colors.getColor(colors.task);
           expect(c).to.equal('#333333');
         });
         
         it('returns proper value for anniversary events', function() {
-          var c = serviceUnderTest.getColor(serviceUnderTest.anniversary);
+          var c = colors.getColor(colors.anniversary);
           expect(c).to.equal('#444444');
         });
       });
       
       describe('system colors behavior', function() {
         it('returns proper value for calendar events', function() {
-          var c = serviceUnderTest.getColor(serviceUnderTest.calendar, true);
+          var c = colors.getColor(colors.calendar, true);
           expect(c).to.equal('#111111');
         });
         
         it('returns proper value for appointment events', function() {
-          var c = serviceUnderTest.getColor(serviceUnderTest.appointment, true);
+          var c = colors.getColor(colors.appointment, true);
           expect(c).to.equal('#990033');
         });
         
         it('returns proper value for task events', function() {
-          var c = serviceUnderTest.getColor(serviceUnderTest.task, true);
+          var c = colors.getColor(colors.task, true);
           expect(c).to.equal('#669933');
         });
         
         it('returns proper value for anniversary events', function() {
-          var c = serviceUnderTest.getColor(serviceUnderTest.anniversary, true);
+          var c = colors.getColor(colors.anniversary, true);
           expect(c).to.equal('#9933FF');
         });
       });
