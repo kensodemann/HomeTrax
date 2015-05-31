@@ -3,9 +3,7 @@
 
   angular.module('app.core').factory('HomeAppEvent', HomeAppEvent);
 
-  function HomeAppEvent($resource) {
-    return $resource('/api/events/:id', {
-      id: "@_id"
-    });
+  function HomeAppEvent(HomeAppResource) {
+    return new HomeAppResource('events');
   }
 }());

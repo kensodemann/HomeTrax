@@ -3,10 +3,8 @@
 
   angular.module('app.calendar').factory('EventCategory', EventCategory);
 
-  function EventCategory($resource) {
-    return $resource('/api/eventCategories/:id', {
-      id: "@_id"
-    });
+  function EventCategory(HomeAppResource) {
+    return new HomeAppResource('eventCategories');
   }
 }());
 
