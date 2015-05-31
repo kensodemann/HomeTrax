@@ -13,11 +13,14 @@ module.exports = function(app, config) {
   app.set('views', config.rootPath + '/server/views');
 
   app.use(morgan('dev'));
-  app.use(bodyParser());
+  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(bodyParser.json());
   app.use(cookieParser());
 
   app.use(session({
-    secret: 'HomeTraxer Secret PopCorn'
+    secret: 'HomeTraxer Secret PopCorn',
+    resave: false,
+    saveUninitialized: true
   }));
 
   app.use(passport.initialize());

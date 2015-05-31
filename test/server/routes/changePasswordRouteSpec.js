@@ -17,7 +17,8 @@ describe('api/changepassword Route', function() {
     var fakeViewPath = path.normalize(__dirname + '/../mockViews/server/views');
     app.set('view engine', 'jade');
     app.set('views', fakeViewPath);
-    app.use(bodyParser());
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.json());
   });
 
   describe('PUT', function() {

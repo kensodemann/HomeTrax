@@ -5,7 +5,7 @@ html
 		title My Home App
 		base(href="/")
 		link(href="/favicon.ico", rel="shortcut icon", type="image/x-icon")
-		<!-- @ifndef DEBUG -->
+		// @ifndef DEBUG
 		link(rel="stylesheet", href="/vendor/bootstrap/dist/css/bootstrap.min.css")
 		link(rel="stylesheet", href="/vendor/fontawesome/css/font-awesome.min.css")
 		link(rel="stylesheet", href="/vendor/toastr/toastr.min.css")
@@ -14,8 +14,8 @@ html
 		link(rel="stylesheet", href="/vendor/bootstrap-additions/dist/bootstrap-additions.min.css")
 		link(rel="stylesheet", href="/dist/Home-App.min.css")
 	body(ng-app="app", ng-strict-di)
-		<!-- @endif -->
-		<!-- @ifdef DEBUG -->
+		// @endif
+		// @ifdef DEBUG
 		link(rel="stylesheet", href="/vendor/bootstrap/dist/css/bootstrap.css")
 		link(rel="stylesheet", href="/vendor/fontawesome/css/font-awesome.css")
 		link(rel="stylesheet", href="/vendor/toastr/toastr.css")
@@ -24,7 +24,7 @@ html
 		link(rel="stylesheet", href="/vendor/bootstrap-additions/dist/bootstrap-additions.css")
 		link(rel="stylesheet", href="/dist/Home-App.css")
 	body(ng-app="app")
-		<!-- @endif -->
+		// @endif
 		include navigation
 		include currentUser
 		block main-content
