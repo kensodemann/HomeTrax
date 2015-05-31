@@ -12,7 +12,7 @@
     .constant('HomeAppResource', HomeAppResource);
 
   function HomeAppResource(resourceName) {
-    var dateColumns = ['purchaseDate'];
+    var dateColumns = ['purchaseDate', 'transactionDate'];
 
     return _resource('/api/' + resourceName + '/:id', {
       id: "@_id"
