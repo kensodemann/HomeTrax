@@ -5,6 +5,7 @@
     var financialAccountTypes;
     var editorModes;
 
+    var mockEntity;
     var mockModal;
     var mockModalConstructor;
     var finacialAccountEditor;
@@ -13,12 +14,22 @@
     beforeEach(module('app.financial'));
 
     beforeEach(function() {
+      buildMockEntity();
       buildMockModal();
 
       module(function($provide) {
         $provide.value('$modal', mockModalConstructor);
+        $provide.value('Entity', mockEntity);
       });
     });
+
+    function buildMockEntity() {
+      mockEntity = sinon.stub({
+        query: function() {}
+      });
+      mockEntity.query.returns([{_id: 1, name: 'Fred'}, {_id: 2, name: 'Barney'}, {_id: 12, name: 'Wilma'},
+        {_id: 22, name: 'Betty'}]);
+    }
 
     function buildMockModal() {
       var mockPromise = sinon.stub({
@@ -41,7 +52,7 @@
       return getEditorScope().controller;
     }
 
-    beforeEach(inject(function($rootScope, _financialAccountEditor_, _financialAccountTypes_, _editorModes_) {
+    beforeEach(inject(function($rootScope, $q, _financialAccountEditor_, _financialAccountTypes_, _editorModes_) {
       scope = $rootScope;
       financialAccountTypes = _financialAccountTypes_;
       finacialAccountEditor = _financialAccountEditor_;
@@ -81,6 +92,16 @@
       it('is initially hidden', function() {
         var config = mockModalConstructor.getCall(0).args[0];
         expect(config.show).to.be.false;
+      });
+
+      it('gets the potential entities that an account could be associated with', function() {
+        expect(mockEntity.query.calledOnce).to.be.true;
+      });
+
+      it('puts the entities on the editor controller', function() {
+        var controller = getEditorController();
+        expect(controller.entities).to.deep.equal([{_id: 1, name: 'Fred'}, {_id: 2, name: 'Barney'}, {_id: 12, name: 'Wilma'},
+          {_id: 22, name: 'Betty'}]);
       });
     });
 
@@ -160,7 +181,7 @@
         finacialAccountEditor.open(mockAccount, "itDontMatterNone", saveCompleted);
       });
 
-      function saveCompleted(acct){
+      function saveCompleted(acct) {
         theSaveCompleted = true;
         savedAccount = acct;
       }
@@ -193,7 +214,7 @@
         expect(mockModal.hide.calledOnce).to.be.true;
       });
 
-      it('calls the save callback with the new account if the save succeeds', function(){
+      it('calls the save callback with the new account if the save succeeds', function() {
         controller.save();
         mockAccount.$save.yield(mockAccount);
         expect(theSaveCompleted).to.be.true;
