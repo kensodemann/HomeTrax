@@ -20,20 +20,20 @@
 							label.col-md-3.control-label(for='name') Name
 							.col-md-9
 								input.form-control(name='name', type='text', ng-model='controller.name', required)
-								.error-container(ng-show='financialAccountEditor.name.$invalid')
-									small.text-danger(ng-show='financialAccountEditor.name.$error.required') Required
+								div(ng-messages="financialAccountEditor.name.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group
 							label.col-md-3.control-label(for='bank') Bank Name
 							.col-md-9
 								input.form-control(name='bank', type='text', ng-model='controller.bank', required)
-								.error-container(ng-show='financialAccountEditor.bank.$invalid')
-									small.text-danger(ng-show='financialAccountEditor.bank.$error.required') Required
+								div(ng-messages="financialAccountEditor.bank.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group
 							label.col-md-3.control-label(for='amount') Opening Balance
 							.col-md-9
 								input.form-control(name='amount', type='text', ng-model='controller.amount', required)
-								.error-container(ng-show='financialAccountEditor.amount.$invalid')
-									small.text-danger(ng-show='financialAccountEditor.amount.$error.required') Required
+								div(ng-messages="financialAccountEditor.amount.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 				.modal-footer
 					button.btn.btn-default.pull-left(type='button', ng-click="controller.remove()", ng-show="controller.mode === 'edit'") Remove
 					button.btn.btn-default(type='button', ng-click="$hide()") Cancel
