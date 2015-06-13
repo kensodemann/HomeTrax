@@ -9,6 +9,10 @@
 
     editor.copyToController = function(model) {
       var controller = editor.editorScope.controller;
+      controller.entities = Entity.query();
+      controller.entities.$promise.then(function() {
+        controller.entity = findEntity(controller.entities, model.entityRid);
+      });
       controller.name = model.name;
       controller.bank = model.bank;
       controller.accountNumber = model.accountNumber;
@@ -16,7 +20,6 @@
       controller.amount = model.amount;
       Editor.prototype.copyToController.call(editor, model);
     };
-
     editor.copyToResourceModel = function() {
       var model = editor.editorScope.model;
       var controller = editor.editorScope.controller;
@@ -34,7 +37,6 @@
 
     return {
       open: function(account, mode, saveCallback) {
-        editor.editorScope.controller.entities = Entity.query();
         editor.open(account, mode, saveCallback);
       }
     };
@@ -44,6 +46,13 @@
         return acctType.accountType === t;
       });
       return matching.length > 0 ? matching[0] : financialAccountTypes[0];
+    }
+
+    function findEntity(entities, rid) {
+      var matching = $.grep(entities, function(e) {
+        return e._id === rid;
+      });
+      return matching[0];
     }
   }
 }());

@@ -10,10 +10,12 @@
     var mockModalConstructor;
     var finacialAccountEditor;
     var scope;
+    var testEntities;
 
     beforeEach(module('app.financial'));
 
     beforeEach(function() {
+      createTestData();
       buildMockEntity();
       buildMockModal();
 
@@ -27,8 +29,7 @@
       mockEntity = sinon.stub({
         query: function() {}
       });
-      mockEntity.query.returns([{_id: 1, name: 'Fred'}, {_id: 2, name: 'Barney'}, {_id: 12, name: 'Wilma'},
-        {_id: 22, name: 'Betty'}]);
+      mockEntity.query.returns(testEntities);
     }
 
     function buildMockModal() {
@@ -104,8 +105,20 @@
           accountNumber: '1399405-2093',
           accountType: financialAccountTypes[4].accountType,
           balanceType: financialAccountTypes[4].balanceType,
+          entityRid: 2,
           amount: 176940.43
         };
+      });
+
+      it('gets the potential entities that an account could be associated with', function() {
+        finacialAccountEditor.open({}, 'any');
+        expect(mockEntity.query.calledOnce).to.be.true;
+      });
+
+      it('puts the entities on the editor controller', function() {
+        var controller = getEditorController();
+        finacialAccountEditor.open({}, 'any');
+        expect(controller.entities).to.deep.equal(testEntities);
       });
 
       it('does not show the dialog if it is not ready', function() {
@@ -154,16 +167,15 @@
         expect(controller.accountType).to.equal(financialAccountTypes[0]);
       });
 
-      it('gets the potential entities that an account could be associated with', function() {
-        finacialAccountEditor.open({}, 'any');
-        expect(mockEntity.query.calledOnce).to.be.true;
-      });
-
-      it('puts the entities on the editor controller', function() {
+      it('copies the entity after they load', function(){
         var controller = getEditorController();
-        finacialAccountEditor.open({}, 'any');
-        expect(controller.entities).to.deep.equal([{_id: 1, name: 'Fred'}, {_id: 2, name: 'Barney'}, {_id: 12, name: 'Wilma'},
-          {_id: 22, name: 'Betty'}]);
+        finacialAccountEditor.open(testAccount, 'any');
+        expect(controller.entity).to.be.undefined;
+        testEntities.$promise.then.yield();
+        expect(controller.entity).to.deep.equal({
+          _id: 2,
+          name: 'Barney'
+        });
       });
     });
 
@@ -205,7 +217,7 @@
         expect(mockAccount.amount).to.equal(42.03);
       });
 
-      it('copies the entity if this is a liability balance account type', function(){
+      it('copies the entity if this is a liability balance account type', function() {
         controller.name = 'Bill & Ted';
         controller.bank = 'The Excellent Bank';
         controller.accountNumber = '399405-039950-01';
@@ -224,7 +236,7 @@
         expect(mockAccount.entityRid).to.equal(1);
       });
 
-      it('does not copy the entity if this is an asset balance account type', function(){
+      it('does not copy the entity if this is an asset balance account type', function() {
         controller.name = 'Bill & Ted';
         controller.bank = 'The Excellent Bank';
         controller.accountNumber = '399405-039950-01';
@@ -275,5 +287,26 @@
         expect(mockModal.hide.called).to.be.false;
       });
     });
+
+    function createTestData() {
+      var mockPromise = sinon.stub({
+        then: function() {}
+      });
+
+      testEntities = [{
+        _id: 1,
+        name: 'Fred'
+      }, {
+        _id: 2,
+        name: 'Barney'
+      }, {
+        _id: 12,
+        name: 'Wilma'
+      }, {
+        _id: 22,
+        name: 'Betty'
+      }];
+      testEntities.$promise = mockPromise;
+    }
   });
 }());
