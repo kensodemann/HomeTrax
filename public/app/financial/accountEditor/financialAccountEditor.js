@@ -15,7 +15,6 @@
       });
       controller.name = model.name;
       controller.bank = model.bank;
-      controller.accountNumber = model.accountNumber;
       controller.accountType = findAccountType(model.accountType);
       controller.amount = model.amount;
       Editor.prototype.copyToController.call(editor, model);
@@ -26,7 +25,6 @@
 
       model.name = controller.name;
       model.bank = controller.bank;
-      model.accountNumber = controller.accountNumber;
       model.accountType = controller.accountType.accountType;
       model.balanceType = controller.accountType.balanceType;
       model.amount = Number(controller.amount);

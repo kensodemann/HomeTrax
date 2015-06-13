@@ -102,7 +102,6 @@
         testAccount = {
           name: 'Mortgage',
           bank: 'Eastern World Bank',
-          accountNumber: '1399405-2093',
           accountType: financialAccountTypes[4].accountType,
           balanceType: financialAccountTypes[4].balanceType,
           entityRid: 2,
@@ -149,7 +148,6 @@
         finacialAccountEditor.open(testAccount, 'any');
         expect(controller.name).to.equal(testAccount.name);
         expect(controller.bank).to.equal(testAccount.bank);
-        expect(controller.accountNumber).to.equal(testAccount.accountNumber);
         expect(controller.accountType).to.equal(financialAccountTypes[4]);
         expect(controller.amount).to.equal(testAccount.amount);
       });
@@ -203,7 +201,6 @@
       it('copies the data from the editor controller to the account resource', function() {
         controller.name = 'Bill & Ted';
         controller.bank = 'The Excellent Bank';
-        controller.accountNumber = '399405-039950-01';
         controller.accountType = financialAccountTypes[2];
         controller.amount = 42.03;
 
@@ -211,7 +208,6 @@
 
         expect(mockAccount.name).to.equal('Bill & Ted');
         expect(mockAccount.bank).to.equal('The Excellent Bank');
-        expect(mockAccount.accountNumber).to.equal('399405-039950-01');
         expect(mockAccount.accountType).to.equal(financialAccountTypes[2].accountType);
         expect(mockAccount.balanceType).to.equal(financialAccountTypes[2].balanceType);
         expect(mockAccount.amount).to.equal(42.03);
@@ -220,7 +216,6 @@
       it('copies the entity if this is a liability balance account type', function() {
         controller.name = 'Bill & Ted';
         controller.bank = 'The Excellent Bank';
-        controller.accountNumber = '399405-039950-01';
         controller.accountType = {
           accountType: 'line of credit',
           balanceType: 'liability'
@@ -239,7 +234,6 @@
       it('does not copy the entity if this is an asset balance account type', function() {
         controller.name = 'Bill & Ted';
         controller.bank = 'The Excellent Bank';
-        controller.accountNumber = '399405-039950-01';
         controller.accountType = {
           accountType: 'under the mattress',
           balanceType: 'asset'
