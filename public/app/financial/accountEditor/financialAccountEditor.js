@@ -3,12 +3,16 @@
 
   angular.module('app.financial').factory('financialAccountEditor', FinancialAccountEditor);
 
-  function FinancialAccountEditor($modal, Editor, financialAccountTypes) {
+  function FinancialAccountEditor($modal, Editor, financialAccountTypes, Entity) {
     var editor = new Editor($modal, '/partials/financial/accountEditor/template', 'Account');
     editor.editorScope.controller.accountTypes = financialAccountTypes;
 
     editor.copyToController = function(model) {
       var controller = editor.editorScope.controller;
+      controller.entities = Entity.query();
+      controller.entities.$promise.then(function() {
+        controller.entity = findEntity(controller.entities, model.entityRid);
+      });
       controller.name = model.name;
       controller.bank = model.bank;
       controller.accountNumber = model.accountNumber;
@@ -16,8 +20,7 @@
       controller.amount = model.amount;
       Editor.prototype.copyToController.call(editor, model);
     };
-
-    editor.copyToResourceModel = function(){
+    editor.copyToResourceModel = function() {
       var model = editor.editorScope.model;
       var controller = editor.editorScope.controller;
 
@@ -27,6 +30,9 @@
       model.accountType = controller.accountType.accountType;
       model.balanceType = controller.accountType.balanceType;
       model.amount = Number(controller.amount);
+      if (controller.accountType.balanceType === 'liability' && !!controller.entity) {
+        model.entityRid = controller.entity._id;
+      }
     };
 
     return {
@@ -40,6 +46,13 @@
         return acctType.accountType === t;
       });
       return matching.length > 0 ? matching[0] : financialAccountTypes[0];
+    }
+
+    function findEntity(entities, rid) {
+      var matching = $.grep(entities, function(e) {
+        return e._id === rid;
+      });
+      return matching[0];
     }
   }
 }());

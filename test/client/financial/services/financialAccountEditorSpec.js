@@ -5,20 +5,32 @@
     var financialAccountTypes;
     var editorModes;
 
+    var mockEntity;
     var mockModal;
     var mockModalConstructor;
     var finacialAccountEditor;
     var scope;
+    var testEntities;
 
     beforeEach(module('app.financial'));
 
     beforeEach(function() {
+      createTestData();
+      buildMockEntity();
       buildMockModal();
 
       module(function($provide) {
         $provide.value('$modal', mockModalConstructor);
+        $provide.value('Entity', mockEntity);
       });
     });
+
+    function buildMockEntity() {
+      mockEntity = sinon.stub({
+        query: function() {}
+      });
+      mockEntity.query.returns(testEntities);
+    }
 
     function buildMockModal() {
       var mockPromise = sinon.stub({
@@ -41,7 +53,7 @@
       return getEditorScope().controller;
     }
 
-    beforeEach(inject(function($rootScope, _financialAccountEditor_, _financialAccountTypes_, _editorModes_) {
+    beforeEach(inject(function($rootScope, $q, _financialAccountEditor_, _financialAccountTypes_, _editorModes_) {
       scope = $rootScope;
       financialAccountTypes = _financialAccountTypes_;
       finacialAccountEditor = _financialAccountEditor_;
@@ -93,8 +105,20 @@
           accountNumber: '1399405-2093',
           accountType: financialAccountTypes[4].accountType,
           balanceType: financialAccountTypes[4].balanceType,
+          entityRid: 2,
           amount: 176940.43
         };
+      });
+
+      it('gets the potential entities that an account could be associated with', function() {
+        finacialAccountEditor.open({}, 'any');
+        expect(mockEntity.query.calledOnce).to.be.true;
+      });
+
+      it('puts the entities on the editor controller', function() {
+        var controller = getEditorController();
+        finacialAccountEditor.open({}, 'any');
+        expect(controller.entities).to.deep.equal(testEntities);
       });
 
       it('does not show the dialog if it is not ready', function() {
@@ -142,6 +166,17 @@
         finacialAccountEditor.open({}, 'any');
         expect(controller.accountType).to.equal(financialAccountTypes[0]);
       });
+
+      it('copies the entity after they load', function(){
+        var controller = getEditorController();
+        finacialAccountEditor.open(testAccount, 'any');
+        expect(controller.entity).to.be.undefined;
+        testEntities.$promise.then.yield();
+        expect(controller.entity).to.deep.equal({
+          _id: 2,
+          name: 'Barney'
+        });
+      });
     });
 
     describe('Saving the account', function() {
@@ -160,7 +195,7 @@
         finacialAccountEditor.open(mockAccount, "itDontMatterNone", saveCompleted);
       });
 
-      function saveCompleted(acct){
+      function saveCompleted(acct) {
         theSaveCompleted = true;
         savedAccount = acct;
       }
@@ -182,6 +217,44 @@
         expect(mockAccount.amount).to.equal(42.03);
       });
 
+      it('copies the entity if this is a liability balance account type', function() {
+        controller.name = 'Bill & Ted';
+        controller.bank = 'The Excellent Bank';
+        controller.accountNumber = '399405-039950-01';
+        controller.accountType = {
+          accountType: 'line of credit',
+          balanceType: 'liability'
+        };
+        controller.entity = {
+          _id: 1,
+          name: 'Cow'
+        };
+        controller.amount = 42.03;
+
+        controller.save();
+
+        expect(mockAccount.entityRid).to.equal(1);
+      });
+
+      it('does not copy the entity if this is an asset balance account type', function() {
+        controller.name = 'Bill & Ted';
+        controller.bank = 'The Excellent Bank';
+        controller.accountNumber = '399405-039950-01';
+        controller.accountType = {
+          accountType: 'under the mattress',
+          balanceType: 'asset'
+        };
+        controller.entity = {
+          _id: 1,
+          name: 'Cow'
+        };
+        controller.amount = 42.03;
+
+        controller.save();
+
+        expect(mockAccount.entityRid).to.be.undefined;
+      });
+
       it('calls save on the account', function() {
         controller.save();
         expect(mockAccount.$save.calledOnce).to.be.true;
@@ -193,7 +266,7 @@
         expect(mockModal.hide.calledOnce).to.be.true;
       });
 
-      it('calls the save callback with the new account if the save succeeds', function(){
+      it('calls the save callback with the new account if the save succeeds', function() {
         controller.save();
         mockAccount.$save.yield(mockAccount);
         expect(theSaveCompleted).to.be.true;
@@ -214,5 +287,26 @@
         expect(mockModal.hide.called).to.be.false;
       });
     });
+
+    function createTestData() {
+      var mockPromise = sinon.stub({
+        then: function() {}
+      });
+
+      testEntities = [{
+        _id: 1,
+        name: 'Fred'
+      }, {
+        _id: 2,
+        name: 'Barney'
+      }, {
+        _id: 12,
+        name: 'Wilma'
+      }, {
+        _id: 22,
+        name: 'Betty'
+      }];
+      testEntities.$promise = mockPromise;
+    }
   });
 }());
