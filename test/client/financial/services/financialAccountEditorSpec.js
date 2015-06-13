@@ -205,6 +205,44 @@
         expect(mockAccount.amount).to.equal(42.03);
       });
 
+      it('copies the entity if this is a liability balance account type', function(){
+        controller.name = 'Bill & Ted';
+        controller.bank = 'The Excellent Bank';
+        controller.accountNumber = '399405-039950-01';
+        controller.accountType = {
+          accountType: 'line of credit',
+          balanceType: 'liability'
+        };
+        controller.entity = {
+          _id: 1,
+          name: 'Cow'
+        };
+        controller.amount = 42.03;
+
+        controller.save();
+
+        expect(mockAccount.entityRid).to.equal(1);
+      });
+
+      it('does not copy the entity if this is an asset balance account type', function(){
+        controller.name = 'Bill & Ted';
+        controller.bank = 'The Excellent Bank';
+        controller.accountNumber = '399405-039950-01';
+        controller.accountType = {
+          accountType: 'under the mattress',
+          balanceType: 'asset'
+        };
+        controller.entity = {
+          _id: 1,
+          name: 'Cow'
+        };
+        controller.amount = 42.03;
+
+        controller.save();
+
+        expect(mockAccount.entityRid).to.be.undefined;
+      });
+
       it('calls save on the account', function() {
         controller.save();
         expect(mockAccount.$save.calledOnce).to.be.true;

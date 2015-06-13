@@ -17,7 +17,7 @@
       Editor.prototype.copyToController.call(editor, model);
     };
 
-    editor.copyToResourceModel = function(){
+    editor.copyToResourceModel = function() {
       var model = editor.editorScope.model;
       var controller = editor.editorScope.controller;
 
@@ -27,6 +27,9 @@
       model.accountType = controller.accountType.accountType;
       model.balanceType = controller.accountType.balanceType;
       model.amount = Number(controller.amount);
+      if (controller.accountType.balanceType === 'liability' && !!controller.entity) {
+        model.entityRid = controller.entity._id;
+      }
     };
 
     return {
