@@ -11,34 +11,33 @@
 							label.col-md-3.control-label(for='username') Username
 							.col-md-9
 								input.form-control(name='username', type='text', ng-model='ctrl.model.username', required)
-								.error-container(ng-show='userEditor.username.$invalid')
-									small.text-danger(ng-show='userEditor.username.$error.required') Required
+								div(ng-messages="userEditor.username.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group
 							label.col-md-3.control-label(for='firstName') First Name
 							.col-md-9
 								input.form-control(name='firstName', type='text', ng-model='ctrl.model.firstName', required)
-								.error-container(ng-show='userEditor.firstName.$invalid')
-									small.text-danger(ng-show='userEditor.firstName.$error.required') Required
+								div(ng-messages="userEditor.firstName.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group
 							label.col-md-3.control-label(for='lastName') Last Name
 							.col-md-9
 								input.form-control(name='lastName', type='text', ng-model='ctrl.model.lastName', required)
-								.error-container(ng-show='userEditor.lastName.$invalid')
-									small.text-danger(ng-show='userEditor.lastName.$error.required') Required
+								div(ng-messages="userEditor.lastName.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group(ng-show='ctrl.mode==="create"')
 							label.col-md-3.control-label(for='password') Password
 							.col-md-9
 								input.form-control(name='password', type='password', ng-change='validatePassword()', ng-model='ctrl.model.password', ng-minlength=8, ng-required='ctrl.mode==="create"')
-								.error-container(ng-show='userEditor.password.$invalid')
-									small.text-danger(ng-show='userEditor.password.$error.required') Required
-									small.text-danger(ng-show='userEditor.password.$error.minlength') Must be at least 8 characters long
+								div(ng-messages="userEditor.password.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group(ng-show='ctrl.mode==="create"')
 							label.col-md-3.control-label(for='verifyPassword') Verify Password
 							.col-md-9
 								input.form-control(name='verifyPassword', type='password', ng-change='validatePassword()', ng-model='ctrl.model.verifyPassword', ng-required='ctrl.mode==="create"', matches-value='{{ctrl.model.password}}')
-								.error-container(ng-show='userEditor.verifyPassword.$invalid')
-									small.text-danger(ng-show='userEditor.verifyPassword.$error.required') Required
-									small.text-danger(ng-show='!userEditor.verifyPassword.$error.required && userEditor.verifyPassword.$error.matchesValue') Must match password
+								div(ng-messages="userEditor.verifyPassword.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
+									small.text-danger(ng-message="matchesValue") Must match new password
 						.form-group
 							label.col.md-9.col-md-offset-3
 								.checkbox-group
