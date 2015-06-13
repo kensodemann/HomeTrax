@@ -93,16 +93,6 @@
         var config = mockModalConstructor.getCall(0).args[0];
         expect(config.show).to.be.false;
       });
-
-      it('gets the potential entities that an account could be associated with', function() {
-        expect(mockEntity.query.calledOnce).to.be.true;
-      });
-
-      it('puts the entities on the editor controller', function() {
-        var controller = getEditorController();
-        expect(controller.entities).to.deep.equal([{_id: 1, name: 'Fred'}, {_id: 2, name: 'Barney'}, {_id: 12, name: 'Wilma'},
-          {_id: 22, name: 'Betty'}]);
-      });
     });
 
     describe('Opening the editor', function() {
@@ -162,6 +152,18 @@
         var controller = getEditorController();
         finacialAccountEditor.open({}, 'any');
         expect(controller.accountType).to.equal(financialAccountTypes[0]);
+      });
+
+      it('gets the potential entities that an account could be associated with', function() {
+        finacialAccountEditor.open({}, 'any');
+        expect(mockEntity.query.calledOnce).to.be.true;
+      });
+
+      it('puts the entities on the editor controller', function() {
+        var controller = getEditorController();
+        finacialAccountEditor.open({}, 'any');
+        expect(controller.entities).to.deep.equal([{_id: 1, name: 'Fred'}, {_id: 2, name: 'Barney'}, {_id: 12, name: 'Wilma'},
+          {_id: 22, name: 'Betty'}]);
       });
     });
 

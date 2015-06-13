@@ -6,7 +6,6 @@
   function FinancialAccountEditor($modal, Editor, financialAccountTypes, Entity) {
     var editor = new Editor($modal, '/partials/financial/accountEditor/template', 'Account');
     editor.editorScope.controller.accountTypes = financialAccountTypes;
-    editor.editorScope.controller.entities = Entity.query();
 
     editor.copyToController = function(model) {
       var controller = editor.editorScope.controller;
@@ -32,6 +31,7 @@
 
     return {
       open: function(account, mode, saveCallback) {
+        editor.editorScope.controller.entities = Entity.query();
         editor.open(account, mode, saveCallback);
       }
     };
