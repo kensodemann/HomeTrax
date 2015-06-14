@@ -14,14 +14,14 @@
 							label.col-md-2.control-label(for='title') Title
 							.col-md-10
 								input.form-control(name='title', type='text', ng-model='ctrl.model.title', ng-disabled="ctrl.isReadonly", required)
-								.error-container(ng-show='eventEditor.title.$invalid')
-									small.text-danger(ng-show='eventEditor.title.$error.required') Required
+								div(ng-messages="eventEditor.title.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group
 							label.col-md-2.control-label(for='category') Category
 							.col-md-10
 								input.form-control(name='category', type='text', ng-model='ctrl.model.category', options='ctrl.categoryOptions', datasets='ctrl.categories', sf-typeahead, ng-disabled="ctrl.isReadonly", required)
-								.error-container(ng-show='eventEditor.category.$invalid')
-									small.text-danger(ng-show='eventEditor.category.$error.required') Required
+								div(ng-messages="eventEditor.category.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group
 							label.col.md-10.col-md-offset-2
 								.checkbox-group

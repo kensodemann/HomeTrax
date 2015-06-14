@@ -11,26 +11,26 @@
 							label.col-md-3.control-label(for='transactionDate') Transaction Date
 							.col-md-9
 								input.form-control(name='transactionDate', type='text', ng-model='controller.transactionDate', bs-datepicker, required)
-								.error-container(ng-show='transactionEditor.transactionDate.$invalid')
-									small.text-danger(ng-show='transactionEditor.transactionDate.$error.required') Required
+								div(ng-messages="transactionEditor.transactionDate.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group
 							label.col-md-3.control-label(for='description') Description
 							.col-md-9
 								input.form-control(name='description', type='text', ng-model='controller.description', required)
-								.error-container(ng-show='transactionEditor.description.$invalid')
-									small.text-danger(ng-show='transactionEditor.description.$error.required') Required
+								div(ng-messages="transactionEditor.description.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group
 							label.col-md-3.control-label(for='principalAmount') Principal Amount
 							.col-md-9
-								input.form-control(name='principalAmount', type='text', ng-model='controller.principalAmount', required)
-								.error-container(ng-show='transactionEditor.principalAmount.$invalid')
-									small.text-danger(ng-show='transactionEditor.principalAmount.$error.required') Required
+								input.form-control(name='principalAmount', type='text', ng-model='controller.principalAmount', required, currency-amount)
+								div(ng-messages="transactionEditor.principalAmount.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 						.form-group
 							label.col-md-3.control-label(for='interestAmount') Interest Amount
 							.col-md-9
-								input.form-control(name='interestAmount', type='text', ng-model='controller.interestAmount', required)
-								.error-container(ng-show='transactionEditor.interestAmount.$invalid')
-									small.text-danger(ng-show='transactionEditor.interestAmount.$error.required') Required
+								input.form-control(name='interestAmount', type='text', ng-model='controller.interestAmount', required, currency-amount)
+								div(ng-messages="transactionEditor.interestAmount.$error", role="alert")
+									div(ng-messages-include="/partials/common/templates/errorMessages")
 				.modal-footer
 					button.btn.btn-default(type='button', ng-click="$hide()") Cancel
 					button.btn.btn-primary(type='submit', ng-click='controller.save()', ng-disabled="transactionEditor.$invalid || errorMessage") Save
