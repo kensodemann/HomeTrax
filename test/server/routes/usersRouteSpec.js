@@ -14,7 +14,8 @@ describe('api/users Routes', function() {
 
   beforeEach(function() {
     app = express();
-    app.use(bodyParser());
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.json());
   });
 
   describe('GET', function() {
@@ -61,7 +62,7 @@ describe('api/users Routes', function() {
       };
       roleCalledWith = '';
       roleOrCurrentCalledWith = '';
-      proxyquire('../../../server/config/routes', {
+      proxyquire('../../../server/repositories/users', {
         '../services/authentication': authStub
       })(app);
     });
@@ -111,7 +112,7 @@ describe('api/users Routes', function() {
       it('Requires Admin or Current User', function(done) {
         request(app)
           .get('/api/users/123456789012345678901234')
-          .end(function(err, res) {
+          .end(function() {
             expect(roleOrCurrentCalledWith).to.equal('admin');
             done();
           });
@@ -135,7 +136,7 @@ describe('api/users Routes', function() {
       });
 
       it('Returns 404 if specified user does not exist', function(done) {
-        db.users.remove({}, function(err) {
+        db.users.remove({}, function() {
           request(app)
             .get('/api/users/123456789012345678901234')
             .end(function(err, res) {
@@ -171,7 +172,7 @@ describe('api/users Routes', function() {
           };
         }
       };
-      proxyquire('../../../server/config/routes', {
+      proxyquire('../../../server/repositories/users', {
         '../services/authentication': authStub
       })(app);
     });
@@ -367,7 +368,7 @@ describe('api/users Routes', function() {
           };
         }
       };
-      proxyquire('../../../server/config/routes', {
+      proxyquire('../../../server/repositories/users', {
         '../services/authentication': authStub
       })(app);
     });

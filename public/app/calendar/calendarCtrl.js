@@ -4,7 +4,7 @@
 
   angular.module('app.calendar').controller('calendarCtrl', CalendarCtrl);
 
-  function CalendarCtrl($scope, $log, $aside, calendarData, eventEditor) {
+  function CalendarCtrl($scope, $aside, calendarData, calendarEventEditor) {
     var self = this;
 
     self.eventSources = [{
@@ -68,13 +68,13 @@
 
     function dayClicked(day) {
       var event = new calendarData.newEvent(day);
-      eventEditor.initialize($scope.calendar);
-      eventEditor.open(event, 'create');
+      calendarEventEditor.initialize($scope.calendar);
+      calendarEventEditor.open(event, 'create');
     }
 
     function eventClicked(event) {
-      eventEditor.initialize($scope.calendar);
-      eventEditor.open(event, 'edit');
+      calendarEventEditor.initialize($scope.calendar);
+      calendarEventEditor.open(event, 'edit');
     }
   }
 }());

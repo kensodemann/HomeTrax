@@ -1,12 +1,23 @@
 'use strict';
 
+var authentication = require('../services/authentication');
+var _ = require('underscore');
+var eventTypes = require('./eventTypes');
 var db = require('../config/database');
-var error = require('../services/error');
-var Q = require('q');
 var ObjectId = require("mongojs").ObjectId;
+var redirect = require('../services/redirect');
+var RepositoryBase = require('./RepositoryBase');
+var util = require('util');
 
-module.exports.get = function(req, res) {
-  db.events.find({
+function Events() {
+  RepositoryBase.call(this);
+  this.collection = db.events;
+}
+
+util.inherits(Events, RepositoryBase);
+
+Events.prototype.get = function(req, res) {
+  this.criteria = {
     $or: [{
       userId: new ObjectId(req.user._id)
     }, {
@@ -14,110 +25,103 @@ module.exports.get = function(req, res) {
     }, {
       private: null
     }]
-  }, function(err, events) {
-    res.send(events);
-  });
+  };
+  return RepositoryBase.prototype.get.call(this, req, res);
 };
 
-module.exports.save = function(req, res) {
-  var e = req.body;
-  assignIdFromRequest(req, e);
-  assignUserId(e, req);
-  removeFields();
-  if (isValid(e, res)) {
-    determineIfActionIsValid(req).done(yes, no);
-  }
+Events.prototype.preSaveAction = function(req, done) {
+  req.body.userId = new ObjectId(req.user._id);
+  removeBackupProperties(req);
+  makeTypesConsistent(req);
+  done(null);
+};
 
-  function removeFields() {
-    for (var p in e) {
-      if (e.hasOwnProperty(p)) {
-        if (p.match(/^_.*/) && p !== '_id') {
-          delete e[p];
-        }
+function removeBackupProperties(req) {
+  for (var p in req.body) {
+    if (req.body.hasOwnProperty(p)) {
+      if (p.match(/^_.*/) && p !== '_id') {
+        delete req.body[p];
       }
     }
   }
+}
 
-  function yes() {
-    db.events.save(e, function(err, ev) {
-      if (!req.params || !req.params.id) {
-        res.status(201);
-      }
-      res.send(ev);
-    });
+function makeTypesConsistent(req) {
+  if (!!req.body.accountRid) {
+    req.body.acountRid = new ObjectId(req.body.accountRid);
   }
-
-  function no(stat) {
-    res.status(stat);
-    res.end();
+  if (!!req.body.principalAmount) {
+    req.body.principalAmount = Number(req.body.principalAmount);
   }
-};
-
-module.exports.remove = function(req, res) {
-  determineIfActionIsValid(req).done(yes, no);
-
-  function yes() {
-    db.events.remove({
-      _id: new ObjectId(req.params.id)
-    }, true, function(err, e) {
-      res.send(e);
-    });
-  }
-
-  function no(stat) {
-    res.status(stat);
-    res.end();
-  }
-};
-
-function assignIdFromRequest(req, e) {
-  if (req.params && req.params.id) {
-    e._id = new ObjectId(req.params.id);
+  if (!!req.body.interestAmount) {
+    req.body.interestAmount = Number(req.body.interestAmount);
   }
 }
 
-function assignUserId(e, req) {
-  e.userId = new ObjectId(req.user._id);
-}
+Events.prototype.preCheckStatus = function(req, done) {
+  var my = this;
 
-function determineIfActionIsValid(req) {
-  var dfd = Q.defer();
   if (!req.params || !req.params.id) {
-    dfd.resolve(true);
+    done(null, 200);
   }
   else {
-    db.events.findOne({
-      _id: new ObjectId(req.params.id)
-    }, function(err, evt) {
-      if (!evt) {
-        return dfd.reject(404);
+    var criteria = _.extend({}, my.criteria);
+    criteria._id = new ObjectId(req.params.id);
+    my.collection.findOne(criteria, function(err, item) {
+      var status = 404;
+      if (!!item) {
+        status = item.userId.toString() !== req.user._id.toString() ? 403 : 200;
       }
-      if (evt.userId.toString() !== req.user._id.toString()) {
-        return dfd.reject(403);
-      }
-      dfd.resolve(true);
+      done(err, status);
     });
   }
+};
 
-  return dfd.promise;
+Events.prototype.validate = function(req, done) {
+  if (!req.body) {
+    return done(null, new Error('Request is empty.'));
+  }
+
+  if (req.body.eventType === eventTypes.transaction) {
+    validateTransactionEvent(req, done);
+  } else {
+    validateMiscellaneousEvent(req, done);
+  }
+};
+
+function validateTransactionEvent(req, done) {
+  if (!req.body.description) {
+    return done(null, new Error('Transactions must have a description.'));
+  }
+  if (!req.body.transactionDate) {
+    return done(null, new Error('Transactions must have a transaction date.'));
+  }
+  done(null, null);
 }
 
-function isValid(evt, res) {
-  if (!evt.title) {
-    error.send(new Error('Events must have a title.'), res);
-    return false;
+function validateMiscellaneousEvent(req, done) {
+  if (!req.body.title) {
+    return done(null, new Error('Events must have a title.'));
   }
-  if (!evt.category) {
-    error.send(new Error('Events must have a category.'), res);
-    return false;
+  if (!req.body.category) {
+    return done(null, new Error('Events must have a category.'));
   }
-  if (!evt.start) {
-    error.send(new Error('Events must have a start date.'), res);
-    return false;
+  if (!req.body.start) {
+    return done(null, new Error('Events must have a start date.'));
   }
-  if (evt.end && evt.end < evt.start) {
-    error.send(new Error('Start date must be on or before the end date.'), res);
-    return false;
+  if (req.body.end && req.body.end < req.body.start) {
+    return done(null, new Error('Start date must be on or before the end date.'));
   }
-  return true;
+  done(null, null);
 }
+
+var repository = new Events();
+
+module.exports = function(app) {
+  app.get('/api/events', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.get(req, res);});
+  app.post('/api/events/:id?', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.save(req, res);});
+  app.delete('/api/events/:id', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.remove(req, res);});
+};

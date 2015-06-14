@@ -6,20 +6,20 @@ div.container
 				label.col-md-2.control-label(for='username') Username
 				.col-md-10
 					input.form-control(name='username', type='text', ng-model='ctrl.model.username', required)
-					.error-container(ng-show='profileForm.username.$invalid')
-						small.text-danger(ng-show='profileForm.username.$error.required') Required
+					div(ng-messages="profileForm.username.$error", role="alert")
+						div(ng-messages-include="/partials/common/templates/errorMessages")
 			.form-group
 				label.col-md-2.control-label(for='firstName') First Name
 				.col-md-10
 					input.form-control(name='firstName', type='text', ng-model='ctrl.model.firstName', required)
-					.error-container(ng-show='profileForm.firstName.$invalid')
-						small.text-danger(ng-show='profileForm.firstName.$error.required') Required
+					div(ng-messages="profileForm.firstName.$error", role="alert")
+						div(ng-messages-include="/partials/common/templates/errorMessages")
 			.form-group
 				label.col-md-2.control-label(for='lastName') Last Name
 				.col-md-10
 					input.form-control(name='lastName', type='text', ng-model='ctrl.model.lastName', required)
-					.error-container(ng-show='profileForm.lastName.$invalid')
-						small.text-danger(ng-show='profileForm.lastName.$error.required') Required
+					div(ng-messages="profileForm.lastName.$error", role="alert")
+						div(ng-messages-include="/partials/common/templates/errorMessages")
 		.form-group
 			.col-md-offset-2.col-md-10.btn-area
 				button.btn.btn-default(type='button', ng-click="ctrl.reset()") Reset

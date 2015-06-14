@@ -1,20 +1,19 @@
 'use strict';
 
+var error = require('../services/error');
 var fs = require("fs");
+var redirect = require('../services/redirect');
 
-module.exports.get = function(req, res) {
+function get(req, res) {
   fs.readFile("./server/data/versions.json", "utf8", function(err, data) {
     if (err) {
-      return sendError(err, res);
+      return error.send(err, res);
     }
     var output = JSON.parse(data);
     res.status(200).json(output);
   });
-};
-
-function sendError(err, res) {
-  res.status(400);
-  res.send({
-    reason: err.toString()
-  });
 }
+
+module.exports = function(app){
+  app.get('/api/versions', redirect.toHttps, function(req, res) {get(req, res);});
+};

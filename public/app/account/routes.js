@@ -8,7 +8,7 @@
     controller: 'myProfileCtrl',
     resolve: {
       authorized: /* @ngInject */ function(authService) {
-        return authService.currentUserAuthorizedForRoute('');
+        return authService.currentUserAuthorizedForRole('');
       }
     }
   }, {
@@ -17,7 +17,7 @@
     controller: 'userListCtrl',
     resolve: {
       authorized: /* @ngInject */ function(authService) {
-        return authService.currentUserAuthorizedForRoute('admin');
+        return authService.currentUserAuthorizedForRole('admin');
       }
     }
   }, {

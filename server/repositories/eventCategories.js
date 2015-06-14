@@ -1,23 +1,23 @@
 'use strict';
 
+var authentication = require('../services/authentication');
 var db = require('../config/database');
-var ObjectId = require("mongojs").ObjectId;
+var redirect = require('../services/redirect');
+var RepositoryBase = require("./RepositoryBase");
+var util = require("util");
 
-module.exports.get = function(req, res) {
-  db.eventCategories.find(function(err, cats) {
-    res.send(cats);
-  });
-};
+function EventCategories(){
+  RepositoryBase.call(this);
+  this.collection = db.eventCategories;
+}
 
-module.exports.save = function(req, res) {
-  var cat = req.body;
-  var status = 201;
-  if (req.params && req.params.id) {
-    cat._id = new ObjectId(req.params.id);
-    status = 200;
-  }
-  db.eventCategories.save(req.body, function(err, cat) {
-    res.status(status);
-    res.send(cat);
-  });
+util.inherits(EventCategories, RepositoryBase);
+
+var repository = new EventCategories();
+
+module.exports = function(app){
+  app.get('/api/eventCategories', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.get(req, res);});
+  app.post('/api/eventCategories/:id?', redirect.toHttps, authentication.requiresApiLogin,
+    function(req, res) {repository.save(req, res);});
 };

@@ -2,18 +2,20 @@
 (function() {
   'use strict';
 
-  angular.module('app', ['app.core', 'app.account', 'app.calendar', 'app.household', 'ngAnimate', 'ngRoute', 'ngResource']);
+  angular.module('app', ['app.core', 'app.account', 'app.calendar', 'app.financial', 'app.household', 'ngAnimate', 'ngRoute', 'ngResource']);
 
   angular.module('app')
     .config(configure)
     .run(runApplication);
 
-  function configure($routeProvider, $locationProvider, mainRoutes, accountRoutes, calendarRoutes, householdRoutes) {
+  function configure($routeProvider, $locationProvider,
+                     mainRoutes, accountRoutes, calendarRoutes, financialRoutes, householdRoutes) {
     $locationProvider.html5Mode(true);
 
     setupRoutes(mainRoutes);
     setupRoutes(accountRoutes);
     setupRoutes(calendarRoutes);
+    setupRoutes(financialRoutes);
     setupRoutes(householdRoutes);
 
     function setupRoutes(routes) {

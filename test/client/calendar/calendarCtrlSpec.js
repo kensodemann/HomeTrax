@@ -15,7 +15,7 @@
     var mockAsideConstructor;
     var mockCalendar;
     var mockCalendarData;
-    var mockEventEditor;
+    var mockCalendarEventEditor;
     var mockPromise;
     var testEvent;
 
@@ -64,7 +64,7 @@
       }
 
       function buildMockEventEditor() {
-        mockEventEditor = sinon.stub({
+        mockCalendarEventEditor = sinon.stub({
           initialize: function() {},
           open: function() {}
         });
@@ -93,7 +93,7 @@
         $scope: scope,
         $aside: mockAsideConstructor,
         calendarData: mockCalendarData,
-        eventEditor: mockEventEditor
+        calendarEventEditor: mockCalendarEventEditor
       });
     }
 
@@ -139,8 +139,8 @@
 
         ctrl.uiConfig.calendar.dayClick(moment());
 
-        expect(mockEventEditor.initialize.calledOnce).to.be.true;
-        expect(mockEventEditor.initialize.calledWith(mockCalendar)).to.be.true;
+        expect(mockCalendarEventEditor.initialize.calledOnce).to.be.true;
+        expect(mockCalendarEventEditor.initialize.calledWith(mockCalendar)).to.be.true;
       });
 
       it('creates a new event for the day', function() {
@@ -156,8 +156,8 @@
       it('opens the event editor passing the new event', function() {
         var ctrl = createController();
         ctrl.uiConfig.calendar.dayClick(moment());
-        expect(mockEventEditor.open.calledOnce).to.be.true;
-        expect(mockEventEditor.open.calledWith(testEvent)).to.be.true;
+        expect(mockCalendarEventEditor.open.calledOnce).to.be.true;
+        expect(mockCalendarEventEditor.open.calledWith(testEvent)).to.be.true;
       });
     });
 
@@ -173,8 +173,8 @@
         };
         ctrl.uiConfig.calendar.eventClick(eventToEdit);
 
-        expect(mockEventEditor.initialize.calledOnce).to.be.true;
-        expect(mockEventEditor.initialize.calledWith(mockCalendar)).to.be.true;
+        expect(mockCalendarEventEditor.initialize.calledOnce).to.be.true;
+        expect(mockCalendarEventEditor.initialize.calledWith(mockCalendar)).to.be.true;
       });
 
       it('opens the event editor passing the clicked event', function() {
@@ -186,8 +186,8 @@
           end: moment()
         };
         ctrl.uiConfig.calendar.eventClick(eventToEdit);
-        expect(mockEventEditor.open.calledOnce).to.be.true;
-        expect(mockEventEditor.open.calledWith(eventToEdit)).to.be.true;
+        expect(mockCalendarEventEditor.open.calledOnce).to.be.true;
+        expect(mockCalendarEventEditor.open.calledWith(eventToEdit)).to.be.true;
       });
     });
 
