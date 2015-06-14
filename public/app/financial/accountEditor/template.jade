@@ -31,7 +31,7 @@
 						.form-group
 							label.col-md-3.control-label(for='amount') Opening Balance
 							.col-md-9
-								input.form-control(name='amount', type='text', ng-model='controller.amount', required)
+								input.form-control(name='amount', type='text', ng-model='controller.amount', required, currency-amount)
 								div(ng-messages="financialAccountEditor.amount.$error", role="alert")
 									div(ng-messages-include="/partials/common/templates/errorMessages")
 				.modal-footer
