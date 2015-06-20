@@ -1,6 +1,8 @@
 # Add the ruby gems path to the PATH so we can run sass
 export PATH=$PATH:$HOME/.gem/bin
 
+
 ##########
 echo "INFO: Running 'grunt openShiftBuild'"
+cd $OPENSHIFT_REPO_DIR
 grunt openShiftBuild
