@@ -1,9 +1,11 @@
-node_modules/*
+node_modules
+bower_components
+
 .idea/*
 !.idea/codeStyleSettings.xml
+
 *.html
 public/dist/
-public/vendor/
 public/style/*
 !public/style/*.scss
 
@@ -16,5 +18,4 @@ data/
 *.log
 
 .sass-cache/
-
 .DS_Store
