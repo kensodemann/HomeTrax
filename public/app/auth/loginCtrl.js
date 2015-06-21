@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.account').controller('loginCtrl', LoginCtrl);
+  angular.module('app.auth').controller('loginCtrl', LoginCtrl);
 
   function LoginCtrl($location, authService, notifier) {
     var self = this;

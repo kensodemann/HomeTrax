@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.account').factory('users', Users);
+  angular.module('app.userAdministration').factory('users', Users);
 
   function Users($q, User) {
     var exports = {

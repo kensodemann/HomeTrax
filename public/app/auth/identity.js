@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.account').factory('identity', Identity);
+  angular.module('app.auth').factory('identity', Identity);
 
   function Identity($window, User) {
     var exports = {

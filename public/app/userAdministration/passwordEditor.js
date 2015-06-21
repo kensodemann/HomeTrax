@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.account').factory('passwordEditor', PasswordEditor);
+  angular.module('app.userAdministration').factory('passwordEditor', PasswordEditor);
 
   function PasswordEditor($rootScope, $modal, UserPassword, notifier) {
     var exports = {
@@ -10,7 +10,7 @@
 
     var editorScope = $rootScope.$new(true);
     var editor = $modal({
-      template: '/partials/account/templates/passwordEditor',
+      template: '/partials/userAdministration/templates/passwordEditor',
       show: false,
       backdrop: 'static',
       scope: editorScope

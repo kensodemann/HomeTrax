@@ -12,7 +12,7 @@
     var mockNotifier;
     var mockUser;
 
-    beforeEach(module('app.account'));
+    beforeEach(module('app.userAdministration'));
 
     beforeEach(function() {
       buildMockColors();
@@ -91,7 +91,7 @@
 
       it('uses the correct template', function() {
         var config = mockModalConstructor.getCall(0).args[0];
-        expect(config.template).to.equal('/partials/account/templates/userEditor');
+        expect(config.template).to.equal('/partials/userAdministration/templates/userEditor');
       });
 
       it('is initially hidden', function() {

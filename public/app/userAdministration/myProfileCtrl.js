@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.account').controller('myProfileCtrl', MyProfileCtrl);
+  angular.module('app.userAdministration').controller('myProfileCtrl', MyProfileCtrl);
 
   function MyProfileCtrl(User, identity, passwordEditor, notifier) {
     var self = this;

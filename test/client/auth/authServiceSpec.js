@@ -4,11 +4,12 @@
   describe('authService', function() {
     var mockHttp;
     var mockIdentity;
+    var mockUser;
     var dfd;
     var serviceUnderTest;
     var scope;
 
-    beforeEach(module('app.account'));
+    beforeEach(module('app.auth'));
 
     beforeEach(function() {
       mockHttp = sinon.stub({
@@ -21,10 +22,12 @@
         isAuthorized: function() {
         }
       });
+      mockUser = sinon.stub().returns({});
 
       module(function($provide) {
         $provide.value('$http', mockHttp);
         $provide.value('identity', mockIdentity);
+        $provide.value('User', mockUser);
       });
     });
 

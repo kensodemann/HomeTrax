@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('app',
-    ['app.core', 'app.account', 'app.calendar', 'app.financial', 'app.household',
+    ['app.core', 'app.auth', 'app.calendar', 'app.financial', 'app.household', 'app.userAdministration',
       'LocalStorageModule', 'ngAnimate', 'ngRoute', 'ngResource']);
 
   angular.module('app')
@@ -12,14 +12,15 @@
     .run(routeErrorHandling);
 
   function routes($routeProvider, $locationProvider,
-                  mainRoutes, accountRoutes, calendarRoutes, financialRoutes, householdRoutes) {
+                  mainRoutes, authRoutes, calendarRoutes, financialRoutes, householdRoutes, userAdministrationRoutes) {
     $locationProvider.html5Mode(true);
 
     setupRoutes(mainRoutes);
-    setupRoutes(accountRoutes);
+    setupRoutes(authRoutes);
     setupRoutes(calendarRoutes);
     setupRoutes(financialRoutes);
     setupRoutes(householdRoutes);
+    setupRoutes(userAdministrationRoutes);
 
     function setupRoutes(routes) {
       angular.forEach(routes, function(route) {

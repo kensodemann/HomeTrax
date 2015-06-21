@@ -28,7 +28,7 @@
       }];
     });
 
-    beforeEach(module('app.account'));
+    beforeEach(module('app.userAdministration'));
 
     beforeEach(inject(function($rootScope, $httpBackend, User) {
       scope = $rootScope;

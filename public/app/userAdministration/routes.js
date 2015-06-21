@@ -1,10 +1,9 @@
-/* global angular */
 (function() {
   'use strict';
 
-  angular.module('app.account').constant('accountRoutes', [{
-    path: '/account/myprofile',
-    templateUrl: '/partials/account/templates/myProfile',
+  angular.module('app.auth').constant('userAdministrationRoutes', [{
+    path: '/userAdministration/myprofile',
+    templateUrl: '/partials/userAdministration/templates/myProfile',
     controller: 'myProfileCtrl',
     resolve: {
       authorized: /* @ngInject */ function(authService) {
@@ -12,17 +11,13 @@
       }
     }
   }, {
-    path: '/account/userlist',
-    templateUrl: '/partials/account/templates/userList',
+    path: '/userAdministration/userlist',
+    templateUrl: '/partials/userAdministration/templates/userList',
     controller: 'userListCtrl',
     resolve: {
       authorized: /* @ngInject */ function(authService) {
         return authService.currentUserAuthorizedForRole('admin');
       }
     }
-  }, {
-    path: '/login',
-    templateUrl: '/partials/account/templates/login',
-    controller: 'loginCtrl'
   }]);
 })();

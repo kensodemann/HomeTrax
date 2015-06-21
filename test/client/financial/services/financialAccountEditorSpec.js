@@ -75,7 +75,7 @@
         expect(controller).to.exist;
       });
 
-      it('puts the account types on the controller', function() {
+      it('puts the auth types on the controller', function() {
         var controller = getEditorController();
         expect(controller.accountTypes).to.deep.equal(financialAccountTypes);
       });
@@ -109,7 +109,7 @@
         };
       });
 
-      it('gets the potential entities that an account could be associated with', function() {
+      it('gets the potential entities that an auth could be associated with', function() {
         finacialAccountEditor.open({}, 'any');
         expect(mockEntity.query.calledOnce).to.be.true;
       });
@@ -152,14 +152,14 @@
         expect(controller.amount).to.equal(testAccount.amount);
       });
 
-      it('uses the first account type if the model is unknown', function() {
+      it('uses the first auth type if the model is unknown', function() {
         var controller = getEditorController();
         testAccount.accountType = 'bogus';
         finacialAccountEditor.open(testAccount, 'any');
         expect(controller.accountType).to.equal(financialAccountTypes[0]);
       });
 
-      it('uses the first account type if the model is new', function() {
+      it('uses the first auth type if the model is new', function() {
         var controller = getEditorController();
         finacialAccountEditor.open({}, 'any');
         expect(controller.accountType).to.equal(financialAccountTypes[0]);
@@ -177,7 +177,7 @@
       });
     });
 
-    describe('Saving the account', function() {
+    describe('Saving the auth', function() {
       var mockAccount;
       var controller;
       var theSaveCompleted;
@@ -198,7 +198,7 @@
         savedAccount = acct;
       }
 
-      it('copies the data from the editor controller to the account resource', function() {
+      it('copies the data from the editor controller to the auth resource', function() {
         controller.name = 'Bill & Ted';
         controller.bank = 'The Excellent Bank';
         controller.accountType = financialAccountTypes[2];
@@ -213,7 +213,7 @@
         expect(mockAccount.amount).to.equal(42.03);
       });
 
-      it('copies the entity if this is a liability balance account type', function() {
+      it('copies the entity if this is a liability balance auth type', function() {
         controller.name = 'Bill & Ted';
         controller.bank = 'The Excellent Bank';
         controller.accountType = {
@@ -231,7 +231,7 @@
         expect(mockAccount.entityRid).to.equal(1);
       });
 
-      it('does not copy the entity if this is an asset balance account type', function() {
+      it('does not copy the entity if this is an asset balance auth type', function() {
         controller.name = 'Bill & Ted';
         controller.bank = 'The Excellent Bank';
         controller.accountType = {
@@ -249,7 +249,7 @@
         expect(mockAccount.entityRid).to.be.undefined;
       });
 
-      it('calls save on the account', function() {
+      it('calls save on the auth', function() {
         controller.save();
         expect(mockAccount.$save.calledOnce).to.be.true;
       });
@@ -260,7 +260,7 @@
         expect(mockModal.hide.calledOnce).to.be.true;
       });
 
-      it('calls the save callback with the new account if the save succeeds', function() {
+      it('calls the save callback with the new auth if the save succeeds', function() {
         controller.save();
         mockAccount.$save.yield(mockAccount);
         expect(theSaveCompleted).to.be.true;

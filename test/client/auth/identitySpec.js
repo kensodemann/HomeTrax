@@ -8,7 +8,7 @@
     var mockUserConstructor;
     var mockWindow;
 
-    beforeEach(module('app.account'));
+    beforeEach(module('app.auth'));
 
     beforeEach(function() {
       buildMockUser();

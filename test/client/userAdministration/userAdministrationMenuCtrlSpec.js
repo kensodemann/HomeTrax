@@ -4,7 +4,7 @@
   describe('userAdminMenuCtrl', function() {
     var $controllerConstructor;
 
-    beforeEach(module('app.account'));
+    beforeEach(module('app.userAdministration'));
 
     beforeEach(inject(function($controller) {
       $controllerConstructor = $controller;
@@ -15,7 +15,7 @@
       it('Should set the identity to the injected identity object', function() {
         var mockIdentity = {};
 
-        var ctrl = $controllerConstructor('userAdminMenuCtrl', {
+        var ctrl = $controllerConstructor('userAdministrationMenuCtrl', {
           identity: mockIdentity
         });
 

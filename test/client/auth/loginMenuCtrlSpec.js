@@ -10,7 +10,7 @@
     var mockIdentity;
     var mockLocation;
 
-    beforeEach(module('app.account'));
+    beforeEach(module('app.auth'));
 
     beforeEach(inject(function($controller, $rootScope, $q) {
       scope = $rootScope.$new();

@@ -1,10 +1,10 @@
-ul.nav.navbar-nav.navbar-right(ng-controller="userAdminMenuCtrl as ctrl")
+ul.nav.navbar-nav.navbar-right(ng-controller="userAdministrationMenuCtrl as ctrl")
 	li(ng-show="ctrl.identity.isAuthenticated() && !ctrl.identity.isAuthorized('admin')")
-		a(href="/account/myprofile") My Profile
+		a(href="/userAdministration/myprofile") My Profile
 	li.dropdown(ng-show="ctrl.identity.isAuthorized('admin')")
 		a.dropdown-toggle(href="#" data-toggle="dropdown") User Admin <b class="caret"></b>
 		ul.dropdown-menu
 			li
-				a(href="/account/myprofile") My Profile
+				a(href="/userAdministration/myprofile") My Profile
 			li
-				a(href="/account/userlist") User List
+				a(href="/userAdministration/userlist") User List

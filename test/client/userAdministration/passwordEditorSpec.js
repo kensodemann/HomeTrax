@@ -10,7 +10,7 @@
     var mockUserPassword;
     var mockUserPasswordConstructor;
 
-    beforeEach(module('app.account'));
+    beforeEach(module('app.userAdministration'));
 
     beforeEach(function() {
       buildMockModal();

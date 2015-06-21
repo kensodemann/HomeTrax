@@ -10,7 +10,7 @@
 
     var serviceUnderTest;
 
-    beforeEach(module('app.account'));
+    beforeEach(module('app.userAdministration'));
 
     beforeEach(buildMocks);
     beforeEach(provideMocks);

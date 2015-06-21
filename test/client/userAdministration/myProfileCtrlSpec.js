@@ -3,7 +3,7 @@
   'use strict';
 
   describe('myProfileCtrl', function() {
-    beforeEach(module('app.account'));
+    beforeEach(module('app.userAdministration'));
 
     var ctrl;
     var $controllerConstructor;

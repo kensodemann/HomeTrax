@@ -44,7 +44,7 @@
         expect(mockFinancialAccountConstructor.query.calledOnce).to.be.true;
       });
 
-      it('creates the liability and asset account lists', function(){
+      it('creates the liability and asset auth lists', function(){
         var controller = createController();
         mockFinancialAccountConstructor.query.yield(testData);
         expect(controller.liabilityAccounts.length).to.equal(4);
@@ -60,20 +60,20 @@
     });
 
     describe('Adding a new event', function() {
-      it('creates a new account', function() {
+      it('creates a new auth', function() {
         var controller = createController();
         controller.addAccountClicked();
         expect(mockFinancialAccountConstructor.calledOnce).to.be.true;
       });
 
-      it('opens the account editor passing the new account', function() {
+      it('opens the auth editor passing the new auth', function() {
         var controller = createController();
         controller.addAccountClicked();
         expect(mockFinancialAccountEditor.open.calledOnce).to.be.true;
         expect(mockFinancialAccountEditor.open.calledWith(mockFinancialAccount, 'create')).to.be.true;
       });
 
-      it('adds the account to the asset list if it is an asset account', function(){
+      it('adds the auth to the asset list if it is an asset auth', function(){
         var controller = createController();
         controller.addAccountClicked();
         mockFinancialAccountEditor.open.callArgWith(2, {name:'bob', balanceType: 'liability'});
@@ -81,7 +81,7 @@
         expect(controller.liabilityAccounts.length).to.equal(1);
       });
 
-      it('adds the account to the asset list if it is an asset account', function(){
+      it('adds the auth to the asset list if it is an asset auth', function(){
         var controller = createController();
         controller.addAccountClicked();
         mockFinancialAccountEditor.open.callArgWith(2, {name:'brian', balanceType: 'asset'});

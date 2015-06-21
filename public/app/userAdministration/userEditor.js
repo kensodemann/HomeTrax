@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.account').factory('userEditor', userEditor);
+  angular.module('app.userAdministration').factory('userEditor', userEditor);
 
   function userEditor($rootScope, $modal, notifier) {
     var exports = {
@@ -11,7 +11,7 @@
 
     var editorScope = $rootScope.$new();
     var editor = $modal({
-      template: '/partials/account/templates/userEditor',
+      template: '/partials/userAdministration/templates/userEditor',
       backdrop: 'static',
       show: false,
       scope: editorScope

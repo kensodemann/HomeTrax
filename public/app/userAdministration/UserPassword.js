@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.account').factory('UserPassword', UserPassword);
+  angular.module('app.userAdministration').factory('UserPassword', UserPassword);
 
   function UserPassword($resource) {
     return $resource('/api/changepassword/:id', {

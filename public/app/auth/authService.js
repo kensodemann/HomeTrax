@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.account').factory('authService', AuthService);
+  angular.module('app.auth').factory('authService', AuthService);
 
   function AuthService($http, identity, $q, User) {
     return {
