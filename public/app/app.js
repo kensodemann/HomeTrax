@@ -2,14 +2,17 @@
 (function() {
   'use strict';
 
-  angular.module('app', ['app.core', 'app.account', 'app.calendar', 'app.financial', 'app.household', 'ngAnimate', 'ngRoute', 'ngResource']);
+  angular.module('app',
+    ['app.core', 'app.account', 'app.calendar', 'app.financial', 'app.household',
+      'LocalStorageModule', 'ngAnimate', 'ngRoute', 'ngResource']);
 
   angular.module('app')
-    .config(configure)
-    .run(runApplication);
+    .config(routes)
+    .config(services)
+    .run(routeErrorHandling);
 
-  function configure($routeProvider, $locationProvider,
-                     mainRoutes, accountRoutes, calendarRoutes, financialRoutes, householdRoutes) {
+  function routes($routeProvider, $locationProvider,
+                  mainRoutes, accountRoutes, calendarRoutes, financialRoutes, householdRoutes) {
     $locationProvider.html5Mode(true);
 
     setupRoutes(mainRoutes);
@@ -34,7 +37,11 @@
     }
   }
 
-  function runApplication($rootScope, $location) {
+  function services(localStorageServiceProvider) {
+    localStorageServiceProvider.setPrefix('HomeTrax');
+  }
+
+  function routeErrorHandling($rootScope, $location) {
     $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
       if (rejection === 'Not Authorized') {
         $location.path('/');
