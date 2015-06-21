@@ -2,6 +2,8 @@
 
 var passport = require('passport');
 var encryption = require('./encryption');
+var jwt = require('jsonwebtoken');
+var secret = require('../config/secret');
 
 module.exports.passwordIsValid = function(user, enteredPassword) {
   var hashedPassword = encryption.hash(user.salt, enteredPassword);
@@ -23,9 +25,11 @@ exports.authenticate = function(req, res, next) {
       if (err) {
         return next(err);
       }
+      var token = jwt.sign(user, secret.jwtCertificate);
       res.send({
         success: true,
-        user: user
+        user: user,
+        token: token
       });
     });
   });
