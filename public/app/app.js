@@ -7,6 +7,7 @@
       'LocalStorageModule', 'ngAnimate', 'ngRoute', 'ngResource']);
 
   angular.module('app')
+    .config(auth)
     .config(routes)
     .config(services)
     .run(routeErrorHandling);
@@ -36,6 +37,10 @@
         });
       }
     }
+  }
+
+  function auth($httpProvider) {
+    $httpProvider.interceptors.push('authInterceptor');
   }
 
   function services(localStorageServiceProvider) {
