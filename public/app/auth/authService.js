@@ -3,7 +3,7 @@
 
   angular.module('app.auth').factory('authService', AuthService);
 
-  function AuthService($http, identity, $q, User) {
+  function AuthService($http, identity, $q, User, authToken) {
     return {
       authenticateUser: function(username, password) {
         var dfd = $q.defer();
@@ -15,8 +15,10 @@
             var u = new User();
             angular.extend(u, response.data.user);
             identity.currentUser = u;
+            authToken.set(response.data.token);
             dfd.resolve(true);
           } else {
+            authToken.clear();
             dfd.resolve(false);
           }
         });
@@ -31,6 +33,7 @@
           identity.currentUser = undefined;
           dfd.resolve();
         });
+        authToken.clear();
         return dfd.promise;
       },
 
