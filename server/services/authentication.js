@@ -37,7 +37,7 @@ exports.authenticate = function(req, res, next) {
 };
 
 exports.requiresApiLogin = function(req, res, next) {
-  if (req.isAuthenticated()) {
+  if (userIsAuthenticated(req)) {
     next();
   } else {
     res.status(403);
@@ -47,7 +47,7 @@ exports.requiresApiLogin = function(req, res, next) {
 
 exports.requiresRole = function(role) {
   return function(req, res, next) {
-    if (req.isAuthenticated() && userInRole(req, role)) {
+    if (userIsAuthenticated(req) && userIsInRole(req, role)) {
       next();
     } else {
       res.status(403);
@@ -58,7 +58,7 @@ exports.requiresRole = function(role) {
 
 exports.requiresRoleOrIsCurrentUser = function(role) {
   return function(req, res, next) {
-    if (req.isAuthenticated() && (userInRole(req, role) || req.user._id == req.params.id)) {
+    if (userIsAuthenticated(req) && (userIsInRole(req, role) || req.user._id == req.params.id)) {
       next();
     } else {
       res.status(403);
@@ -67,6 +67,23 @@ exports.requiresRoleOrIsCurrentUser = function(role) {
   };
 };
 
-function userInRole(req, role) {
+function userIsAuthenticated(req) {
+  var token = getAuthToken(req);
+  try {
+    req.user = jwt.verify(token, secret.jwtCertificate);
+  } catch (err) {
+    return false;
+  }
+  return true;
+}
+
+function getAuthToken(req) {
+  if (!req.headers.authorization) {
+    return undefined;
+  }
+  return req.headers.authorization.split(' ')[1];
+}
+
+function userIsInRole(req, role) {
   return req.user.roles.indexOf(role) !== -1;
 }
