@@ -1,4 +1,3 @@
-/* global angular moment */
 (function() {
   'use strict';
 
