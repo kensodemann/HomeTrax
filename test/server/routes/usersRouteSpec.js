@@ -19,6 +19,7 @@ describe('api/users Routes', function() {
 
   describe('GET', function() {
     var authStub;
+    var requiresApiLoginCalled;
     var roleCalledWith;
     var roleOrCurrentCalledWith;
 
@@ -46,6 +47,10 @@ describe('api/users Routes', function() {
     beforeEach(function(done) {
       loadUsers(done);
       authStub = {
+        requiresApiLogin: function(req, res, next) {
+          requiresApiLoginCalled = true;
+          next();
+        },
         requiresRole: function(role) {
           return function(req, res, next) {
             roleCalledWith = role;
@@ -59,6 +64,7 @@ describe('api/users Routes', function() {
           };
         }
       };
+      requiresApiLoginCalled = false;
       roleCalledWith = '';
       roleOrCurrentCalledWith = '';
       proxyquire('../../../server/repositories/users', {
@@ -77,7 +83,7 @@ describe('api/users Routes', function() {
         .get('/api/users')
         .end(function(err, res) {
           expect(res.status).to.equal(200);
-          expect(roleCalledWith).to.equal('admin');
+          expect(requiresApiLoginCalled).to.be.true;
           done();
         });
     });
@@ -112,7 +118,7 @@ describe('api/users Routes', function() {
         request(app)
           .get('/api/users/123456789012345678901234')
           .end(function() {
-            expect(roleOrCurrentCalledWith).to.equal('admin');
+            expect(requiresApiLoginCalled).to.be.true;
             done();
           });
       });
