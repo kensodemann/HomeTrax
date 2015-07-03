@@ -104,11 +104,11 @@ describe('authentication', function() {
       expect(res.end.called).to.be.false;
     });
 
-    it('sets a status 403 if not authenticated', function() {
+    it('sets a status 401 if not authenticated', function() {
       mockJWT.verify.throws('InvalidToken');
       authentication.requiresApiLogin(req, res, next);
       expect(next.called).to.be.false;
-      expect(res.status.calledWith(403)).to.be.true;
+      expect(res.status.calledWith(401)).to.be.true;
       expect(res.end.calledOnce).to.be.true;
     });
   });
@@ -130,11 +130,11 @@ describe('authentication', function() {
       next = sinon.spy();
     });
 
-    it('sets a status 403 if not authenticated', function() {
+    it('sets a status 401 if not authenticated', function() {
       mockJWT.verify.throws('InvalidToken');
       authentication.requiresRole('rye')(req, res, next);
       expect(next.called).to.be.false;
-      expect(res.status.calledWith(403)).to.be.true;
+      expect(res.status.calledWith(401)).to.be.true;
       expect(res.end.calledOnce).to.be.true;
     });
 
@@ -180,11 +180,11 @@ describe('authentication', function() {
       next = sinon.spy();
     });
 
-    it('Should set a status 403 if not authenticated', function() {
+    it('Should set a status 401 if not authenticated', function() {
       mockJWT.verify.throws('InvalidToken');
       authentication.requiresRoleOrIsCurrentUser('rye')(req, res, next);
       expect(next.called).to.be.false;
-      expect(res.status.calledWith(403)).to.be.true;
+      expect(res.status.calledWith(401)).to.be.true;
       expect(res.end.calledOnce).to.be.true;
     });
 

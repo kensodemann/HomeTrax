@@ -3,11 +3,19 @@
 
   angular.module('app.auth').factory('authInterceptor', AuthInterceptor);
 
-  function AuthInterceptor(authToken) {
+  function AuthInterceptor($rootScope, $q, AuthEvents, authToken) {
     return {
       request: function(config) {
         addAuthHeader(config);
         return config;
+      },
+
+      responseError: function(response) {
+        $rootScope.$broadcast({
+          401: AuthEvents.notAuthenticated,
+          403: AuthEvents.notAuthorized
+        }[response.status], response);
+        return $q.reject(response);
       }
     };
 
