@@ -97,7 +97,7 @@ describe('api/accounts Routes', function() {
 
 
     describe('asset accounts', function() {
-      it('includes sums and counts for asset account', function(done) {
+      it('includes sums and counts for asset auth', function(done) {
         request(app)
           .get('/api/accounts')
           .end(function(err, res) {
@@ -139,7 +139,7 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('returns the specified account', function(done) {
+    it('returns the specified auth', function(done) {
       request(app)
         .get('/api/accounts/' + myCarLoan._id.toString())
         .end(function(err, res) {
@@ -151,7 +151,7 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('returns a 404 status if the account does not exist', function(done) {
+    it('returns a 404 status if the auth does not exist', function(done) {
       request(app)
         .get('/api/accounts/' + myCar._id.toString())
         .end(function(err, res) {
@@ -250,7 +250,7 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('returns 404 if the account does not exist', function(done) {
+    it('returns 404 if the auth does not exist', function(done) {
       request(app)
         .post('/api/accounts/54133902bc88a8241ac17f9d')
         .send({
@@ -280,7 +280,7 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('removes the specified account', function(done) {
+    it('removes the specified auth', function(done) {
       request(app)
         .delete('/api/accounts/' + mySecondMortgage._id.toString())
         .send()
@@ -295,7 +295,7 @@ describe('api/accounts Routes', function() {
         });
     });
 
-    it('removes events associated with specified account', function(done) {
+    it('removes events associated with specified auth', function(done) {
       request(app)
         .delete('/api/accounts/' + mySecondMortgage._id.toString())
         .send()
@@ -311,7 +311,7 @@ describe('api/accounts Routes', function() {
 
     });
 
-    it('returns a status of 404 if the specified account does not exist', function(done) {
+    it('returns a status of 404 if the specified auth does not exist', function(done) {
       request(app)
         .delete('/api/accounts/55293bd4b4b789415aa33dcf')
         .send()

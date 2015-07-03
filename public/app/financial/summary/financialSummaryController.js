@@ -27,7 +27,7 @@
       },
 
       addAccountTooltip: {
-        title: "Add a new account"
+        title: "Add a new auth"
       },
 
       liabilityAccounts: [],

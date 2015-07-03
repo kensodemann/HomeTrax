@@ -84,7 +84,7 @@
         expect(mockFinancialAccount.get.calledWith({id: 42})).to.be.true;
       });
 
-      it('queries the transaction events for this account', function() {
+      it('queries the transaction events for this auth', function() {
         mockRouteParams.id = 73;
         createController();
         expect(mockHomeAppEventConstructor.query.calledOnce).to.be.true;
@@ -103,7 +103,7 @@
         controller.transactions = [{}, {}, {}];
       });
 
-      it('creates a new transaction event for the current account', function() {
+      it('creates a new transaction event for the current auth', function() {
         controller.addTransaction();
         expect(mockHomeAppEventConstructor.calledOnce).to.be.true;
         expect(mockHomeAppEventConstructor.calledWith({
@@ -247,14 +247,14 @@
       });
     });
 
-    describe('editing the account', function() {
+    describe('editing the auth', function() {
       var account;
       var controller;
       beforeEach(function() {
         account = {
           _id: 42,
           name: 'The Ultimate Account',
-          otherInfo: 'This is random other information that may be on the account'
+          otherInfo: 'This is random other information that may be on the auth'
         };
         mockFinancialAccount.get.returns(account);
 
@@ -267,11 +267,11 @@
         expect(mockFinancialAccountEditor.open.calledWith({
           _id: 42,
           name: 'The Ultimate Account',
-          otherInfo: 'This is random other information that may be on the account'
+          otherInfo: 'This is random other information that may be on the auth'
         }, editorModes.modify)).to.be.true;
       });
 
-      it('is performed on a copy of the account', function() {
+      it('is performed on a copy of the auth', function() {
         expect(mockFinancialAccountEditor.open.getCall(0).args[0]).to.deep.equal(account);
         expect(mockFinancialAccountEditor.open.getCall(0).args[0]).to.not.equal(account);
       });

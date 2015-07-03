@@ -1,4 +1,3 @@
-/* global afterEach beforeEach describe it */
 'use strict';
 
 var colors = require('../../../server/services/colors');

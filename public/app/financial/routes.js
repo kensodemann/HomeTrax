@@ -4,20 +4,10 @@
   angular.module('app.financial').constant('financialRoutes', [{
     path: '/financialSummary',
     templateUrl: '/partials/financial/summary/template',
-    controller: 'financialSummaryController',
-    resolve: {
-      authorized: /* @ngInject */ function(authService) {
-        return authService.currentUserAuthorizedForRole('');
-      }
-    }
+    controller: 'financialSummaryController'
   }, {
     path: '/financialDetails/:id',
     templateUrl: '/partials/financial/details/template',
-    controller: 'financialDetailsController',
-    resolve: {
-      authorized: /* @ngInject */ function(authService) {
-        return authService.currentUserAuthorizedForRole('');
-      }
-    }
+    controller: 'financialDetailsController'
   }]);
 })();

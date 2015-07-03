@@ -5,12 +5,7 @@
   angular.module('app').constant('mainRoutes', [{
     path: '/',
     templateUrl: '/partials/main/templates/main',
-    controller: 'mainCtrl',
-    resolve: {
-      authorized: /* @ngInject */ function(authService) {
-        return authService.currentUserAuthorizedForRole('');
-      }
-    }
+    controller: 'mainCtrl'
   }, {
     path: '/about',
     templateUrl: '/partials/main/templates/about',
