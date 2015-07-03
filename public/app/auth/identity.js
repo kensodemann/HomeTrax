@@ -4,7 +4,7 @@
 
   angular.module('app.auth').factory('identity', Identity);
 
-  function Identity($window, User) {
+  function Identity($http, User, cacheBuster) {
     var exports = {
       currentUser: undefined,
       isAuthenticated: isAuthenticated,
@@ -16,10 +16,11 @@
     return exports;
 
     function setCurrentUser() {
-      if (!!$window.bootstrappedUserObject) {
-        exports.currentUser = new User();
-        angular.extend(exports.currentUser, $window.bootstrappedUserObject);
-      }
+      $http.get('/api/currentUser', { params: { _: cacheBuster.value } })
+        .success(function(data) {
+          exports.currentUser = new User();
+          angular.extend(exports.currentUser, data);
+        });
     }
 
     function isAuthenticated() {
