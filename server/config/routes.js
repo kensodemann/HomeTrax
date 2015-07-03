@@ -22,8 +22,6 @@ module.exports = function(app) {
   });
 
   app.get('*', redirect.toHttps, function(req, res) {
-    res.render('index', {
-      bootstrappedUser: req.user
-    });
+    res.render('index');
   });
 };
