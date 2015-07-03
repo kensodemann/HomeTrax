@@ -35,16 +35,6 @@
         });
         authToken.clear();
         return dfd.promise;
-      },
-
-      currentUserAuthorizedForRole: function(role) {
-        if (!identity.isAuthenticated()) {
-          return $q.reject('Not Logged In');
-        } else if (role !== '' && !identity.isAuthorized(role)) {
-          return $q.reject('Not Authorized');
-        } else {
-          return true;
-        }
       }
     };
   }
