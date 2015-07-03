@@ -6,7 +6,6 @@
     var identity;
     var httpBackend;
     var mockCacheBuster;
-    var mockUserConstructor;
 
     beforeEach(module('app.auth'));
 
@@ -14,10 +13,8 @@
       mockCacheBuster = {
         value: 'SomeBusterOfCache'
       };
-      mockUserConstructor = sinon.stub().returns({});
 
       module(function($provide) {
-        $provide.value('User', mockUserConstructor);
         $provide.value('cacheBuster', mockCacheBuster);
       });
     });
@@ -39,7 +36,6 @@
           name: 'Ford Prefect'
         });
         httpBackend.flush();
-        expect(mockUserConstructor.calledOnce).to.be.true;
         expect(identity.currentUser).to.deep.equal({
           _id: 42,
           name: 'Ford Prefect'
