@@ -4,7 +4,9 @@ bower_components
 .idea/*
 !.idea/codeStyleSettings.xml
 
-*.html
+server/**/*.html
+public/index.html
+
 public/dist/
 public/style/*
 !public/style/*.scss

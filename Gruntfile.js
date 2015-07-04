@@ -98,12 +98,14 @@ module.exports = function(grunt) {
           }
         },
         files: {
+          'public/index.html': 'public/index.tpl.html',
           'server/includes/scripts.jade': 'server/includes/scripts.tpl.jade',
           'server/includes/layout.jade': 'server/includes/layout.tpl.jade'
         }
       },
       dist: {
         files: {
+          'public/index.html': 'public/index.tpl.html',
           'server/includes/scripts.jade': 'server/includes/scripts.tpl.jade',
           'server/includes/layout.jade': 'server/includes/layout.tpl.jade'
         }
