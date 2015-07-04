@@ -25,9 +25,13 @@
   <link rel="stylesheet" href="dist/Home-App.min.css">
   <!-- @endif -->
 </head>
-<body>
+<body ng-app="app">
+
+<div ng-include="'app/main/templates/navigation.html'"></div>
+
 <section class="content">
   <div ng-controller="shellController as controller">
+    <h1>{{controller.hello}}</h1>
     <div ng-view></div>
   </div>
 </section>

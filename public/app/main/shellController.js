@@ -12,5 +12,7 @@
     $scope.$on(AuthEvents.notAuthorized, function() {
       $location.path('/login');
     });
+
+    this.hello = 'Hello There!!';
   }
 }());
