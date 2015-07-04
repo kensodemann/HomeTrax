@@ -4,12 +4,12 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var passport = require('passport');
-var serveStatic = require('serve-static');
+//var serveStatic = require('serve-static');
 var session = require('express-session');
 
 module.exports = function(app, config) {
-  app.set('view engine', 'jade');
-  app.set('views', config.rootPath + '/server/views');
+  //app.set('view engine', 'jade');
+  //app.set('views', config.rootPath + '/server/views');
 
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
@@ -25,5 +25,6 @@ module.exports = function(app, config) {
 
   app.use(passport.initialize());
 
-  app.use(serveStatic(config.rootPath + '/public'));
+  //app.use(serveStatic(config.rootPath + '/public'));
+  app.use(express.static(config.rootPath + '/public'));
 };
