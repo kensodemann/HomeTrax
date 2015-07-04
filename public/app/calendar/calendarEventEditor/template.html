@@ -1,0 +1,86 @@
+<div tabindex="-1" role="dialog" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form name="eventEditor" class="form-horizontal">
+        <div class="modal-header">
+          <button type="button" ng-click="$hide()" aria-hidden="true" class="close">&times;</button>
+          <h4 class="modal-title">{{ctrl.title}}</h4></div>
+        <div class="modal-body">
+          <fieldset>
+            <div class="form-group">
+              <div ng-show="ctrl.isReadonly" class="col-md-12">
+                <div class="bg-info text-center form-static">Editing is disabled because this event belongs to
+                  {{ctrl.eventOwnerName}}
+                </div>
+              </div>
+            </div>
+            <div class="form-group"><label for="title" class="col-md-2 control-label">Title</label>
+
+              <div class="col-md-10"><input name="title" type="text" ng-model="ctrl.model.title"
+                                            ng-disabled="ctrl.isReadonly" required="required" class="form-control"/>
+
+                <div ng-messages="eventEditor.title.$error" role="alert">
+                  <div ng-messages-include="app/common/templates/errorMessages.html"></div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group"><label for="category" class="col-md-2 control-label">Category</label>
+
+              <div class="col-md-10"><input name="category" type="text" ng-model="ctrl.model.category"
+                                            options="ctrl.categoryOptions" datasets="ctrl.categories"
+                                            sf-typeahead="sf-typeahead" ng-disabled="ctrl.isReadonly"
+                                            required="required" class="form-control"/>
+
+                <div ng-messages="eventEditor.category.$error" role="alert">
+                  <div ng-messages-include="app/common/templates/errorMessages.html"></div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group"><label class="col md-10 col-md-offset-2">
+              <div class="checkbox-group"><input type="checkbox" ng-model="ctrl.model.isAllDayEvent"
+                                                 ng-disabled="ctrl.isReadonly"/><span>&nbsp;All day event</span></div>
+            </label></div>
+            <div class="form-group"><label for="startDate" class="col-md-2 control-label">Start</label>
+
+              <div class="col-md-5"><input type="text" ng-model="ctrl.model.start" name="startDate"
+                                           bs-datepicker="bs-datepicker" data-date-type="number"
+                                           ng-disabled="ctrl.isReadonly" required="required" class="form-control"/>
+              </div>
+              <div class="col-md-5"><input type="text" ng-model="ctrl.model.start" name="startTime"
+                                           ng-hide="ctrl.model.isAllDayEvent" bs-timepicker="bs-timepicker"
+                                           data-time-type="number" ng-disabled="ctrl.isReadonly" required="required"
+                                           class="form-control"/></div>
+            </div>
+            <div class="form-group"><label for="endDate" class="col-md-2 control-label">End</label>
+
+              <div class="col-md-5"><input type="text" ng-model="ctrl.model.end" name="endDate"
+                                           bs-datepicker="bs-datepicker" data-date-type="number"
+                                           ng-disabled="ctrl.isReadonly" required="required" class="form-control"/>
+              </div>
+              <div class="col-md-5"><input type="text" ng-model="ctrl.model.end" name="endTime"
+                                           ng-hide="ctrl.model.isAllDayEvent" bs-timepicker="bs-timepicker"
+                                           data-time-type="number" ng-disabled="ctrl.isReadonly" required="required"
+                                           class="form-control"/></div>
+            </div>
+            <div class="form-group"><label class="col md-10 col-md-offset-2">
+              <div class="checkbox-group"><input type="checkbox" ng-model="ctrl.model.isPrivate"
+                                                 ng-disabled="ctrl.isReadonly"/><span>&nbsp;Private event</span></div>
+            </label></div>
+            <div class="form-group">
+              <div class="col-md-offset-4 col-md-8 text-danger">{{ctrl.errorMessage}}</div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="modal-footer">
+          <button type="button" ng-click="ctrl.remove()" ng-show="!ctrl.isReadonly &amp;&amp; ctrl.mode === 'edit'"
+                  class="btn btn-default pull-left">Remove
+          </button>
+          <button type="button" ng-click="$hide()" class="btn btn-default">Cancel</button>
+          <button type="submit" ng-click="ctrl.ok()" ng-disabled="eventEditor.$invalid || errorMessage"
+                  ng-show="!ctrl.isReadonly" class="btn btn-primary">Save Event
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

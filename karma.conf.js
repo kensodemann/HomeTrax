@@ -25,6 +25,7 @@ module.exports = function(config) {
       'test/client/test-app.js',
       'public/app/**/*.js',
       'public/app/**/*.jade',
+      'public/app/**/*.html',
       'test/client/**/*Spec.js'
     ],
 
@@ -39,7 +40,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '**/*.jade': ['ng-jade2js']
+      '**/*.jade': ['ng-jade2js'],
+      '**/*.html': ['ng-html2js']
     },
 
     ngJade2JsPreprocessor: {
@@ -48,6 +50,10 @@ module.exports = function(config) {
         path = path.replace(/\.jade$/, '');
         return path;
       }
+    },
+
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'public/'
     },
 
 

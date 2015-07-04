@@ -1,6 +1,7 @@
 'use strict';
 
 var authentication = require('../services/authentication');
+var config = require('./config');
 var redirect = require('../services/redirect');
 
 module.exports = function(app) {
@@ -18,7 +19,7 @@ module.exports = function(app) {
     res.end();
   });
 
-  app.get('/partials/*', redirect.toHttps, function(req, res) {
-    res.render('../../public/app/' + req.params[0]);
+  app.all('/*', function(req, res) {
+    res.sendFile(config.rootPath + '/public/index.html');
   });
 };

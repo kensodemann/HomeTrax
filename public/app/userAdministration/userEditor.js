@@ -11,7 +11,7 @@
 
     var editorScope = $rootScope.$new();
     var editor = $modal({
-      template: '/partials/userAdministration/templates/userEditor',
+      template: 'app/userAdministration/templates/userEditor.html',
       backdrop: 'static',
       show: false,
       scope: editorScope

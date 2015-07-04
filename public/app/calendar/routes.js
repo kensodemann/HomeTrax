@@ -4,7 +4,7 @@
 
   angular.module('app.calendar').constant('calendarRoutes', [{
     path: '/calendar',
-    templateUrl: '/partials/calendar/templates/calendar',
+    templateUrl: 'app/calendar/templates/calendar.html',
     controller: 'calendarCtrl'
   }]);
 })();

@@ -19,7 +19,7 @@
     };
 
     var editor = $modal({
-      template: '/partials/calendar/calendarEventEditor/template',
+      template: 'app/calendar/calendarEventEditor/template.html',
       backdrop: 'static',
       scope: editorScope,
       show: false

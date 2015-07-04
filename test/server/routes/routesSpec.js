@@ -35,19 +35,6 @@ describe('Basic Routes', function() {
     });
   });
 
-  describe('partials', function() {
-    beforeEach(function() {
-      require('../../../server/config/routes')(app);
-    });
-
-    it('Loads valid partials', function(done) {
-      request(app)
-        .get('/partials/main')
-        .expect('<main></main>')
-        .expect(200, done);
-    });
-  });
-
   describe('login', function() {
     var authCalled;
     var authStub = {

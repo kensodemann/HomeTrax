@@ -18,7 +18,7 @@
 
     var asideScope = $scope.$new(true);
     var aside = $aside({
-      template: '/partials/calendar/templates/options',
+      template: 'app/calendar/templates/options.html',
       backdrop: 'static',
       show: false,
       scope: asideScope

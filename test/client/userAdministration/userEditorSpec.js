@@ -91,7 +91,7 @@
 
       it('uses the correct template', function() {
         var config = mockModalConstructor.getCall(0).args[0];
-        expect(config.template).to.equal('/partials/userAdministration/templates/userEditor');
+        expect(config.template).to.equal('app/userAdministration/templates/userEditor.html');
       });
 
       it('is initially hidden', function() {

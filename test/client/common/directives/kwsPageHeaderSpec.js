@@ -6,7 +6,7 @@
     var scope;
     var el;
 
-    beforeEach(module('/partials/common/templates/kwsPageHeader'));
+    beforeEach(module('app/common/templates/kwsPageHeader.html'));
     beforeEach(module('app.core'));
 
     beforeEach(inject(function($rootScope, $compile) {
@@ -39,12 +39,7 @@
       });
 
       it('Renders the first line as the title', function() {
-        expect(el[0].innerHTML).to.contain('><kws-templated-view kws-model="kwsModel" kws-template="Killswitch"></kws-templated-view></h2>');
-      });
-
-      it('Renders the rest as subtext, one per line', function() {
-        var re = /kws-template="line 1"><\/kws-templated-view>.*kws-template="line 2"><\/kws-templated-view>.*kws-template="line 3"><\/kws-templated-view>/;
-        expect(re.test(el[0].innerHTML)).to.be.true;
+        expect(el[0].innerHTML).to.contain('<kws-templated-view kws-model="kwsModel" kws-template="Killswitch"></kws-templated-view>');
       });
     });
 
