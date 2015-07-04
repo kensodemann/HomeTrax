@@ -4,7 +4,7 @@
   angular.module('app.financial').factory('financialAccountEditor', FinancialAccountEditor);
 
   function FinancialAccountEditor($modal, Editor, financialAccountTypes, Entity) {
-    var editor = new Editor($modal, '/partials/financial/accountEditor/template', 'Account');
+    var editor = new Editor($modal, 'app/financial/accountEditor/template.html', 'Account');
     editor.editorScope.controller.accountTypes = financialAccountTypes;
 
     editor.copyToController = function(model) {

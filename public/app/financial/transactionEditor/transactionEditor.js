@@ -5,7 +5,7 @@
     .factory('transactionEditor', TransactionEditor);
 
   function TransactionEditor($modal, Editor) {
-    var editor = new Editor($modal, '/partials/financial/transactionEditor/template', 'Transaction');
+    var editor = new Editor($modal, 'app/financial/transactionEditor/template.html', 'Transaction');
 
     editor.copyToController = function(model) {
       var controller = editor.editorScope.controller;

@@ -3,11 +3,11 @@
 
   angular.module('app.financial').constant('financialRoutes', [{
     path: '/financialSummary',
-    templateUrl: '/partials/financial/summary/template',
+    templateUrl: 'app/financial/summary/template.html',
     controller: 'financialSummaryController'
   }, {
     path: '/financialDetails/:id',
-    templateUrl: '/partials/financial/details/template',
+    templateUrl: 'app/financial/details/template.html',
     controller: 'financialDetailsController'
   }]);
 })();

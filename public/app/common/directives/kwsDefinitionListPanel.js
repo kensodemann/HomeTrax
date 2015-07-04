@@ -16,7 +16,7 @@
         kwsModel: "="
       },
       link: link,
-      templateUrl: '/partials/common/templates/kwsDefinitionListPanel',
+      templateUrl: 'app/common/templates/kwsDefinitionListPanel.html',
       controller: 'kwsEditablePanelCtrl',
       controllerAs: 'ctrl'
     };

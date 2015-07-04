@@ -10,7 +10,7 @@
 
     var editorScope = $rootScope.$new(true);
     var editor = $modal({
-      template: '/partials/userAdministration/templates/passwordEditor',
+      template: 'app/userAdministration/templates/passwordEditor.html',
       show: false,
       backdrop: 'static',
       scope: editorScope

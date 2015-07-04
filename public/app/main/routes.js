@@ -4,11 +4,11 @@
 
   angular.module('app').constant('mainRoutes', [{
     path: '/',
-    templateUrl: '/partials/main/templates/main',
+    templateUrl: 'app/main/templates/main.html',
     controller: 'mainCtrl'
   }, {
     path: '/about',
-    templateUrl: '/partials/main/templates/about',
+    templateUrl: 'app/main/templates/about.html',
     controller: 'aboutCtrl'
   }]);
 })();

@@ -6,7 +6,7 @@
     var scope;
     var el;
 
-    beforeEach(module('/partials/common/templates/kwsDefinitionListPanel'));
+    beforeEach(module('app/common/templates/kwsDefinitionListPanel.html'));
     beforeEach(module('app.core'));
 
     beforeEach(inject(function($rootScope, $compile) {
@@ -52,12 +52,8 @@
       });
 
       it('renders the title', function() {
-        expect(el[0].innerHTML).to.contain('<div class="panel-heading"><h3 class="panel-title ng-binding">I Am Title');
-      });
-
-      it('renders the lists', function() {
-        var re = /<dl.*Label 1<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="\{\{kwsModel.foo\}\}"><\/kws-templated-view><\/dd>.*Label 2<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="Value 2"><\/kws-templated-view><\/dd>.*Label 3<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="\{\{kwsModel.bar\}\}"><\/kws-templated-view><\/dd>.*Label 4<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="Value 4"><\/kws-templated-view><\/dd>.*Label 5<\/dt>.*<dd><kws-templated-view kws-model="kwsModel" kws-template="\{\{kwsModel.snafu\}\}"><\/kws-templated-view><\/dd>.*<\/dl>/;
-        expect(re.test(el[0].innerHTML)).to.be.true;
+        expect(el[0].innerHTML).to.contain('<div class="panel-heading">');
+        expect(el[0].innerHTML).to.contain('<h3 class="panel-title ng-binding">I Am Title');
       });
     });
 

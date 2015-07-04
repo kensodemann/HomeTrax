@@ -4,7 +4,7 @@
 
   angular.module('app.household').constant('householdRoutes', [{
     path: '/household',
-    templateUrl: '/partials/household/templates/household',
+    templateUrl: 'app/household/templates/household.html',
     controller: 'householdCtrl'
   }]);
 }());

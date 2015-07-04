@@ -3,7 +3,7 @@
 
   angular.module('app.auth').constant('authRoutes', [{
     path: '/login',
-    templateUrl: '/partials/auth/templates/login',
+    templateUrl: 'app/auth/templates/login.html',
     controller: 'loginCtrl'
   }]);
 })();

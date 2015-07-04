@@ -58,18 +58,4 @@ describe('ServerApp', function() {
       expect(serverApp.port).to.equal(3030);
     });
   });
-
-  describe('View Configuration', function() {
-    var rootPath = path.normalize(__dirname + "/../../");
-
-    it('Sets the view path correctly', function() {
-      serverApp.initialize();
-      expect(serverApp.app.get('views')).to.equal(rootPath + '/server/views');
-    });
-
-    it('Uses Jade as the view engine', function() {
-      serverApp.initialize();
-      expect(serverApp.app.get('view engine')).to.equal('jade');
-    });
-  });
 });

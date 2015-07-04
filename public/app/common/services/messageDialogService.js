@@ -19,7 +19,7 @@
     var askDfd;
     var askScope = $rootScope.$new(true);
     var askDlg = $modal({
-      template: '/partials/common/templates/askDialog',
+      template: 'app/common/templates/askDialog.html',
       backdrop: 'static',
       show: false,
       scope: askScope
