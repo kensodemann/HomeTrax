@@ -6,8 +6,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["public/dist", "server/includes/layout.jade", "server/includes/scripts.jade", "public/app/**/*.html",
-      "./public/style/*.css*", "server/**/*.html"],
+    clean: ["public/dist", "./public/style/*.css*"],
 
     // Code Quality Checks
     jshint: {
@@ -98,16 +97,12 @@ module.exports = function(grunt) {
           }
         },
         files: {
-          'public/index.html': 'public/index.tpl.html',
-          'server/includes/scripts.jade': 'server/includes/scripts.tpl.jade',
-          'server/includes/layout.jade': 'server/includes/layout.tpl.jade'
+          'public/index.html': 'public/index.tpl.html'
         }
       },
       dist: {
         files: {
-          'public/index.html': 'public/index.tpl.html',
-          'server/includes/scripts.jade': 'server/includes/scripts.tpl.jade',
-          'server/includes/layout.jade': 'server/includes/layout.tpl.jade'
+          'public/index.html': 'public/index.tpl.html'
         }
       }
     },
@@ -153,8 +148,6 @@ module.exports = function(grunt) {
           'public/css/**/*.scss',
           'public/index.tpl.html',
           'server/**/*.js',
-          'server/includes/layout.tpl.jade',
-          'server/includes/scripts.tpl.jade',
           'test/**/*.js'],
         tasks: ['default']
       }

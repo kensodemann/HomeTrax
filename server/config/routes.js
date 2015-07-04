@@ -21,8 +21,4 @@ module.exports = function(app) {
   app.get('/partials/*', redirect.toHttps, function(req, res) {
     res.render('../../public/app/' + req.params[0]);
   });
-
-  //app.get('*', redirect.toHttps, function(req, res) {
-  //  res.render('index.html');
-  //});
 };

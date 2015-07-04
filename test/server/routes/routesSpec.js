@@ -14,9 +14,10 @@ describe('Basic Routes', function() {
   beforeEach(function() {
     app = express();
     var fakeViewPath = path.normalize(__dirname + '/../mockViews/server/views');
+    app.set('view engine', 'jade');
+    app.set('views', fakeViewPath);
     var fakeHtmlPath = path.normalize(__dirname + '/../mockViews/public');
-    //app.use(serveStatic(fakeHtmlPath));
-    app.use(express.static(fakeHtmlPath));
+    app.use(serveStatic(fakeHtmlPath));
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
   });
@@ -32,27 +33,20 @@ describe('Basic Routes', function() {
         .expect('<index></index>')
         .expect(200, done);
     });
-
-    //it('Goes to the inedex view for unknown routes', function(done) {
-    //  request(app)
-    //    .get('/i_dont_exist')
-    //    .expect('<index></index>')
-    //    .expect(200, done);
-    //});
   });
 
-  //describe('partials', function() {
-  //  beforeEach(function() {
-  //    require('../../../server/config/routes')(app);
-  //  });
-  //
-  //  it('Loads valid partials', function(done) {
-  //    request(app)
-  //      .get('/partials/main')
-  //      .expect('<main></main>')
-  //      .expect(200, done);
-  //  });
-  //});
+  describe('partials', function() {
+    beforeEach(function() {
+      require('../../../server/config/routes')(app);
+    });
+
+    it('Loads valid partials', function(done) {
+      request(app)
+        .get('/partials/main')
+        .expect('<main></main>')
+        .expect(200, done);
+    });
+  });
 
   describe('login', function() {
     var authCalled;
