@@ -8,9 +8,6 @@ var serveStatic = require('serve-static');
 var session = require('express-session');
 
 module.exports = function(app, config) {
-  app.set('view engine', 'jade');
-  app.set('views', config.rootPath + '/server/views');
-
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());

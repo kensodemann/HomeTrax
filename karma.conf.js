@@ -24,7 +24,6 @@ module.exports = function(config) {
       'public/vendor/typeahead.js/dist/bloodhound.js',
       'test/client/test-app.js',
       'public/app/**/*.js',
-      'public/app/**/*.jade',
       'public/app/**/*.html',
       'test/client/**/*Spec.js'
     ],
@@ -40,16 +39,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '**/*.jade': ['ng-jade2js'],
       '**/*.html': ['ng-html2js']
-    },
-
-    ngJade2JsPreprocessor: {
-      cacheIdFromPath: function(filepath) {
-        var path = filepath.replace(/^public\/app/, '/partials');
-        path = path.replace(/\.jade$/, '');
-        return path;
-      }
     },
 
     ngHtml2JsPreprocessor: {
