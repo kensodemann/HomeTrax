@@ -13,9 +13,13 @@
       mockCacheBuster = {
         value: 'SomeBusterOfCache'
       };
+      var mockConfig = {
+        dataService: 'http://somedataservice'
+      };
 
       module(function($provide) {
         $provide.value('cacheBuster', mockCacheBuster);
+        $provide.value('config', mockConfig);
       });
     });
 
@@ -26,12 +30,12 @@
 
     describe('instantiation', function() {
       it('queries the API for the current user', function() {
-        httpBackend.expectGET('/api/currentUser?_=SomeBusterOfCache').respond({});
+        httpBackend.expectGET('http://somedataservice/api/currentUser?_=SomeBusterOfCache').respond({});
         httpBackend.flush();
       });
 
       it('sets the current user to the ', function() {
-        httpBackend.expectGET('/api/currentUser?_=SomeBusterOfCache').respond({
+        httpBackend.expectGET('http://somedataservice/api/currentUser?_=SomeBusterOfCache').respond({
           _id: 42,
           name: 'Ford Prefect'
         });

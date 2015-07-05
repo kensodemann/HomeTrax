@@ -28,12 +28,16 @@
         }
       });
       mockUser = sinon.stub().returns({});
+      var mockConfig = {
+        dataService: 'http://something'
+      };
 
       module(function($provide) {
         $provide.value('$http', mockHttp);
         $provide.value('identity', mockIdentity);
         $provide.value('User', mockUser);
         $provide.value('authToken', mockAuthToken);
+        $provide.value('config', mockConfig);
       });
     });
 
@@ -52,7 +56,7 @@
 
       it('Calls post, passing username and password', function() {
         serviceUnderTest.authenticateUser('jimmy', 'CrakzKorn');
-        expect(mockHttp.post.calledWith('/login', {
+        expect(mockHttp.post.calledWith('http://something/login', {
           username: 'jimmy',
           password: 'CrakzKorn'
         })).to.be.true;
@@ -142,7 +146,7 @@
 
       it('posts to the logout endpoint', function() {
         serviceUnderTest.logoutUser();
-        expect(mockHttp.post.calledWith('/logout', {
+        expect(mockHttp.post.calledWith('http://something/logout', {
           logout: true
         })).to.be.true;
       });

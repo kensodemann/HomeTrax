@@ -7,6 +7,7 @@
     var HomeAppEvent;
     var scope;
     var testData;
+    var config;
 
     beforeEach(module('app.core'));
 
@@ -14,10 +15,11 @@
       initializeTestData();
     });
 
-    beforeEach(inject(function($rootScope, $httpBackend, _HomeAppEvent_) {
+    beforeEach(inject(function($rootScope, $httpBackend, _HomeAppEvent_, _config_) {
       scope = $rootScope;
       httpBackend = $httpBackend;
       HomeAppEvent = _HomeAppEvent_;
+      config = _config_;
     }));
 
     it('Exists', function() {
@@ -26,14 +28,14 @@
 
     describe('query', function() {
       it('gets all the data', function() {
-        httpBackend.expectGET('/api/events')
+        httpBackend.expectGET(config.dataService + '/api/events')
           .respond(testData);
         HomeAppEvent.query({});
         httpBackend.flush();
       });
 
       it('gets the specified event type', function() {
-        httpBackend.expectGET('/api/events?eventType=transaction')
+        httpBackend.expectGET(config.dataService + '/api/events?eventType=transaction')
           .respond(testData);
         HomeAppEvent.query({
           eventType: 'transaction'
@@ -44,7 +46,7 @@
       describe('date adjustments', function() {
         var res;
         beforeEach(function() {
-          httpBackend.expectGET('/api/events')
+          httpBackend.expectGET(config.dataService + '/api/events')
             .respond(testData);
           res = HomeAppEvent.query({});
           httpBackend.flush();
@@ -63,14 +65,14 @@
     describe('post', function() {
       var res;
       beforeEach(function() {
-        httpBackend.expectGET('/api/events')
+        httpBackend.expectGET(config.dataService + '/api/events')
           .respond(testData);
         res = HomeAppEvent.query({});
         httpBackend.flush();
       });
 
       it('posts the data using the _id', function() {
-        httpBackend.expectPOST('/api/events/73').respond(res[1]);
+        httpBackend.expectPOST(config.dataService + '/api/events/73').respond(res[1]);
         res[1].$save();
         httpBackend.flush();
       });
@@ -78,7 +80,7 @@
       describe('date adjustments', function() {
         it('Removes the TZ from the transaction date', function() {
           res[0].transactionDate = new Date(2011, 6, 15);
-          httpBackend.expectPOST('/api/events/42', {
+          httpBackend.expectPOST(config.dataService + '/api/events/42', {
             _id: 42,
             description: 'Withdrawl #1',
             transactionDate: '2011-07-15T00:00:00.000Z',
@@ -91,7 +93,7 @@
         });
 
         it('adds the TZ to the tranaction date in the response', function(){
-          httpBackend.expectPOST('/api/events/42').respond({
+          httpBackend.expectPOST(config.dataService + '/api/events/42').respond({
             _id: 42,
             description: 'Withdrawl #1',
             transactionDate: '2015-01-15T00:00:00.000Z',

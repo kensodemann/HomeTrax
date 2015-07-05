@@ -30,6 +30,16 @@
 
     beforeEach(module('app.userAdministration'));
 
+    beforeEach(function() {
+      var mockConfig = {
+        dataService: 'http://something'
+      };
+
+      module(function($provide) {
+        $provide.value('config', mockConfig);
+      });
+    });
+
     beforeEach(inject(function($rootScope, $httpBackend, User) {
       scope = $rootScope;
       httpBackend = $httpBackend;
@@ -42,7 +52,7 @@
 
     describe('query', function() {
       it('gets the data', function() {
-        httpBackend.expectGET('/api/users')
+        httpBackend.expectGET('http://something/api/users')
           .respond(testData);
         var res = serviceUnderTest.query({});
         httpBackend.flush();
@@ -54,16 +64,16 @@
       });
 
       it('returns the color defined for the user if defined', function() {
-        httpBackend.expectGET('/api/users')
+        httpBackend.expectGET('http://something/api/users')
           .respond(testData);
         var res = serviceUnderTest.query({});
         httpBackend.flush();
 
         expect(res[2].color).to.equal("#ff0000");
       });
-      
+
       it('defaults the color if it is not defined', function() {
-        httpBackend.expectGET('/api/users')
+        httpBackend.expectGET('http://something/api/users')
           .respond(testData);
         var res = serviceUnderTest.query({});
         httpBackend.flush();
