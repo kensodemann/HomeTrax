@@ -22,10 +22,10 @@ module.exports = function(config) {
       'public/vendor/moment/moment.js',
       'public/vendor/fullcalendar/dist/fullcalendar.js',
       'public/vendor/typeahead.js/dist/bloodhound.js',
-      'test/client/test-app.js',
+      'test/test-app.js',
       'public/app/**/*.js',
       'public/app/**/*.html',
-      'test/client/**/*Spec.js'
+      'test/**/*Spec.js'
     ],
 
 

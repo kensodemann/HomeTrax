@@ -146,8 +146,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-preprocess');
 
   // Tasks
-  grunt.registerTask('default', ['clean', 'preprocess:dev', 'sass', 'karma', 'mochaTest', 'jshint', 'concat']);
-  grunt.registerTask('build', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
+  grunt.registerTask('default', ['clean', 'preprocess:dev', 'sass', 'karma', 'jshint', 'concat']);
+  grunt.registerTask('build', ['openShiftBuild', 'karma', 'jshint']);
   grunt.registerTask('openShiftBuild',
     ['clean', 'preprocess:dist', 'sass', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
   grunt.registerTask('dev', ['default', 'watch']);
