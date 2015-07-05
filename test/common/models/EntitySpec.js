@@ -2,6 +2,7 @@
   'use strict';
 
   describe('Entity', function() {
+    var config;
     var httpBackend;
     var Entity;
     var testData;
@@ -12,9 +13,10 @@
       initializeTestData();
     });
 
-    beforeEach(inject(function($httpBackend, _Entity_) {
+    beforeEach(inject(function($httpBackend, _Entity_, _config_) {
       httpBackend = $httpBackend;
       Entity = _Entity_;
+      config = _config_;
     }));
 
     it('Exists', function() {
@@ -23,14 +25,14 @@
 
     describe('query', function() {
       it('gets the data', function() {
-        httpBackend.expectGET('/api/entities')
+        httpBackend.expectGET(config.dataService + '/api/entities')
           .respond(testData);
         Entity.query({});
         httpBackend.flush();
       });
 
       it('Transforms purchase dates for the time zone', function() {
-        httpBackend.expectGET('/api/entities')
+        httpBackend.expectGET(config.dataService + '/api/entities')
           .respond(testData);
         var res = Entity.query({});
         httpBackend.flush();
@@ -45,21 +47,21 @@
     describe('post', function() {
       var res;
       beforeEach(function() {
-        httpBackend.expectGET('/api/entities')
+        httpBackend.expectGET(config.dataService + '/api/entities')
           .respond(testData);
         res = Entity.query({});
         httpBackend.flush();
       });
 
       it('posts the data using the _id', function() {
-        httpBackend.expectPOST('/api/entities/2').respond(res[1]);
+        httpBackend.expectPOST(config.dataService + '/api/entities/2').respond(res[1]);
         res[1].$save();
         httpBackend.flush();
       });
 
       it('Adjusts the purchase date for TZ', function() {
         res[0].purchaseDate = new Date(2011, 6, 15);
-        httpBackend.expectPOST('/api/entities/1', {
+        httpBackend.expectPOST(config.dataService + '/api/entities/1', {
           _id: 1,
           name: 'Fred',
           testTag: 42,
@@ -72,7 +74,7 @@
 
       it('Adjusts the purchase date in the response', function() {
         res[0].purchaseDate = new Date('2011-07-15T00:00:00.000Z');
-        httpBackend.expectPOST('/api/entities/1').respond({
+        httpBackend.expectPOST(config.dataService + '/api/entities/1').respond({
           _id: 1,
           name: 'Fred',
           testTag: 42,

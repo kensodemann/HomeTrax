@@ -1,11 +1,13 @@
 (function() {
   'use strict';
 
+  var _config;
   var _dateUtilities;
   var _resource;
 
   angular.module('app.core')
-    .run(function($resource, dateUtilities) {
+    .run(function($resource, config, dateUtilities) {
+      _config = config;
       _resource = $resource;
       _dateUtilities = dateUtilities;
     })
@@ -14,7 +16,7 @@
   function HomeAppResource(resourceName) {
     var dateColumns = ['purchaseDate', 'transactionDate'];
 
-    return _resource('/api/' + resourceName + '/:id', {
+    return _resource(_config.dataService + '/api/' + resourceName + '/:id', {
       id: "@_id"
     }, {
       query: {

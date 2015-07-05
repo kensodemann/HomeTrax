@@ -2,6 +2,7 @@
   'use strict';
 
   describe('FinancialAccount', function() {
+    var config;
     var httpBackend;
     var resource;
     var scope;
@@ -25,10 +26,11 @@
       }];
     });
 
-    beforeEach(inject(function($rootScope, $httpBackend, FinancialAccount) {
+    beforeEach(inject(function($rootScope, $httpBackend, FinancialAccount, _config_) {
       scope = $rootScope;
       httpBackend = $httpBackend;
       resource = FinancialAccount;
+      config = _config_;
     }));
 
     it('Should exist', function() {
@@ -38,7 +40,7 @@
     describe('query', function() {
       var res;
       beforeEach(function() {
-        httpBackend.expectGET('/api/accounts')
+        httpBackend.expectGET(config.dataService + '/api/accounts')
           .respond(testData);
         res = resource.query({});
         httpBackend.flush();

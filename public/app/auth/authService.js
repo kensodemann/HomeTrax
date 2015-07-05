@@ -3,11 +3,11 @@
 
   angular.module('app.auth').factory('authService', AuthService);
 
-  function AuthService($http, identity, $q, User, authToken) {
+  function AuthService($http, identity, $q, User, config, authToken) {
     return {
       authenticateUser: function(username, password) {
         var dfd = $q.defer();
-        $http.post('/login', {
+        $http.post(config.dataService + '/login', {
           username: username,
           password: password
         }).then(function(response) {
@@ -27,7 +27,7 @@
 
       logoutUser: function() {
         var dfd = $q.defer();
-        $http.post('/logout', {
+        $http.post(config.dataService + '/logout', {
           logout: true
         }).then(function() {
           identity.currentUser = undefined;

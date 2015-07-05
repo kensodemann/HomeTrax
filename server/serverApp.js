@@ -10,7 +10,7 @@ var ServerApp = function() {
     //  Set the environment variables we need.
     process.env.NODE_ENV = process.env.NODE_ENV || 'development';
     self.ipaddress = process.env.OPENSHIFT_NODEJS_IP || process.env.IP;
-    self.port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT ||  8080;
+    self.port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT ||  8081;
 
     if (typeof self.ipaddress === "undefined") {
       //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -69,9 +69,6 @@ var ServerApp = function() {
   self.initialize = function() {
     self.setupVariables();
     self.setupTerminationHandlers();
-
-    require('./config/passport')();
-    require('./config/initialData')();
 
     self.initializeServer();
   };

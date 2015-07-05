@@ -3,10 +3,10 @@
 
   angular.module('app').factory('Versions', Versions);
 
-  function Versions($resource) {
+  function Versions($resource, config) {
     var millisecondsPerMinute = 60000;
 
-    return $resource('/api/versions', {
+    return $resource(config.dataService + '/api/versions', {
       id: "@_id"
     }, {
       query: {

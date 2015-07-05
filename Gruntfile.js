@@ -46,19 +46,6 @@ module.exports = function(grunt) {
             sinon: true
           }
         }
-      },
-      serverTest: {
-        src: ['test/server/**/*.js'],
-        options: {
-          expr: true,
-          globals: {
-            afterEach: true,
-            beforeEach: true,
-            describe: true,
-            it: true
-          },
-          node: true
-        }
       }
     },
 
@@ -71,13 +58,6 @@ module.exports = function(grunt) {
         browsers: ['PhantomJS'],
         reporters: 'dots'
       }
-    },
-    mochaTest: {
-      options: {
-        reporter: 'min',
-        timeout: 5000
-      },
-      src: ['test/server/**/*Spec.js']
     },
 
     // Build
@@ -147,7 +127,6 @@ module.exports = function(grunt) {
           'public/app/**/*.js',
           'public/css/**/*.scss',
           'public/index.tpl.html',
-          'server/**/*.js',
           'test/**/*.js'],
         tasks: ['default']
       }
@@ -163,13 +142,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-ng-annotate');
   grunt.loadNpmTasks('grunt-preprocess');
 
   // Tasks
-  grunt.registerTask('default', ['clean', 'preprocess:dev', 'sass', 'karma', 'mochaTest', 'jshint', 'concat']);
-  grunt.registerTask('build', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
+  grunt.registerTask('default', ['clean', 'preprocess:dev', 'sass', 'karma', 'jshint', 'concat']);
+  grunt.registerTask('build', ['openShiftBuild', 'karma', 'jshint']);
   grunt.registerTask('openShiftBuild',
     ['clean', 'preprocess:dist', 'sass', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
   grunt.registerTask('dev', ['default', 'watch']);

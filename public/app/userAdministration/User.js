@@ -4,8 +4,8 @@
 
   angular.module('app.userAdministration').factory('User', User);
 
-  function User($resource) {
-    var UserResource = $resource('/api/users/:id', {
+  function User($resource, config) {
+    var UserResource = $resource(config.dataService + '/api/users/:id', {
       id: "@_id"
     }, {
       update: {
