@@ -6,7 +6,7 @@
   function Versions($resource, config) {
     var millisecondsPerMinute = 60000;
 
-    return $resource(config.dataService + '/api/versions', {
+    return $resource(config.dataService + '/versions', {
       id: "@_id"
     }, {
       query: {

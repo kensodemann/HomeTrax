@@ -40,7 +40,7 @@
     describe('query', function() {
       var res;
       beforeEach(function() {
-        httpBackend.expectGET(config.dataService + '/api/accounts')
+        httpBackend.expectGET(config.dataService + '/accounts')
           .respond(testData);
         res = resource.query({});
         httpBackend.flush();

@@ -4,7 +4,7 @@
   angular.module('app.userAdministration').factory('UserPassword', UserPassword);
 
   function UserPassword($resource, config) {
-    return $resource(config.dataService + '/api/changepassword/:id', {
+    return $resource(config.dataService + '/changepassword/:id', {
       id: "@_id"
     }, {
       update: {

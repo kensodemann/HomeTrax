@@ -16,7 +16,7 @@
   function HomeAppResource(resourceName) {
     var dateColumns = ['purchaseDate', 'transactionDate'];
 
-    return _resource(_config.dataService + '/api/' + resourceName + '/:id', {
+    return _resource(_config.dataService + '/' + resourceName + '/:id', {
       id: "@_id"
     }, {
       query: {

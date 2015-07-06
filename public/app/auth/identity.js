@@ -16,7 +16,7 @@
     return exports;
 
     function setCurrentUser() {
-      $http.get(config.dataService + '/api/currentUser', { params: { _: cacheBuster.value } })
+      $http.get(config.dataService + '/currentUser', { params: { _: cacheBuster.value } })
         .success(function(data) {
           exports.currentUser =  data;
         });
