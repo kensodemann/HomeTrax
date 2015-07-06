@@ -4,15 +4,11 @@ bower_components
 .idea/*
 !.idea/codeStyleSettings.xml
 
-server/**/*.html
-public/index.html
+www/index.html
 
-public/dist/
-public/style/*
-!public/style/*.scss
-
-server/includes/scripts.jade
-server/includes/layout.jade
+www/dist/
+www/style/*
+!www/style/*.scss
 
 .c9/
 data/

@@ -15,24 +15,24 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'public/vendor/jquery/dist/jquery.js',
-      'public/vendor/angular/angular.js',
-      'public/vendor/angular-resource/angular-resource.js',
-      'public/vendor/angular-mocks/angular-mocks.js',
-      'public/vendor/moment/moment.js',
-      'public/vendor/fullcalendar/dist/fullcalendar.js',
-      'public/vendor/typeahead.js/dist/bloodhound.js',
+      'www/vendor/jquery/dist/jquery.js',
+      'www/vendor/angular/angular.js',
+      'www/vendor/angular-resource/angular-resource.js',
+      'www/vendor/angular-mocks/angular-mocks.js',
+      'www/vendor/moment/moment.js',
+      'www/vendor/fullcalendar/dist/fullcalendar.js',
+      'www/vendor/typeahead.js/dist/bloodhound.js',
       'test/test-app.js',
-      'public/app/**/*.js',
-      'public/app/**/*.html',
+      'www/app/**/*.js',
+      'www/app/**/*.html',
       'test/**/*Spec.js'
     ],
 
 
     // list of files to exclude
     exclude: [
-      'public/app/app.js',
-      'public/app/**/app.*.js'
+      'www/app/app.js',
+      'www/app/**/app.*.js'
     ],
 
 
@@ -43,7 +43,7 @@ module.exports = function(config) {
     },
 
     ngHtml2JsPreprocessor: {
-      stripPrefix: 'public/'
+      stripPrefix: 'www/'
     },
 
 

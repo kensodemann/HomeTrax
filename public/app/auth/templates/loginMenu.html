@@ -1,8 +1,0 @@
-<ul ng-controller="loginMenuCtrl as loginMenuCtrl" class="nav navbar-nav navbar-right">
-  <li>
-    <a href="/login" ng-hide="loginMenuCtrl.identity.isAuthenticated()">Log In</a>
-    <a href="#"
-       ng-click="loginMenuCtrl.logout()"
-       ng-show="loginMenuCtrl.identity.isAuthenticated()">Log Out</a>
-  </li>
-</ul>

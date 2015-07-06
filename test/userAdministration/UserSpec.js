@@ -52,7 +52,7 @@
 
     describe('query', function() {
       it('gets the data', function() {
-        httpBackend.expectGET('http://something/api/users')
+        httpBackend.expectGET('http://something/users')
           .respond(testData);
         var res = serviceUnderTest.query({});
         httpBackend.flush();
@@ -64,7 +64,7 @@
       });
 
       it('returns the color defined for the user if defined', function() {
-        httpBackend.expectGET('http://something/api/users')
+        httpBackend.expectGET('http://something/users')
           .respond(testData);
         var res = serviceUnderTest.query({});
         httpBackend.flush();
@@ -73,7 +73,7 @@
       });
 
       it('defaults the color if it is not defined', function() {
-        httpBackend.expectGET('http://something/api/users')
+        httpBackend.expectGET('http://something/users')
           .respond(testData);
         var res = serviceUnderTest.query({});
         httpBackend.flush();

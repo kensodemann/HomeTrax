@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["public/dist", "./public/style/*.css*"],
+    clean: ["www/dist", "./www/style/*.css*"],
 
     // Code Quality Checks
     jshint: {
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         strict: true
       },
       client: {
-        src: ['public/app/**/*.js'],
+        src: ['www/app/**/*.js'],
         options: {
           globals: {
             '$': true,
@@ -64,7 +64,7 @@ module.exports = function(grunt) {
     sass: {
       dist: {
         files: {
-          'public/dist/<%= pkg.name %>.css': 'public/style/homeApp.scss'
+          'www/dist/<%= pkg.name %>.css': 'www/style/homeApp.scss'
         }
       }
     },
@@ -77,12 +77,12 @@ module.exports = function(grunt) {
           }
         },
         files: {
-          'public/index.html': 'public/index.tpl.html'
+          'www/index.html': 'www/index.tpl.html'
         }
       },
       dist: {
         files: {
-          'public/index.html': 'public/index.tpl.html'
+          'www/index.html': 'www/index.tpl.html'
         }
       }
     },
@@ -91,8 +91,8 @@ module.exports = function(grunt) {
         options: {
           sourceMap: true
         },
-        src: ['public/app/app.js', 'public/**/app.*.js', 'public/app/**/*.js'],
-        dest: 'public/dist/<%= pkg.name %>.js'
+        src: ['www/app/app.js', 'www/**/app.*.js', 'www/app/**/*.js'],
+        dest: 'www/dist/<%= pkg.name %>.js'
       }
     },
     ngAnnotate: {
@@ -101,20 +101,20 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'public/dist/<%= pkg.name %>.js': ['public/dist/<%= pkg.name %>.js']
+          'www/dist/<%= pkg.name %>.js': ['www/dist/<%= pkg.name %>.js']
         }
       }
     },
     uglify: {
       dist: {
-        src: 'public/dist/<%= pkg.name %>.js',
-        dest: 'public/dist/<%= pkg.name %>.min.js'
+        src: 'www/dist/<%= pkg.name %>.js',
+        dest: 'www/dist/<%= pkg.name %>.min.js'
       }
     },
     cssmin: {
       dist: {
         files: {
-          'public/dist/<%= pkg.name %>.min.css': ['public/dist/<%= pkg.name %>.css']
+          'www/dist/<%= pkg.name %>.min.css': ['www/dist/<%= pkg.name %>.css']
         }
       }
     },
@@ -124,9 +124,9 @@ module.exports = function(grunt) {
       src: {
         files: ['Gruntfile.js',
           'server.js',
-          'public/app/**/*.js',
-          'public/css/**/*.scss',
-          'public/index.tpl.html',
+          'www/app/**/*.js',
+          'www/css/**/*.scss',
+          'www/index.tpl.html',
           'test/**/*.js'],
         tasks: ['default']
       }
