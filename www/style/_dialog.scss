@@ -1,0 +1,15 @@
+@import "variables";
+
+.msg-dlg-ico {
+  vertical-align: middle;
+  margin: 0 10px;
+}
+
+.btn-area .btn + .btn {
+  margin-left: 5px;
+  margin-bottom: 0;
+}
+
+.editor {
+  padding: 10px;
+}

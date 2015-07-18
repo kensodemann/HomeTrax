@@ -1,0 +1,24 @@
+<div tabindex="-1" role="dialog" class="aside">
+  <div class="aside-dialog">
+    <div class="aside-content">
+      <div ng-show="title" class="aside-header">
+        <button type="button" ng-click="$hide()" class="close">&times;</button>
+        <h4 ng-bind="title" class="aside-title"></h4></div>
+      <div class="aside-body">
+        <div class="checkbox"><label><input type="checkbox" ng-model="$parent.showOnlyMine"
+                                            ng-click="showOnlyMineClicked()"/><span>Show only my events</span></label>
+        </div>
+        <h4>Categories</h4>
+        <ul class="list-unstyled">
+          <li ng-repeat="cat in eventCategories"><span class="checkbox"><label><input type="checkbox"
+                                                                                      ng-model="cat.include"
+                                                                                      ng-change="categoryChanged(cat)"/><span>{{cat.name}}</span></label></span>
+          </li>
+        </ul>
+      </div>
+      <div class="aside-footer">
+        <button type="button" ng-click="$hide()" class="btn btn-default">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

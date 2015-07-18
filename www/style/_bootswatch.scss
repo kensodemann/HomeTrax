@@ -1,0 +1,41 @@
+// United 3.3.4
+// Bootswatch
+// -----------------------------------------------------
+@import url("//fonts.googleapis.com/css?family=Ubuntu");
+
+// Navbar =====================================================================
+
+.navbar {
+
+  &-default {
+
+    .badge {
+      background-color: #fff;
+      color: $navbar-default-bg;
+    }
+  }
+
+  &-inverse {
+
+    .badge {
+      background-color: #fff;
+      color: $navbar-inverse-bg;
+    }
+  }
+}
+
+// Datepicker ====================================================================
+
+.datepicker.dropdown-menu {
+  button {
+    @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border);
+  }
+  tbody {
+    button.btn-primary {
+      @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+    }
+    button.btn-info {
+      @include button-variant($btn-info-color, $btn-info-bg, $btn-info-border);
+    }
+  }
+}
