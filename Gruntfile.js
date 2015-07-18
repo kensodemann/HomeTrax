@@ -6,8 +6,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["public/dist", "server/includes/layout.jade", "server/includes/scripts.jade", "public/app/**/*.html",
-      "./public/style/*.css*", "server/**/*.html"],
+    clean: ["www/dist", "./www/style/*.css*", "www/index.html", "www/app/common/core/config.js"],
 
     // Code Quality Checks
     jshint: {
@@ -15,7 +14,7 @@ module.exports = function(grunt) {
         strict: true
       },
       client: {
-        src: ['public/app/**/*.js'],
+        src: ['www/app/**/*.js'],
         options: {
           globals: {
             '$': true,
@@ -47,19 +46,6 @@ module.exports = function(grunt) {
             sinon: true
           }
         }
-      },
-      serverTest: {
-        src: ['test/server/**/*.js'],
-        options: {
-          expr: true,
-          globals: {
-            afterEach: true,
-            beforeEach: true,
-            describe: true,
-            it: true
-          },
-          node: true
-        }
       }
     },
 
@@ -73,19 +59,12 @@ module.exports = function(grunt) {
         reporters: 'dots'
       }
     },
-    mochaTest: {
-      options: {
-        reporter: 'min',
-        timeout: 5000
-      },
-      src: ['test/server/**/*Spec.js']
-    },
 
     // Build
     sass: {
       dist: {
         files: {
-          'public/dist/<%= pkg.name %>.css': 'public/style/homeApp.scss'
+          'www/dist/<%= pkg.name %>.css': 'www/style/homeApp.scss'
         }
       }
     },
@@ -98,14 +77,14 @@ module.exports = function(grunt) {
           }
         },
         files: {
-          'server/includes/scripts.jade': 'server/includes/scripts.tpl.jade',
-          'server/includes/layout.jade': 'server/includes/layout.tpl.jade'
+          'www/index.html': 'www/preprocessedSources/index.html',
+          'www/app/common/core/config.js': 'www/preprocessedSources/config.js'
         }
       },
       dist: {
         files: {
-          'server/includes/scripts.jade': 'server/includes/scripts.tpl.jade',
-          'server/includes/layout.jade': 'server/includes/layout.tpl.jade'
+          'www/index.html': 'www/preprocessedSources/index.html',
+          'www/app/common/core/config.js': 'www/preprocessedSources/config.js'
         }
       }
     },
@@ -114,8 +93,8 @@ module.exports = function(grunt) {
         options: {
           sourceMap: true
         },
-        src: ['public/app/app.js', 'public/**/app.*.js', 'public/app/**/*.js'],
-        dest: 'public/dist/<%= pkg.name %>.js'
+        src: ['www/app/app.js', 'www/**/app.*.js', 'www/app/**/*.js'],
+        dest: 'www/dist/<%= pkg.name %>.js'
       }
     },
     ngAnnotate: {
@@ -124,20 +103,20 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'public/dist/<%= pkg.name %>.js': ['public/dist/<%= pkg.name %>.js']
+          'www/dist/<%= pkg.name %>.js': ['www/dist/<%= pkg.name %>.js']
         }
       }
     },
     uglify: {
       dist: {
-        src: 'public/dist/<%= pkg.name %>.js',
-        dest: 'public/dist/<%= pkg.name %>.min.js'
+        src: 'www/dist/<%= pkg.name %>.js',
+        dest: 'www/dist/<%= pkg.name %>.min.js'
       }
     },
     cssmin: {
       dist: {
         files: {
-          'public/dist/<%= pkg.name %>.min.css': ['public/dist/<%= pkg.name %>.css']
+          'www/dist/<%= pkg.name %>.min.css': ['www/dist/<%= pkg.name %>.css']
         }
       }
     },
@@ -147,11 +126,12 @@ module.exports = function(grunt) {
       src: {
         files: ['Gruntfile.js',
           'server.js',
-          'public/app/**/*.js',
-          'public/css/**/*.scss',
-          'server/**/*.js',
-          'server/includes/layout.tpl.jade',
-          'server/includes/scripts.tpl.jade',
+          'www/app/**/*.js',
+          'www/css/**/*.scss',
+          'www/preprocessedSources/index.html',
+          '!www/index.html',
+          'www/preprocessedSources/config.js',
+          '!www/app/common/core/config.js',
           'test/**/*.js'],
         tasks: ['default']
       }
@@ -167,13 +147,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-ng-annotate');
   grunt.loadNpmTasks('grunt-preprocess');
 
   // Tasks
-  grunt.registerTask('default', ['clean', 'preprocess:dev', 'sass', 'karma', 'mochaTest', 'jshint', 'concat']);
-  grunt.registerTask('build', ['openShiftBuild', 'karma', 'mochaTest', 'jshint']);
+  grunt.registerTask('default', ['clean', 'preprocess:dev', 'sass', 'karma', 'jshint', 'concat']);
+  grunt.registerTask('build', ['openShiftBuild', 'karma', 'jshint']);
   grunt.registerTask('openShiftBuild',
     ['clean', 'preprocess:dist', 'sass', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
   grunt.registerTask('dev', ['default', 'watch']);
