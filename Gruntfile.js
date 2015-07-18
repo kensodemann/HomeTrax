@@ -129,6 +129,7 @@ module.exports = function(grunt) {
           'www/app/**/*.js',
           'www/css/**/*.scss',
           'www/index.tpl.html',
+          'www/sourceTemplates/config.tpl.js',
           'test/**/*.js'],
         tasks: ['default']
       }
