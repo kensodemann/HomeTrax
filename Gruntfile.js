@@ -77,12 +77,14 @@ module.exports = function(grunt) {
           }
         },
         files: {
-          'www/index.html': 'www/index.tpl.html'
+          'www/index.html': 'www/index.tpl.html',
+          'www/app/common/core/config.js': 'www/sourceTemplates/config.tpl.js'
         }
       },
       dist: {
         files: {
-          'www/index.html': 'www/index.tpl.html'
+          'www/index.html': 'www/index.tpl.html',
+          'www/app/common/core/config.js': 'www/sourceTemplates/config.tpl.js'
         }
       }
     },
