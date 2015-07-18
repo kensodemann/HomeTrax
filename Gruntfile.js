@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["www/dist", "./www/style/*.css*"],
+    clean: ["www/dist", "./www/style/*.css*", "www/index.html", "www/app/common/core/config.js"],
 
     // Code Quality Checks
     jshint: {
@@ -78,13 +78,13 @@ module.exports = function(grunt) {
         },
         files: {
           'www/index.html': 'www/index.tpl.html',
-          'www/app/common/core/config.js': 'www/sourceTemplates/config.tpl.js'
+          'www/app/common/core/config.js': 'www/preprocessedSources/config.js'
         }
       },
       dist: {
         files: {
           'www/index.html': 'www/index.tpl.html',
-          'www/app/common/core/config.js': 'www/sourceTemplates/config.tpl.js'
+          'www/app/common/core/config.js': 'www/preprocessedSources/config.js'
         }
       }
     },
@@ -129,7 +129,8 @@ module.exports = function(grunt) {
           'www/app/**/*.js',
           'www/css/**/*.scss',
           'www/index.tpl.html',
-          'www/sourceTemplates/config.tpl.js',
+          'www/preprocessedSources/config.js',
+          '!www/app/common/core/config.js',
           'test/**/*.js'],
         tasks: ['default']
       }

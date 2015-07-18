@@ -31,7 +31,6 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-      'www/app/common/core/config.tpl.js',
       'www/app/app.js',
       'www/app/**/app.*.js'
     ],
