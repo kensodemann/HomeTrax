@@ -19,7 +19,7 @@
           eventType: eventTypes.transaction,
           accountRid: controller.account._id
         });
-        transactionEditor.open(newEvent, editorModes.create, function() {
+        transactionEditor.open(controller.account, newEvent, editorModes.create, function() {
           controller.transactions.unshift(newEvent);
         });
       },
@@ -39,7 +39,7 @@
       },
 
       editTransaction: function(trans) {
-        transactionEditor.open(trans, editorModes.edit);
+        transactionEditor.open(controller.account, trans, editorModes.edit);
       },
 
       editAccount: function() {

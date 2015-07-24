@@ -16,7 +16,6 @@
       controller.name = model.name;
       controller.bank = model.bank;
       controller.accountType = findAccountType(model.accountType);
-      controller.amount = model.amount;
       Editor.prototype.copyToController.call(editor, model);
     };
     editor.copyToResourceModel = function() {
@@ -27,7 +26,6 @@
       model.bank = controller.bank;
       model.accountType = controller.accountType.accountType;
       model.balanceType = controller.accountType.balanceType;
-      model.amount = Number(controller.amount);
       if (controller.accountType.balanceType === 'liability' && !!controller.entity) {
         model.entityRid = controller.entity._id;
       }

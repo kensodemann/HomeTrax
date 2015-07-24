@@ -9,6 +9,7 @@ www/index.html
 www/dist/
 www/style/*
 !www/style/*.scss
+www/app/common/core/config.js
 
 .c9/
 data/
