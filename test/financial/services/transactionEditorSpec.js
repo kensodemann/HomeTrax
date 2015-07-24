@@ -193,6 +193,22 @@
         expect(mockTransaction.interestAmount).to.equal(42.03);
       });
 
+      it('negates the amount for disbursements from liability accounts', function() {
+        controller.transactionDate = '2015-05-11T05:00:00.000Z';
+        controller.description = 'This is a transaction';
+        controller.principalAmount = '4313.04';
+        controller.interestAmount = '42.03';
+        controller.transactionType = transactionTypes[0];
+        testAccount.balanceType = balanceTypes.liability;
+
+        controller.save();
+
+        expect(mockTransaction.transactionDate).to.equal('2015-05-11T05:00:00.000Z');
+        expect(mockTransaction.description).to.equal('This is a transaction');
+        expect(mockTransaction.principalAmount).to.equal(-4313.04);
+        expect(mockTransaction.interestAmount).to.equal(42.03);
+      });
+
       it('copies the transactionType if the balanceType is liability', function() {
         controller.transactionDate = '2015-05-11T05:00:00.000Z';
         controller.description = 'This is a transaction';

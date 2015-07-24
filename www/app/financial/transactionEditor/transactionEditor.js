@@ -28,6 +28,9 @@
 
       if (controller.account.balanceType === balanceTypes.liability){
         model.transactionType = controller.transactionType.transactionType;
+        if (model.transactionType === 'disbursement'){
+          model.principalAmount *= -1;
+        }
       }
     };
 
