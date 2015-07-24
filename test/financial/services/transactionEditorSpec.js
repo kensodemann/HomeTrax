@@ -9,6 +9,7 @@
 
     var scope;
     var transactionEditor;
+    var transactionTypes;
 
     beforeEach(module('app.financial'));
 
@@ -40,10 +41,11 @@
       return getEditorScope().controller;
     }
 
-    beforeEach(inject(function($rootScope, _transactionEditor_, _editorModes_) {
+    beforeEach(inject(function($rootScope, _transactionEditor_, _editorModes_, _transactionTypes_) {
       scope = $rootScope;
       transactionEditor = _transactionEditor_;
       editorModes = _editorModes_;
+      transactionTypes = _transactionTypes_;
     }));
 
     it('Should exist', function() {
@@ -58,6 +60,11 @@
       it('constructs a scope with a controller object', function() {
         var controller = getEditorController();
         expect(controller).to.exist;
+      });
+
+      it('puts the transaction types on the controller', function() {
+        var controller = getEditorController();
+        expect(controller.transactionTypes).to.equal(transactionTypes);
       });
 
       it('uses a static backdrop', function() {
