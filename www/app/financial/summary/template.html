@@ -25,7 +25,7 @@
                 <td><a href="financialDetails/{{acct._id}}">{{acct.name}}</a></td>
                 <td>{{acct.principalPaid | currency}}</td>
                 <td>{{acct.interestPaid | currency}}</td>
-                <td>{{acct.balance | currency}}</td>
+                <td>{{(acct.disbursements + acct.principalPaid) | currency}}</td>
               </tr>
               </tbody>
             </table>
@@ -44,7 +44,7 @@
                 <td><a href="financialDetails/{{acct._id}}">{{acct.name}}</a></td>
                 <td>{{acct.principalPaid | currency}}</td>
                 <td>{{acct.interestPaid | currency}}</td>
-                <td>{{acct.balance | currency}}</td>
+                <td>{{(acct.principalPaid + acct.interestPaid) | currency}}</td>
               </tr>
               </tbody>
             </table>
