@@ -27,7 +27,8 @@
     };
 
     return {
-      open: function(transaction, mode, saveCallback) {
+      open: function(account, transaction, mode, saveCallback) {
+        editor.editorScope.controller.account = account;
         editor.open(transaction, mode, saveCallback);
       }
     };

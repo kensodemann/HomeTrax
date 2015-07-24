@@ -88,31 +88,38 @@
       });
 
       it('does not show the dialog if it is not ready', function() {
-        transactionEditor.open({}, 'anything');
+        transactionEditor.open({}, {}, 'anything');
         expect(mockModal.show.called).to.be.false;
       });
 
       it('shows the dialog if it is ready', function() {
-        transactionEditor.open({}, 'anything');
+        transactionEditor.open({}, {}, 'anything');
         mockModal.$promise.then.yield();
         expect(mockModal.show.calledOnce).to.be.true;
       });
 
+      it('puts the passed account on the controller so it can be read', function() {
+        var controller = getEditorController();
+        transactionEditor.open({_id: 42, name: 'I am the account'},
+          {_id: 73, name: 'I am the transaction'}, 'anything');
+        expect(controller.account).to.deep.equal({_id: 42, name: 'I am the account'});
+      });
+
       it('sets the title to Modify Account if the mode is modify', function() {
         var controller = getEditorController();
-        transactionEditor.open({}, editorModes.modify);
+        transactionEditor.open({}, {}, editorModes.modify);
         expect(controller.title).to.equal('Modify Transaction');
       });
 
       it('sets the title to New Account if the mode is "create"', function() {
         var controller = getEditorController();
-        transactionEditor.open({}, editorModes.create);
+        transactionEditor.open({}, {}, editorModes.create);
         expect(controller.title).to.equal('New Transaction');
       });
 
       it('copies the data from the passed model to the controller', function() {
         var controller = getEditorController();
-        transactionEditor.open(testTransaction, 'any');
+        transactionEditor.open({}, testTransaction, 'any');
         expect(controller.transactionDate).to.equal(testTransaction.transactionDate);
         expect(controller.description).to.equal(testTransaction.description);
         expect(controller.principalAmount).to.equal(testTransaction.principalAmount);
@@ -133,10 +140,10 @@
           $save: function() {}
         });
         controller = getEditorController();
-        transactionEditor.open(mockTransaction, "itDontMatterNone", saveCompleted);
+        transactionEditor.open({}, mockTransaction, "itDontMatterNone", saveCompleted);
       });
 
-      function saveCompleted(trans){
+      function saveCompleted(trans) {
         theSaveCompleted = true;
         savedTransaction = trans;
       }
@@ -166,7 +173,7 @@
         expect(mockModal.hide.calledOnce).to.be.true;
       });
 
-      it('calls the save callback with the new transaction if the save succeeds', function(){
+      it('calls the save callback with the new transaction if the save succeeds', function() {
         controller.save();
         mockTransaction.$save.yield(mockTransaction);
         expect(theSaveCompleted).to.be.true;
