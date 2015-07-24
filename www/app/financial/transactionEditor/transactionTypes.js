@@ -2,10 +2,10 @@
   'use strict';
 
   angular.module('app.financial').constant('transactionTypes', [{
-    accountType: "disbursement",
+    transactionType: "disbursement",
     name: "Cash Disbursement"
   }, {
-    accountType: "payment",
+    transactionType: "payment",
     name: "Payment"
   }]);
 }());
