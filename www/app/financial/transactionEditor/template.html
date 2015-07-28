@@ -7,6 +7,17 @@
           <h4 class="modal-title">{{controller.title}}</h4></div>
         <div class="modal-body">
           <fieldset>
+            <div ng-show="controller.account.balanceType==='liability'">
+              <div class="form-group"><label for="transactionType" class="col-md-3 control-label">Transaction
+                Type</label>
+
+                <div class="col-md-9"><select ng-model="controller.transactionType"
+                                              ng-options="item as item.name for item in controller.transactionTypes"
+                                              class="form-control">
+                </select>
+                </div>
+              </div>
+            </div>
             <div class="form-group"><label for="transactionDate" class="col-md-3 control-label">Transaction Date</label>
 
               <div class="col-md-9"><input name="transactionDate" type="text" ng-model="controller.transactionDate"

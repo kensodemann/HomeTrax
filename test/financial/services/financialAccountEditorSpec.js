@@ -104,8 +104,7 @@
           bank: 'Eastern World Bank',
           accountType: financialAccountTypes[4].accountType,
           balanceType: financialAccountTypes[4].balanceType,
-          entityRid: 2,
-          amount: 176940.43
+          entityRid: 2
         };
       });
 
@@ -149,7 +148,6 @@
         expect(controller.name).to.equal(testAccount.name);
         expect(controller.bank).to.equal(testAccount.bank);
         expect(controller.accountType).to.equal(financialAccountTypes[4]);
-        expect(controller.amount).to.equal(testAccount.amount);
       });
 
       it('uses the first auth type if the model is unknown', function() {
@@ -202,7 +200,6 @@
         controller.name = 'Bill & Ted';
         controller.bank = 'The Excellent Bank';
         controller.accountType = financialAccountTypes[2];
-        controller.amount = 42.03;
 
         controller.save();
 
@@ -210,7 +207,6 @@
         expect(mockAccount.bank).to.equal('The Excellent Bank');
         expect(mockAccount.accountType).to.equal(financialAccountTypes[2].accountType);
         expect(mockAccount.balanceType).to.equal(financialAccountTypes[2].balanceType);
-        expect(mockAccount.amount).to.equal(42.03);
       });
 
       it('copies the entity if this is a liability balance auth type', function() {
@@ -224,7 +220,6 @@
           _id: 1,
           name: 'Cow'
         };
-        controller.amount = 42.03;
 
         controller.save();
 
@@ -242,7 +237,6 @@
           _id: 1,
           name: 'Cow'
         };
-        controller.amount = 42.03;
 
         controller.save();
 
