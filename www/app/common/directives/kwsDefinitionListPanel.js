@@ -11,9 +11,9 @@
     return {
       restrict: 'AE',
       scope: {
-        kwsTitle: "@",
-        kwsLists: "=",
-        kwsModel: "="
+        kwsTitle: '@',
+        kwsLists: '=',
+        kwsModel: '='
       },
       link: link,
       templateUrl: 'app/common/templates/kwsDefinitionListPanel.html',
@@ -32,6 +32,7 @@
         if (isVisibleInViewMode(item) && !item.template) {
           createViewModeTemplate(item);
         }
+
         if (isVisibleInEditMode(item) && !item.editTemplate) {
           createEditModeTemplate(item);
         }
@@ -48,15 +49,17 @@
 
     function createViewModeTemplate(item) {
       if (!item.columnName) {
-        throw new Error("Must have a view template or a column name");
+        throw new Error('Must have a view template or a column name');
       }
-      item.template = "{{kwsModel." + item.columnName + "}}";
+
+      item.template = '{{kwsModel.' + item.columnName + '}}';
     }
 
     function createEditModeTemplate(item) {
       if (!item.columnName) {
-        throw new Error("Must have an edit template or a column name");
+        throw new Error('Must have an edit template or a column name');
       }
+
       var cn = item.columnName;
       item.editTemplate = '<input class="form-control" name="' + cn + '" ng-model="kwsModel[\'' + cn + '\']">';
     }

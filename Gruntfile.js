@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["www/dist", "./www/style/*.css*", "www/index.html", "www/app/common/core/config.js"],
+    clean: ['www/dist', './www/style/*.css*', 'www/index.html', 'www/app/common/core/config.js'],
 
     // Code Quality Checks
     jshint: {
@@ -15,6 +15,13 @@ module.exports = function(grunt) {
         jshintrc: true
       },
       src: ['www/app/**/*.js', 'server/**/*.js', 'test/client/**/*.js']
+    },
+
+    jscs: {
+      src: '**/*.js',
+      options: {
+        config: true
+      }
     },
 
     // Tests
@@ -110,6 +117,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');

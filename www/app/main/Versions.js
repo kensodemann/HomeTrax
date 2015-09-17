@@ -7,7 +7,7 @@
     var millisecondsPerMinute = 60000;
 
     return $resource(config.dataService + '/versions', {
-      id: "@_id"
+      id: '@_id'
     }, {
       query: {
         method: 'GET',
@@ -24,6 +24,7 @@
           item.releaseDate = adjustDateForTimezone(d);
         }
       });
+
       return resp;
     }
 

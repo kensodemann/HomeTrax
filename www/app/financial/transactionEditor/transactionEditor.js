@@ -38,6 +38,7 @@
       var matching = $.grep(transactionTypes, function(tt){
         return tt.transactionType === transType;
       });
+
       return matching[0];
     }
 

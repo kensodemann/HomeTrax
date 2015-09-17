@@ -11,11 +11,11 @@
         }
 
         scope.$watch(attrs.ngModel, function(newValue) {
-          validate(newValue || "", attrs.matchesValue || "");
+          validate(newValue || '', attrs.matchesValue || '');
         });
 
         attrs.$observe('matchesValue', function(newValue) {
-          validate(newValue || "", ctrl.$modelValue || "");
+          validate(newValue || '', ctrl.$modelValue || '');
         });
       }
     };

@@ -14,8 +14,10 @@
       evts = HomeAppEvent.query({eventType: eventTypes.miscellaneous}, function() {
         dfd.resolve(true);
       }, function() {
+
         dfd.resolve(false);
       });
+
       return dfd.promise;
     }
 
@@ -50,6 +52,7 @@
         ]).then(function(data) {
           dfd.resolve(data[0] && data[1]);
         });
+
         return dfd.promise;
       },
 

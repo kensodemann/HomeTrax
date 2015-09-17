@@ -12,6 +12,7 @@
         askDlg.$promise.then(function() {
           askDlg.show();
         });
+
         return askDfd.promise;
       }
     };

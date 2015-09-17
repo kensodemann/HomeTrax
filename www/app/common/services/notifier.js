@@ -13,16 +13,16 @@
 
     function notify(msg) {
       myToastr.success(msg, null, {
-        showMethod: "slideDown",
-        positionClass: "toast-bottom-right"
+        showMethod: 'slideDown',
+        positionClass: 'toast-bottom-right'
       });
       $log.info(msg);
     }
 
     function error(msg) {
       myToastr.error(msg, null, {
-        showMethod: "slideDown",
-        positionClass: "toast-bottom-right"
+        showMethod: 'slideDown',
+        positionClass: 'toast-bottom-right'
       });
       $log.error(msg);
     }

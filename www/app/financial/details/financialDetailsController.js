@@ -27,7 +27,7 @@
       deleteTransaction: function(trans) {
         messageDialogService.ask('Are you sure you want to delete this transaction?', 'Delete Transaction')
           .then(function(yes){
-            if(yes){
+            if (yes){
               trans.$delete(function(){
                 var index = controller.transactions.indexOf(trans);
                 if (index > -1){

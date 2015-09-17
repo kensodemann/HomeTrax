@@ -69,6 +69,7 @@
           datumTokenizer: function(d) {
             return $window.Bloodhound.tokenizers.whitespace(d.name);
           },
+
           queryTokenizer: $window.Bloodhound.tokenizers.whitespace,
           local: eventCategories
         });
@@ -143,6 +144,7 @@
           eventResource.start = moment(m.start + zoneOffset);
           eventResource.end = moment(m.end + zoneOffset);
         }
+
         eventResource.category = (typeof m.category === 'object') ? m.category.name : lookupCategory(m.category);
         eventResource.private = m.isPrivate;
         eventResource.user = m.user;
@@ -161,6 +163,7 @@
               });
               return category;
             }
+
             return matching[0].name;
           }
         }
@@ -182,6 +185,7 @@
       if (currentCalendar) {
         currentCalendar.fullCalendar('refetchEvents');
       }
+
       editor.hide();
     }
 

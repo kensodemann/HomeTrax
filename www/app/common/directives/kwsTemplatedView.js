@@ -7,8 +7,8 @@
     return {
       restrict: 'E',
       scope: {
-        kwsModel: "=",
-        kwsTemplate: "@"
+        kwsModel: '=',
+        kwsTemplate: '@'
       },
       link: link
     };

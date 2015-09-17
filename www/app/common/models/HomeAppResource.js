@@ -17,7 +17,7 @@
     var dateColumns = ['purchaseDate', 'transactionDate'];
 
     return _resource(_config.dataService + '/' + resourceName + '/:id', {
-      id: "@_id"
+      id: '@_id'
     }, {
       query: {
         method: 'GET',
@@ -37,6 +37,7 @@
       resp.forEach(function(item) {
         addTimezoneOffset(item);
       });
+
       return resp;
     }
 

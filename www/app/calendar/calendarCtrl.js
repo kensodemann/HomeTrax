@@ -39,6 +39,7 @@
       else {
         calendarData.excludeCategory(cat.name);
       }
+
       $scope.calendar.fullCalendar('refetchEvents');
     };
 

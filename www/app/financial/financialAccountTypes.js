@@ -2,24 +2,24 @@
   'use strict';
 
   angular.module('app.financial').constant('financialAccountTypes', [{
-    accountType: "checking",
-    name: "Checking",
-    balanceType: "asset"
+    accountType: 'checking',
+    name: 'Checking',
+    balanceType: 'asset'
   }, {
-    accountType: "savings",
+    accountType: 'savings',
     name: 'Savings',
-    balanceType: "asset"
+    balanceType: 'asset'
   }, {
-    accountType: "brokerage",
-    name: "Investment",
-    balanceType: "asset"
+    accountType: 'brokerage',
+    name: 'Investment',
+    balanceType: 'asset'
   }, {
-    accountType: "mortgage",
-    name: "Home Mortgage",
-    balanceType: "liability"
+    accountType: 'mortgage',
+    name: 'Home Mortgage',
+    balanceType: 'liability'
   }, {
-    accountType: "loan",
-    name: "Loan",
-    balanceType: "liability"
+    accountType: 'loan',
+    name: 'Loan',
+    balanceType: 'liability'
   }]);
 }());

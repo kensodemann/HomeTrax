@@ -13,11 +13,13 @@
       controller.entities.$promise.then(function() {
         controller.entity = findEntity(controller.entities, model.entityRid);
       });
+
       controller.name = model.name;
       controller.bank = model.bank;
       controller.accountType = findAccountType(model.accountType);
       Editor.prototype.copyToController.call(editor, model);
     };
+
     editor.copyToResourceModel = function() {
       var model = editor.editorScope.model;
       var controller = editor.editorScope.controller;
@@ -41,6 +43,7 @@
       var matching = $.grep(financialAccountTypes, function(acctType) {
         return acctType.accountType === t;
       });
+
       return matching.length > 0 ? matching[0] : financialAccountTypes[0];
     }
 
@@ -48,6 +51,7 @@
       var matching = $.grep(entities, function(e) {
         return e._id === rid;
       });
+
       return matching[0];
     }
   }

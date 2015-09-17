@@ -2,7 +2,11 @@
   "validateIndentation": 2,
   "excludeFiles": [
     "node_modules/**",
-    ".openshift/**"
+    "bower_components/**",
+    ".openshift/**",
+    "www/vendor/**",
+    "www/dist/**",
+    "www/preprocessedSources/**"
   ],
   "requirePaddingNewLinesAfterBlocks": {
     "allExcept": [

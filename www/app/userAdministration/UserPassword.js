@@ -5,7 +5,7 @@
 
   function UserPassword($resource, config) {
     return $resource(config.dataService + '/changepassword/:id', {
-      id: "@_id"
+      id: '@_id'
     }, {
       update: {
         method: 'PUT',

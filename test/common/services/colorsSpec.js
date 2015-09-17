@@ -18,7 +18,7 @@
       function buildMockIdentity() {
         mockIdentity = {
           currentUser: {
-            _id: "42",
+            _id: '42',
             colors: ['#111111', '#222222', '#333333', '#444444']
           }
         };

@@ -13,6 +13,7 @@
       householdData.load().then(function() {
         self.household = householdData.household;
       });
+
       setupHeaderLines();
       setupInformationLines();
     }

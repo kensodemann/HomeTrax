@@ -12,6 +12,7 @@
         if (!cachedToken){
           cachedToken = localStorageService.get(key);
         }
+
         return cachedToken;
       },
 

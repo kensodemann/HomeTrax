@@ -21,6 +21,7 @@
       else {
         colors = identity.currentUser.colors;
       }
+
       return colors[type];
     }
 

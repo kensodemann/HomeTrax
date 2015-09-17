@@ -12,6 +12,7 @@
         var minutesFromUTC = d.getTimezoneOffset();
         return new Date(d.getTime() - (minutesFromUTC * millisecondsPerMinute));
       },
+
       addTimezoneOffset: function(d) {
         var minutesFromUTC = d.getTimezoneOffset();
         return new Date(d.getTime() + (minutesFromUTC * millisecondsPerMinute));

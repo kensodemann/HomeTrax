@@ -17,6 +17,7 @@
         if (ctrl.$isEmpty(modelValue)) {
           return true;
         }
+
         return CURRENCY_REGEXP.test(viewValue);
       };
     }

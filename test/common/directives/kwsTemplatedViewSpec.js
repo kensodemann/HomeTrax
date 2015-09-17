@@ -16,7 +16,7 @@
       scope.myModel = {
         name: 'I am name'
       };
-      scope.myTemplate = "<div>{{kwsModel.name}}</div>";
+      scope.myTemplate = '<div>{{kwsModel.name}}</div>';
       var el = angular.element('<kws-templated-view kws-model="myModel" kws-template="{{myTemplate}}"/></kws-templated-view>');
       compile(el)(scope);
       scope.$digest();

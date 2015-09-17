@@ -17,6 +17,7 @@
         if (e) {
           exports.household = e[e.length - 1];
         }
+
         return e;
       }
     }

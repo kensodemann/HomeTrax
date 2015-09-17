@@ -30,12 +30,14 @@
           dfd.resolve(findUser(id));
         });
       }
+
       return dfd.promise;
 
       function findUser(id) {
         var matching = $.grep(exports.all, function(user) {
           return user._id === id;
         });
+
         return matching.length > 0 ? matching[0] : undefined;
       }
     }

@@ -26,6 +26,7 @@
       mockUser = sinon.stub({
         $save: function() {
         },
+
         $update: function() {
         }
       });

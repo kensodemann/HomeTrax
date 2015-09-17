@@ -51,7 +51,8 @@
     "mocha": "^2.0.1",
     "q": "^1.1.2",
     "sinon": "^1.10.0",
-    "supertest": "^0.12.1"
+    "supertest": "^0.12.1",
+    "grunt-jscs": "~2.1.0"
   },
   "bundleDependencies": [],
   "private": true,

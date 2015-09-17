@@ -34,6 +34,7 @@
       }];
       mockUser = sinon.stub({
         query: function() {},
+
         $save: function() {}
       });
       mockUser.query.returns(testData);
@@ -70,6 +71,7 @@
           expect(user.lastName).to.equal('Meany');
           done();
         });
+
         scope.$digest();
       });
 
@@ -78,6 +80,7 @@
           expect(mockUser.query.calledTwice).to.be.true;
           done();
         });
+
         queryUsersDfd.resolve();
         scope.$digest();
       });
@@ -107,6 +110,7 @@
           });
           done();
         });
+
         queryUsersDfd.resolve();
         scope.$digest();
       });
@@ -116,6 +120,7 @@
           expect(user).to.be.undefined;
           done();
         });
+
         queryUsersDfd.resolve();
         scope.$digest();
       });

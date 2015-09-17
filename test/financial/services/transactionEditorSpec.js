@@ -29,6 +29,7 @@
       mockModal = sinon.stub({
         $promise: mockPromise,
         hide: function() {},
+
         show: function() {}
       });
       mockModalConstructor = sinon.stub().returns(mockModal);
@@ -171,7 +172,7 @@
         });
         controller = getEditorController();
         testAccount = {};
-        transactionEditor.open(testAccount, mockTransaction, "itDontMatterNone", saveCompleted);
+        transactionEditor.open(testAccount, mockTransaction, 'itDontMatterNone', saveCompleted);
       });
 
       function saveCompleted(trans) {

@@ -71,7 +71,7 @@
 
         function success() {
           notifier.notify((editorScope.ctrl.mode === 'create') ?
-            "User created successfully" : "Changes to user saved successfully");
+            'User created successfully' : 'Changes to user saved successfully');
           editor.hide();
           if (saveCallback) {
             saveCallback(userResource);
@@ -91,6 +91,7 @@
         if (editorScope.ctrl.mode === 'create') {
           userResource.password = editorScope.ctrl.model.password;
         }
+
         userResource.roles = [];
         if (editorScope.ctrl.model.isAdministrator) {
           userResource.roles.push('admin');

@@ -41,10 +41,12 @@
       } else {
         self.editorScope.controller.title = 'New ' + self.entityName;
       }
+
       self.copyToController(model);
       self.editor.$promise.then(function() {
         self.editor.show();
       });
+
       saved = saveCallback;
     },
 

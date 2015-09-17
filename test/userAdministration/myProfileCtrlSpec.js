@@ -46,6 +46,7 @@
       function buildMockNotifier() {
         mockNotifier = sinon.stub({
           error: function() {},
+
           notify: function() {}
         });
       }

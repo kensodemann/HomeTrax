@@ -22,6 +22,7 @@
             dfd.resolve(false);
           }
         });
+
         return dfd.promise;
       },
 
@@ -33,6 +34,7 @@
           identity.currentUser = undefined;
           dfd.resolve();
         });
+
         authToken.clear();
         return dfd.promise;
       }
