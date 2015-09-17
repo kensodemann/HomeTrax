@@ -11,42 +11,10 @@ module.exports = function(grunt) {
     // Code Quality Checks
     jshint: {
       options: {
-        strict: true
+        strict: true,
+        jshintrc: true
       },
-      client: {
-        src: ['www/app/**/*.js'],
-        options: {
-          globals: {
-            '$': true,
-            angular: true,
-            inject: true,
-            moment: true
-          }
-        }
-      },
-      server: {
-        src: ['server/**/*.js', 'Gruntfile.js'],
-        options: {
-          node: true
-        }
-      },
-      clientTest: {
-        src: ['test/client/**/*.js'],
-        options: {
-          expr: true,
-          globals: {
-            afterEach: true,
-            angular: true,
-            beforeEach: true,
-            describe: true,
-            expect: true,
-            inject: true,
-            it: true,
-            module: true,
-            sinon: true
-          }
-        }
-      }
+      src: ['www/app/**/*.js', 'server/**/*.js', 'test/client/**/*.js']
     },
 
     // Tests

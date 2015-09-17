@@ -1,0 +1,12 @@
+{
+  "unused": true,
+  "undef": true,
+  "predef": [
+    "$",
+    "angular",
+    "moment",
+    "navigator",
+    "toastr",
+    "window"
+  ]
+}
