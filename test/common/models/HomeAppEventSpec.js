@@ -124,25 +124,25 @@
         interestAmount: 0.05,
         eventType: 'transaction'
       }, {
-        "_id": 320,
-        "start": "2015-05-01T00:00:00.000Z",
-        "end": "2015-05-02T00:00:00.000Z",
-        "allDay": true,
-        "title": "May Day",
-        "category": "Holiday",
-        "private": false,
-        "color": "#006600",
-        "eventType": "miscellaneous"
+        '_id': 320,
+        'start': '2015-05-01T00:00:00.000Z',
+        'end': '2015-05-02T00:00:00.000Z',
+        'allDay': true,
+        'title': 'May Day',
+        'category': 'Holiday',
+        'private': false,
+        'color': '#006600',
+        'eventType': 'miscellaneous'
       }, {
-        "_id": 531,
-        "start": "2015-05-29T08:00:00.000Z",
-        "end": "2015-05-30T14:30:00.000Z",
-        "allDay": false,
-        "title": "Synod Assembly",
-        "category": "Church",
-        "private": false,
-        "color": "#006600",
-        "eventType": "miscellaneous"
+        '_id': 531,
+        'start': '2015-05-29T08:00:00.000Z',
+        'end': '2015-05-30T14:30:00.000Z',
+        'allDay': false,
+        'title': 'Synod Assembly',
+        'category': 'Church',
+        'private': false,
+        'color': '#006600',
+        'eventType': 'miscellaneous'
       }, {
         _id: 314159,
         description: 'Deposit #2',

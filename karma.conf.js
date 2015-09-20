@@ -1,82 +1,53 @@
-// Karma configuration
-// Generated on Sat Apr 19 2014 20:28:38 GMT-0500 (Central Daylight Time)
+/*jshint node: true */
 
 module.exports = function(config) {
-  config.set({
+  var componentPaths = require('./conf/component-paths');
 
-    // base path that will be used to resolve all patterns (eg. files, exclude)
+  config.set({
     basePath: '',
 
-
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha', 'chai', 'sinon-chai'],
 
-
-    // list of files / patterns to load in the browser
     files: [
-      'www/vendor/jquery/dist/jquery.js',
-      'www/vendor/angular/angular.js',
-      'www/vendor/angular-resource/angular-resource.js',
-      'www/vendor/angular-mocks/angular-mocks.js',
-      'www/vendor/moment/moment.js',
-      'www/vendor/fullcalendar/dist/fullcalendar.js',
-      'www/vendor/typeahead.js/dist/bloodhound.js',
+      componentPaths.lib.jquery.dev,
+      componentPaths.lib.angular.dev,
+      componentPaths.lib.angularResource.dev,
+      componentPaths.lib.angularMocks.dev,
+      componentPaths.lib.moment.dev,
+      componentPaths.lib.fullCalendar.dev,
+      componentPaths.lib.bloodhound.dev,
+
       'test/test-app.js',
-      'www/app/**/*.js',
-      'www/app/**/*.html',
+      'src/app/**/*.js',
+      'src/app/**/*.html',
       'test/**/*Spec.js'
     ],
 
-
-    // list of files to exclude
     exclude: [
-      'www/app/app.js',
-      'www/app/**/app.*.js'
+      'src/app/app.js',
+      'src/app/**/app.*.js'
     ],
 
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       '**/*.html': ['ng-html2js']
     },
 
     ngHtml2JsPreprocessor: {
-      stripPrefix: 'www/'
+      stripPrefix: 'src/'
     },
 
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress'],
 
-
-    // web server port
     port: 9876,
 
-
-    // enable / disable colors in the output (reporters and logs)
     colors: true,
 
-
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
 
-
-    // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['Chrome'],
 
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
   });
 };

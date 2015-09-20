@@ -1,51 +1,81 @@
+/*jshint node: true */
+
 'use strict';
 
 module.exports = function(grunt) {
+  var componentPaths = require('./conf/component-paths');
+
+  var paths = {
+    css: [
+      componentPaths.css.angularMotion.dev,
+      componentPaths.css.bootstrapAdditions.dev,
+      componentPaths.css.fullcalendar.dev
+    ],
+    cssRelease: [
+      componentPaths.css.angularMotion.release,
+      componentPaths.css.bootstrapAdditions.release,
+      componentPaths.css.fullcalendar.release
+    ],
+    lib: [
+      componentPaths.lib.jquery.dev,
+      componentPaths.lib.bootstrap.dev,
+      componentPaths.lib.toastr.dev,
+      componentPaths.lib.angular.dev,
+      componentPaths.lib.angularLocalStorage.dev,
+      componentPaths.lib.angularMessages.dev,
+      componentPaths.lib.angularResource.dev,
+      componentPaths.lib.angularRoute.dev,
+      componentPaths.lib.angularStrap.dev,
+      componentPaths.lib.angularStrapTpl.dev,
+      componentPaths.lib.angularUiCalendar.dev,
+      componentPaths.lib.moment.dev,
+      componentPaths.lib.fullCalendar.dev,
+      componentPaths.lib.bloodhound.dev,
+      componentPaths.lib.typeahead.dev,
+      componentPaths.lib.angularTypeahead.dev,
+      componentPaths.lib.angularAnimate.dev
+    ],
+    libRelease: [
+      componentPaths.lib.jquery.release,
+      componentPaths.lib.bootstrap.release,
+      componentPaths.lib.toastr.release,
+      componentPaths.lib.angular.release,
+      componentPaths.lib.angularLocalStorage.release,
+      componentPaths.lib.angularMessages.release,
+      componentPaths.lib.angularResource.release,
+      componentPaths.lib.angularRoute.release,
+      componentPaths.lib.angularStrap.release,
+      componentPaths.lib.angularStrapTpl.release,
+      componentPaths.lib.angularUiCalendar.release,
+      componentPaths.lib.moment.release,
+      componentPaths.lib.fullCalendar.release,
+      componentPaths.lib.bloodhound.release,
+      componentPaths.lib.typeahead.release,
+      componentPaths.lib.angularTypeahead.release,
+      componentPaths.lib.angularAnimate.release
+    ]
+  };
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     // Housekeeping
-    clean: ["www/dist", "./www/style/*.css*", "www/index.html", "www/app/common/core/config.js"],
+    clean: ['www/'],
 
     // Code Quality Checks
     jshint: {
       options: {
-        strict: true
+        strict: true,
+        jshintrc: true
       },
-      client: {
-        src: ['www/app/**/*.js'],
-        options: {
-          globals: {
-            '$': true,
-            angular: true,
-            inject: true,
-            moment: true
-          }
-        }
-      },
-      server: {
-        src: ['server/**/*.js', 'Gruntfile.js'],
-        options: {
-          node: true
-        }
-      },
-      clientTest: {
-        src: ['test/client/**/*.js'],
-        options: {
-          expr: true,
-          globals: {
-            afterEach: true,
-            angular: true,
-            beforeEach: true,
-            describe: true,
-            expect: true,
-            inject: true,
-            it: true,
-            module: true,
-            sinon: true
-          }
-        }
+      src: ['Gruntfile.js', 'karma.conf.js', 'src/app/**/*.js', 'server/**/*.js', 'test/client/**/*.js']
+    },
+
+    jscs: {
+      src: '**/*.js',
+      options: {
+        config: true
       }
     },
 
@@ -64,7 +94,7 @@ module.exports = function(grunt) {
     sass: {
       dist: {
         files: {
-          'www/dist/<%= pkg.name %>.css': 'www/style/homeApp.scss'
+          'www/<%= pkg.name %>.css': 'src/style/homeApp.scss'
         }
       }
     },
@@ -77,46 +107,85 @@ module.exports = function(grunt) {
           }
         },
         files: {
-          'www/index.html': 'www/preprocessedSources/index.html',
-          'www/app/common/core/config.js': 'www/preprocessedSources/config.js'
+          'src/app/common/core/config.js': 'src/preprocessedSources/config.js'
         }
       },
       dist: {
         files: {
-          'www/index.html': 'www/preprocessedSources/index.html',
-          'www/app/common/core/config.js': 'www/preprocessedSources/config.js'
+          'src/app/common/core/config.js': 'src/preprocessedSources/config.js'
         }
       }
     },
+
     concat: {
-      js: {
+      css: {
+        src: paths.css,
+        dest: 'www/libs.css'
+      },
+      cssRelease: {
+        src: paths.cssRelease,
+        dest: 'www/libs.css'
+      },
+      lib: {
+        src: paths.lib,
+        dest: 'www/libs.js'
+      },
+      libRelease: {
+        src: paths.libRelease,
+        dest: 'www/libs.js'
+      },
+      homeTrax: {
         options: {
           sourceMap: true
         },
-        src: ['www/app/app.js', 'www/**/app.*.js', 'www/app/**/*.js'],
-        dest: 'www/dist/<%= pkg.name %>.js'
+        src: ['src/app/app.js', 'src/**/app.*.js', 'src/app/**/*.js'],
+        dest: 'www/<%= pkg.name %>.js'
       }
     },
+
+    copy: {
+      bootstrapFonts: {
+        expand: true,
+        cwd: componentPaths.fonts.bootstrap,
+        src: '**/*',
+        dest: 'www/fonts'
+      },
+      fontawesomeFonts: {
+        expand: true,
+        cwd: componentPaths.fonts.fontAwesome,
+        src: '**/*',
+        dest: 'www/fonts'
+      },
+      views: {
+        expand: true,
+        cwd: 'src/',
+        src: ['favicon.ico', 'index.html', 'app/**/*.html'],
+        dest: 'www/'
+      }
+    },
+
     ngAnnotate: {
       options: {
         singleQuotes: true
       },
       dist: {
         files: {
-          'www/dist/<%= pkg.name %>.js': ['www/dist/<%= pkg.name %>.js']
+          'www/<%= pkg.name %>.js': ['www/<%= pkg.name %>.js']
         }
       }
     },
+
     uglify: {
       dist: {
-        src: 'www/dist/<%= pkg.name %>.js',
-        dest: 'www/dist/<%= pkg.name %>.min.js'
+        src: 'www/<%= pkg.name %>.js',
+        dest: 'www/<%= pkg.name %>.js'
       }
     },
+
     cssmin: {
       dist: {
         files: {
-          'www/dist/<%= pkg.name %>.min.css': ['www/dist/<%= pkg.name %>.css']
+          'www/<%= pkg.name %>.css': ['www/<%= pkg.name %>.css']
         }
       }
     },
@@ -126,12 +195,11 @@ module.exports = function(grunt) {
       src: {
         files: ['Gruntfile.js',
           'server.js',
-          'www/app/**/*.js',
-          'www/css/**/*.scss',
-          'www/preprocessedSources/index.html',
-          '!www/index.html',
-          'www/preprocessedSources/config.js',
-          '!www/app/common/core/config.js',
+          'src/app/**/*.js',
+          'src/style/**/*.scss',
+          'src/index.html',
+          'src/preprocessedSources/config.js',
+          '!src/app/common/core/config.js',
           'test/**/*.js'],
         tasks: ['default']
       }
@@ -141,7 +209,9 @@ module.exports = function(grunt) {
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -151,9 +221,31 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-preprocess');
 
   // Tasks
-  grunt.registerTask('default', ['clean', 'preprocess:dev', 'sass', 'karma', 'jshint', 'concat']);
+  grunt.registerTask('default', [
+    'clean',
+    'karma',
+    'jshint',
+    'jscs',
+    'copy',
+    'preprocess:dev',
+    'sass',
+    'concat:css',
+    'concat:lib',
+    'concat:homeTrax',
+    'ngAnnotate'
+  ]);
   grunt.registerTask('build', ['openShiftBuild', 'karma', 'jshint']);
-  grunt.registerTask('openShiftBuild',
-    ['clean', 'preprocess:dist', 'sass', 'concat', 'ngAnnotate', 'cssmin', 'uglify']);
+  grunt.registerTask('openShiftBuild', [
+    'clean',
+    'copy',
+    'preprocess:dist',
+    'sass',
+    'concat:cssRelease',
+    'concat:libRelease',
+    'concat:homeTrax',
+    'ngAnnotate',
+    'cssmin',
+    'uglify'
+  ]);
   grunt.registerTask('dev', ['default', 'watch']);
 };

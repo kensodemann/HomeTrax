@@ -41,6 +41,7 @@
         mockModal = sinon.stub({
           $promise: mockPromise,
           hide: function() {},
+
           show: function() {}
         });
         mockModalConstructor = sinon.stub().returns(mockModal);
@@ -49,6 +50,7 @@
       function buildMockNotifier() {
         mockNotifier = sinon.stub({
           notify: function() {},
+
           error: function() {}
         });
       }
@@ -56,6 +58,7 @@
       function buildMockUser() {
         mockUser = sinon.stub({
           $save: function() {},
+
           $update: function() {}
         });
       }
@@ -218,7 +221,7 @@
           ctrl.save();
           mockUser.$update.callArg(0);
           expect(mockNotifier.notify.calledOnce).to.be.true;
-          expect(mockNotifier.notify.calledWith("Changes to user saved successfully")).to.be.true;
+          expect(mockNotifier.notify.calledWith('Changes to user saved successfully')).to.be.true;
         });
 
         it('closes on success', function() {
@@ -233,7 +236,7 @@
             data: 'You are a sucky sucky failure'
           });
           expect(mockNotifier.error.calledOnce).to.be.true;
-          expect(mockNotifier.error.calledWith("You are a sucky sucky failure")).to.be.true;
+          expect(mockNotifier.error.calledWith('You are a sucky sucky failure')).to.be.true;
         });
 
         it('does not close on failure', function() {
@@ -272,7 +275,7 @@
           ctrl.save();
           mockUser.$save.callArg(0);
           expect(mockNotifier.notify.calledOnce).to.be.true;
-          expect(mockNotifier.notify.calledWith("User created successfully")).to.be.true;
+          expect(mockNotifier.notify.calledWith('User created successfully')).to.be.true;
         });
 
         it('closes on success', function() {
@@ -287,7 +290,7 @@
             data: 'You are a sucky sucky failure'
           });
           expect(mockNotifier.error.calledOnce).to.be.true;
-          expect(mockNotifier.error.calledWith("You are a sucky sucky failure")).to.be.true;
+          expect(mockNotifier.error.calledWith('You are a sucky sucky failure')).to.be.true;
         });
 
         it('does not close on failure', function() {

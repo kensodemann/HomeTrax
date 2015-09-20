@@ -28,6 +28,7 @@
       mockModal = sinon.stub({
         hide: function() {
         },
+
         show: function() {
         }
       });
@@ -46,6 +47,7 @@
       mockNotifier = sinon.stub({
         notify: function() {
         },
+
         error: function() {
         }
       });
