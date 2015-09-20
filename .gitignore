@@ -3,12 +3,11 @@ bower_components
 
 .idea/*
 
-www/index.html
+www/
 
-www/dist/
-www/style/*
-!www/style/*.scss
-www/app/common/core/config.js
+src/app/common/core/config.js
+src/style/*.css
+src/style/*.map
 
 .c9/
 data/

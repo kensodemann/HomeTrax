@@ -4,9 +4,8 @@
     "node_modules/**",
     "bower_components/**",
     ".openshift/**",
-    "www/vendor/**",
-    "www/dist/**",
-    "www/preprocessedSources/**"
+    "src/preprocessedSources/**",
+    "www/**"
   ],
   "requirePaddingNewLinesAfterBlocks": {
     "allExcept": [
