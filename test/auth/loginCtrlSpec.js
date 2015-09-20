@@ -25,6 +25,7 @@
       mockNotifier = sinon.stub({
         error: function() {
         },
+
         notify: function() {
         }
       });
@@ -32,6 +33,7 @@
       mockLocation = sinon.stub({
         path: function() {
         },
+
         replace: function() {
         }
       });

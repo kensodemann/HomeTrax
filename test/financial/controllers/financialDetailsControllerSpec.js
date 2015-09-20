@@ -98,7 +98,7 @@
     describe('adding a transaction', function() {
       var controller;
       beforeEach(function() {
-        mockFinancialAccount.get.returns({_id: 73});
+        mockFinancialAccount.get.returns({_id: 73, name: 'I am the best number, ever'});
         controller = createController();
         controller.transactions = [{}, {}, {}];
       });
@@ -115,12 +115,12 @@
       it('opens the transaction editor', function() {
         controller.addTransaction();
         expect(mockTransactionEditor.open.calledOnce).to.be.true;
-        expect(mockTransactionEditor.open.calledWith(mockHomeAppEvent, editorModes.create)).to.be.true;
+        expect(mockTransactionEditor.open.calledWith({_id: 73, name: 'I am the best number, ever'}, mockHomeAppEvent, editorModes.create)).to.be.true;
       });
 
       it('adds the new event to the front of the transaction list', function() {
         controller.addTransaction();
-        mockTransactionEditor.open.callArg(2);
+        mockTransactionEditor.open.callArg(3);
         expect(controller.transactions.length).to.equal(4);
         expect(controller.transactions[0]).to.equal(mockHomeAppEvent);
       });
@@ -129,6 +129,7 @@
     describe('updating a transaction', function() {
       var controller;
       beforeEach(function() {
+        mockFinancialAccount.get.returns({_id: 73, name: 'I am the best number, ever'});
         controller = createController();
         controller.transactions = [{
           _id: 42,
@@ -157,7 +158,7 @@
       it('opens the transaction editor', function() {
         controller.editTransaction(controller.transactions[1]);
         expect(mockTransactionEditor.open.calledOnce).to.be.true;
-        expect(mockTransactionEditor.open.calledWith(controller.transactions[1], editorModes.edit)).to.be.true;
+        expect(mockTransactionEditor.open.calledWith({_id: 73, name: 'I am the best number, ever'}, controller.transactions[1], editorModes.edit)).to.be.true;
       });
     });
 

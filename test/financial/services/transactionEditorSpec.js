@@ -8,7 +8,9 @@
     var mockModalConstructor;
 
     var scope;
+    var balanceTypes;
     var transactionEditor;
+    var transactionTypes;
 
     beforeEach(module('app.financial'));
 
@@ -27,6 +29,7 @@
       mockModal = sinon.stub({
         $promise: mockPromise,
         hide: function() {},
+
         show: function() {}
       });
       mockModalConstructor = sinon.stub().returns(mockModal);
@@ -40,10 +43,12 @@
       return getEditorScope().controller;
     }
 
-    beforeEach(inject(function($rootScope, _transactionEditor_, _editorModes_) {
+    beforeEach(inject(function($rootScope, _transactionEditor_, _editorModes_, _balanceTypes_, _transactionTypes_) {
       scope = $rootScope;
       transactionEditor = _transactionEditor_;
       editorModes = _editorModes_;
+      balanceTypes = _balanceTypes_;
+      transactionTypes = _transactionTypes_;
     }));
 
     it('Should exist', function() {
@@ -58,6 +63,11 @@
       it('constructs a scope with a controller object', function() {
         var controller = getEditorController();
         expect(controller).to.exist;
+      });
+
+      it('puts the transaction types on the controller', function() {
+        var controller = getEditorController();
+        expect(controller.transactionTypes).to.equal(transactionTypes);
       });
 
       it('uses a static backdrop', function() {
@@ -88,35 +98,62 @@
       });
 
       it('does not show the dialog if it is not ready', function() {
-        transactionEditor.open({}, 'anything');
+        transactionEditor.open({}, {}, 'anything');
         expect(mockModal.show.called).to.be.false;
       });
 
       it('shows the dialog if it is ready', function() {
-        transactionEditor.open({}, 'anything');
+        transactionEditor.open({}, {}, 'anything');
         mockModal.$promise.then.yield();
         expect(mockModal.show.calledOnce).to.be.true;
       });
 
+      it('puts the passed account on the controller so it can be read', function() {
+        var controller = getEditorController();
+        transactionEditor.open({_id: 42, name: 'I am the account'},
+          {_id: 73, name: 'I am the transaction'}, 'anything');
+        expect(controller.account).to.deep.equal({_id: 42, name: 'I am the account'});
+      });
+
       it('sets the title to Modify Account if the mode is modify', function() {
         var controller = getEditorController();
-        transactionEditor.open({}, editorModes.modify);
+        transactionEditor.open({}, {}, editorModes.modify);
         expect(controller.title).to.equal('Modify Transaction');
       });
 
       it('sets the title to New Account if the mode is "create"', function() {
         var controller = getEditorController();
-        transactionEditor.open({}, editorModes.create);
+        transactionEditor.open({}, {}, editorModes.create);
         expect(controller.title).to.equal('New Transaction');
       });
 
       it('copies the data from the passed model to the controller', function() {
         var controller = getEditorController();
-        transactionEditor.open(testTransaction, 'any');
+        transactionEditor.open({}, testTransaction, 'any');
         expect(controller.transactionDate).to.equal(testTransaction.transactionDate);
         expect(controller.description).to.equal(testTransaction.description);
         expect(controller.principalAmount).to.equal(testTransaction.principalAmount);
         expect(controller.interestAmount).to.equal(testTransaction.interestAmount);
+      });
+
+      it('copies the matching transaction type to the controller', function() {
+        var controller = getEditorController();
+        testTransaction.transactionType = 'payment';
+        transactionEditor.open({}, testTransaction, 'any');
+        expect(controller.transactionType).to.equal(transactionTypes[1]);
+      });
+
+      it('uses the first tranaction type if the one on the transaction is not valid', function() {
+        var controller = getEditorController();
+        testTransaction.transactionType = 'bogus';
+        transactionEditor.open({}, testTransaction, 'any');
+        expect(controller.transactionType).to.equal(transactionTypes[0]);
+      });
+
+      it('sets the first transaction type if one is not specified in the passed model', function() {
+        var controller = getEditorController();
+        transactionEditor.open({}, testTransaction, 'any');
+        expect(controller.transactionType).to.equal(transactionTypes[0]);
       });
     });
 
@@ -125,6 +162,7 @@
       var controller;
       var theSaveCompleted;
       var savedTransaction;
+      var testAccount;
 
       beforeEach(function() {
         theSaveCompleted = false;
@@ -133,10 +171,11 @@
           $save: function() {}
         });
         controller = getEditorController();
-        transactionEditor.open(mockTransaction, "itDontMatterNone", saveCompleted);
+        testAccount = {};
+        transactionEditor.open(testAccount, mockTransaction, 'itDontMatterNone', saveCompleted);
       });
 
-      function saveCompleted(trans){
+      function saveCompleted(trans) {
         theSaveCompleted = true;
         savedTransaction = trans;
       }
@@ -155,6 +194,52 @@
         expect(mockTransaction.interestAmount).to.equal(42.03);
       });
 
+      it('negates the amount for disbursements from liability accounts', function() {
+        controller.transactionDate = '2015-05-11T05:00:00.000Z';
+        controller.description = 'This is a transaction';
+        controller.principalAmount = '4313.04';
+        controller.interestAmount = '42.03';
+        controller.transactionType = transactionTypes[0];
+        testAccount.balanceType = balanceTypes.liability;
+
+        controller.save();
+
+        expect(mockTransaction.transactionDate).to.equal('2015-05-11T05:00:00.000Z');
+        expect(mockTransaction.description).to.equal('This is a transaction');
+        expect(mockTransaction.principalAmount).to.equal(-4313.04);
+        expect(mockTransaction.interestAmount).to.equal(42.03);
+      });
+
+      it('copies the transactionType if the balanceType is liability', function() {
+        controller.transactionDate = '2015-05-11T05:00:00.000Z';
+        controller.description = 'This is a transaction';
+        controller.principalAmount = '4313.04';
+        controller.interestAmount = '42.03';
+        controller.transactionType = transactionTypes[1];
+
+        testAccount.balanceType = balanceTypes.liability;
+
+        controller.save();
+
+        expect(mockTransaction.transactionType).to.equal('payment');
+      });
+
+      it('does not copy the transactionType if the balanceType is not liability', function() {
+        it('copies the transactionType if the balanceType is liability', function() {
+          controller.transactionDate = '2015-05-11T05:00:00.000Z';
+          controller.description = 'This is a transaction';
+          controller.principalAmount = '4313.04';
+          controller.interestAmount = '42.03';
+          controller.transactionType = transactionTypes[1];
+
+          testAccount.balanceType = balanceTypes.asset;
+
+          controller.save();
+
+          expect(mockTransaction.transactionType).to.not.exist;
+        });
+      });
+
       it('calls save on the transaction', function() {
         controller.save();
         expect(mockTransaction.$save.calledOnce).to.be.true;
@@ -166,7 +251,7 @@
         expect(mockModal.hide.calledOnce).to.be.true;
       });
 
-      it('calls the save callback with the new transaction if the save succeeds', function(){
+      it('calls the save callback with the new transaction if the save succeeds', function() {
         controller.save();
         mockTransaction.$save.yield(mockTransaction);
         expect(theSaveCompleted).to.be.true;

@@ -10,7 +10,9 @@
     beforeEach(function() {
       mockLocalStorageService = sinon.stub({
         get: function() {},
+
         set: function() {},
+
         remove: function() {}
       });
 

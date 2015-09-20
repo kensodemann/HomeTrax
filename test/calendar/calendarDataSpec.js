@@ -52,6 +52,7 @@
           expect(res).to.be.true;
           done();
         });
+
         mockHomeAppEvent.query.callArg(1);
         mockEventCategory.query.callArg(1);
         scope.$digest();
@@ -62,6 +63,7 @@
           expect(res).to.be.false;
           done();
         });
+
         mockHomeAppEvent.query.callArg(2);
         mockEventCategory.query.callArg(1);
         scope.$digest();
@@ -72,6 +74,7 @@
           expect(res).to.be.false;
           done();
         });
+
         mockHomeAppEvent.query.callArg(1);
         mockEventCategory.query.callArg(2);
         scope.$digest();
@@ -179,7 +182,7 @@
         expect(evts.length).to.equal(10);
       });
 
-      it("returns only my events when limitToMine filter set", function() {
+      it('returns only my events when limitToMine filter set', function() {
         serviceUnderTest.load();
         serviceUnderTest.limitToMine(true);
         var evts = serviceUnderTest.events();

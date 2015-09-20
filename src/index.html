@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home Trax</title>
+  <base href="/">
+
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+  <link rel="stylesheet" href="libs.css">
+  <link rel="stylesheet" href="Home-Trax.css">
+</head>
+<body ng-app="app" ng-strict-di>
+
+<div ng-include="'app/main/templates/navigation.html'"></div>
+
+<section class="content">
+  <div ng-controller="shellController as controller">
+    <div ng-view></div>
+  </div>
+</section>
+
+<footer class="container text-center">
+  <p>&copy; 2015 Kenneth W. Sodemann</p>
+</footer>
+
+<script type="text/javascript" src="libs.js"></script>
+<script type="text/javascript" src="Home-Trax.js"></script>
+
+</body>
+</html>

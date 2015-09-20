@@ -48,6 +48,7 @@
         householdData.load().then(function() {
           done();
         });
+
         queryDfd.resolve({});
         scope.$digest();
       });
@@ -63,6 +64,7 @@
           expect(householdData.household).to.deep.equal({_id: 2, name: 'New House'});
           done();
         });
+
         queryDfd.resolve([{_id: 1, name: 'old house'},
           {_id: 2, name: 'New House'}]);
         scope.$digest();
@@ -73,6 +75,7 @@
           expect(!!householdData.household).to.be.false;
           done();
         });
+
         queryDfd.resolve();
         scope.$digest();
       });

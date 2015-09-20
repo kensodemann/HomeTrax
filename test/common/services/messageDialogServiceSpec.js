@@ -14,6 +14,7 @@
       mockModal = sinon.stub({
         show: function() {
         },
+
         hide: function() {
         }
       });

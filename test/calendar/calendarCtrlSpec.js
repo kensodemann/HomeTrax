@@ -48,11 +48,17 @@
 
         mockCalendarData = sinon.stub({
           load: function() {},
+
           events: function() {},
+
           eventCategories: function() {},
+
           newEvent: function() {},
+
           limitToMine: function() {},
+
           excludeCategory: function() {},
+
           includeCategory: function() {}
         });
         mockCalendarData.load.returns(loadDfd.promise);
@@ -66,6 +72,7 @@
       function buildMockEventEditor() {
         mockCalendarEventEditor = sinon.stub({
           initialize: function() {},
+
           open: function() {}
         });
       }
@@ -73,7 +80,9 @@
       function buildMockAside() {
         mockAside = sinon.stub({
           hide: function() {},
+
           show: function() {},
+
           $promise: mockPromise
         });
 

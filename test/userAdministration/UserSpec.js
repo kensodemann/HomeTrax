@@ -10,20 +10,20 @@
 
     beforeEach(function() {
       testData = [{
-        UserId: "1",
+        UserId: '1',
         TestTag: 1
       }, {
-        UserId: "2",
+        UserId: '2',
         TestTag: 2
       }, {
-        UserId: "3",
+        UserId: '3',
         TestTag: 4,
-        color: "#ff0000"
+        color: '#ff0000'
       }, {
-        UserId: "4",
+        UserId: '4',
         TestTag: 5
       }, {
-        UserId: "5",
+        UserId: '5',
         TestTag: 7
       }];
     });
@@ -69,7 +69,7 @@
         var res = serviceUnderTest.query({});
         httpBackend.flush();
 
-        expect(res[2].color).to.equal("#ff0000");
+        expect(res[2].color).to.equal('#ff0000');
       });
 
       it('defaults the color if it is not defined', function() {
@@ -78,7 +78,7 @@
         var res = serviceUnderTest.query({});
         httpBackend.flush();
 
-        expect(res[0].color).to.equal("#3a87ad");
+        expect(res[0].color).to.equal('#3a87ad');
       });
     });
   });

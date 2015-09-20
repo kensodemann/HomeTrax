@@ -17,7 +17,7 @@
       $controllerConstructor = $controller;
     }));
 
-    function createController (){
+    function createController(){
       return $controllerConstructor('calendarMenuCtrl', {
         identity: mockIdentity
       });

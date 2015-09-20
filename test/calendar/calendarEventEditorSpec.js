@@ -1,4 +1,3 @@
-/* global beforeEach describe expect inject it moment sinon */
 (function() {
   'use strict';
 
@@ -55,35 +54,35 @@
 
       function setupTestEventCategories() {
         testEventCategories = [{
-          "name": "Test",
-          "_id": "5401cb6f95b028e003e6bd17"
+          'name': 'Test',
+          '_id': '5401cb6f95b028e003e6bd17'
         }, {
-          "name": "Appointments",
-          "_id": "5401cf2e95b028e003e6bd18"
+          'name': 'Appointments',
+          '_id': '5401cf2e95b028e003e6bd18'
         }, {
-          "name": "Holiday",
-          "_id": "540475e3d587a23c155222f5"
+          'name': 'Holiday',
+          '_id': '540475e3d587a23c155222f5'
         }, {
-          "name": "Family",
-          "_id": "54047fd2d587a23c155222fa"
+          'name': 'Family',
+          '_id': '54047fd2d587a23c155222fa'
         }, {
-          "name": "Fried Chicken",
-          "_id": "542b789f78f2be0815c90fe9"
+          'name': 'Fried Chicken',
+          '_id': '542b789f78f2be0815c90fe9'
         }, {
-          "name": "Technology",
-          "_id": "542bfa75f7b14c80126a9b8b"
+          'name': 'Technology',
+          '_id': '542bfa75f7b14c80126a9b8b'
         }, {
-          "name": "Church",
-          "_id": "542bfaa2f7b14c80126a9b8d"
+          'name': 'Church',
+          '_id': '542bfaa2f7b14c80126a9b8d'
         }, {
-          "name": "Meeting",
-          "_id": "542bfd0eb16d48880e05079c"
+          'name': 'Meeting',
+          '_id': '542bfd0eb16d48880e05079c'
         }, {
-          "name": "Travel",
-          "_id": "542bfd53b16d48880e05079f"
+          'name': 'Travel',
+          '_id': '542bfd53b16d48880e05079f'
         }, {
-          "name": "Recreation",
-          "_id": "542f5824c68b48fc13a7674e"
+          'name': 'Recreation',
+          '_id': '542f5824c68b48fc13a7674e'
         }];
       }
 
@@ -96,6 +95,7 @@
       function buildMockCalendarEvent() {
         mockCalendarEvent = sinon.stub({
           $save: function() {},
+
           $remove: function() {}
         });
         mockCalendarEvent.start = moment();
@@ -114,6 +114,7 @@
       function buildMockEventCategory() {
         mockEventCategory = sinon.stub({
           query: function() {},
+
           save: function() {}
         });
         mockEventCategory.query.returns(testEventCategories);
@@ -122,7 +123,7 @@
       function buildMockIdentity() {
         mockIdentity = sinon.stub();
         mockIdentity.currentUser = {
-          _id: "42"
+          _id: '42'
         };
       }
 
@@ -140,6 +141,7 @@
         mockModal = sinon.stub({
           $promise: mockPromise,
           hide: function() {},
+
           show: function() {}
         });
         mockModalConstructor = sinon.stub().returns(mockModal);
@@ -148,6 +150,7 @@
       function buildMockNotifier() {
         mockNotifier = sinon.stub({
           notify: function() {},
+
           error: function() {}
         });
       }
@@ -155,6 +158,7 @@
       function buildMockWindow() {
         mockBloodhound = sinon.stub({
           initialize: function() {},
+
           ttAdapter: function() {}
         });
         mockBloodhoundConstructor = sinon.stub().returns(mockBloodhound);
@@ -225,14 +229,14 @@
       var testEvent;
       beforeEach(function() {
         testEvent = {
-          "_id": "547bb0daeb5412000042fac1",
-          "start": moment("2014-12-01T01:00:00.000Z"),
-          "end": moment("2014-12-01T02:30:00.000Z"),
-          "allDay": false,
-          "title": "AA Meeting",
-          "category": "Personal",
-          "private": true,
-          "userId": "53a4dcea7c6dc30000bee3ab"
+          '_id': '547bb0daeb5412000042fac1',
+          'start': moment('2014-12-01T01:00:00.000Z'),
+          'end': moment('2014-12-01T02:30:00.000Z'),
+          'allDay': false,
+          'title': 'AA Meeting',
+          'category': 'Personal',
+          'private': true,
+          'userId': '53a4dcea7c6dc30000bee3ab'
         };
       });
 
@@ -281,8 +285,8 @@
 
       it('subtracts a day from the end date if this is an all-day event', function() {
         testEvent.allDay = true;
-        testEvent.start = moment("2014-12-01T00:00:00.000Z");
-        testEvent.end = moment("2014-12-03T00:00:00.000Z");
+        testEvent.start = moment('2014-12-01T00:00:00.000Z');
+        testEvent.end = moment('2014-12-03T00:00:00.000Z');
         var ctrl = getEditorCtrl();
         var zoneOffset = moment().utcOffset() * 60000;
         calendarEventEditor.open(testEvent, 'anything');
@@ -328,7 +332,7 @@
           expect(ctrl.eventOwnerName).to.equal('Jackie Jones');
         });
 
-        it("displays a message with a generic name if the owner does not exist", function() {
+        it('displays a message with a generic name if the owner does not exist', function() {
           mockIdentity.currentUser._id = '4273';
           calendarEventEditor.open(testEvent, 'anything');
           usersGetDfd.resolve();
@@ -444,7 +448,7 @@
         ctrl.model.category = 'Health & Fitness';
         ctrl.model.isPrivate = true;
         ctrl.model.user = 'KWS';
-        ctrl.model.color = "#abcdef";
+        ctrl.model.color = '#abcdef';
       });
 
       it('copies the data to the resource', function() {
@@ -559,6 +563,7 @@
           expect(mockCalendarEvent.$remove.calledOnce).to.be.true;
           done();
         });
+
         askDfd.resolve(true);
         scope.$digest();
       });
@@ -587,6 +592,7 @@
           expect(mockModal.hide.called).to.be.false;
           done();
         });
+
         askDfd.resolve(false);
         scope.$digest();
       });

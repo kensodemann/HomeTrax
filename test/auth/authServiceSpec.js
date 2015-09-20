@@ -15,6 +15,7 @@
     beforeEach(function() {
       mockAuthToken = sinon.stub({
         clear: function() {},
+
         set: function() {}
       });
       mockHttp = sinon.stub({
@@ -24,6 +25,7 @@
       mockIdentity = sinon.stub({
         isAuthenticated: function() {
         },
+
         isAuthorized: function() {
         }
       });
@@ -69,6 +71,7 @@
           expect(mockIdentity.currentUser.lastName).to.equal('Jones');
           done();
         });
+
         dfd.resolve({
           data: {
             success: true,
@@ -105,6 +108,7 @@
           expect(mockIdentity.currentUser).to.be.undefined;
           done();
         });
+
         dfd.resolve({
           data: {
             success: false,
@@ -160,6 +164,7 @@
           expect(mockIdentity.currentUser).to.be.undefined;
           done();
         });
+
         dfd.resolve();
         scope.$apply();
       });
