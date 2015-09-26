@@ -12,7 +12,7 @@
     var mockNotifier;
     var mockUser;
 
-    beforeEach(module('app.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration'));
 
     beforeEach(function() {
       buildMockColors();

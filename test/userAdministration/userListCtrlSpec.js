@@ -10,7 +10,7 @@
     var mockUserConstructor;
     var mockUserEditor;
 
-    beforeEach(module('app.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration'));
 
     beforeEach(inject(function($controller, $q) {
       $controllerConstructor = $controller;

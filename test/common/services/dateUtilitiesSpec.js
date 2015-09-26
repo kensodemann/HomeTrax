@@ -4,7 +4,7 @@
   describe('date utilities service', function() {
     var dateUtilities;
 
-    beforeEach(module('app.core'));
+    beforeEach(module('homeTrax.common.services.dateUtilities'));
 
     beforeEach(inject(function(_dateUtilities_) {
       dateUtilities = _dateUtilities_;

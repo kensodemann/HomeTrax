@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.userAdministration').factory('UserPassword', UserPassword);
+  angular.module('homeTrax.common.resources').factory('UserPassword', UserPassword);
 
   function UserPassword($resource, config) {
     return $resource(config.dataService + '/changepassword/:id', {

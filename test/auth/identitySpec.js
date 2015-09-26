@@ -7,7 +7,7 @@
     var httpBackend;
     var mockCacheBuster;
 
-    beforeEach(module('app.auth'));
+    beforeEach(module('homeTrax.auth'));
 
     beforeEach(function() {
       mockCacheBuster = {

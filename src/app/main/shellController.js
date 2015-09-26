@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').controller('shellController', ShellController);
+  angular.module('homeTrax.main').controller('shellController', ShellController);
 
   function ShellController($scope, $location, AuthEvents) {
     $scope.$on(AuthEvents.notAuthenticated, function() {

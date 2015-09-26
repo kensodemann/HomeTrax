@@ -10,7 +10,7 @@
     var mockUserPassword;
     var mockUserPasswordConstructor;
 
-    beforeEach(module('app.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration'));
 
     beforeEach(function() {
       buildMockModal();

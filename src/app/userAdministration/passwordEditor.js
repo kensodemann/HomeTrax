@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.userAdministration').factory('passwordEditor', PasswordEditor);
+  angular.module('homeTrax.userAdministration').factory('passwordEditor', PasswordEditor);
 
   function PasswordEditor($rootScope, $modal, UserPassword, notifier) {
     var exports = {

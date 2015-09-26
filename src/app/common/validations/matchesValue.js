@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.core').directive('matchesValue', function() {
+  angular.module('homeTrax.common.validations').directive('matchesValue', function() {
     return {
       require: 'ngModel',
       restrict: 'A',

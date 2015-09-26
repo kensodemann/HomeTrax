@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').factory('Versions', Versions);
+  angular.module('homeTrax.common.resources').factory('Versions', Versions);
 
   function Versions($resource, config) {
     var millisecondsPerMinute = 60000;

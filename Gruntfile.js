@@ -138,7 +138,7 @@ module.exports = function(grunt) {
         options: {
           sourceMap: true
         },
-        src: ['src/app/app.js', 'src/**/app.*.js', 'src/app/**/*.js'],
+        src: ['src/app/app.js', 'src/**/module.js', 'src/app/**/*.js'],
         dest: 'www/<%= pkg.name %>.js'
       }
     },

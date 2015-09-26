@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.auth').factory('identity', Identity);
+  angular.module('homeTrax.auth').factory('identity', Identity);
 
   function Identity($http, config, cacheBuster) {
     var exports = {

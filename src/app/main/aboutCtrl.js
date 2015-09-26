@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').controller('aboutCtrl', AboutCtrl);
+  angular.module('homeTrax.main').controller('aboutCtrl', AboutCtrl);
 
   function AboutCtrl(versionData) {
     var self = this;

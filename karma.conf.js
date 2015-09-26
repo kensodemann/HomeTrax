@@ -19,7 +19,7 @@ module.exports = function(config) {
       componentPaths.lib.bloodhound.dev,
 
       'test/test-app.js',
-      'src/app/**/app.*.js',
+      'src/app/**/module.js',
       'src/app/**/*.js',
       'src/app/**/*.html',
       'test/**/*Spec.js'

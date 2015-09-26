@@ -1,9 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('app.core').factory('messageDialogService', MessageDialogService);
+  angular.module('homeTrax.common.services.messageDialog').factory('messageDialog', messageDialog);
 
-  function MessageDialogService($modal, $rootScope, $q) {
+  function messageDialog($modal, $rootScope, $q) {
     var exports = {
       ask: function(question, title) {
         askDfd = $q.defer();
@@ -20,7 +20,7 @@
     var askDfd;
     var askScope = $rootScope.$new(true);
     var askDlg = $modal({
-      template: 'app/common/templates/askDialog.html',
+      template: 'app/common/services/messageDialog/templates/askDialog.html',
       backdrop: 'static',
       show: false,
       scope: askScope

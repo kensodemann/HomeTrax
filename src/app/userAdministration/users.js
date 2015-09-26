@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.userAdministration').factory('users', Users);
+  angular.module('homeTrax.userAdministration').factory('users', Users);
 
   function Users($q, User) {
     var exports = {

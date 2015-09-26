@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.auth').controller('loginCtrl', LoginCtrl);
+  angular.module('homeTrax.auth').controller('loginCtrl', LoginCtrl);
 
   function LoginCtrl($location, authService, notifier) {
     var self = this;

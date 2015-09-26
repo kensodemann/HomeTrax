@@ -28,7 +28,7 @@
       }];
     });
 
-    beforeEach(module('app.userAdministration'));
+    beforeEach(module('homeTrax.common.resources'));
 
     beforeEach(inject(function($rootScope, $httpBackend, _config_, _User_) {
       scope = $rootScope;

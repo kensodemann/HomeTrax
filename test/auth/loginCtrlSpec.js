@@ -2,7 +2,7 @@
   'use strict';
 
   describe('loginCtrl', function() {
-    beforeEach(module('app.auth'));
+    beforeEach(module('homeTrax.auth'));
 
     var scope;
     var $controllerConstructor;

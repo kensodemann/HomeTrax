@@ -2,7 +2,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.userAdministration').factory('userEditor', userEditor);
+  angular.module('homeTrax.userAdministration').factory('userEditor', userEditor);
 
   function userEditor($rootScope, $modal, notifier) {
     var exports = {

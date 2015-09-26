@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.core')
+  angular.module('homeTrax.common.services.dateUtilities')
     .factory('dateUtilities', DateUtilities);
 
   function DateUtilities() {

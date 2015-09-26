@@ -1,9 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('app.core').value('myToastr', toastr);
+  angular.module('homeTrax.common.services').value('myToastr', toastr);
 
-  angular.module('app.core').factory('notifier', Notifier);
+  angular.module('homeTrax.common').factory('notifier', Notifier);
 
   function Notifier($log, myToastr) {
     return {

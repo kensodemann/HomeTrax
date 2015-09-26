@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app.auth').factory('authService', AuthService);
+  angular.module('homeTrax.auth').factory('authService', AuthService);
 
   function AuthService($http, identity, $q, User, config, authToken) {
     return {

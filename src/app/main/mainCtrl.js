@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('app').controller('mainCtrl', MainCtrl);
+  angular.module('homeTrax.main').controller('mainCtrl', MainCtrl);
 
   function MainCtrl(identity) {
     var message = 'Hello World from Angular!!';

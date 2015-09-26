@@ -12,7 +12,7 @@
     var authService;
     var scope;
 
-    beforeEach(module('app.auth'));
+    beforeEach(module('homeTrax.auth'));
 
     beforeEach(function() {
       mockAuthToken = sinon.stub({

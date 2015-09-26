@@ -5,7 +5,7 @@
     var scope;
     var el;
 
-    beforeEach(module('app.core'));
+    beforeEach(module('homeTrax.common.validations'));
 
     beforeEach(inject(function($rootScope, $compile) {
       scope = $rootScope;

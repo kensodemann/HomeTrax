@@ -2,15 +2,19 @@
 (function() {
   'use strict';
 
-  angular.module('app',
-    ['app.core', 'app.auth', 'app.userAdministration',
-      'LocalStorageModule', 'ngAnimate', 'ngRoute', 'ngResource']);
+  angular.module('homeTrax', [
+    'homeTrax.auth',
+    'homeTrax.main',
+    'homeTrax.userAdministration',
+    'LocalStorageModule',
+    'ngRoute'
+  ]);
 
-  angular.module('app')
-    .config(auth)
-    .config(routes)
-    .config(services)
-    .run(routeErrorHandling);
+  angular.module('homeTrax')
+      .config(auth)
+      .config(routes)
+      .config(services)
+      .run(routeErrorHandling);
 
   function routes($routeProvider, $locationProvider,
                   mainRoutes, authRoutes, userAdministrationRoutes) {

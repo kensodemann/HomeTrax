@@ -4,7 +4,7 @@
   describe('userAdminMenuCtrl', function() {
     var $controllerConstructor;
 
-    beforeEach(module('app.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration'));
 
     beforeEach(inject(function($controller) {
       $controllerConstructor = $controller;

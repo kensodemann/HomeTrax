@@ -2,9 +2,9 @@
 (function() {
   'use strict';
 
-  angular.module('app.auth', [
-    'app.core',
-    'app.userAdministration',
+  angular.module('homeTrax.auth', [
+    'homeTrax.common',
+    'homeTrax.userAdministration',
     'ngResource',
     'mgcrea.ngStrap'
   ]);
