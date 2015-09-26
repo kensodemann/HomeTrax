@@ -2,9 +2,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.userAdministration').controller('myProfileCtrl', MyProfileCtrl);
+  angular.module('homeTrax.userAdministration').controller('myProfileController', MyProfileController);
 
-  function MyProfileCtrl(User, identity, passwordEditor, notifier) {
+  function MyProfileController(User, identity, passwordEditor, notifier) {
     var self = this;
 
     self.model = currentUser();

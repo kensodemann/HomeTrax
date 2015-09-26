@@ -1,9 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.main').controller('mainCtrl', MainCtrl);
+  angular.module('homeTrax.main').controller('mainController', MainController);
 
-  function MainCtrl(identity) {
+  function MainController(identity) {
     var message = 'Hello World from Angular!!';
 
     if (identity.isAuthenticated()) {

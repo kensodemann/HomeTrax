@@ -41,7 +41,7 @@
     });
 
     function createController(){
-      return $controllerConstructor('loginCtrl', {
+      return $controllerConstructor('loginController', {
         $location: mockLocation,
         authService: mockAuthService,
         notifier: mockNotifier
@@ -49,13 +49,13 @@
     }
 
     describe('signin', function() {
-      var ctrl;
+      var controller;
       beforeEach(function(){
-        ctrl = createController();
+        controller = createController();
       });
 
       it('Should call authenticateUser', function() {
-        ctrl.signin('jeff', 'FireW00d');
+        controller.signin('jeff', 'FireW00d');
         expect(mockAuthService.authenticateUser.calledWith('jeff', 'FireW00d')).to.be.true;
       });
 
@@ -77,13 +77,13 @@
       });
 
       function callSigninWithSuccess() {
-        ctrl.signin('jeff', 'FireW00d');
+        controller.signin('jeff', 'FireW00d');
         dfd.resolve(true);
         scope.$apply();
       }
 
       function callSigninWithFailure() {
-        ctrl.signin('jeff', 'FireW00d');
+        controller.signin('jeff', 'FireW00d');
         dfd.resolve(false);
         scope.$apply();
       }

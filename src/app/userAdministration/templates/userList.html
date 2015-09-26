@@ -8,12 +8,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in ctrl.users">
+    <tr ng-repeat="user in controller.users">
       <td>{{user.firstName}}</td>
       <td>{{user.lastName}}</td>
-      <td><a href="" ng-click="ctrl.edit(user)">{{user.username}}</a></td>
+      <td><a href="" ng-click="controller.edit(user)">{{user.username}}</a></td>
     </tr>
     </tbody>
   </table>
-  <button ng-click="ctrl.create()" class="btn btn-default">New User</button>
+  <button ng-click="controller.create()" class="btn btn-default">New User</button>
 </div>

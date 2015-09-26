@@ -3,7 +3,7 @@
     <fieldset>
       <div class="form-group"><label for="username" class="col-md-2 control-label">Username</label>
 
-        <div class="col-md-10"><input name="username" type="text" ng-model="ctrl.model.username" required="required"
+        <div class="col-md-10"><input name="username" type="text" ng-model="controller.model.username" required="required"
                                       class="form-control"/>
 
           <div ng-messages="profileForm.username.$error" role="alert">
@@ -13,7 +13,7 @@
       </div>
       <div class="form-group"><label for="firstName" class="col-md-2 control-label">First Name</label>
 
-        <div class="col-md-10"><input name="firstName" type="text" ng-model="ctrl.model.firstName" required="required"
+        <div class="col-md-10"><input name="firstName" type="text" ng-model="controller.model.firstName" required="required"
                                       class="form-control"/>
 
           <div ng-messages="profileForm.firstName.$error" role="alert">
@@ -23,7 +23,7 @@
       </div>
       <div class="form-group"><label for="lastName" class="col-md-2 control-label">Last Name</label>
 
-        <div class="col-md-10"><input name="lastName" type="text" ng-model="ctrl.model.lastName" required="required"
+        <div class="col-md-10"><input name="lastName" type="text" ng-model="controller.model.lastName" required="required"
                                       class="form-control"/>
 
           <div ng-messages="profileForm.lastName.$error" role="alert">
@@ -34,10 +34,10 @@
     </fieldset>
     <div class="form-group">
       <div class="col-md-offset-2 col-md-10 btn-area">
-        <button type="button" ng-click="ctrl.reset()" class="btn btn-default">Reset</button>
-        <button type="submit" ng-click="ctrl.save()" ng-disabled="profileForm.$invalid" class="btn btn-primary">Save
+        <button type="button" ng-click="controller.reset()" class="btn btn-default">Reset</button>
+        <button type="submit" ng-click="controller.save()" ng-disabled="profileForm.$invalid" class="btn btn-primary">Save
         </button>
-        <button type="button" ng-click="ctrl.openPasswordEditor()" class="btn btn-default">Set Password</button>
+        <button type="button" ng-click="controller.openPasswordEditor()" class="btn btn-default">Set Password</button>
       </div>
     </div>
   </form>

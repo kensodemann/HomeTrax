@@ -1,6 +1,6 @@
 <div class="container"><h1 class="text-center">HomeTrax</h1>
 
-  <h2 class="text-center">Current Version: {{ctrl.currentVersion}}</h2>
+  <h2 class="text-center">Current Version: {{controller.currentVersion}}</h2>
 
   <p>HomeTrax is a program for tracking various things about life. Specifically for keeping track of things I
     am always needing to look up that I don't really track anywhere else. Mostly stuff about my house.</p>
@@ -12,7 +12,7 @@
   <h2>Version History</h2>
 
   <div id="accordion" class="panel-group">
-    <div ng-repeat="version in ctrl.versions" class="panel panel-default">
+    <div ng-repeat="version in controller.versions" class="panel panel-default">
       <div class="panel-heading"><h3 class="panel-title"><a data-toggle="collapse" data-parent="#accordion"
                                                             href="#collapse{{version.id}}">{{version.name}}</a></h3>
       </div>

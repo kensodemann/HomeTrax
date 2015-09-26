@@ -5,7 +5,7 @@
   describe('myProfileCtrl', function() {
     beforeEach(module('homeTrax.userAdministration'));
 
-    var ctrl;
+    var controller;
     var $controllerConstructor;
     var mockColors;
     var mockIdentity;
@@ -70,7 +70,7 @@
     }
 
     function createController() {
-      ctrl = $controllerConstructor('myProfileCtrl', {
+      controller = $controllerConstructor('myProfileController', {
         User: mockUserResource,
         identity: mockIdentity,
         passwordEditor: mockPasswordEditor,
@@ -85,39 +85,39 @@
         expect(mockUserResource.get.calledWith({
           id: '123456789009876543211234'
         })).to.be.true;
-        expect(ctrl.model).to.equal(mockUser);
+        expect(controller.model).to.equal(mockUser);
       });
     });
 
     describe('Reset', function() {
       it('Gets the data for the currently logged in user', function() {
-        ctrl.model = undefined;
+        controller.model = undefined;
 
-        ctrl.reset();
+        controller.reset();
 
         expect(mockUserResource.get.calledTwice).to.be.true;
         expect(mockUserResource.get.calledWith({
           id: '123456789009876543211234'
         })).to.be.true;
-        expect(ctrl.model).to.equal(mockUser);
+        expect(controller.model).to.equal(mockUser);
       });
     });
 
     describe('Save', function() {
       it('updates the data', function() {
-        ctrl.save();
+        controller.save();
         expect(mockUser.$update.calledOnce).to.be.true;
       });
 
       it('notifies the user upon success', function() {
-        ctrl.save();
+        controller.save();
         mockUser.$update.callArg(0);
         expect(mockNotifier.notify.calledOnce).to.be.true;
         expect(mockNotifier.notify.calledWith('Profile modifications saved successfully'));
       });
 
       it('notifies the user upon error', function() {
-        ctrl.save();
+        controller.save();
         mockUser.$update.callArgWith(1, {
           status: 400,
           statusText: 'something went wrong',
@@ -132,7 +132,7 @@
 
     describe('Changing Password', function() {
       it('opens the password editor', function() {
-        ctrl.openPasswordEditor();
+        controller.openPasswordEditor();
         expect(mockPasswordEditor.open.calledOnce).to.be.true;
         expect(mockPasswordEditor.open.calledWithExactly('123456789009876543211234')).to.be.true;
       });

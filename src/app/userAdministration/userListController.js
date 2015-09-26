@@ -1,9 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.userAdministration').controller('userListCtrl', UserListCtrl);
+  angular.module('homeTrax.userAdministration').controller('userListController', UserListController);
 
-  function UserListCtrl(User, userEditor) {
+  function UserListController(User, userEditor) {
     var self = this;
 
     self.users = User.query();

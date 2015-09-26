@@ -17,7 +17,7 @@
       scope: editorScope
     });
 
-    editorScope.ctrl = {
+    editorScope.controller = {
       save: saveOrUpdate
     };
 
@@ -37,21 +37,21 @@
 
         function initializeCtrlVariables() {
           userResource = user;
-          editorScope.ctrl.mode = mode;
+          editorScope.controller.mode = mode;
         }
 
         function initializeLabels() {
-          editorScope.ctrl.title = (mode === 'edit') ? 'Edit User' : 'Create User';
-          editorScope.ctrl.saveLabel = (mode === 'edit') ? 'Save' : 'Create';
+          editorScope.controller.title = (mode === 'edit') ? 'Edit User' : 'Create User';
+          editorScope.controller.saveLabel = (mode === 'edit') ? 'Save' : 'Create';
         }
 
         function initializeModel() {
           saveCallback = callback;
-          editorScope.ctrl.model = {};
-          editorScope.ctrl.model.firstName = user.firstName;
-          editorScope.ctrl.model.lastName = user.lastName;
-          editorScope.ctrl.model.username = user.username;
-          editorScope.ctrl.model.isAdministrator = !!user.roles &&
+          editorScope.controller.model = {};
+          editorScope.controller.model.firstName = user.firstName;
+          editorScope.controller.model.lastName = user.lastName;
+          editorScope.controller.model.username = user.username;
+          editorScope.controller.model.isAdministrator = !!user.roles &&
             (user.roles.indexOf('admin') > -1);
         }
       }
@@ -62,7 +62,7 @@
       saveResource();
 
       function saveResource() {
-        if (editorScope.ctrl.mode === 'create') {
+        if (editorScope.controller.mode === 'create') {
           userResource.$save(success, error);
         }
         else {
@@ -70,7 +70,7 @@
         }
 
         function success() {
-          notifier.notify((editorScope.ctrl.mode === 'create') ?
+          notifier.notify((editorScope.controller.mode === 'create') ?
             'User created successfully' : 'Changes to user saved successfully');
           editor.hide();
           if (saveCallback) {
@@ -80,20 +80,20 @@
 
         function error(reason) {
           notifier.error(reason.data);
-          editorScope.ctrl.errorMessage = reason.data;
+          editorScope.controller.errorMessage = reason.data;
         }
       }
 
       function copyModelToResource() {
-        userResource.firstName = editorScope.ctrl.model.firstName;
-        userResource.lastName = editorScope.ctrl.model.lastName;
-        userResource.username = editorScope.ctrl.model.username;
-        if (editorScope.ctrl.mode === 'create') {
-          userResource.password = editorScope.ctrl.model.password;
+        userResource.firstName = editorScope.controller.model.firstName;
+        userResource.lastName = editorScope.controller.model.lastName;
+        userResource.username = editorScope.controller.model.username;
+        if (editorScope.controller.mode === 'create') {
+          userResource.password = editorScope.controller.model.password;
         }
 
         userResource.roles = [];
-        if (editorScope.ctrl.model.isAdministrator) {
+        if (editorScope.controller.model.isAdministrator) {
           userResource.roles.push('admin');
         }
       }

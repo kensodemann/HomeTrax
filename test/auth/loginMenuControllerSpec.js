@@ -32,7 +32,7 @@
     });
 
     function createController() {
-      return $controllerConstructor('loginMenuCtrl', {
+      return $controllerConstructor('loginMenuController', {
         identity: mockIdentity,
         authService: mockAuthService,
         $location: mockLocation
@@ -42,22 +42,22 @@
 
     describe('identity', function() {
       it('Should set the identity to the injected identity object', function() {
-        var ctrl = createController();
-        expect(ctrl.identity).to.equal(mockIdentity);
+        var controller = createController();
+        expect(controller.identity).to.equal(mockIdentity);
       });
     });
 
 
     describe('logout', function() {
       it('Should call authService.logoutUser()', function() {
-        var ctrl = createController();
-        ctrl.logout();
+        var controller = createController();
+        controller.logout();
         expect(mockAuthService.logoutUser.calledOnce).to.be.true;
       });
 
       it('Should redirect to the login page', function() {
-        var ctrl = createController();
-        ctrl.logout();
+        var controller = createController();
+        controller.logout();
         dfd.resolve();
         scope.$digest();
 

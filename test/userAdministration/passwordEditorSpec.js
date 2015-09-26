@@ -62,13 +62,13 @@
     });
 
     function getCtrl() {
-      return mockModalConstructor.getCall(0).args[0].scope.ctrl;
+      return mockModalConstructor.getCall(0).args[0].scope.controller;
     }
 
     describe('instantiation', function() {
       it('sets the password model', function() {
-        var ctrl = getCtrl();
-        expect(ctrl.model).to.equal(mockUserPassword);
+        var controller = getCtrl();
+        expect(controller.model).to.equal(mockUserPassword);
       });
     });
 
@@ -79,65 +79,65 @@
       });
 
       it('sets the _id on to model', function() {
-        var ctrl = getCtrl();
+        var controller = getCtrl();
         serviceUnderTest.open(42);
-        expect(ctrl.model._id).to.equal(42);
+        expect(controller.model._id).to.equal(42);
       });
 
       it('clears the model data', function(){
-        var ctrl = getCtrl();
-        ctrl.model = {
+        var controller = getCtrl();
+        controller.model = {
           password: 'something',
           newPassword: 'somethingElse',
           verifyPassword: 'somethingElse'
         };
         serviceUnderTest.open(42);
-        expect(ctrl.model.password).to.equal('');
-        expect(ctrl.model.newPassword).to.equal('');
-        expect(ctrl.model.verifyPassword).to.equal('');
+        expect(controller.model.password).to.equal('');
+        expect(controller.model.newPassword).to.equal('');
+        expect(controller.model.verifyPassword).to.equal('');
       });
     });
 
     describe('setting new password', function() {
-      var ctrl;
+      var controller;
       beforeEach(function() {
-        ctrl = getCtrl();
+        controller = getCtrl();
       });
 
       it('updates password', function() {
-        ctrl.setPassword();
-        expect(ctrl.model.$update.calledOnce).to.be.true;
+        controller.setPassword();
+        expect(controller.model.$update.calledOnce).to.be.true;
       });
 
       it('notifies user on password change success', function() {
-        ctrl.setPassword();
+        controller.setPassword();
         resolvePasswordUpdate();
         expect(mockNotifier.notify.calledOnce).to.be.true;
         expect(mockNotifier.notify.calledWith('Password changed successfully')).to.be.true;
       });
 
       it('closes the editor on success', function() {
-        ctrl.setPassword();
+        controller.setPassword();
         resolvePasswordUpdate();
         expect(mockModal.hide.calledOnce).to.be.true;
       });
 
       it('notifies user if http request fails', function() {
-        ctrl.setPassword();
+        controller.setPassword();
         rejectPasswordUpdate();
 
-        expect(ctrl.errorMessage).to.equal('because you suck eggs');
+        expect(controller.errorMessage).to.equal('because you suck eggs');
         expect(mockNotifier.error.calledOnce).to.be.true;
         expect(mockNotifier.error.calledWith('because you suck eggs')).to.be.true;
         expect(mockModal.hide.called).to.be.false;
       });
 
       function resolvePasswordUpdate() {
-        ctrl.model.$update.callArgWith(0, ctrl.model);
+        controller.model.$update.callArgWith(0, controller.model);
       }
 
       function rejectPasswordUpdate() {
-        ctrl.model.$update.callArgWith(1, {
+        controller.model.$update.callArgWith(1, {
           status: 400,
           statusText: 'something went wrong',
           data: {

@@ -42,7 +42,7 @@
     }
 
     function createController() {
-      return $controllerConstructor('userListCtrl', {
+      return $controllerConstructor('userListController', {
         User: mockUserConstructor,
         userEditor: mockUserEditor
       });
@@ -56,50 +56,50 @@
 
       it('assigns the results to the users', function(){
         mockUserConstructor.query.returns('Results of the query');
-        var ctrl = createController();
-        expect(ctrl.users).to.equal('Results of the query');
+        var controller = createController();
+        expect(controller.users).to.equal('Results of the query');
       });
     });
 
     describe('Editing Existing User', function() {
-      var ctrl;
+      var controller;
       beforeEach(function() {
-        ctrl = createController();
+        controller = createController();
       });
 
       it('opens the editor', function() {
         var user = {
           name: 'Fred Flintstone'
         };
-        ctrl.edit(user);
+        controller.edit(user);
         expect(mockUserEditor.open.calledOnce).to.be.true;
         expect(mockUserEditor.open.calledWithExactly(user, 'edit')).to.be.true;
       });
     });
 
     describe('Creating New User', function() {
-      var ctrl;
+      var controller;
       beforeEach(function() {
-        ctrl = createController();
+        controller = createController();
       });
 
       it('news up a user resource', function(){
-        ctrl.create();
+        controller.create();
         expect(mockUserConstructor.calledOnce).to.be.true;
       });
 
       it('opens the editor', function() {
-        ctrl.create();
+        controller.create();
         expect(mockUserEditor.open.calledOnce).to.be.true;
         expect(mockUserEditor.open.calledWith(mockUser, 'create')).to.be.true;
       });
       
       it('pushes the new user', function() {
         mockUserConstructor.query.returns([1, 2, 3, 4, 5, 6]);
-        var ctrl = createController();
-        ctrl.create();
+        var controller = createController();
+        controller.create();
         mockUserEditor.open.callArgWith(2, mockUser);
-        expect(ctrl.users).to.deep.equal([1, 2, 3, 4, 5, 6, mockUser]);
+        expect(controller.users).to.deep.equal([1, 2, 3, 4, 5, 6, mockUser]);
       });
     });
   });

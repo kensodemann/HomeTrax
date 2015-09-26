@@ -73,8 +73,8 @@
       expect(serviceUnderTest).to.not.be.undefined;
     });
 
-    function getEditorCtrl() {
-      return mockModalConstructor.getCall(0).args[0].scope.ctrl;
+    function getEditorController() {
+      return mockModalConstructor.getCall(0).args[0].scope.controller;
     }
 
     describe('Editor Instantiation', function() {
@@ -82,9 +82,9 @@
         expect(mockModalConstructor.calledOnce).to.be.true;
       });
 
-      it('has a scope with a ctrl object', function() {
-        var ctrl = getEditorCtrl();
-        expect(ctrl).to.not.be.undefined;
+      it('has a scope with a controller object', function() {
+        var controller = getEditorController();
+        expect(controller).to.not.be.undefined;
       });
 
       it('uses a static backdrop', function() {
@@ -104,9 +104,9 @@
     });
 
     describe('opening the editor', function() {
-      var ctrl;
+      var controller;
       beforeEach(function() {
-        ctrl = getEditorCtrl();
+        controller = getEditorController();
       });
 
       it('does not show the editor if the modal is not ready', function() {
@@ -122,29 +122,29 @@
 
       it('sets the mode to whatever is passed', function() {
         serviceUnderTest.open(mockUser, 'edit');
-        expect(ctrl.mode).to.equal('edit');
+        expect(controller.mode).to.equal('edit');
         serviceUnderTest.open(mockUser, 'create');
-        expect(ctrl.mode).to.equal('create');
+        expect(controller.mode).to.equal('create');
       });
 
       it('sets the title to "Edit User" if mode is "edit"', function() {
         serviceUnderTest.open(mockUser, 'edit');
-        expect(ctrl.title).to.equal('Edit User');
+        expect(controller.title).to.equal('Edit User');
       });
 
       it('sets the title to "Create User" if mode is "create"', function() {
         serviceUnderTest.open(mockUser, 'create');
-        expect(ctrl.title).to.equal('Create User');
+        expect(controller.title).to.equal('Create User');
       });
 
       it('sets the button label to "Save" if mode is "edit"', function() {
         serviceUnderTest.open(mockUser, 'edit');
-        expect(ctrl.saveLabel).to.equal('Save');
+        expect(controller.saveLabel).to.equal('Save');
       });
 
       it('sets the button label to "Create" if mode is "create"', function() {
         serviceUnderTest.open(mockUser, 'create');
-        expect(ctrl.saveLabel).to.equal('Create');
+        expect(controller.saveLabel).to.equal('Create');
       });
 
       it('populates the model for the editor', function() {
@@ -152,29 +152,29 @@
         mockUser.lastName = 'Jackson';
         mockUser.username = 'email@me.com';
         serviceUnderTest.open(mockUser, 'Anything');
-        expect(ctrl.model).to.not.equal(mockUser);
-        expect(ctrl.model.firstName).to.equal('Billy');
-        expect(ctrl.model.lastName).to.equal('Jackson');
-        expect(ctrl.model.username).to.equal('email@me.com');
+        expect(controller.model).to.not.equal(mockUser);
+        expect(controller.model.firstName).to.equal('Billy');
+        expect(controller.model.lastName).to.equal('Jackson');
+        expect(controller.model.username).to.equal('email@me.com');
       });
 
       it('sets isAdministrator in the editor model if the user has the admin role', function() {
         mockUser.roles = ['admin'];
         serviceUnderTest.open(mockUser, 'Anything');
-        expect(ctrl.model.isAdministrator).to.be.true;
+        expect(controller.model.isAdministrator).to.be.true;
       });
 
       it('clears isAdministrator in the editor model if the user does not have the admin role', function() {
         serviceUnderTest.open(mockUser, 'Anything');
-        expect(ctrl.model.isAdministrator).to.be.false;
+        expect(controller.model.isAdministrator).to.be.false;
       });
     });
 
     describe('saving', function() {
-      var ctrl;
+      var controller;
       var callback;
       beforeEach(function() {
-        ctrl = getEditorCtrl();
+        controller = getEditorController();
         callback = sinon.stub();
       });
 
@@ -184,12 +184,12 @@
         });
 
         it('copies data back to the resource', function() {
-          ctrl.model.firstName = 'Wilma';
-          ctrl.model.lastName = 'Rubble';
-          ctrl.model.username = 'wife@swap.com';
-          ctrl.model.password = 'spiceItUpABit';
-          ctrl.model.isAdministrator = false;
-          ctrl.save();
+          controller.model.firstName = 'Wilma';
+          controller.model.lastName = 'Rubble';
+          controller.model.username = 'wife@swap.com';
+          controller.model.password = 'spiceItUpABit';
+          controller.model.isAdministrator = false;
+          controller.save();
           expect(mockUser.firstName).to.equal('Wilma');
           expect(mockUser.lastName).to.equal('Rubble');
           expect(mockUser.username).to.equal('wife@swap.com');
@@ -198,12 +198,12 @@
         });
 
         it('adds the admin role if isAdministrator', function() {
-          ctrl.model.firstName = 'Wilma';
-          ctrl.model.lastName = 'Rubble';
-          ctrl.model.username = 'wife@swap.com';
-          ctrl.model.password = 'spiceItUpABit';
-          ctrl.model.isAdministrator = true;
-          ctrl.save();
+          controller.model.firstName = 'Wilma';
+          controller.model.lastName = 'Rubble';
+          controller.model.username = 'wife@swap.com';
+          controller.model.password = 'spiceItUpABit';
+          controller.model.isAdministrator = true;
+          controller.save();
           expect(mockUser.firstName).to.equal('Wilma');
           expect(mockUser.lastName).to.equal('Rubble');
           expect(mockUser.username).to.equal('wife@swap.com');
@@ -212,26 +212,26 @@
         });
 
         it('calls $update on the resource', function() {
-          ctrl.save();
+          controller.save();
           expect(mockUser.$update.calledOnce).to.be.true;
           expect(mockUser.$save.called).to.be.false;
         });
 
         it('notifies the user on success', function() {
-          ctrl.save();
+          controller.save();
           mockUser.$update.callArg(0);
           expect(mockNotifier.notify.calledOnce).to.be.true;
           expect(mockNotifier.notify.calledWith('Changes to user saved successfully')).to.be.true;
         });
 
         it('closes on success', function() {
-          ctrl.save();
+          controller.save();
           mockUser.$update.callArg(0);
           expect(mockModal.hide.calledOnce).to.be.true;
         });
 
         it('notifies the user on failure', function() {
-          ctrl.save();
+          controller.save();
           mockUser.$update.callArg(1, {
             data: 'You are a sucky sucky failure'
           });
@@ -240,7 +240,7 @@
         });
 
         it('does not close on failure', function() {
-          ctrl.save();
+          controller.save();
           mockUser.$update.callArg(1, {
             data: 'You are a sucky sucky failure'
           });
@@ -254,11 +254,11 @@
         });
 
         it('copies data back to the resource', function() {
-          ctrl.model.firstName = 'Betty';
-          ctrl.model.lastName = 'Flintstone';
-          ctrl.model.username = 'wife.swap@too.com';
-          ctrl.model.password = 'spiceItUpABit';
-          ctrl.save();
+          controller.model.firstName = 'Betty';
+          controller.model.lastName = 'Flintstone';
+          controller.model.username = 'wife.swap@too.com';
+          controller.model.password = 'spiceItUpABit';
+          controller.save();
           expect(mockUser.firstName).to.equal('Betty');
           expect(mockUser.lastName).to.equal('Flintstone');
           expect(mockUser.username).to.equal('wife.swap@too.com');
@@ -266,26 +266,26 @@
         });
 
         it('calls $save on the resource', function() {
-          ctrl.save();
+          controller.save();
           expect(mockUser.$update.called).to.be.false;
           expect(mockUser.$save.calledOnce).to.be.true;
         });
 
         it('notifies the user on success', function() {
-          ctrl.save();
+          controller.save();
           mockUser.$save.callArg(0);
           expect(mockNotifier.notify.calledOnce).to.be.true;
           expect(mockNotifier.notify.calledWith('User created successfully')).to.be.true;
         });
 
         it('closes on success', function() {
-          ctrl.save();
+          controller.save();
           mockUser.$save.callArg(0);
           expect(mockModal.hide.calledOnce).to.be.true;
         });
 
         it('notifies the user on failure', function() {
-          ctrl.save();
+          controller.save();
           mockUser.$save.callArg(1, {
             data: 'You are a sucky sucky failure'
           });
@@ -294,7 +294,7 @@
         });
 
         it('does not close on failure', function() {
-          ctrl.save();
+          controller.save();
           mockUser.$save.callArg(1, {
             data: 'You are a sucky sucky failure'
           });
@@ -309,7 +309,7 @@
 
         it('is called if specified and save succeeds', function() {
           serviceUnderTest.open(mockUser, 'create', callback);
-          ctrl.save();
+          controller.save();
           mockUser.$save.callArg(0);
           expect(callback.calledOnce).to.be.true;
           expect(callback.calledWith(mockUser)).to.be.true;
@@ -317,14 +317,14 @@
 
         it('is not called if not specified but save succeeds', function() {
           serviceUnderTest.open(mockUser, 'create');
-          ctrl.save();
+          controller.save();
           mockUser.$save.callArg(0);
           expect(callback.called).to.be.false;
         });
 
         it('is not called if specified but save fails', function() {
           serviceUnderTest.open(mockUser, 'create', callback);
-          ctrl.save();
+          controller.save();
           mockUser.$save.callArg(1, {
             data: 'You are a sucky sucky failure'
           });

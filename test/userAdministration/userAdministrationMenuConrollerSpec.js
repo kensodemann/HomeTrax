@@ -15,11 +15,11 @@
       it('Should set the identity to the injected identity object', function() {
         var mockIdentity = {};
 
-        var ctrl = $controllerConstructor('userAdministrationMenuCtrl', {
+        var controller = $controllerConstructor('userAdministrationMenuController', {
           identity: mockIdentity
         });
 
-        expect(ctrl.identity).to.equal(mockIdentity);
+        expect(controller.identity).to.equal(mockIdentity);
       });
     });
   });

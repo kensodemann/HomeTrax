@@ -33,7 +33,7 @@
         $routeProvider.when(route.path, {
           templateUrl: route.templateUrl,
           controller: route.controller,
-          controllerAs: 'ctrl',
+          controllerAs: 'controller',
           resolve: route.resolve
         });
       }

@@ -1,9 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.auth').controller('loginCtrl', LoginCtrl);
+  angular.module('homeTrax.auth').controller('loginController', LoginController);
 
-  function LoginCtrl($location, authService, notifier) {
+  function LoginController($location, authService, notifier) {
     var self = this;
     self.signin = function(username, password) {
       authService.authenticateUser(username, password).then(handleResult);
