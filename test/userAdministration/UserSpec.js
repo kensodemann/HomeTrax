@@ -1,10 +1,10 @@
-/* global beforeEach describe expect inject it sinon */
 (function() {
   'use strict';
 
   describe('User', function() {
+    var config;
     var httpBackend;
-    var serviceUnderTest;
+    var User;
     var scope;
     var testData;
 
@@ -30,31 +30,22 @@
 
     beforeEach(module('app.userAdministration'));
 
-    beforeEach(function() {
-      var mockConfig = {
-        dataService: 'http://something'
-      };
-
-      module(function($provide) {
-        $provide.value('config', mockConfig);
-      });
-    });
-
-    beforeEach(inject(function($rootScope, $httpBackend, User) {
+    beforeEach(inject(function($rootScope, $httpBackend, _config_, _User_) {
       scope = $rootScope;
       httpBackend = $httpBackend;
-      serviceUnderTest = User;
+      config = _config_;
+      User = _User_;
     }));
 
     it('exists', function() {
-      expect(serviceUnderTest).to.not.be.undefined;
+      expect(User).to.not.be.undefined;
     });
 
     describe('query', function() {
       it('gets the data', function() {
-        httpBackend.expectGET('http://something/users')
-          .respond(testData);
-        var res = serviceUnderTest.query({});
+        httpBackend.expectGET(config.dataService + '/users')
+            .respond(testData);
+        var res = User.query({});
         httpBackend.flush();
 
         expect(res.length).to.equal(5);
@@ -64,18 +55,18 @@
       });
 
       it('returns the color defined for the user if defined', function() {
-        httpBackend.expectGET('http://something/users')
-          .respond(testData);
-        var res = serviceUnderTest.query({});
+        httpBackend.expectGET(config.dataService + '/users')
+            .respond(testData);
+        var res = User.query({});
         httpBackend.flush();
 
         expect(res[2].color).to.equal('#ff0000');
       });
 
       it('defaults the color if it is not defined', function() {
-        httpBackend.expectGET('http://something/users')
-          .respond(testData);
-        var res = serviceUnderTest.query({});
+        httpBackend.expectGET(config.dataService + '/users')
+            .respond(testData);
+        var res = User.query({});
         httpBackend.flush();
 
         expect(res[0].color).to.equal('#3a87ad');

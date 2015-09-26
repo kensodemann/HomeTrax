@@ -1,8 +1,8 @@
-/* global beforeEach describe expect inject it sinon */
 (function() {
   'use strict';
 
   describe('identity', function() {
+    var config;
     var identity;
     var httpBackend;
     var mockCacheBuster;
@@ -13,29 +13,26 @@
       mockCacheBuster = {
         value: 'SomeBusterOfCache'
       };
-      var mockConfig = {
-        dataService: 'http://somedataservice'
-      };
 
       module(function($provide) {
         $provide.value('cacheBuster', mockCacheBuster);
-        $provide.value('config', mockConfig);
       });
     });
 
-    beforeEach(inject(function($httpBackend, _identity_) {
+    beforeEach(inject(function($httpBackend, _config_, _identity_) {
+      config = _config_;
       identity = _identity_;
       httpBackend = $httpBackend;
     }));
 
     describe('instantiation', function() {
       it('queries the API for the current user', function() {
-        httpBackend.expectGET('http://somedataservice/currentUser?_=SomeBusterOfCache').respond({});
+        httpBackend.expectGET(config.dataService + '/currentUser?_=SomeBusterOfCache').respond({});
         httpBackend.flush();
       });
 
       it('sets the current user to the ', function() {
-        httpBackend.expectGET('http://somedataservice/currentUser?_=SomeBusterOfCache').respond({
+        httpBackend.expectGET(config.dataService + '/currentUser?_=SomeBusterOfCache').respond({
           _id: 42,
           name: 'Ford Prefect'
         });

@@ -9,7 +9,7 @@
 
   // @ifndef DEBUG
   angular.module('app.core').constant('config', {
-    dataService: 'https://hometraxdata-kensodemann.rhcloud.com/'
+    dataService: 'https://hometraxdata-kensodemann.rhcloud.com'
   });
   // @endif
 }());
