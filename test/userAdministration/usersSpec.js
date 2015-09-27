@@ -10,7 +10,7 @@
 
     var serviceUnderTest;
 
-    beforeEach(module('app.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration'));
 
     beforeEach(buildMocks);
     beforeEach(provideMocks);

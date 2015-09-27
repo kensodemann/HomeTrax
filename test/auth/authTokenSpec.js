@@ -5,7 +5,7 @@
     var mockLocalStorageService;
     var authToken;
 
-    beforeEach(module('app.auth'));
+    beforeEach(module('homeTrax.auth'));
 
     beforeEach(function() {
       mockLocalStorageService = sinon.stub({

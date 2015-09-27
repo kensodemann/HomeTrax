@@ -2,13 +2,13 @@
 (function() {
   'use strict';
 
-  angular.module('app').constant('mainRoutes', [{
+  angular.module('homeTrax.main').constant('mainRoutes', [{
     path: '/',
     templateUrl: 'app/main/templates/main.html',
-    controller: 'mainCtrl'
+    controller: 'mainController'
   }, {
     path: '/about',
     templateUrl: 'app/main/templates/about.html',
-    controller: 'aboutCtrl'
+    controller: 'aboutController'
   }]);
 })();

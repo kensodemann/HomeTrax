@@ -1,13 +1,13 @@
 (function() {
   'use strict';
 
-  angular.module('app.core').directive('matchesValue', function() {
+  angular.module('homeTrax.common.validations').directive('matchesValue', function() {
     return {
       require: 'ngModel',
       restrict: 'A',
-      link: function(scope, elem, attrs, ctrl) {
+      link: function(scope, elem, attrs, ngModelController) {
         function validate(value1, value2) {
-          ctrl.$setValidity('matchesValue', value1 === value2);
+          ngModelController.$setValidity('matchesValue', value1 === value2);
         }
 
         scope.$watch(attrs.ngModel, function(newValue) {
@@ -15,7 +15,7 @@
         });
 
         attrs.$observe('matchesValue', function(newValue) {
-          validate(newValue || '', ctrl.$modelValue || '');
+          validate(newValue || '', ngModelController.$modelValue || '');
         });
       }
     };
