@@ -1,7 +1,5 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.main', [
-    'homeTrax.common.resources'
-  ]);
+  angular.module('homeTrax.main', ['ngRoute']);
 }());

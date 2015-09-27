@@ -1,11 +1,11 @@
-/* global angular */
 (function() {
   'use strict';
 
   angular.module('homeTrax.auth', [
-    'homeTrax.common',
-    'homeTrax.userAdministration',
-    'ngResource',
-    'mgcrea.ngStrap'
+    'homeTrax.common.core',
+    'homeTrax.common.resources',
+    'homeTrax.common.services.cacheBuster',
+    'homeTrax.common.services.notifier',
+    'ngRoute'
   ]);
 }());

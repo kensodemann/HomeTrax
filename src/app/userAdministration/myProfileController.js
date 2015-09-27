@@ -1,7 +1,15 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.userAdministration').controller('myProfileController', MyProfileController);
+  angular.module('homeTrax.userAdministration')
+    .controller('myProfileController', MyProfileController)
+    .config(function($routeProvider){
+      $routeProvider.when('/userAdministration/myprofile', {
+        templateUrl: 'app/userAdministration/templates/myProfile.html',
+        controller: 'myProfileController',
+        controllerAs: 'controller'
+      });
+    });
 
   function MyProfileController(User, identity, passwordEditor, notifier) {
     var controller = this;

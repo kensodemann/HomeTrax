@@ -12,6 +12,7 @@ module.exports = function(config) {
       componentPaths.lib.jquery.dev,
       componentPaths.lib.angular.dev,
       componentPaths.lib.angularResource.dev,
+      componentPaths.lib.angularRoute.dev,
       componentPaths.lib.angularStrap.dev,
       componentPaths.lib.angularMocks.dev,
       componentPaths.lib.moment.dev,

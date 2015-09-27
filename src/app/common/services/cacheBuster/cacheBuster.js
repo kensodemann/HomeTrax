@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.services').factory('cacheBuster', CacheBuster);
+  angular.module('homeTrax.common.services.cacheBuster').factory('cacheBuster', CacheBuster);
 
   function CacheBuster() {
     return {

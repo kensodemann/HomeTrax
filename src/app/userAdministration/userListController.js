@@ -1,7 +1,15 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.userAdministration').controller('userListController', UserListController);
+  angular.module('homeTrax.userAdministration')
+    .controller('userListController', UserListController)
+    .config(function($routeProvider) {
+      $routeProvider.when('/userAdministration/userlist', {
+        templateUrl: 'app/userAdministration/templates/userList.html',
+        controller: 'userListController',
+        controllerAs: 'controller'
+      });
+    });
 
   function UserListController(User, userEditor) {
     var self = this;

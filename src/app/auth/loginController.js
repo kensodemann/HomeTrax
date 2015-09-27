@@ -1,7 +1,15 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.auth').controller('loginController', LoginController);
+  angular.module('homeTrax.auth')
+    .controller('loginController', LoginController)
+    .config(function($routeProvider) {
+      $routeProvider.when('/login', {
+        templateUrl: 'app/auth/templates/login.html',
+        controller: 'loginController',
+        controllerAs: 'controller'
+      });
+    });
 
   function LoginController($location, authService, notifier) {
     var self = this;

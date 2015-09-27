@@ -3,11 +3,11 @@
   'use strict';
 
   angular.module('homeTrax', [
+    'homeTrax.about',
     'homeTrax.auth',
     'homeTrax.main',
     'homeTrax.userAdministration',
-    'LocalStorageModule',
-    'ngRoute'
+    'LocalStorageModule'
   ]);
 
   angular.module('homeTrax')
@@ -16,28 +16,8 @@
       .config(services)
       .run(routeErrorHandling);
 
-  function routes($routeProvider, $locationProvider,
-                  mainRoutes, authRoutes, userAdministrationRoutes) {
+  function routes($locationProvider) {
     $locationProvider.html5Mode(true);
-
-    setupRoutes(mainRoutes);
-    setupRoutes(authRoutes);
-    setupRoutes(userAdministrationRoutes);
-
-    function setupRoutes(routes) {
-      angular.forEach(routes, function(route) {
-        createRoute(route);
-      });
-
-      function createRoute(route) {
-        $routeProvider.when(route.path, {
-          templateUrl: route.templateUrl,
-          controller: route.controller,
-          controllerAs: 'controller',
-          resolve: route.resolve
-        });
-      }
-    }
   }
 
   function auth($httpProvider) {
