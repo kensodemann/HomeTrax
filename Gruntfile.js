@@ -27,12 +27,7 @@ module.exports = function(grunt) {
       componentPaths.lib.angularRoute.dev,
       componentPaths.lib.angularStrap.dev,
       componentPaths.lib.angularStrapTpl.dev,
-      componentPaths.lib.angularUiCalendar.dev,
       componentPaths.lib.moment.dev,
-      componentPaths.lib.fullCalendar.dev,
-      componentPaths.lib.bloodhound.dev,
-      componentPaths.lib.typeahead.dev,
-      componentPaths.lib.angularTypeahead.dev,
       componentPaths.lib.angularAnimate.dev
     ],
     libRelease: [
@@ -46,12 +41,7 @@ module.exports = function(grunt) {
       componentPaths.lib.angularRoute.release,
       componentPaths.lib.angularStrap.release,
       componentPaths.lib.angularStrapTpl.release,
-      componentPaths.lib.angularUiCalendar.release,
       componentPaths.lib.moment.release,
-      componentPaths.lib.fullCalendar.release,
-      componentPaths.lib.bloodhound.release,
-      componentPaths.lib.typeahead.release,
-      componentPaths.lib.angularTypeahead.release,
       componentPaths.lib.angularAnimate.release
     ]
   };

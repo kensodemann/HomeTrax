@@ -15,8 +15,6 @@ module.exports = function(config) {
       componentPaths.lib.angularStrap.dev,
       componentPaths.lib.angularMocks.dev,
       componentPaths.lib.moment.dev,
-      componentPaths.lib.fullCalendar.dev,
-      componentPaths.lib.bloodhound.dev,
 
       'test/test-app.js',
       'src/app/**/module.js',
