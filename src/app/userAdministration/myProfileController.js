@@ -1,23 +1,24 @@
-/* global angular */
 (function() {
   'use strict';
 
   angular.module('homeTrax.userAdministration').controller('myProfileController', MyProfileController);
 
   function MyProfileController(User, identity, passwordEditor, notifier) {
-    var self = this;
+    var controller = this;
 
-    self.model = currentUser();
-    self.reset = reset;
-    self.save = saveUser;
-    self.openPasswordEditor = openPasswordEditor;
+    controller.model = undefined;
+    controller.reset = reset;
+    controller.save = saveUser;
+    controller.openPasswordEditor = openPasswordEditor;
+
+    activate();
 
     function reset() {
-      self.model = currentUser();
+      fetchUserModel();
     }
 
     function saveUser() {
-      self.model.$update(success, error);
+      controller.model.$update(success, error);
 
       function success() {
         notifier.notify('Profile modifications saved successfully');
@@ -29,12 +30,20 @@
     }
 
     function openPasswordEditor() {
-      passwordEditor.open(identity.currentUser._id);
+      identity.get().then(function(user) {
+        passwordEditor.open(user._id);
+      });
     }
 
-    function currentUser() {
-      return User.get({
-        id: identity.currentUser._id
+    function activate() {
+      fetchUserModel();
+    }
+
+    function fetchUserModel() {
+      identity.get().then(function(user) {
+        controller.model = User.get({
+          id: user._id
+        });
       });
     }
   }
