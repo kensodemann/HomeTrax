@@ -187,7 +187,7 @@ module.exports = function(grunt) {
           'server.js',
           'src/app/**/*.js',
           'src/style/**/*.scss',
-          'src/index.html',
+          'src/**/*.html',
           'src/preprocessedSources/config.js',
           '!src/app/common/core/config.js',
           'test/**/*.js'],
