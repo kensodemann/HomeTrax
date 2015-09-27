@@ -4,7 +4,7 @@
 
   angular.module('homeTrax.auth').factory('identity', Identity);
 
-  function Identity($http, config, cacheBuster) {
+  function Identity($http, config, authToken, cacheBuster) {
     var exports = {
       currentUser: undefined,
       isAuthenticated: isAuthenticated,
@@ -23,11 +23,12 @@
     }
 
     function isAuthenticated() {
-      return !!exports.currentUser;
+      return !!authToken.get();
     }
 
     function isAuthorized(role) {
-      return isAuthenticated() && (!role || (!!exports.currentUser.roles && exports.currentUser.roles.indexOf(role) > -1));
+      return isAuthenticated() &&
+        (!role || (!! exports.currentUser && !!exports.currentUser.roles && exports.currentUser.roles.indexOf(role) > -1));
     }
   }
 }());

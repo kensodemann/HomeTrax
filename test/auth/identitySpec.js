@@ -5,6 +5,7 @@
     var config;
     var identity;
     var httpBackend;
+    var mockAuthToken;
     var mockCacheBuster;
 
     beforeEach(module('homeTrax.auth'));
@@ -13,8 +14,18 @@
       mockCacheBuster = {
         value: 'SomeBusterOfCache'
       };
+    });
 
+    beforeEach(function() {
+      mockAuthToken = sinon.stub({
+        get: function() {
+        }
+      });
+    });
+
+    beforeEach(function() {
       module(function($provide) {
+        $provide.value('authToken', mockAuthToken);
         $provide.value('cacheBuster', mockCacheBuster);
       });
     });
@@ -45,24 +56,25 @@
     });
 
     describe('isAuthenticated', function() {
-      it('returns false if there is no user', function() {
-        identity.currentUser = undefined;
+      it('returns false if there is no token', function() {
+        mockAuthToken.get.returns(null);
         expect(identity.isAuthenticated()).to.be.false;
       });
 
-      it('returns true if there is a user', function() {
-        identity.currentUser = {};
+      it('returns true if there is a token', function() {
+        mockAuthToken.get.returns('Something');
         expect(identity.isAuthenticated()).to.be.true;
       });
     });
 
     describe('isAuthorized', function() {
       it('returns false if there is no user', function() {
-        identity.currentUser = undefined;
+        mockAuthToken.get.returns(null);
         expect(identity.isAuthorized('')).to.be.false;
       });
 
-      it('returns false if there is a user, but user does not have role', function() {
+      it('returns false if there is an authorized user, but user does not have role', function() {
+        mockAuthToken.get.returns('Something');
         identity.currentUser = {
           _id: 'something',
           roles: ['user', 'cook']
@@ -70,7 +82,8 @@
         expect(identity.isAuthorized('admin')).to.be.false;
       });
 
-      it('returns true if there is a user, and user does have role', function() {
+      it('returns true if there is an authorized user, and user does have role', function() {
+        mockAuthToken.get.returns('Something');
         identity.currentUser = {
           _id: 'something',
           roles: ['user', 'cook', 'admin']
@@ -78,7 +91,8 @@
         expect(identity.isAuthorized('admin')).to.be.true;
       });
 
-      it('returns true if there is a user, and no role is required', function() {
+      it('returns true if there is an authorized user, and no role is required', function() {
+        mockAuthToken.get.returns('Something');
         identity.currentUser = {
           _id: 'something',
           roles: ['user', 'cook', 'admin']
@@ -88,6 +102,7 @@
       });
 
       it('returns false if a role is required but the user does not have any roles', function() {
+        mockAuthToken.get.returns('Something');
         identity.currentUser = {
           _id: 'something'
         };
@@ -95,6 +110,7 @@
       });
 
       it('returns true if a role is not required and the user does not have any roles', function() {
+        mockAuthToken.get.returns('Something');
         identity.currentUser = {
           _id: 'something'
         };
