@@ -6,6 +6,7 @@
     'homeTrax.about',
     'homeTrax.auth',
     'homeTrax.main',
+    'homeTrax.projects',
     'homeTrax.userAdministration',
     'LocalStorageModule'
   ]);
