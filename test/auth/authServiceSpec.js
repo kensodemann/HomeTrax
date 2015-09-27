@@ -27,6 +27,11 @@
       });
 
       mockIdentity = sinon.stub({
+        set:function(){},
+
+        clear:function(){
+        },
+
         isAuthenticated: function() {
         },
 
@@ -66,11 +71,14 @@
         })).to.be.true;
       });
 
-      it('Resolves True and Sets Current User if login succeeds', function(done) {
+      it('Resolves True and sets the identity if login succeeds', function(done) {
         authService.authenticateUser('jimmy', 'CrakzKorn').then(function(result) {
           expect(result).to.be.true;
-          expect(mockIdentity.currentUser.firstName).to.equal('James');
-          expect(mockIdentity.currentUser.lastName).to.equal('Jones');
+          expect(mockIdentity.set.calledOnce).to.be.true;
+          expect(mockIdentity.set.calledWith({
+            firstName: 'James',
+            lastName: 'Jones'
+          })).to.be.true;
           done();
         });
 
@@ -104,10 +112,10 @@
         expect(mockAuthToken.set.calledWith('IAmToken')).to.be.true;
       });
 
-      it('Resolves False and does not set Current User if login fails', function(done) {
+      it('Resolves False and does not set the identity if login fails', function(done) {
         authService.authenticateUser('jimmy', 'CrakzKorn').then(function(result) {
           expect(result).to.be.false;
-          expect(mockIdentity.currentUser).to.be.undefined;
+          expect(mockIdentity.set.called).to.be.false;
           done();
         });
 
@@ -158,12 +166,8 @@
       });
 
       it('Clears the current user when logout complete', function(done) {
-        mockIdentity.currentUser = {
-          firstName: 'James',
-          lastName: 'Jones'
-        };
         authService.logoutUser().then(function() {
-          expect(mockIdentity.currentUser).to.be.undefined;
+          expect(mockIdentity.clear.calledOnce).to.be.true;
           done();
         });
 

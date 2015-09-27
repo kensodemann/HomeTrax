@@ -1,9 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.auth').factory('authToken', AuthToken);
+  angular.module('homeTrax.auth').factory('authToken', authToken);
 
-  function AuthToken(localStorageService) {
+  function authToken(localStorageService) {
     var key = 'authToken';
     var cachedToken = null;
 

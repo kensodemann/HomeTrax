@@ -1,4 +1,3 @@
-/* global beforeEach describe expect inject it sinon */
 (function() {
   'use strict';
 
@@ -7,63 +6,64 @@
 
     var controller;
     var $controllerConstructor;
-    var mockColors;
     var mockIdentity;
     var mockNotifier;
     var mockPasswordEditor;
     var mockUserResource;
     var mockUser;
 
-    beforeEach(inject(function($controller) {
+    var identityGetDfd;
+    var scope;
+
+    beforeEach(inject(function($controller, $rootScope, $q) {
       $controllerConstructor = $controller;
+      scope = $rootScope.$new();
+      identityGetDfd = $q.defer();
 
       createMocks();
       createController();
     }));
 
     function createMocks() {
-      buildMockColors();
       buildMockIdentity();
       buildMockNotifier();
       buildMockPasswordEditor();
       buildMockUser();
 
-      function buildMockColors() {
-        mockColors = {
-          eventColors: [1, 2, 3],
-          userColors: [4, 5, 6]
-        };
-      }
-
       function buildMockIdentity() {
         mockIdentity = sinon.stub({
-          currentUser: {
-            _id: '123456789009876543211234'
+          get: function() {
           }
         });
+        mockIdentity.get.returns(identityGetDfd.promise);
       }
 
       function buildMockNotifier() {
         mockNotifier = sinon.stub({
-          error: function() {},
+          error: function() {
+          },
 
-          notify: function() {}
+          notify: function() {
+          }
         });
       }
 
       function buildMockPasswordEditor() {
         mockPasswordEditor = sinon.stub({
-          open: function() {}
+          open: function() {
+          }
         });
       }
 
       function buildMockUser() {
         mockUser = sinon.stub({
-          $update: function() {}
+          $update: function() {
+          }
         });
 
         mockUserResource = sinon.stub({
-          get: function() {}
+          get: function() {
+          }
         });
         mockUserResource.get.returns(mockUser);
       }
@@ -74,36 +74,48 @@
         User: mockUserResource,
         identity: mockIdentity,
         passwordEditor: mockPasswordEditor,
-        notifier: mockNotifier,
-        colors: mockColors
+        notifier: mockNotifier
       });
     }
 
     describe('Initialization', function() {
-      it('Gets the currently logged in user', function() {
+      it('Gets the current identity', function() {
+        expect(mockIdentity.get.calledOnce).to.be.true;
+      });
+
+      it('Gets the user resource after the identity is known', function() {
+        expect(mockUserResource.get.called).to.be.false;
+        identityGetDfd.resolve({_id: 1234});
+        scope.$digest();
         expect(mockUserResource.get.calledOnce).to.be.true;
-        expect(mockUserResource.get.calledWith({
-          id: '123456789009876543211234'
-        })).to.be.true;
-        expect(controller.model).to.equal(mockUser);
+        expect(mockUserResource.get.calledWith({id: 1234})).to.be.true;
       });
     });
 
     describe('Reset', function() {
+      beforeEach(function() {
+        identityGetDfd.resolve({_id: 4313});
+        scope.$digest();
+      });
+
       it('Gets the data for the currently logged in user', function() {
         controller.model = undefined;
 
         controller.reset();
+        identityGetDfd.resolve({_id: 1234});
+        scope.$digest();
 
         expect(mockUserResource.get.calledTwice).to.be.true;
-        expect(mockUserResource.get.calledWith({
-          id: '123456789009876543211234'
-        })).to.be.true;
         expect(controller.model).to.equal(mockUser);
       });
     });
 
     describe('Save', function() {
+      beforeEach(function() {
+        identityGetDfd.resolve({_id: 4313});
+        scope.$digest();
+      });
+
       it('updates the data', function() {
         controller.save();
         expect(mockUser.$update.calledOnce).to.be.true;
@@ -133,8 +145,10 @@
     describe('Changing Password', function() {
       it('opens the password editor', function() {
         controller.openPasswordEditor();
+        identityGetDfd.resolve({_id: 4313});
+        scope.$digest();
         expect(mockPasswordEditor.open.calledOnce).to.be.true;
-        expect(mockPasswordEditor.open.calledWithExactly('123456789009876543211234')).to.be.true;
+        expect(mockPasswordEditor.open.calledWithExactly(4313)).to.be.true;
       });
     });
   });

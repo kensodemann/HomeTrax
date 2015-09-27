@@ -12,7 +12,7 @@
     function logout() {
       authService.logoutUser().then(navigateToLogin);
 
-      function navigateToLogin(){
+      function navigateToLogin() {
         $location.path('/login');
       }
     }

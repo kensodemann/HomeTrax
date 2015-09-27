@@ -14,7 +14,7 @@
           if (response.data.success) {
             var u = new User();
             angular.extend(u, response.data.user);
-            identity.currentUser = u;
+            identity.set(u);
             authToken.set(response.data.token);
             dfd.resolve(true);
           } else {
@@ -31,7 +31,7 @@
         $http.post(config.dataService + '/logout', {
           logout: true
         }).then(function() {
-          identity.currentUser = undefined;
+          identity.clear();
           dfd.resolve();
         });
 
