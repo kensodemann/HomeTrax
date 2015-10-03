@@ -6,16 +6,6 @@ module.exports = function(grunt) {
   var componentPaths = require('./conf/component-paths');
 
   var paths = {
-    css: [
-      componentPaths.css.angularMotion.dev,
-      componentPaths.css.bootstrapAdditions.dev,
-      componentPaths.css.fullcalendar.dev
-    ],
-    cssRelease: [
-      componentPaths.css.angularMotion.release,
-      componentPaths.css.bootstrapAdditions.release,
-      componentPaths.css.fullcalendar.release
-    ],
     lib: [
       componentPaths.lib.jquery.dev,
       componentPaths.lib.bootstrap.dev,
@@ -25,8 +15,7 @@ module.exports = function(grunt) {
       componentPaths.lib.angularMessages.dev,
       componentPaths.lib.angularResource.dev,
       componentPaths.lib.angularRoute.dev,
-      componentPaths.lib.angularStrap.dev,
-      componentPaths.lib.angularStrapTpl.dev,
+      componentPaths.lib.angularBootstrapUI.dev,
       componentPaths.lib.moment.dev,
       componentPaths.lib.angularAnimate.dev
     ],
@@ -39,8 +28,7 @@ module.exports = function(grunt) {
       componentPaths.lib.angularMessages.release,
       componentPaths.lib.angularResource.release,
       componentPaths.lib.angularRoute.release,
-      componentPaths.lib.angularStrap.release,
-      componentPaths.lib.angularStrapTpl.release,
+      componentPaths.lib.angularBootstrapUI.release,
       componentPaths.lib.moment.release,
       componentPaths.lib.angularAnimate.release
     ]
@@ -108,14 +96,6 @@ module.exports = function(grunt) {
     },
 
     concat: {
-      css: {
-        src: paths.css,
-        dest: 'www/libs.css'
-      },
-      cssRelease: {
-        src: paths.cssRelease,
-        dest: 'www/libs.css'
-      },
       lib: {
         src: paths.lib,
         dest: 'www/libs.js'
@@ -219,7 +199,6 @@ module.exports = function(grunt) {
     'copy',
     'preprocess:dev',
     'sass',
-    'concat:css',
     'concat:lib',
     'concat:homeTrax',
     'ngAnnotate'
@@ -230,7 +209,6 @@ module.exports = function(grunt) {
     'copy',
     'preprocess:dist',
     'sass',
-    'concat:cssRelease',
     'concat:libRelease',
     'concat:homeTrax',
     'ngAnnotate',

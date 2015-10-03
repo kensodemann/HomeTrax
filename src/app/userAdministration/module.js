@@ -4,6 +4,5 @@
   angular.module('homeTrax.userAdministration', [
     'ngRoute',
     'homeTrax.auth',
-    'homeTrax.common.resources',
-    'mgcrea.ngStrap']);
+    'homeTrax.common.resources']);
 }());
