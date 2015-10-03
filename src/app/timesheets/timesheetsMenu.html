@@ -1,0 +1,8 @@
+<ul ng-controller="timesheetsMenuController as controller" class="nav navbar-nav">
+  <li>
+    <a href="/timesheets/current" ng-show="controller.identity.isAuthenticated()">This Week</a>
+  </li>
+  <li>
+    <a href="/timesheets/list" ng-show="controller.identity.isAuthenticated()">Past Weeks</a>
+  </li>
+</ul>
