@@ -19,8 +19,8 @@ module.exports = {
       release: 'bower_components/angular-animate/angular-animate.js'
     },
     angularBootstrapUI: {
-      dev: 'bower_components/angular-bootstrap/ui-bootstrap.js',
-      release: 'bower_components/angular-bootstrap/ui-bootstrap.min.js'
+      dev: 'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      release: 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
     },
     angularLocalStorage: {
       dev: 'bower_components/angular-local-storage/dist/angular-local-storage.js',
