@@ -2,8 +2,11 @@
   'use strict';
 
   angular.module('homeTrax.userAdministration', [
+    'ngMessages',
     'ngRoute',
     'homeTrax.auth',
     'homeTrax.common.resources',
-    'mgcrea.ngStrap']);
+    'homeTrax.common.validations',
+    'ui.bootstrap'
+  ]);
 }());

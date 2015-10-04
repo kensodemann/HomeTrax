@@ -1,20 +1,6 @@
 /*jshint node: true */
 
 module.exports = {
-  css: {
-    angularMotion: {
-      dev: 'bower_components/angular-motion/dist/angular-motion.css',
-      release: 'bower_components/angular-motion/dist/angular-motion.min.css'
-    },
-    bootstrapAdditions: {
-      dev: 'bower_components/bootstrap-additions/dist/bootstrap-additions.css',
-      release: 'bower_components/bootstrap-additions/dist/bootstrap-additions.min.css'
-    },
-    fullcalendar: {
-      dev: 'bower_components/fullcalendar/dist/fullcalendar.css',
-      release: 'bower_components/fullcalendar/dist/fullcalendar.min.css'
-    }
-  },
   lib: {
     jquery: {
       dev: 'bower_components/jquery/dist/jquery.js',
@@ -32,6 +18,10 @@ module.exports = {
       dev: 'bower_components/angular-animate/angular-animate.js',
       release: 'bower_components/angular-animate/angular-animate.js'
     },
+    angularBootstrapUI: {
+      dev: 'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      release: 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
+    },
     angularLocalStorage: {
       dev: 'bower_components/angular-local-storage/dist/angular-local-storage.js',
       release: 'bower_components/angular-local-storage/dist/angular-local-storage.min.js'
@@ -47,14 +37,6 @@ module.exports = {
     angularRoute: {
       dev: 'bower_components/angular-route/angular-route.js',
       release: 'bower_components/angular-route/angular-route.min.js'
-    },
-    angularStrap: {
-      dev: 'bower_components/angular-strap/dist/angular-strap.js',
-      release: 'bower_components/angular-strap/dist/angular-strap.min.js'
-    },
-    angularStrapTpl: {
-      dev: 'bower_components/angular-strap/dist/angular-strap.tpl.js',
-      release: 'bower_components/angular-strap/dist/angular-strap.tpl.min.js'
     },
     angularMocks: {
       dev: 'bower_components/angular-mocks/angular-mocks.js'
