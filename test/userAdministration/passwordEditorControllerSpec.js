@@ -33,7 +33,7 @@
 
     beforeEach(function() {
       mockUserPassword = sinon.stub({
-        $update: function() {
+        $save: function() {
         }
       });
       mockUserPasswordConstructor = sinon.stub();
@@ -70,21 +70,21 @@
       it('updates the user password', function() {
         var controller = createController(42);
         controller.save();
-        expect(mockUserPassword.$update.calledOnce).to.be.true;
+        expect(mockUserPassword.$save.calledOnce).to.be.true;
       });
 
       describe('on success', function() {
         it('notifies the user', function() {
           var controller = createController();
           controller.save();
-          mockUserPassword.$update.yield();
+          mockUserPassword.$save.yield();
           expect(mockNotifier.notify.calledOnce).to.be.true;
         });
 
         it('closes the dialog', function() {
           var controller = createController();
           controller.save();
-          mockUserPassword.$update.yield();
+          mockUserPassword.$save.yield();
           expect(mockModalInstance.close.calledOnce).to.be.true;
         });
       });
@@ -93,7 +93,7 @@
         it('notifies the user', function() {
           var controller = createController();
           controller.save();
-          mockUserPassword.$update.callArgWith(1, {
+          mockUserPassword.$save.callArgWith(1, {
             data: {
               reason: 'Because you suck eggs'
             }
@@ -105,7 +105,7 @@
         it('sets an error message in the editor dialog', function() {
           var controller = createController();
           controller.save();
-          mockUserPassword.$update.callArgWith(1, {
+          mockUserPassword.$save.callArgWith(1, {
             data: {
               reason: 'Because you suck eggs'
             }
