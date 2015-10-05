@@ -7,11 +7,6 @@
   function User($resource, config) {
     var UserResource = $resource(config.dataService + '/users/:id', {
       id: '@_id'
-    }, {
-      update: {
-        method: 'PUT',
-        isArray: false
-      }
     });
 
     // TODO: this is nice, but look at getting rid of it.  Leave it in for now
