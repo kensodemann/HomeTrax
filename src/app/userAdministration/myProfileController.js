@@ -26,7 +26,7 @@
     }
 
     function saveUser() {
-      controller.model.$update(success, error);
+      controller.model.$save(success, error);
 
       function success() {
         notifier.notify('Profile modifications saved successfully');

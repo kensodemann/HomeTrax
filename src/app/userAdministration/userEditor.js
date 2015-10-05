@@ -66,7 +66,7 @@
           userResource.$save(success, error);
         }
         else {
-          userResource.$update(success, error);
+          userResource.$save(success, error);
         }
 
         function success() {

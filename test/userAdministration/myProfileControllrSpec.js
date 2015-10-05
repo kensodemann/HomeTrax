@@ -57,7 +57,7 @@
 
       function buildMockUser() {
         mockUser = sinon.stub({
-          $update: function() {
+          $save: function() {
           }
         });
 
@@ -118,19 +118,19 @@
 
       it('updates the data', function() {
         controller.save();
-        expect(mockUser.$update.calledOnce).to.be.true;
+        expect(mockUser.$save.calledOnce).to.be.true;
       });
 
       it('notifies the user upon success', function() {
         controller.save();
-        mockUser.$update.callArg(0);
+        mockUser.$save.callArg(0);
         expect(mockNotifier.notify.calledOnce).to.be.true;
         expect(mockNotifier.notify.calledWith('Profile modifications saved successfully'));
       });
 
       it('notifies the user upon error', function() {
         controller.save();
-        mockUser.$update.callArgWith(1, {
+        mockUser.$save.callArgWith(1, {
           status: 400,
           statusText: 'something went wrong',
           data: {

@@ -57,9 +57,7 @@
 
       function buildMockUser() {
         mockUser = sinon.stub({
-          $save: function() {},
-
-          $update: function() {}
+          $save: function() {}
         });
       }
     });
@@ -211,28 +209,27 @@
           expect(mockUser.roles).to.deep.equal(['admin']);
         });
 
-        it('calls $update on the resource', function() {
+        it('calls $save on the resource', function() {
           controller.save();
-          expect(mockUser.$update.calledOnce).to.be.true;
-          expect(mockUser.$save.called).to.be.false;
+          expect(mockUser.$save.calledOnce).to.be.true;
         });
 
         it('notifies the user on success', function() {
           controller.save();
-          mockUser.$update.callArg(0);
+          mockUser.$save.callArg(0);
           expect(mockNotifier.notify.calledOnce).to.be.true;
           expect(mockNotifier.notify.calledWith('Changes to user saved successfully')).to.be.true;
         });
 
         it('closes on success', function() {
           controller.save();
-          mockUser.$update.callArg(0);
+          mockUser.$save.callArg(0);
           expect(mockModal.hide.calledOnce).to.be.true;
         });
 
         it('notifies the user on failure', function() {
           controller.save();
-          mockUser.$update.callArg(1, {
+          mockUser.$save.callArg(1, {
             data: 'You are a sucky sucky failure'
           });
           expect(mockNotifier.error.calledOnce).to.be.true;
@@ -241,7 +238,7 @@
 
         it('does not close on failure', function() {
           controller.save();
-          mockUser.$update.callArg(1, {
+          mockUser.$save.callArg(1, {
             data: 'You are a sucky sucky failure'
           });
           expect(mockModal.hide.called).to.be.false;
@@ -267,7 +264,6 @@
 
         it('calls $save on the resource', function() {
           controller.save();
-          expect(mockUser.$update.called).to.be.false;
           expect(mockUser.$save.calledOnce).to.be.true;
         });
 
