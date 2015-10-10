@@ -11,17 +11,17 @@
       });
     });
 
-  function UserListController(User, userEditor) {
+  function UserListController(User, userEditor, EditorMode) {
     var self = this;
 
     self.users = User.query();
 
     self.edit = function(user) {
-      userEditor.open(user, 'edit');
+      userEditor.open(user, EditorMode.edit);
     };
 
     self.create = function() {
-      userEditor.open(new User(), 'create', addNewUser);
+      userEditor.open(new User(), EditorMode.create, addNewUser);
 
       function addNewUser(user) {
         self.users.push(user);

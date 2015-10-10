@@ -10,21 +10,21 @@
 
     beforeEach(function() {
       testData = [{
-        UserId: '1',
-        TestTag: 1
+        userId: '1',
+        testTag: 1
       }, {
-        UserId: '2',
-        TestTag: 2
+        userId: '2',
+        testTag: 2
       }, {
-        UserId: '3',
-        TestTag: 4,
+        userId: '3',
+        testTag: 4,
         color: '#ff0000'
       }, {
-        UserId: '4',
-        TestTag: 5
+        userId: '4',
+        testTag: 5
       }, {
-        UserId: '5',
-        TestTag: 7
+        userId: '5',
+        testTag: 7
       }];
     });
 
@@ -44,19 +44,19 @@
     describe('query', function() {
       it('gets the data', function() {
         httpBackend.expectGET(config.dataService + '/users')
-            .respond(testData);
+          .respond(testData);
         var res = User.query({});
         httpBackend.flush();
 
         expect(res.length).to.equal(5);
-        expect(res[0].TestTag).to.equal(1);
-        expect(res[2].TestTag).to.equal(4);
-        expect(res[4].TestTag).to.equal(7);
+        expect(res[0].testTag).to.equal(1);
+        expect(res[2].testTag).to.equal(4);
+        expect(res[4].testTag).to.equal(7);
       });
 
       it('returns the color defined for the user if defined', function() {
         httpBackend.expectGET(config.dataService + '/users')
-            .respond(testData);
+          .respond(testData);
         var res = User.query({});
         httpBackend.flush();
 
@@ -65,11 +65,42 @@
 
       it('defaults the color if it is not defined', function() {
         httpBackend.expectGET(config.dataService + '/users')
-            .respond(testData);
+          .respond(testData);
         var res = User.query({});
         httpBackend.flush();
 
         expect(res[0].color).to.equal('#3a87ad');
+      });
+    });
+
+    describe('is administrator', function() {
+      it('is false if the user has no roles', function() {
+        var user = new User({
+          userId: '42',
+          firstName: 'Douglas',
+          lastName: 'Adams'
+        });
+        expect(user.isAdministrator()).to.be.false;
+      });
+
+      it('is false if the user does not have the role', function() {
+        var user = new User({
+          userId: '42',
+          firstName: 'Douglas',
+          lastName: 'Adams',
+          roles: ['butcher', 'baker', 'candlestickmaker']
+        });
+        expect(user.isAdministrator()).to.be.false;
+      });
+
+      it('is trie if the user has the role', function() {
+        var user = new User({
+          userId: '42',
+          firstName: 'Douglas',
+          lastName: 'Adams',
+          roles: ['butcher', 'baker', 'admin', 'candlestickmaker']
+        });
+        expect(user.isAdministrator()).to.be.true;
       });
     });
   });

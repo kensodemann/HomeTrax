@@ -17,7 +17,7 @@
       mockModal.open.returns(mockModalInstance);
 
       module(function($provide) {
-        $provide.value('$modal', mockModal);
+        $provide.value('$uibModal', mockModal);
       });
     });
 

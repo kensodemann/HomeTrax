@@ -10,11 +10,14 @@
     var mockUserConstructor;
     var mockUserEditor;
 
+    var EditorMode;
+
     beforeEach(module('homeTrax.userAdministration'));
 
-    beforeEach(inject(function($controller, $q) {
+    beforeEach(inject(function($controller, $q, _EditorMode_) {
       $controllerConstructor = $controller;
       q = $q;
+      EditorMode = _EditorMode_;
     }));
 
     beforeEach(function() {
@@ -54,7 +57,7 @@
         expect(mockUserConstructor.query.called).to.be.true;
       });
 
-      it('assigns the results to the users', function(){
+      it('assigns the results to the users', function() {
         mockUserConstructor.query.returns('Results of the query');
         var controller = createController();
         expect(controller.users).to.equal('Results of the query');
@@ -73,7 +76,7 @@
         };
         controller.edit(user);
         expect(mockUserEditor.open.calledOnce).to.be.true;
-        expect(mockUserEditor.open.calledWithExactly(user, 'edit')).to.be.true;
+        expect(mockUserEditor.open.calledWithExactly(user, EditorMode.edit)).to.be.true;
       });
     });
 
@@ -83,7 +86,7 @@
         controller = createController();
       });
 
-      it('news up a user resource', function(){
+      it('news up a user resource', function() {
         controller.create();
         expect(mockUserConstructor.calledOnce).to.be.true;
       });
@@ -91,9 +94,9 @@
       it('opens the editor', function() {
         controller.create();
         expect(mockUserEditor.open.calledOnce).to.be.true;
-        expect(mockUserEditor.open.calledWith(mockUser, 'create')).to.be.true;
+        expect(mockUserEditor.open.calledWith(mockUser, EditorMode.create)).to.be.true;
       });
-      
+
       it('pushes the new user', function() {
         mockUserConstructor.query.returns([1, 2, 3, 4, 5, 6]);
         var controller = createController();

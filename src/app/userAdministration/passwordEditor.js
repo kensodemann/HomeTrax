@@ -5,13 +5,13 @@
     .factory('passwordEditor', passwordEditor)
     .controller('passwordEditorController', PasswordEditorController);
 
-  function passwordEditor($modal) {
+  function passwordEditor($uibModal) {
     return {
       open: open
     };
 
     function open(id) {
-      return $modal.open({
+      return $uibModal.open({
         templateUrl: 'app/userAdministration/templates/passwordEditor.html',
         backdrop: 'static',
         controller: 'passwordEditorController',
