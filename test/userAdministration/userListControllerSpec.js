@@ -1,4 +1,3 @@
-/* global beforeEach describe expect inject it sinon */
 (function() {
   'use strict';
 

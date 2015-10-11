@@ -6,8 +6,11 @@
       <div><input placeholder="Email" ng-model="controller.username" class="form-control"/></div>
       <div><input type="password" placeholder="Password" ng-model="controller.password" class="form-control"/></div>
       <div>
-        <button ng-click="controller.signin(controller.username, controller.password)" class="btn btn-lg btn-block btn-primary">Sign In
-        </button>
+        <ht-wait-button wait-click="controller.signin(controller.username, controller.password)"
+                        wait-busy="controller.isLoggingIn"
+                        class="btn btn-lg btn-block btn-primary"
+                        ng-disabled="!controller.username || controller.isLoggingIn">Sign In
+        </ht-wait-button>
       </div>
     </fieldset>
   </form>

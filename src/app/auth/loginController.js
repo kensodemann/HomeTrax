@@ -14,9 +14,11 @@
   function LoginController($location, authService, notifier) {
     var self = this;
     self.signin = function(username, password) {
-      authService.authenticateUser(username, password).then(handleResult);
+      var p = authService.authenticateUser(username, password);
+      p.then(handleResult);
+      return p;
 
-      function handleResult(success){
+      function handleResult(success) {
         if (success) {
           notifier.notify('Welcome Home!');
           $location.path('/').replace();

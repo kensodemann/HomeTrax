@@ -55,7 +55,7 @@ module.exports = {
     }
   },
   fonts: {
-    fontAwesome: 'bower_components/fontawesome/fonts',
+    fontAwesome: 'bower_components/font-awesome/fonts',
     bootstrap: 'bower_components/bootstrap-sass/assets/fonts'
   }
 };

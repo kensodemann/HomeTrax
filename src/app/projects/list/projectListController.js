@@ -11,6 +11,18 @@
       });
     });
 
-  function ProjectListController() {
+  function ProjectListController(Project) {
+    var controller = this;
+
+    controller.isQuerying = true;
+    controller.projects = Project.query();
+
+    activate();
+
+    function activate() {
+      controller.projects.$promise.finally(function(){
+        controller.isQuerying = false;
+      });
+    }
   }
 }());
