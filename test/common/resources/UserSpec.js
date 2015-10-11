@@ -103,5 +103,45 @@
         expect(user.isAdministrator()).to.be.true;
       });
     });
+
+    describe('addRole', function() {
+      it('adds the role if the user does not already have it', function() {
+        var user = new User({
+          userId: 73,
+          roles: ['wholeWheat', 'buttered', 'sweet']
+        });
+        user.addRole('dinner');
+        expect(user.roles).to.deep.equal(['wholeWheat', 'buttered', 'sweet', 'dinner']);
+      });
+
+      it('does not add the role if the user already has it', function() {
+        var user = new User({
+          userId: 73,
+          roles: ['wholeWheat', 'buttered', 'sweet']
+        });
+        user.addRole('sweet');
+        expect(user.roles).to.deep.equal(['wholeWheat', 'buttered', 'sweet']);
+      });
+    });
+
+    describe('removeRole', function() {
+      it('removes the role if the user has it', function() {
+        var user = new User({
+          userId: 73,
+          roles: ['wholeWheat', 'buttered', 'sweet']
+        });
+        user.removeRole('buttered');
+        expect(user.roles).to.deep.equal(['wholeWheat', 'sweet']);
+      });
+
+      it('does nothing if the user does not already have that role', function() {
+        var user = new User({
+          userId: 73,
+          roles: ['wholeWheat', 'buttered', 'sweet']
+        });
+        user.removeRole('dinner');
+        expect(user.roles).to.deep.equal(['wholeWheat', 'buttered', 'sweet']);
+      });
+    });
   });
 }());

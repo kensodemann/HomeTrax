@@ -95,6 +95,16 @@
         var controller = createController(testUser, EditorMode.edit);
         expect(controller.title).to.equal('Edit User');
       });
+
+      it('sets the mode if when in edit mode', function() {
+        var controller = createController(testUser, EditorMode.edit);
+        expect(controller.mode).to.equal(EditorMode.edit);
+      });
+
+      it('sets the mode if when in create mode', function() {
+        var controller = createController(testUser, EditorMode.create);
+        expect(controller.mode).to.equal(EditorMode.create);
+      });
     });
 
     describe('saving a user', function() {
@@ -105,9 +115,48 @@
           lastName: 'Peachtree',
           username: 'bp@email.com',
           isAdministrator: sinon.stub(),
-          $save: sinon.stub()
+          $save: sinon.stub(),
+          addRole:sinon.stub(),
+          removeRole:sinon.stub()
         };
         testUser.isAdministrator.returns(false);
+      });
+
+      it('copies the first name back to the user before saving', function() {
+        var controller = createController(testUser);
+        controller.firstName = 'Jimmy';
+        controller.save();
+        expect(testUser.firstName).to.equal('Jimmy');
+      });
+
+      it('copies the last name back to the user before saving', function() {
+        var controller = createController(testUser);
+        controller.lastName = 'Pearbush';
+        controller.save();
+        expect(testUser.lastName).to.equal('Pearbush');
+      });
+
+      it('copies the last name back to the user before saving', function() {
+        var controller = createController(testUser);
+        controller.username = 'jp@morgan.com';
+        controller.save();
+        expect(testUser.username).to.equal('jp@morgan.com');
+      });
+
+      it('adds the admin role if it is not there and user selected as admin', function() {
+        var controller = createController(testUser);
+        controller.isAdministrator = true;
+        controller.save();
+        expect(testUser.addRole.calledOnce).to.be.true;
+        expect(testUser.addRole.calledWith('admin')).to.be.true;
+      });
+
+      it('removes the admin role if it is there and user not selected as admin', function() {
+        var controller = createController(testUser);
+        controller.isAdministrator = false;
+        controller.save();
+        expect(testUser.removeRole.calledOnce).to.be.true;
+        expect(testUser.removeRole.calledWith('admin')).to.be.true;
       });
 
       it('saves the user', function() {

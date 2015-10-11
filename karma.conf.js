@@ -17,6 +17,7 @@ module.exports = function(config) {
       componentPaths.lib.angularBootstrapUI.dev,
       componentPaths.lib.angularMocks.dev,
       componentPaths.lib.moment.dev,
+      componentPaths.lib.underscore.dev,
 
       'test/test-app.js',
       'src/app/**/module.js',

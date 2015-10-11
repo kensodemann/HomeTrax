@@ -17,7 +17,8 @@ module.exports = function(grunt) {
       componentPaths.lib.angularRoute.dev,
       componentPaths.lib.angularBootstrapUI.dev,
       componentPaths.lib.moment.dev,
-      componentPaths.lib.angularAnimate.dev
+      componentPaths.lib.angularAnimate.dev,
+      componentPaths.lib.underscore.dev
     ],
     libRelease: [
       componentPaths.lib.jquery.release,
@@ -30,7 +31,8 @@ module.exports = function(grunt) {
       componentPaths.lib.angularRoute.release,
       componentPaths.lib.angularBootstrapUI.release,
       componentPaths.lib.moment.release,
-      componentPaths.lib.angularAnimate.release
+      componentPaths.lib.angularAnimate.release,
+      componentPaths.lib.underscore.release
     ]
   };
 

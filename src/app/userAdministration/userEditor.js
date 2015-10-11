@@ -38,11 +38,13 @@
     controller.lastName = user.lastName;
     controller.username = user.username;
     controller.isAdministrator = user.isAdministrator();
-    controller.title = mode === EditorMode.create ? 'Create User' : 'Edit User';
+    controller.title = (mode === EditorMode.create ? 'Create User' : 'Edit User');
+    controller.mode = mode;
     controller.errorMessage = undefined;
     controller.save = save;
 
     function save() {
+      updateUserResource();
       user.$save(success, failure);
 
       function success() {
@@ -53,6 +55,17 @@
       function failure(response) {
         notifier.error(response.data.reason);
         controller.errorMessage = response.data.reason;
+      }
+
+      function updateUserResource() {
+        user.firstName = controller.firstName;
+        user.lastName = controller.lastName;
+        user.username = controller.username;
+        if (controller.isAdministrator) {
+          user.addRole('admin');
+        } else {
+          user.removeRole('admin');
+        }
       }
     }
   }
