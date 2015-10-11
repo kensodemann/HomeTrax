@@ -2,34 +2,57 @@
   'use strict';
 
   describe('projectListController', function() {
+    var mockModalInstance;
     var mockProject;
+    var mockProjectConstructor;
+    var mockProjectEditor;
+
     var $controllerConstructor;
+    var EditorMode;
 
     var queryDfd;
+    var resultDfd;
     var scope;
     var testProjects;
 
     beforeEach(module('homeTrax.projects.list'));
 
-    beforeEach(inject(function($rootScope, $controller, $q) {
+    beforeEach(inject(function($rootScope, $controller, $q, _EditorMode_) {
       scope = $rootScope.$new();
       $controllerConstructor = $controller;
       queryDfd = $q.defer();
+      resultDfd = $q.defer();
+      EditorMode = _EditorMode_;
     }));
 
     beforeEach(initializeTestData);
 
     beforeEach(function() {
-      mockProject = sinon.stub({
-        query: function() {
+      mockProject = {};
+      mockProjectConstructor = sinon.stub();
+      mockProjectConstructor.returns(mockProject);
+      mockProjectConstructor.query = sinon.stub();
+      mockProjectConstructor.query.returns(testProjects);
+    });
+
+    beforeEach(function() {
+      mockModalInstance = {
+        result: resultDfd.promise
+      };
+    });
+
+    beforeEach(function() {
+      mockProjectEditor = sinon.stub({
+        open: function() {
         }
       });
-      mockProject.query.returns(testProjects);
+      mockProjectEditor.open.returns(mockModalInstance);
     });
 
     function createController() {
       return $controllerConstructor('projectListController', {
-        Project: mockProject
+        Project: mockProjectConstructor,
+        projectEditor: mockProjectEditor
       });
     }
 
@@ -46,7 +69,7 @@
 
       it('queries the projects', function() {
         createController();
-        expect(mockProject.query.calledOnce).to.be.true;
+        expect(mockProjectConstructor.query.calledOnce).to.be.true;
       });
 
       it('assigns the projects', function() {
@@ -54,12 +77,69 @@
         expect(controller.projects).to.deep.equal(testProjects);
       });
 
-      it('clears the "is querying" flag when the query completes', function(){
+      it('clears the "is querying" flag when the query completes', function() {
         var controller = createController();
         queryDfd.resolve();
         scope.$digest();
         expect(controller.isQuerying).to.be.false;
       })
+    });
+
+    describe('creating a new project', function() {
+      var controller;
+      beforeEach(function() {
+        controller = createController();
+        queryDfd.resolve();
+        scope.$digest();
+      });
+
+      it('creates a new project resource', function() {
+        controller.newProject();
+        expect(mockProjectConstructor.calledOnce).to.be.true;
+      });
+
+      it('opens the project editor', function() {
+        controller.newProject();
+        expect(mockProjectEditor.open.calledOnce).to.be.true;
+      });
+
+      it('passes the new project to the editor, opened in create mode', function() {
+        controller.newProject();
+        expect(mockProjectEditor.open.calledWith(mockProject, EditorMode.create));
+      });
+
+      it('adds the project to the list if it is saved', function() {
+        controller.newProject();
+        resultDfd.resolve({
+          _id: 6,
+          name: 'The New One'
+        });
+        scope.$digest();
+        expect(controller.projects.length).to.equal(6);
+        expect(controller.projects[5]).to.deep.equal({
+          _id: 6,
+          name: 'The New One'
+        })
+      });
+    });
+
+    describe('modifying an existing project', function() {
+      var controller;
+      beforeEach(function() {
+        controller = createController();
+        queryDfd.resolve();
+        scope.$digest();
+      });
+
+      it('opens the editor', function() {
+        controller.editProject(testProjects[3]);
+        expect(mockProjectEditor.open.calledOnce).to.be.true;
+      });
+
+      it('opens the editor in edit mode passing the specified project', function() {
+        controller.editProject(testProjects[3]);
+        expect(mockProjectEditor.open.calledWith(testProjects[3], EditorMode.edit)).to.be.true;
+      });
     });
 
     function initializeTestData() {

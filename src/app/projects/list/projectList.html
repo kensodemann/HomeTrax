@@ -2,7 +2,7 @@
   <div class="subheader">
     <form class="form-inline">
       <div class="form-group">
-        <button ng-click="controller.create()" class="btn btn-default"><i class="fa fa-lg fa-plus"></i> Add Project
+        <button ng-click="controller.newProject()" class="btn btn-default"><i class="fa fa-lg fa-plus"></i> Add Project
         </button>
       </div>
 
@@ -42,7 +42,7 @@
         <td ng-bind="project.name"></td>
         <td ng-bind="project.jiraTaskId"></td>
         <td ng-bind="project.sbvbTaskId"></a></td>
-        <td><i class="fa fa-lg fa-pencil-square-o"></i></td>
+        <td><i class="fa fa-lg fa-pencil-square-o" ng-click="controller.editProject(project)"></i></td>
       </tr>
       </tbody>
     </table>

@@ -166,7 +166,7 @@
       });
 
       describe('on success', function() {
-        it('closes the editor', function() {
+        it('closes the edit', function() {
           var controller = createController(testUser);
           controller.save();
           testUser.$save.yield();
@@ -198,7 +198,7 @@
       });
 
       describe('on failure', function() {
-        it('does not close the editor', function() {
+        it('does not close the edit', function() {
           var controller = createController(testUser);
           controller.save();
           testUser.$save.callArgWith(1, {

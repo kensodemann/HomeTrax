@@ -27,9 +27,6 @@
     function buildMockUser() {
       mockUser = sinon.stub({
         $save: function() {
-        },
-
-        $update: function() {
         }
       });
       mockUserConstructor = sinon.stub().returns(mockUser);
@@ -69,7 +66,7 @@
         controller = createController();
       });
 
-      it('opens the editor', function() {
+      it('opens the edit', function() {
         var user = {
           name: 'Fred Flintstone'
         };
@@ -90,7 +87,7 @@
         expect(mockUserConstructor.calledOnce).to.be.true;
       });
 
-      it('opens the editor', function() {
+      it('opens the edit', function() {
         controller.create();
         expect(mockUserEditor.open.calledOnce).to.be.true;
         expect(mockUserEditor.open.calledWith(mockUser, EditorMode.create)).to.be.true;

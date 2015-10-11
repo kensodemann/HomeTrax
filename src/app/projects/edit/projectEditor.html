@@ -1,0 +1,76 @@
+<div class="modal-header">
+  <button type="button" ng-click="$dismiss()" aria-hidden="true" class="close">&times;</button>
+  <h4 class="modal-title" ng-bind="controller.title"></h4></div>
+<div class="modal-body">
+  <form name="editor" class="form-horizontal">
+    <div class="form-group">
+      <label for="name" class="col-md-3 control-label">Name</label>
+
+      <div class="col-md-9">
+        <input id="name"
+               name="name"
+               class="form-control"
+               type="text"
+               ng-model="controller.name"
+               required="required"/>
+
+        <div ng-messages="editor.name.$error" role="alert">
+          <div ng-messages-include="app/common/templates/errorMessages.html"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="jiraTaskId" class="col-md-3 control-label">JIRA Task ID</label>
+
+      <div class="col-md-9">
+        <input id="jiraTaskId"
+               name="jiraTaskId"
+               class="form-control"
+               type="text"
+               ng-model="controller.jiraTaskId"/>
+
+        <div ng-messages="editor.jiraTaskId.$error" role="alert">
+          <div ng-messages-include="app/common/templates/errorMessages.html"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="sbvbTaskId" class="col-md-3 control-label">SBVB Task ID</label>
+
+      <div class="col-md-9">
+        <input id="sbvbTaskId"
+               name="sbvbTaskId"
+               class="form-control"
+               type="text"
+               ng-model="controller.sbvbTaskId"/>
+
+        <div ng-messages="editor.sbvbTaskId.$error" role="alert">
+          <div ng-messages-include="app/common/templates/errorMessages.html"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col md-9 col-md-offset-3">
+        <div class="checkbox-group">
+          <input type="checkbox" ng-model="controller.isActive"/><span>&nbsp;Active</span>
+        </div>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-offset-4 col-md-8 text-danger" ng-bind="controller.errorMessage"></div>
+    </div>
+  </form>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" ng-click="$dismiss()" class="btn btn-default">Close</button>
+  <ht-wait-button wait-click="controller.save()"
+                  wait-busy="controller.isSaving"
+                  class="btn btn-primary"
+                  ng-disabled="editor.$invalid || controller.isSaving">Save
+  </ht-wait-button>
+</div>

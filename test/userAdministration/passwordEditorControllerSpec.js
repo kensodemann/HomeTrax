@@ -102,7 +102,7 @@
           expect(mockNotifier.error.calledWith('Because you suck eggs')).to.be.true;
         });
 
-        it('sets an error message in the editor dialog', function() {
+        it('sets an error message in the edit dialog', function() {
           var controller = createController();
           controller.save();
           mockUserPassword.$save.callArgWith(1, {

@@ -143,7 +143,7 @@
     });
 
     describe('Changing Password', function() {
-      it('opens the password editor', function() {
+      it('opens the password edit', function() {
         controller.openPasswordEditor();
         identityGetDfd.resolve({_id: 4313});
         scope.$digest();
