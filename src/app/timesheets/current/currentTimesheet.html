@@ -1,4 +1,58 @@
-<section>
-  <h2>Current Timesheet</h2>
-  <h3>This view will show the current week's time entry</h3>
-</section>
+<div class="container">
+  <header>
+    <h2 class="text-center">Current Timesheet</h2>
+    <uib-tabset justified="true">
+      <uib-tab ng-repeat="day in controller.dates">
+        <uib-tab-heading>
+          <div ng-bind="day | date:'EEEE'"></div>
+          <div ng-bind="day | date:'mediumDate'"></div>
+        </uib-tab-heading>
+      </uib-tab>
+    </uib-tabset>
+  </header>
+
+  <section class="taskList">
+    <div class="row projectTimer" style="padding-top: 1em;">
+      <section class="col-md-9 taskDefinition">
+        <div class="title" style="font-weight: bold; font-size: large">[AA-101] Eat Cake (RFP14141)</div>
+        <div class="task">Programming</div>
+      </section>
+      <section class="col-md-1 timeSection">
+        <span class="pull-right" style="vertical-align: -40%;font-size: x-large">6:45</span>
+      </section>
+      <section class="col-md-2 timerControls">
+        <button class="btn btn-default" style="min-width: 80px"><i class="fa fa-clock-o"></i><span class="icon-label">Start</span></button>
+        <!--<button class="btn btn-default"><i class="fa fa-stop"></i>&nbsp;Stop</button>-->
+        <i class="fa fa-lg fa-pencil-square-o" style="padding-left: 1em"></i>
+      </section>
+    </div>
+    <div class="row projectTimer" style="padding-top: 1em;">
+      <section class="col-md-9 taskDefinition">
+        <div class="title" style="font-weight: bold; font-size: large">[AA-101] Eat Cake (RFP14141)</div>
+        <div class="task">Programming</div>
+      </section>
+      <section class="col-md-1 timeSection">
+        <span class="pull-right" style="vertical-align: -40%;font-size: x-large">6:45</span>
+      </section>
+      <section class="col-md-2 timerControls">
+        <!--<button class="btn btn-default"><i class="fa fa-clock-o"></i>&nbsp;Start</button>-->
+        <button class="btn btn-default" style="min-width: 80px"><i class="fa fa-stop"></i><span class="icon-label">Stop</span></button>
+        <i class="fa fa-lg fa-pencil-square-o" style="padding-left: 1em"></i>
+      </section>
+    </div>
+    <div class="row timerTotal" style="padding-top: 1em;">
+      <section class="col-md-9 taskDefinition">
+        <div class="title pull-right" style="font-weight: bold; font-size: x-large">Total Hours:</div>
+      </section>
+      <section class="col-md-1 timeSection">
+        <span class="pull-right" style="vertical-align: -40%;font-size: x-large">128:45</span>
+      </section>
+      <section class="col-md-2 padding">
+      </section>
+    </div>
+  </section>
+
+  <section class="pageControls" style="padding-top: 1em;">
+    <button class="btn btn-default"><i class="fa fa-lg fa-plus"></i><span class="icon-label">Add a timer</span></button>
+  </section>
+</div>
