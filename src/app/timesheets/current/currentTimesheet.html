@@ -12,34 +12,8 @@
   </header>
 
   <section class="taskList">
-    <div class="row projectTimer" style="padding-top: 1em;">
-      <section class="col-md-9 taskDefinition">
-        <div class="title" style="font-weight: bold; font-size: large">[AA-101] Eat Cake (RFP14141)</div>
-        <div class="task">Programming</div>
-      </section>
-      <section class="col-md-1 timeSection">
-        <span class="pull-right" style="vertical-align: -40%;font-size: x-large">6:45</span>
-      </section>
-      <section class="col-md-2 timerControls">
-        <button class="btn btn-default" style="min-width: 80px"><i class="fa fa-clock-o"></i><span class="icon-label">Start</span></button>
-        <!--<button class="btn btn-default"><i class="fa fa-stop"></i>&nbsp;Stop</button>-->
-        <i class="fa fa-lg fa-pencil-square-o" style="padding-left: 1em"></i>
-      </section>
-    </div>
-    <div class="row projectTimer" style="padding-top: 1em;">
-      <section class="col-md-9 taskDefinition">
-        <div class="title" style="font-weight: bold; font-size: large">[AA-101] Eat Cake (RFP14141)</div>
-        <div class="task">Programming</div>
-      </section>
-      <section class="col-md-1 timeSection">
-        <span class="pull-right" style="vertical-align: -40%;font-size: x-large">6:45</span>
-      </section>
-      <section class="col-md-2 timerControls">
-        <!--<button class="btn btn-default"><i class="fa fa-clock-o"></i>&nbsp;Start</button>-->
-        <button class="btn btn-default" style="min-width: 80px"><i class="fa fa-stop"></i><span class="icon-label">Stop</span></button>
-        <i class="fa fa-lg fa-pencil-square-o" style="padding-left: 1em"></i>
-      </section>
-    </div>
+    <ht-task-timer ng-repeat="task in controller.tasks" ht-task="task" ht-all-tasks="controller.tasks"></ht-task-timer>
+
     <div class="row timerTotal" style="padding-top: 1em;">
       <section class="col-md-9 taskDefinition">
         <div class="title pull-right" style="font-weight: bold; font-size: x-large">Total Hours:</div>
