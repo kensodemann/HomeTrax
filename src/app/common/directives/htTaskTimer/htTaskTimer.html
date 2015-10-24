@@ -4,7 +4,7 @@
     <div class="task" ng-bind="controller.htTask.task.name"></div>
   </section>
   <section class="col-md-1 timeSection">
-    <span class="pull-right" ng-bind="controller.htTask.seconds"></span>
+    <span class="pull-right" ng-bind="controller.htTask.milliseconds | hoursMinutes"></span>
   </section>
   <section class="col-md-2 timerControls">
     <button class="btn btn-default" ng-hide="controller.htTask.isActive"><i class="fa fa-clock-o"></i><span class="icon-label">Start</span></button>

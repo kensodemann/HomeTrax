@@ -29,7 +29,7 @@
       sbvbTaskId: 'RFP14141',
       jiraTaskId: 'AA-101',
       name: 'Drink Coffee',
-      seconds: 4392,
+      milliseconds: 4392000,
       isActive: true,
       task: {
         _id: '1234',
@@ -40,7 +40,7 @@
       sbvbTaskId: 'RFP14141',
       jiraTaskId: 'AA-102',
       name: 'Eat Cake',
-      seconds: 5891,
+      milliseconds: 5891000,
       isActive: false,
       task: {
         _id: '1235',
