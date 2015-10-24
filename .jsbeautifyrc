@@ -1,0 +1,11 @@
+{
+  "js": {
+    "indent_size": 2,
+    "space_in_paren": false,
+    "space_after_anon_function": false,
+    "break_chained_methods": true,
+    "keep_array_indentation": true,
+    "space_before_conditional": true,
+    "end_with_newline": true
+  }
+}
