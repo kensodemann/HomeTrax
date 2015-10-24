@@ -48,7 +48,9 @@
       beforeEach(function() {
         httpBackend.expectGET(config.dataService + '/projects/2')
           .respond(testData[1]);
-        res = project.get({id: 2});
+        res = project.get({
+          id: 2
+        });
         httpBackend.flush();
       });
 
@@ -75,7 +77,7 @@
       });
     });
 
-    function initializeTestData(){
+    function initializeTestData() {
       testData = [{
         _id: 1,
         name: 'Fred',
