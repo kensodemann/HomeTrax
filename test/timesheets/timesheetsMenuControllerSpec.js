@@ -23,12 +23,14 @@
 
     it('exists', function() {
       var controller = createController();
-      expect(controller).to.exist;
+      expect(controller)
+        .to.exist;
     });
 
     it('exposes the identity', function() {
       var controller = createController();
-      expect(controller.identity).to.equal(mockIdentity);
+      expect(controller.identity)
+        .to.equal(mockIdentity);
     });
   });
 }());

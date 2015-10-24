@@ -11,6 +11,5 @@
       });
     });
 
-  function TimesheetListController() {
-  }
+  function TimesheetListController() {}
 }());
