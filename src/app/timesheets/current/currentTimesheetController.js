@@ -14,7 +14,8 @@
   function CurrentTimesheetController(dateUtilities) {
     var controller = this;
 
-    controller.dates = dateUtilities.generateWeek(new Date());
+    var endDate = dateUtilities.weekEndDate(new Date());
+    controller.dates = dateUtilities.generateWeek(endDate);
 
     controller.tasks = [{
       _id: '88499584',

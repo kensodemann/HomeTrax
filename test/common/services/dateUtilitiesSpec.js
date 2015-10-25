@@ -98,5 +98,22 @@
         expect(days[6].isoDateString).to.equal('2015-10-31');
       });
     });
+
+    describe('week end date calculator', function() {
+      it('calculates today if Saturday is passed', function() {
+        var dt = dateUtilities.weekEndDate(new Date(2015, 9, 31));
+        expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-31');
+      });
+
+      it('calculates next Saturday if Sunday is passed', function() {
+        var dt = dateUtilities.weekEndDate(new Date(2015, 9, 25));
+        expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-31');
+      });
+
+      it('calculates next Saturday for any day in between', function() {
+        var dt = dateUtilities.weekEndDate(new Date(2015, 9, 21));
+        expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-24');
+      });
+    });
   });
 })();

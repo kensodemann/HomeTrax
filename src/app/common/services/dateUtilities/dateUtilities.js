@@ -10,7 +10,8 @@
     return {
       removeTimezoneOffset: removeTimezoneOffset,
       addTimezoneOffset: addTimezoneOffset,
-      generateWeek: generateWeek
+      generateWeek: generateWeek,
+      weekEndDate: weekEndDate
     };
 
     function removeTimezoneOffset(d) {
@@ -36,6 +37,11 @@
       }
 
       return days;
+    }
+
+    function weekEndDate(d) {
+      var offset = (moment(d).isoWeekday() === 7 ? 7 : 0);
+      return moment(d).isoWeekday(6 + offset);
     }
   }
 }());
