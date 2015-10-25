@@ -4,8 +4,8 @@
     <uib-tabset justified="true">
       <uib-tab ng-repeat="day in controller.dates">
         <uib-tab-heading>
-          <div ng-bind="day | date:'EEEE'"></div>
-          <div ng-bind="day | date:'mediumDate'"></div>
+          <div ng-bind="day.date | date:'EEEE'"></div>
+          <div ng-bind="day.date | date:'mediumDate'"></div>
         </uib-tab-heading>
       </uib-tab>
     </uib-tabset>
