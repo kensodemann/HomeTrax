@@ -11,8 +11,10 @@
       });
     });
 
-  function CurrentTimesheetController(dateUtilities) {
+  function CurrentTimesheetController(Timesheet, dateUtilities) {
     var controller = this;
+
+    activate();
 
     var endDate = dateUtilities.weekEndDate(new Date());
     controller.dates = dateUtilities.generateWeek(endDate);
@@ -40,5 +42,25 @@
         name: 'Eat'
       }
     }];
+
+    function activate() {
+      var weekEndDate = dateUtilities.weekEndDate(new Date()).toJSON().substring(0, 10);
+      Timesheet.query({
+        endDate: weekEndDate
+      }, success, error);
+
+      function success(timesheets) {
+        if (timesheets.length === 0) {
+          controller.timesheet = new Timesheet({
+            endDate: weekEndDate
+          });
+          controller.timesheet.$save();
+        } else {
+          controller.timesheet = timesheets[0];
+        }
+      }
+
+      function error() {}
+    }
   }
 }());
