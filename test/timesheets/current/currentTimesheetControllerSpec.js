@@ -2,28 +2,30 @@
   'use strict';
 
   describe('homeTrax.timesheets.current: currentTimesheetController', function() {
-    var mockTimesheet;
-    var mockTimesheetConstructor;
+    var mockTimesheets;
     var $controllerConstructor;
+
+    var getCurrentDfd;
+    var $rootScope;
 
     beforeEach(module('homeTrax.timesheets.current'));
 
-    beforeEach(inject(function($controller) {
+    beforeEach(inject(function($controller, $q, _$rootScope_) {
       $controllerConstructor = $controller;
+      getCurrentDfd = $q.defer();
+      $rootScope = _$rootScope_;
     }));
 
     beforeEach(function() {
-      mockTimesheetConstructor = sinon.stub();
-      mockTimesheet = sinon.stub({
-        $save: function() {}
+      mockTimesheets = sinon.stub({
+        getCurrent: function() {}
       });
-      mockTimesheetConstructor.returns(mockTimesheet);
-      mockTimesheetConstructor.query = sinon.stub();
+      mockTimesheets.getCurrent.returns(getCurrentDfd.promise);
     });
 
     function createController() {
       return $controllerConstructor('currentTimesheetController', {
-        Timesheet: mockTimesheetConstructor
+        timesheets: mockTimesheets
       });
     }
 
@@ -43,22 +45,22 @@
         clock.restore();
       });
 
-      it('attempts to get the current timesheet', function() {
+      it('gets the current timesheet', function() {
         createController();
-        expect(mockTimesheetConstructor.query.calledOnce).to.be.true;
-        expect(mockTimesheetConstructor.query.calledWith({
-          endDate: '2015-10-17'
-        })).to.be.true;
+        expect(mockTimesheets.getCurrent.calledOnce).to.be.true;
       });
 
-      it('creates a new timesheet if no timesheet is returned', function() {
+      it('assigns the resolved current period', function() {
         var controller = createController();
-        mockTimesheetConstructor.query.yield([]);
-        expect(mockTimesheetConstructor.calledOnce).to.be.true;
-        expect(mockTimesheetConstructor.calledWith({
-          endDate: '2015-10-17'
-        })).to.be.true;
-        expect(controller.timesheet).to.equal(mockTimesheet);
+        getCurrentDfd.resolve({
+          _id: 1,
+          endDate: '2015-10-15'
+        });
+        $rootScope.$digest();
+        expect(controller.timesheet).to.deep.equal({
+          _id: 1,
+          endDate: '2015-10-15'
+        });
       });
     });
   });

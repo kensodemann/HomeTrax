@@ -11,7 +11,7 @@
       });
     });
 
-  function CurrentTimesheetController(Timesheet, dateUtilities) {
+  function CurrentTimesheetController(dateUtilities, timesheets) {
     var controller = this;
 
     activate();
@@ -44,23 +44,9 @@
     }];
 
     function activate() {
-      var weekEndDate = dateUtilities.weekEndDate(new Date()).toJSON().substring(0, 10);
-      Timesheet.query({
-        endDate: weekEndDate
-      }, success, error);
-
-      function success(timesheets) {
-        if (timesheets.length === 0) {
-          controller.timesheet = new Timesheet({
-            endDate: weekEndDate
-          });
-          controller.timesheet.$save();
-        } else {
-          controller.timesheet = timesheets[0];
-        }
-      }
-
-      function error() {}
+      timesheets.getCurrent().then(function(current) {
+        controller.timesheet = current;
+      });
     }
   }
 }());
