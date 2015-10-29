@@ -4,7 +4,9 @@
   angular.module('homeTrax.auth').factory('identity', Identity);
 
   function Identity($http, $q, config, authToken, cacheBuster) {
-    var exports = {
+    var service = {
+      currentUser: undefined,
+
       get: getCurrentUser,
       set: setCurrentUser,
       clear: clearCurrentUser,
@@ -13,28 +15,28 @@
       isAuthorized: isAuthorized
     };
 
-    var currentUser;
+    service.get();
 
-    return exports;
+    return service;
 
     function getCurrentUser() {
-      if (!!currentUser) {
-        return $q.when(currentUser);
+      if (service.currentUser) {
+        return $q.when(service.currentUser);
       } else {
         return $http.get(config.dataService + '/currentUser', {params: {_: cacheBuster.value}})
           .then(function(response) {
-            currentUser = response.data;
+            service.currentUser = response.data;
             return response.data;
           });
       }
     }
 
     function setCurrentUser(user) {
-      currentUser = user;
+      service.currentUser = user;
     }
 
     function clearCurrentUser() {
-      currentUser = undefined;
+      service.currentUser = undefined;
     }
 
     function isAuthenticated() {
@@ -43,7 +45,7 @@
 
     function isAuthorized(role) {
       return isAuthenticated() &&
-        (!role || (!!currentUser && !!currentUser.roles && currentUser.roles.indexOf(role) > -1));
+        (!role || (!!service.currentUser && !!service.currentUser.roles && service.currentUser.roles.indexOf(role) > -1));
     }
   }
 }());

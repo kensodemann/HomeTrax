@@ -19,8 +19,7 @@
 
     beforeEach(function() {
       mockAuthToken = sinon.stub({
-        get: function() {
-        }
+        get: function() {}
       });
     });
 
@@ -38,25 +37,48 @@
       $rootScope = _$rootScope_;
     }));
 
+    beforeEach(function() {
+      httpBackend.expectGET(config.dataService + '/currentUser?_=SomeBusterOfCache').respond({
+        _id: 0,
+        name: 'The Initially Fetched User'
+      });
+      httpBackend.flush();
+    });
+
     afterEach(function() {
       httpBackend.verifyNoOutstandingExpectation();
       httpBackend.verifyNoOutstandingRequest();
     });
 
+    describe('instantiation', function() {
+      it('attempts to get the current user', function() {
+        expect(identity.currentUser).to.deep.equal({
+          _id: 0,
+          name: 'The Initially Fetched User'
+        });
+      });
+    });
+
     describe('get', function() {
       it('queries the API for the current user if it has not been set', function() {
+        identity.currentUser = undefined;
         httpBackend.expectGET(config.dataService + '/currentUser?_=SomeBusterOfCache').respond({});
         identity.get();
         httpBackend.flush();
       });
 
       it('resolves to the returned user', function(done) {
+        identity.currentUser = undefined;
         httpBackend.expectGET(config.dataService + '/currentUser?_=SomeBusterOfCache').respond({
           _id: 42,
           name: 'Ford Prefect'
         });
         identity.get().then(function(currentUser) {
           expect(currentUser).to.deep.equal({
+            _id: 42,
+            name: 'Ford Prefect'
+          });
+          expect(identity.currentUser).to.deep.equal({
             _id: 42,
             name: 'Ford Prefect'
           });
@@ -70,6 +92,10 @@
     describe('set', function(done) {
       it('sets the user so it is returned without querying the data service', function(done) {
         identity.set({
+          _id: 73,
+          name: 'Sheldon Cooper'
+        });
+        expect(identity.currentUser).to.deep.equal({
           _id: 73,
           name: 'Sheldon Cooper'
         });
