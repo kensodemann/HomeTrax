@@ -2,6 +2,7 @@
   'use strict';
 
   describe('homeTrax.timesheets.current: currentTimesheetController', function() {
+    var mockTaskTimer;
     var mockTimesheets;
     var $controllerConstructor;
 
@@ -17,6 +18,12 @@
     }));
 
     beforeEach(function() {
+      mockTaskTimer = sinon.stub({
+        query: function() {}
+      });
+    });
+
+    beforeEach(function() {
       mockTimesheets = sinon.stub({
         getCurrent: function() {}
       });
@@ -25,7 +32,8 @@
 
     function createController() {
       return $controllerConstructor('currentTimesheetController', {
-        timesheets: mockTimesheets
+        timesheets: mockTimesheets,
+        TaskTimer: mockTaskTimer
       });
     }
 
@@ -61,6 +69,19 @@
           _id: 1,
           endDate: '2015-10-15'
         });
+      });
+
+      it('gets all of the task timers for the current timesheet', function() {
+        var controller = createController();
+        getCurrentDfd.resolve({
+          _id: 1,
+          endDate: '2015-10-15'
+        });
+        $rootScope.$digest();
+        expect(mockTaskTimer.query.calledOnce).to.be.true;
+        expect(mockTaskTimer.query.calledWith({
+          timesheetRid: 1
+        })).to.be.true;
       });
     });
   });
