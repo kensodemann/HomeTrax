@@ -11,8 +11,7 @@
     }));
 
     it('exists', function() {
-      expect(dateUtilities)
-        .to.exist;
+      expect(dateUtilities).to.exist;
     });
 
     describe('date normalization', function() {

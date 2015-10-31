@@ -1,9 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.auth').factory('identity', Identity);
+  angular.module('homeTrax.auth').factory('identity', identity);
 
-  function Identity($http, $q, config, authToken, cacheBuster) {
+  function identity($http, $q, config, authToken, cacheBuster) {
     var service = {
       currentUser: undefined,
 
