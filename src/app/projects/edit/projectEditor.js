@@ -2,8 +2,7 @@
   'use strict';
 
   angular.module('homeTrax.projects.edit')
-    .factory('projectEditor', projectEditor)
-    .controller('projectEditorController', ProjectEditorController);
+    .factory('projectEditor', projectEditor);
 
   function projectEditor($uibModal) {
     return {
@@ -27,33 +26,6 @@
         },
         bindToController: true
       });
-    }
-  }
-
-  function ProjectEditorController($modalInstance, project, mode, EditorMode, Status) {
-    var controller = this;
-
-    controller.name = project.name;
-    controller.jiraTaskId = project.jiraTaskId;
-    controller.sbvbTaskId = project.sbvbTaskId;
-    controller.isActive = (mode === EditorMode.create || project.status === Status.active);
-    controller.title = (mode === EditorMode.create) ? 'Create New Project' : 'Modify Project';
-
-    controller.save = save;
-
-    function save() {
-      project.name = controller.name;
-      project.jiraTaskId = controller.jiraTaskId;
-      project.sbvbTaskId = controller.sbvbTaskId;
-      project.status = (controller.isActive ? Status.active : Status.inactive);
-      project.$save(onSuccess, onFailure);
-
-      function onSuccess(project) {
-        $modalInstance.close(project);
-      }
-
-      function onFailure() {
-      }
     }
   }
 }());

@@ -166,6 +166,19 @@
         expect(mockModalInstance.close.calledOnce).to.be.true;
         expect(mockModalInstance.close.calledWith(project)).to.be.true;
       });
+
+      it('sets an error message for display on error', function() {
+        controller.save();
+        project.$save.callArg(1, {
+          data: {
+            reason: 'Because you suck eggs'
+          }
+        });
+        expect(mockModalInstance.close.called).to.be.false;
+        expect(mockNotifier.error.calledOnce).to.be.true;
+        expect(mockNotifier.error.calledWith('Because you suck eggs')).to.be.true;
+        expect(controller.errorMessage).to.equal('Because you suck eggs');
+      });
     });
   });
 }());

@@ -26,13 +26,14 @@
 
     function generateWeek(d) {
       var days = [];
-      var offset = (moment(d).isoWeekday() === 7 ? 7 : 0);
+      var dt = normalizeDate(d);
+      var offset = (moment(dt).isoWeekday() === 7 ? 7 : 0);
 
       for (var i = 0; i < 7; i++) {
-        var dt = moment(d).isoWeekday(i + offset);
+        var weekDt = moment(dt).isoWeekday(i + offset);
         days.push({
-          date: dt.toDate(),
-          isoDateString: dt.toISOString().substring(0, 10)
+          date: weekDt.toDate(),
+          isoDateString: weekDt.toISOString().substring(0, 10)
         });
       }
 
@@ -40,8 +41,16 @@
     }
 
     function weekEndDate(d) {
-      var offset = (moment(d).isoWeekday() === 7 ? 7 : 0);
-      return moment(d).isoWeekday(6 + offset);
+      var dt = normalizeDate(d);
+
+      var offset = (moment(dt).isoWeekday() === 7 ? 7 : 0);
+      return moment(dt).isoWeekday(6 + offset);
+    }
+
+    function normalizeDate(d){
+      var dt = new Date(d);
+      dt.setUTCHours(0, 0, 0, 0);
+      return addTimezoneOffset(dt);
     }
   }
 }());

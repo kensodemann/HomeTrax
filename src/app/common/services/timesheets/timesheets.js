@@ -10,7 +10,7 @@
     return {
       getCurrent: getCurrentTimesheet,
       refresh: getAllTimesheets,
-      
+
       get all() {
         if (!timesheetCache || previousUser !== identity.currentUser) {
           getAllTimesheets();
@@ -27,7 +27,7 @@
 
     function getCurrentTimesheet() {
       var dfd = $q.defer();
-      var weekEndDate = dateUtilities.weekEndDate().toISOString().substring(0, 10);
+      var weekEndDate = dateUtilities.weekEndDate(new Date()).toISOString().substring(0, 10);
 
       var ts = findCurrentInCache(weekEndDate);
       if (ts) {

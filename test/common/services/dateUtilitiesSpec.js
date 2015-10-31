@@ -21,7 +21,7 @@
       // the timezone isn't important (I want to be reminded at 7:00am, whatever timezone I happen to be in).
       // In these cases, ES-5's date and TZ handling gets in the way.
       //
-      // Working in concert with on another, these two functions strip off the timezone for saving
+      // Working in concert with one another, these two functions strip off the timezone for saving
       // the date, and re-apply the timezone for display of a fetched date.
       describe('remove timezone', function() {
         it('removes the current timezone offset from the date', function() {
@@ -99,19 +99,38 @@
     });
 
     describe('week end date calculator', function() {
-      it('calculates today if Saturday is passed', function() {
-        var dt = dateUtilities.weekEndDate(new Date(2015, 9, 31));
-        expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-31');
+      describe('when dates are passed', function() {
+        it('calculates today if Saturday is passed', function() {
+          var dt = dateUtilities.weekEndDate(new Date(2015, 9, 31));
+          expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-31');
+        });
+
+        it('calculates next Saturday if Sunday is passed', function() {
+          var dt = dateUtilities.weekEndDate(new Date(2015, 9, 25));
+          expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-31');
+        });
+
+        it('calculates next Saturday for any day in between', function() {
+          var dt = dateUtilities.weekEndDate(new Date(2015, 9, 21));
+          expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-24');
+        });
       });
 
-      it('calculates next Saturday if Sunday is passed', function() {
-        var dt = dateUtilities.weekEndDate(new Date(2015, 9, 25));
-        expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-31');
-      });
+      describe('when date strings are passed', function() {
+        it('calculates today if Saturday is passed', function() {
+          var dt = dateUtilities.weekEndDate('2015-10-31');
+          expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-31');
+        });
 
-      it('calculates next Saturday for any day in between', function() {
-        var dt = dateUtilities.weekEndDate(new Date(2015, 9, 21));
-        expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-24');
+        it('calculates next Saturday if Sunday is passed', function() {
+          var dt = dateUtilities.weekEndDate('2015-10-25');
+          expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-31');
+        });
+
+        it('calculates next Saturday for any day in between', function() {
+          var dt = dateUtilities.weekEndDate('2015-10-21');
+          expect(dt.toJSON().substring(0, 10)).to.equal('2015-10-24');
+        });
       });
     });
   });

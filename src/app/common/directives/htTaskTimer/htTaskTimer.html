@@ -1,14 +1,26 @@
 <div class="row taskTimer">
   <section class="col-md-9 taskDefinition">
-    <div class="title">[<span ng-bind="controller.htTask.jiraTaskId"></span>] <span ng-bind="controller.htTask.name"></span> (<span ng-bind="controller.htTask.sbvbTaskId"></span>)</div>
-    <div class="task" ng-bind="controller.htTask.task.name"></div>
+    <div class="title">
+      <span ng-bind="controller.htTimer.project.name"></span>
+      <span ng-show="controller.htTimer.project.jiraTaskId">
+        [<span ng-bind="controller.htTimer.project.jiraTaskId"></span>]
+      </span>
+      <span ng-show="controller.htTimer.project.sbvbTaskId">
+        (<span ng-bind="controller.htTimer.project.sbvbTaskId"></span>)
+      </span>
+    </div>
+    <div class="task" ng-bind="controller.htTimer.task.name"></div>
   </section>
   <section class="col-md-1 timeSection">
-    <span class="pull-right" ng-bind="controller.htTask.milliseconds | hoursMinutes"></span>
+    <span class="pull-right" ng-bind="controller.htTimer.milliseconds | hoursMinutes"></span>
   </section>
   <section class="col-md-2 timerControls">
-    <button class="btn btn-default" ng-hide="controller.htTask.isActive"><i class="fa fa-clock-o"></i><span class="icon-label">Start</span></button>
-    <button class="btn btn-default" ng-show="controller.htTask.isActive"><i class="fa fa-stop"></i><span class="icon-label">Stop</span></button>
-    <i class="fa fa-lg fa-pencil-square-o" style="padding-left: 1em" ng-click="controller.edit()"></i>
+    <button class="btn btn-default" ng-hide="controller.htTimer.isActive"><i class="fa fa-clock-o"></i>
+      <span class="icon-label">Start</span>
+    </button>
+    <button class="btn btn-default" ng-show="controller.htTimer.isActive"><i class="fa fa-stop"></i>
+      <span class="icon-label">Stop</span>
+    </button>
+    <i class="fa fa-lg fa-pencil-square-o" style="padding-left: 1em" ng-click="controller.htEdit()"></i>
   </section>
 </div>

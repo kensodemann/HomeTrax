@@ -9,8 +9,9 @@
     return {
       restrict: 'AE',
       scope: {
-        htTask: '=',
-        htAllTasks: '='
+        htTimer: '=',
+        htAllTimer: '=',
+        htEdit:'&'
       },
       templateUrl: 'app/common/directives/htTaskTimer/htTaskTimer.html',
       controller: 'htTaskTimerController',

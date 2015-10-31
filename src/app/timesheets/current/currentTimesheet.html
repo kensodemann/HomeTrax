@@ -2,7 +2,7 @@
   <header>
     <h2 class="text-center">Current Timesheet</h2>
     <uib-tabset justified="true">
-      <uib-tab ng-repeat="day in controller.dates">
+      <uib-tab ng-repeat="day in controller.dates" active="day.active">
         <uib-tab-heading>
           <div ng-bind="day.date | date:'EEEE'"></div>
           <div ng-bind="day.date | date:'mediumDate'"></div>
@@ -12,7 +12,8 @@
   </header>
 
   <section class="taskList">
-    <ht-task-timer ng-repeat="task in controller.tasks" ht-task="task" ht-all-tasks="controller.tasks"></ht-task-timer>
+    <ht-task-timer ng-repeat="timer in controller.taskTimers" ht-timer="timer" ht-all-timers="controller.taskTimers" ht-edit="controller.editTimer(timer)"></ht-task-timer>
+
 
     <div class="row timerTotal" style="padding-top: 1em;">
       <section class="col-md-9 taskDefinition">
@@ -27,6 +28,8 @@
   </section>
 
   <section class="pageControls" style="padding-top: 1em;">
-    <button class="btn btn-default"><i class="fa fa-lg fa-plus"></i><span class="icon-label">Add a timer</span></button>
+    <button class="btn btn-default" ng-click="controller.newTimer()"><i class="fa fa-lg fa-plus"></i>
+      <span class="icon-label">Add a timer</span>
+    </button>
   </section>
 </div>
