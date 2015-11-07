@@ -195,11 +195,11 @@ module.exports = function(grunt) {
   // Tasks
   grunt.registerTask('default', [
     'clean',
+    'preprocess:dev',
     'karma',
     'jshint',
     'jscs',
     'copy',
-    'preprocess:dev',
     'sass',
     'concat:lib',
     'concat:homeTrax',

@@ -5,8 +5,9 @@
     .factory('TaskTimer', TaskTimer);
 
   function TaskTimer($resource, config) {
-    return $resource(config.dataService + '/taskTimers/:id', {
-      id: '@_id'
+    return $resource(config.dataService + '/timesheets/:timesheetRid/taskTimers/:id', {
+      id: '@_id',
+      timesheetRid: '@timesheetRid'
     });
   }
 }());
