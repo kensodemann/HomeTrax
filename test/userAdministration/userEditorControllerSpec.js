@@ -17,18 +17,15 @@
 
     beforeEach(function() {
       mockModalInstance = sinon.stub({
-        close: function() {
-        }
+        close: function() {}
       });
     });
 
     beforeEach(function() {
       mockNotifier = sinon.stub({
-        error: function() {
-        },
+        error: function() {},
 
-        notify: function() {
-        }
+        notify: function() {}
       });
     });
 
@@ -116,10 +113,28 @@
           username: 'bp@email.com',
           isAdministrator: sinon.stub(),
           $save: sinon.stub(),
-          addRole:sinon.stub(),
-          removeRole:sinon.stub()
+          addRole: sinon.stub(),
+          removeRole: sinon.stub()
         };
         testUser.isAdministrator.returns(false);
+      });
+
+      describe('in add mode', function() {
+        it('copies the password for save', function() {
+          var controller = createController(testUser, EditorMode.create);
+          controller.password = 'IAmPassword';
+          controller.save();
+          expect(testUser.password).to.equal('IAmPassword');
+        });
+      });
+
+      describe('in update mode', function() {
+        it('does not copy a password for save', function() {
+          var controller = createController(testUser, EditorMode.edit);
+          controller.password = 'IAmPassword';
+          controller.save();
+          expect(testUser.password).to.not.exist
+        });
       });
 
       it('copies the first name back to the user before saving', function() {
