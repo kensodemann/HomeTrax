@@ -3,19 +3,22 @@
 
   describe('userListCtrl', function() {
     var $controllerConstructor;
-    var q;
 
     var mockUser;
     var mockUserConstructor;
     var mockUserEditor;
 
+    var saveDfd;
+    var scope;
+
     var EditorMode;
 
     beforeEach(module('homeTrax.userAdministration'));
 
-    beforeEach(inject(function($controller, $q, _EditorMode_) {
+    beforeEach(inject(function($rootScope, $controller, $q, _EditorMode_) {
       $controllerConstructor = $controller;
-      q = $q;
+      saveDfd = $q.defer();
+      scope = $rootScope;
       EditorMode = _EditorMode_;
     }));
 
@@ -25,18 +28,17 @@
     });
 
     function buildMockUser() {
-      mockUser = sinon.stub({
-        $save: function() {
-        }
-      });
+      mockUser = {};
       mockUserConstructor = sinon.stub().returns(mockUser);
       mockUserConstructor.query = sinon.stub();
     }
 
     function buildMockUserEditor() {
       mockUserEditor = sinon.stub({
-        open: function() {
-        }
+        open: function() {}
+      });
+      mockUserEditor.open.returns({
+        result: saveDfd.promise
       });
     }
 
@@ -97,7 +99,8 @@
         mockUserConstructor.query.returns([1, 2, 3, 4, 5, 6]);
         var controller = createController();
         controller.create();
-        mockUserEditor.open.callArgWith(2, mockUser);
+        saveDfd.resolve(mockUser);
+        scope.$digest();
         expect(controller.users).to.deep.equal([1, 2, 3, 4, 5, 6, mockUser]);
       });
     });
