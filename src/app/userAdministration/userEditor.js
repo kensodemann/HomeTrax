@@ -60,6 +60,7 @@
         user.firstName = controller.firstName;
         user.lastName = controller.lastName;
         user.username = controller.username;
+        user.password = (mode === EditorMode.create ? controller.password : undefined);
         if (controller.isAdministrator) {
           user.addRole('admin');
         } else {

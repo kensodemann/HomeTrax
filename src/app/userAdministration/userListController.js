@@ -21,7 +21,7 @@
     };
 
     self.create = function() {
-      userEditor.open(new User(), EditorMode.create, addNewUser);
+      userEditor.open(new User(), EditorMode.create).result.then(addNewUser);
 
       function addNewUser(user) {
         self.users.push(user);
