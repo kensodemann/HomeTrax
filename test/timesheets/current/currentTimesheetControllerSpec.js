@@ -84,13 +84,28 @@
         var controller = createController();
         getCurrentDfd.resolve({
           _id: 1,
-          endDate: '2015-10-15'
+          endDate: '2015-10-17'
         });
         $rootScope.$digest();
         expect(controller.timesheet).to.deep.equal({
           _id: 1,
-          endDate: '2015-10-15'
+          endDate: '2015-10-17'
         });
+      });
+
+      it('gets the dates associated with the end date', function() {
+        var controller = createController();
+        expect(controller.dates.length).to.equal(7);
+        expect(controller.dates[0].isoDateString).to.equal('2015-10-11');
+        expect(controller.dates[3].isoDateString).to.equal('2015-10-14');
+        expect(controller.dates[6].isoDateString).to.equal('2015-10-17');
+      });
+
+      it('sets the current date active', function() {
+        var controller = createController();
+        expect(controller.dates[3].active).to.be.true;
+        expect(controller.dates[2].active).to.be.false;
+        expect(controller.dates[4].active).to.be.false;
       });
 
       it('gets all of the task timers for the current timesheet', function() {

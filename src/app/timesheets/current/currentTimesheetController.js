@@ -46,11 +46,19 @@
     }
 
     function activate() {
+      selectToday();
       timesheets.getCurrent().then(function(current) {
         controller.timesheet = current;
         controller.taskTimers = TaskTimer.query({
           timesheetRid: current._id
         });
+      });
+    }
+
+    function selectToday() {
+      var today = dateUtilities.removeTimezoneOffset(new Date()).toISOString().substring(0, 10);
+      angular.forEach(controller.dates, function(day) {
+        day.active = (day.isoDateString === today);
       });
     }
   }
