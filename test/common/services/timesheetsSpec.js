@@ -21,7 +21,11 @@
 
     beforeEach(function() {
       mockDateUtilities = sinon.stub({
-        weekEndDate: function() {}
+        removeTimezoneOffset: function() {
+        },
+
+        weekEndDate: function() {
+        }
       });
     });
 
@@ -36,7 +40,8 @@
 
     beforeEach(function() {
       mockTimesheet = sinon.stub({
-        $save: function() {}
+        $save: function() {
+        }
       });
       mockTimesheetConstructor = sinon.stub();
       mockTimesheetConstructor.returns(mockTimesheet);

@@ -15,9 +15,9 @@
     });
 
     describe('formatting', function() {
-      it('formats zero to blank', function() {
+      it('formats zero to 0:00', function() {
         var hrs = hoursMinutes(0);
-        expect(hrs).to.equal('');
+        expect(hrs).to.equal('0:00');
       });
 
       it('formats undefined to blank', function() {

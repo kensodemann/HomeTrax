@@ -2,7 +2,7 @@
   angular.module('homeTrax.common.filters')
     .filter('hoursMinutes', function() {
       return function(ms) {
-        if (!ms) {
+        if (angular.isUndefined(ms) || ms === null) {
           return '';
         }
 
