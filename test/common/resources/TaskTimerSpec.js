@@ -21,6 +21,11 @@
       config = _config_;
     }));
 
+    afterEach(function() {
+      httpBackend.verifyNoOutstandingExpectation();
+      httpBackend.verifyNoOutstandingRequest();
+    });
+
     it('exists', function() {
       expect(TaskTimer).to.exist;
     });

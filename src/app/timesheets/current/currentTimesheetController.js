@@ -11,7 +11,7 @@
       });
     });
 
-  function CurrentTimesheetController($q, dateUtilities, timesheets, TaskTimer, taskTimerEditor, EditorMode) {
+  function CurrentTimesheetController($q, dateUtilities, timesheets, timesheetTaskTimers, taskTimerEditor, EditorMode) {
     var controller = this;
 
     controller.dates = [];
@@ -41,12 +41,9 @@
     }
 
     function newTimer() {
-      var timer = new TaskTimer({
-        timesheetRid: controller.timesheet._id,
-        workDate: controller.currentDate
-      });
+      var timer = timesheetTaskTimers.create(controller.currentDate);
       taskTimerEditor.open(timer, EditorMode.create).result.then(function(tt) {
-        controller.allTaskTimers.push(tt);
+        timesheetTaskTimers.add(tt);
         refreshCurrentDate();
       });
     }
@@ -81,28 +78,13 @@
 
       function getTaskTimers(currentTimesheet) {
         controller.timesheet = currentTimesheet;
-        controller.allTaskTimers = TaskTimer.query({
-          timesheetRid: currentTimesheet._id
-        }, dfd.resolve, dfd.reject);
+        controller.allTaskTimers = timesheetTaskTimers.load(currentTimesheet).then(dfd.resolve, dfd.reject);
       }
     }
 
     function refreshCurrentDate() {
-      selectCurrentDateTimers();
-      calculateTimeForCurrentDate();
-    }
-
-    function selectCurrentDateTimers() {
-      controller.taskTimers = _.filter(controller.allTaskTimers, function(timer) {
-        return timer.workDate === controller.currentDate;
-      });
-    }
-
-    function calculateTimeForCurrentDate() {
-      controller.totalTime = 0;
-      angular.forEach(controller.taskTimers, function(timer) {
-        controller.totalTime += timer.milliseconds;
-      });
+      controller.taskTimers = timesheetTaskTimers.get(controller.currentDate);
+      controller.totalTime = timesheetTaskTimers.totalTime(controller.currentDate);
     }
   }
 }());

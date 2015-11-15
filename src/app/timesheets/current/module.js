@@ -9,6 +9,7 @@
     'homeTrax.common.resources',
     'homeTrax.common.services.dateUtilities',
     'homeTrax.common.services.timesheets',
+    'homeTrax.common.services.timesheetTaskTimers',
     'homeTrax.taskTimers.edit'
   ]);
 }());

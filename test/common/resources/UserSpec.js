@@ -37,6 +37,11 @@
       User = _User_;
     }));
 
+    afterEach(function() {
+      httpBackend.verifyNoOutstandingExpectation();
+      httpBackend.verifyNoOutstandingRequest();
+    });
+
     it('exists', function() {
       expect(User).to.not.be.undefined;
     });

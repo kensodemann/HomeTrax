@@ -22,6 +22,11 @@
       config = _config_;
     }));
 
+    afterEach(function() {
+      httpBackend.verifyNoOutstandingExpectation();
+      httpBackend.verifyNoOutstandingRequest();
+    });
+
     it('Should exist', function() {
       expect(stage).to.exist;
     });
