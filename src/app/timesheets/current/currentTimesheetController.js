@@ -11,47 +11,80 @@
       });
     });
 
-  function CurrentTimesheetController($log, dateUtilities, timesheets, TaskTimer, taskTimerEditor, EditorMode) {
+  function CurrentTimesheetController($q, dateUtilities, timesheets, timesheetTaskTimers, taskTimerEditor, EditorMode) {
     var controller = this;
 
-    var endDate = dateUtilities.weekEndDate(new Date());
-    controller.dates = dateUtilities.generateWeek(endDate);
+    controller.dates = [];
+    controller.currentDate = '';
     controller.timesheet = undefined;
+    controller.allTaskTimers = [];
     controller.taskTimers = [];
+    controller.totalTime = 0;
+    controller.isReady = false;
 
+    controller.selectDate = selectDate;
     controller.editTimer = editTimer;
     controller.newTimer = newTimer;
 
     activate();
+
+    function selectDate(idx) {
+      if (controller.isReady) {
+        controller.currentDate = controller.dates[idx].isoDateString;
+
+        refreshCurrentDate();
+      }
+    }
 
     function editTimer(timer) {
       taskTimerEditor.open(timer, EditorMode.edit);
     }
 
     function newTimer() {
-      var today = getSelectedDay();
-      var timer = new TaskTimer({
-        timesheetRid: controller.timesheet._id,
-        workDate: today.isoDateString
-      });
+      var timer = timesheetTaskTimers.create(controller.currentDate);
       taskTimerEditor.open(timer, EditorMode.create).result.then(function(tt) {
-        controller.taskTimers.push(tt);
-      });
-    }
-
-    function getSelectedDay() {
-      return _.find(controller.dates, function(day) {
-        return day.active;
+        timesheetTaskTimers.add(tt);
+        refreshCurrentDate();
       });
     }
 
     function activate() {
-      timesheets.getCurrent().then(function(current) {
-        controller.timesheet = current;
-        controller.taskTimers = TaskTimer.query({
-          timesheetRid: current._id
-        });
+      var today = dateUtilities.removeTimezoneOffset(new Date());
+      generateWeek(today);
+      selectDay(today);
+      loadData().then(function() {
+        controller.isReady = true;
+        refreshCurrentDate();
       });
+    }
+
+    function generateWeek(day) {
+      var endDate = dateUtilities.weekEndDate(day);
+      controller.dates = dateUtilities.generateWeek(endDate);
+    }
+
+    function selectDay(day) {
+      controller.currentDate = day.toISOString().substring(0, 10);
+      angular.forEach(controller.dates, function(day) {
+        day.active = (day.isoDateString === controller.currentDate);
+      });
+    }
+
+    function loadData() {
+      var dfd = $q.defer();
+
+      timesheets.getCurrent().then(getTaskTimers, dfd.reject);
+      return dfd.promise;
+
+      function getTaskTimers(currentTimesheet) {
+        controller.timesheet = currentTimesheet;
+        controller.allTaskTimers = timesheetTaskTimers.load(currentTimesheet).then(dfd.resolve, dfd.reject);
+      }
+    }
+
+    function refreshCurrentDate() {
+      controller.taskTimers = timesheetTaskTimers.get(controller.currentDate);
+      controller.totalTime = timesheetTaskTimers.totalTime(controller.currentDate);
     }
   }
 }());

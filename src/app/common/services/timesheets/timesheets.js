@@ -3,7 +3,7 @@
 
   angular.module('homeTrax.common.services.timesheets').factory('timesheets', timesheets);
 
-  function timesheets($q, $log, Timesheet, identity, dateUtilities) {
+  function timesheets($q, Timesheet, identity, dateUtilities) {
     var timesheetCache;
     var previousUser;
 
@@ -27,7 +27,8 @@
 
     function getCurrentTimesheet() {
       var dfd = $q.defer();
-      var weekEndDate = dateUtilities.weekEndDate(new Date()).toISOString().substring(0, 10);
+      var today = dateUtilities.removeTimezoneOffset(new Date());
+      var weekEndDate = dateUtilities.weekEndDate(today).toISOString().substring(0, 10);
 
       var ts = findCurrentInCache(weekEndDate);
       if (ts) {
