@@ -16,8 +16,6 @@
     var EditorMode;
     var $rootScope;
 
-    var testTaskTimers;
-
     beforeEach(module('homeTrax.timesheets.current'));
 
     beforeEach(inject(function($controller, $q, _$rootScope_, _EditorMode_) {
@@ -28,10 +26,6 @@
       $rootScope = _$rootScope_;
       EditorMode = _EditorMode_;
     }));
-
-    beforeEach(function() {
-      initializeTestData();
-    });
 
     beforeEach(function() {
       mockModalInstance = {
@@ -293,38 +287,6 @@
     function resolveModal(taskTimer) {
       modalDfd.resolve(taskTimer);
       $rootScope.$digest();
-    }
-
-    function initializeTestData() {
-      testTaskTimers = [{
-        _id: 12341,
-        workDate: '2015-10-12',
-        milliseconds: 3884000
-      }, {
-        _id: 12342,
-        workDate: '2015-10-13',
-        milliseconds: 1234000
-      }, {
-        _id: 12343,
-        workDate: '2015-10-14',
-        milliseconds: 4885000
-      }, {
-        _id: 12344,
-        workDate: '2015-10-13',
-        milliseconds: 948000
-      }, {
-        _id: 12345,
-        workDate: '2015-10-12',
-        milliseconds: 3746000
-      }, {
-        _id: 12346,
-        workDate: '2015-10-13',
-        milliseconds: 672000
-      }, {
-        _id: 12347,
-        workDate: '2015-10-15',
-        milliseconds: 123000
-      }];
     }
   });
 }());
