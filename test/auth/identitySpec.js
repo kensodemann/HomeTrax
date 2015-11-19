@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('identity', function() {
+  describe('homeTrax.auth.identity', function() {
     var config;
     var identity;
     var httpBackend;
@@ -9,7 +9,7 @@
     var mockCacheBuster;
     var $rootScope;
 
-    beforeEach(module('homeTrax.auth'));
+    beforeEach(module('homeTrax.auth.identity'));
 
     beforeEach(function() {
       mockCacheBuster = {

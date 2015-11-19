@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('userListCtrl', function() {
+  describe('homeTrax.userAdministration.userList: userListController', function() {
     var $controllerConstructor;
 
     var mockUser;
@@ -13,7 +13,7 @@
 
     var EditorMode;
 
-    beforeEach(module('homeTrax.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration.userList'));
 
     beforeEach(inject(function($rootScope, $controller, $q, _EditorMode_) {
       $controllerConstructor = $controller;

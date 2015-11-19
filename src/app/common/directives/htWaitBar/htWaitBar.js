@@ -1,5 +1,5 @@
 (function() {
-  angular.module('homeTrax.common.directives.htWaitBar')
+  angular.module('homeTrax.common.directives.htWaitBar', [])
     .directive('htWaitBar', htWaitBar)
     .controller('htWaitBarController', htWaitBarController);
 

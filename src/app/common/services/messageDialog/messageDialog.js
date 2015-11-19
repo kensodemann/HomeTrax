@@ -1,7 +1,8 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.services.messageDialog').factory('messageDialog', messageDialog);
+  angular.module('homeTrax.common.services.messageDialog', [])
+    .factory('messageDialog', messageDialog);
 
   function messageDialog($modal, $rootScope, $q) {
     var exports = {

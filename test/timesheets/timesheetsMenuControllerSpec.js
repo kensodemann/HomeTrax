@@ -1,11 +1,11 @@
 (function() {
   'use strict';
 
-  describe('timesheetsMenuController', function() {
+  describe('homeTrax.timesheets.menu: timesheetsMenuController', function() {
     var mockIdentity;
     var $controllerConstructor;
 
-    beforeEach(module('homeTrax.timesheets'));
+    beforeEach(module('homeTrax.timesheets.menu'));
 
     beforeEach(inject(function($controller) {
       $controllerConstructor = $controller;

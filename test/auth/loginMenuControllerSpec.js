@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('loginMenuCtrl', function() {
+  describe('homeTrax.auth.loginMenu: loginMenuController', function() {
     var scope;
     var $controllerConstructor;
 
@@ -10,7 +10,7 @@
     var mockIdentity;
     var mockLocation;
 
-    beforeEach(module('homeTrax.auth'));
+    beforeEach(module('homeTrax.auth.loginMenu'));
 
     beforeEach(inject(function($controller, $rootScope, $q) {
       scope = $rootScope.$new();

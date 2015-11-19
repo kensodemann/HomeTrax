@@ -1,8 +1,8 @@
 (function() {
   'use strict';
 
-  describe('loginCtrl', function() {
-    beforeEach(module('homeTrax.auth'));
+  describe('homeTrax.auth.login: loginController', function() {
+    beforeEach(module('homeTrax.auth.login'));
 
     var scope;
     var $controllerConstructor;

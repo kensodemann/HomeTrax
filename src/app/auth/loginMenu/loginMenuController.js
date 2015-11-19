@@ -1,7 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.auth').controller('loginMenuController', LoginMenuController);
+  angular.module('homeTrax.auth.loginMenu', [
+    'homeTrax.auth.authService',
+    'homeTrax.auth.identity'
+  ]).controller('loginMenuController', LoginMenuController);
 
   function LoginMenuController(identity, authService, $location) {
     var self = this;

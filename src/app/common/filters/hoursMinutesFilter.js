@@ -1,5 +1,5 @@
 (function() {
-  angular.module('homeTrax.common.filters')
+  angular.module('homeTrax.common.filters.hoursMinutes', [])
     .filter('hoursMinutes', function() {
       return function(ms) {
         if (angular.isUndefined(ms) || ms === null) {

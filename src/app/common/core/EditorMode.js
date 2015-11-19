@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.core').constant('EditorMode', {
+  angular.module('homeTrax.common.core.EditorMode', []).constant('EditorMode', {
     edit: 'edit',
     create: 'create'
   });

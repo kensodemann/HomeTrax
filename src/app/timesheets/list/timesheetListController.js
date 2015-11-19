@@ -1,8 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.timesheets.list')
-    .controller('timesheetListController', TimesheetListController)
+  angular.module('homeTrax.timesheets.list', [
+    'ngRoute'
+  ]).controller('timesheetListController', TimesheetListController)
     .config(function($routeProvider) {
       $routeProvider.when('/timesheets/list', {
         templateUrl: 'app/timesheets/list/timesheetList.html',
@@ -11,5 +12,6 @@
       });
     });
 
-  function TimesheetListController() {}
+  function TimesheetListController() {
+  }
 }());

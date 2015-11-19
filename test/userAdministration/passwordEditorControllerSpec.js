@@ -1,14 +1,14 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.userAdministration: passwordEditorController', function() {
+  describe('homeTrax.userAdministration.passwordEditor: passwordEditorController', function() {
     var mockModalInstance;
     var mockNotifier;
     var mockUserPassword;
     var mockUserPasswordConstructor;
     var $controllerConstructor;
 
-    beforeEach(module('homeTrax.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration.passwordEditor'));
 
     beforeEach(inject(function($controller) {
       $controllerConstructor = $controller;

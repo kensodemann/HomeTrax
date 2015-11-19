@@ -4,7 +4,8 @@
 
   angular.module('homeTrax', [
     'homeTrax.about',
-    'homeTrax.auth',
+    'homeTrax.auth.authInterceptor',
+    'homeTrax.auth.login',
     'homeTrax.main',
     'homeTrax.projects',
     'homeTrax.timesheets',

@@ -1,12 +1,12 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.taskTimers.edit: taskTimerEditor', function() {
+  describe('homeTrax.taskTimers.edit.taskTimerEditor', function() {
     var mockModal;
     var mockModalInstance;
     var taskTimerEditor;
 
-    beforeEach(module('homeTrax.taskTimers.edit'));
+    beforeEach(module('homeTrax.taskTimers.edit.taskTimerEditor'));
 
     beforeEach(function() {
       mockModalInstance = {};

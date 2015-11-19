@@ -1,12 +1,12 @@
 (function() {
   'use strict';
 
-  describe('userEditor', function() {
+  describe('homeTrax.userAdministration.userEditor', function() {
     var mockModal;
     var mockModalInstance;
     var userEditor;
 
-    beforeEach(module('homeTrax.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration.userEditor'));
 
     beforeEach(function() {
       mockModalInstance = {};

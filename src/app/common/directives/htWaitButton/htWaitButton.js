@@ -1,5 +1,5 @@
 (function() {
-  angular.module('homeTrax.common.directives.htWaitButton')
+  angular.module('homeTrax.common.directives.htWaitButton', [])
     .directive('htWaitButton', HtWaitButton)
     .controller('htWaitButtonController', HtWaitButtonController);
 

@@ -1,8 +1,17 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.timesheets.current')
-    .controller('currentTimesheetController', CurrentTimesheetController)
+  angular.module('homeTrax.timesheets.current', [
+    'ngRoute',
+    'homeTrax.common.core.EditorMode',
+    'homeTrax.common.directives.htTaskTimer',
+    'homeTrax.common.filters.hoursMinutes',
+    'homeTrax.common.resources',
+    'homeTrax.common.services.dateUtilities',
+    'homeTrax.common.services.timesheets',
+    'homeTrax.common.services.timesheetTaskTimers',
+    'homeTrax.taskTimers.edit'
+  ]).controller('currentTimesheetController', CurrentTimesheetController)
     .config(function($routeProvider) {
       $routeProvider.when('/timesheets/current', {
         templateUrl: 'app/timesheets/current/currentTimesheet.html',

@@ -1,11 +1,19 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.taskTimers.edit')
-    .controller('taskTimerEditorController', TaskTimerEditorController);
+  angular.module('homeTrax.taskTimers.edit.taskTimerEditorController', [
+    'ui.bootstrap',
+    'homeTrax.common.core.EditorMode',
+    'homeTrax.common.core.Status',
+    'homeTrax.common.filters.hoursMinutes',
+    'homeTrax.common.resources',
+    'homeTrax.common.services.notifier',
+    'homeTrax.common.services.stages',
+    'homeTrax.common.services.timeUtilities'
+  ]).controller('taskTimerEditorController', TaskTimerEditorController);
 
   function TaskTimerEditorController($modalInstance, taskTimer, mode, Project,
-    stages, timeUtilities, hoursMinutesFilter, Status, EditorMode, notifier) {
+                                     stages, timeUtilities, hoursMinutesFilter, Status, EditorMode, notifier) {
     var controller = this;
 
     controller.projects = [];

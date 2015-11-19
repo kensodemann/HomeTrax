@@ -1,7 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.directives.htTaskTimer')
+  angular.module('homeTrax.common.directives.htTaskTimer', [
+      'homeTrax.common.filters.hoursMinutes'
+    ])
     .directive('htTaskTimer', htTaskTimer)
     .controller('htTaskTimerController', HtTaskTimerController);
 
@@ -11,7 +13,7 @@
       scope: {
         htTimer: '=',
         htAllTimer: '=',
-        htEdit:'&'
+        htEdit: '&'
       },
       templateUrl: 'app/common/directives/htTaskTimer/htTaskTimer.html',
       controller: 'htTaskTimerController',

@@ -1,9 +1,11 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.services.notifier').value('myToastr', toastr);
+  angular.module('homeTrax.common.services.myToastr', []).value('myToastr', toastr);
 
-  angular.module('homeTrax.common.services.notifier').factory('notifier', Notifier);
+  angular.module('homeTrax.common.services.notifier', [
+    'homeTrax.common.services.myToastr'
+  ]).factory('notifier', Notifier);
 
   function Notifier($log, myToastr) {
     return {

@@ -1,11 +1,11 @@
 (function() {
   'use strict';
 
-  describe('authToken', function() {
+  describe('homeTrax.auth.authToken', function() {
     var mockLocalStorageService;
     var authToken;
 
-    beforeEach(module('homeTrax.auth'));
+    beforeEach(module('homeTrax.auth.authToken'));
 
     beforeEach(function() {
       mockLocalStorageService = sinon.stub({

@@ -1,11 +1,11 @@
 (function() {
   'use strict';
 
-  describe('matchesValue', function() {
+  describe('homeTrax.common.validations.matchesValue', function() {
     var scope;
     var el;
 
-    beforeEach(module('homeTrax.common.validations'));
+    beforeEach(module('homeTrax.common.validations.matchesValue'));
 
     beforeEach(inject(function($rootScope, $compile) {
       scope = $rootScope;

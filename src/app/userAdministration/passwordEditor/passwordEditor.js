@@ -1,8 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.userAdministration')
-    .factory('passwordEditor', passwordEditor)
+  angular.module('homeTrax.userAdministration.passwordEditor', [
+    'ui.bootstrap'
+  ]).factory('passwordEditor', passwordEditor)
     .controller('passwordEditorController', PasswordEditorController);
 
   function passwordEditor($uibModal) {
@@ -12,7 +13,7 @@
 
     function open(id) {
       return $uibModal.open({
-        templateUrl: 'app/userAdministration/templates/passwordEditor.html',
+        templateUrl: 'app/userAdministration/passwordEditor/passwordEditor.html',
         backdrop: 'static',
         controller: 'passwordEditorController',
         controllerAs: 'controller',

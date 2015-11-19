@@ -11,6 +11,7 @@ module.exports = function(config) {
     files: [
       componentPaths.lib.jquery.dev,
       componentPaths.lib.angular.dev,
+      componentPaths.lib.angularLocalStorage.dev,
       componentPaths.lib.angularMessages.dev,
       componentPaths.lib.angularResource.dev,
       componentPaths.lib.angularRoute.dev,

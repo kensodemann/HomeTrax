@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.services.timeUtilities').factory('timeUtilities', timeUtilities);
+  angular.module('homeTrax.common.services.timeUtilities', []).factory('timeUtilities', timeUtilities);
 
   function timeUtilities() {
     var hoursMinutesRegEx = /^(\d+)?(:[0-5]\d)$/;

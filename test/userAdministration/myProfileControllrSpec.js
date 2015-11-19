@@ -2,7 +2,7 @@
   'use strict';
 
   describe('myProfileCtrl', function() {
-    beforeEach(module('homeTrax.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration.myProfile'));
 
     var controller;
     var $controllerConstructor;

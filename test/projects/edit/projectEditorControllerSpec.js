@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.projects.edit: projectEditorController', function() {
+  describe('homeTrax.projects.edit.projectEditorController', function() {
     var mockModalInstance;
     var mockNotifier;
     var $controllerConstructor;
@@ -9,7 +9,7 @@
     var EditorMode;
     var Status;
 
-    beforeEach(module('homeTrax.projects.edit'));
+    beforeEach(module('homeTrax.projects.edit.projectEditorController'));
 
     beforeEach(inject(function($controller, _EditorMode_, _Status_) {
       $controllerConstructor = $controller;

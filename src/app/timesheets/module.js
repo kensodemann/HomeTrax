@@ -3,6 +3,7 @@
 
   angular.module('homeTrax.timesheets', [
     'homeTrax.timesheets.current',
-    'homeTrax.timesheets.list'
+    'homeTrax.timesheets.list',
+    'homeTrax.timesheets.menu'
   ]);
 }());

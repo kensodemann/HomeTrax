@@ -1,7 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.auth').factory('authInterceptor', AuthInterceptor);
+  angular.module('homeTrax.auth.authInterceptor', [
+    'homeTrax.auth.AuthEvents',
+    'homeTrax.auth.authToken'
+  ]).factory('authInterceptor', AuthInterceptor);
 
   function AuthInterceptor($rootScope, $q, AuthEvents, authToken) {
     return {

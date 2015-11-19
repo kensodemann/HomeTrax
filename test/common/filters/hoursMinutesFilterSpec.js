@@ -1,10 +1,10 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.common.filters: hours and minutes formatting filter', function() {
+  describe('homeTrax.common.filters.hoursMinutes', function() {
     var hoursMinutes;
 
-    beforeEach(module('homeTrax.common.filters'));
+    beforeEach(module('homeTrax.common.filters.hoursMinutes'));
 
     beforeEach(inject(function(_hoursMinutesFilter_) {
       hoursMinutes = _hoursMinutesFilter_;

@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('authService', function() {
+  describe('homeTrax.auth.authService', function() {
     var mockAuthToken;
     var mockHttp;
     var mockIdentity;
@@ -12,7 +12,7 @@
     var authService;
     var scope;
 
-    beforeEach(module('homeTrax.auth'));
+    beforeEach(module('homeTrax.auth.authService'));
 
     beforeEach(function() {
       mockAuthToken = sinon.stub({

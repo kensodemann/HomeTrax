@@ -1,11 +1,17 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.userAdministration')
-    .controller('myProfileController', MyProfileController)
+  angular.module('homeTrax.userAdministration.myProfile', [
+    'ngMessages',
+    'ngRoute',
+    'homeTrax.auth.identity',
+    'homeTrax.common.resources',
+    'homeTrax.common.services.notifier',
+    'homeTrax.userAdministration.passwordEditor'
+  ]).controller('myProfileController', MyProfileController)
     .config(function($routeProvider){
       $routeProvider.when('/userAdministration/myprofile', {
-        templateUrl: 'app/userAdministration/templates/myProfile.html',
+        templateUrl: 'app/userAdministration/myProfile/myProfile.html',
         controller: 'myProfileController',
         controllerAs: 'controller'
       });

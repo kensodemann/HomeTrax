@@ -1,12 +1,12 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.common.services.stages: stages', function() {
+  describe('homeTrax.common.services.stages', function() {
     var mockStage;
     var stages;
     var testData;
 
-    beforeEach(module('homeTrax.common.services'));
+    beforeEach(module('homeTrax.common.services.stages'));
 
     beforeEach(function() {
       initializeTestData();

@@ -1,8 +1,13 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.projects.edit')
-    .controller('projectEditorController', ProjectEditorController);
+  angular.module('homeTrax.projects.edit.projectEditorController', [
+      'ui.bootstrap',
+      'homeTrax.common.core.EditorMode',
+      'homeTrax.common.core.Status',
+      'homeTrax.common.directives.htWaitButton',
+      'homeTrax.common.services.notifier'
+    ]).controller('projectEditorController', ProjectEditorController);
 
   function ProjectEditorController($modalInstance, project, mode, EditorMode, Status, notifier) {
     var controller = this;

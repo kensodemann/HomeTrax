@@ -1,10 +1,10 @@
 (function() {
   'use strict';
 
-  describe('userAdminMenuCtrl', function() {
+  describe('homeTrax.userAdministration.menu: userAdminMenuController', function() {
     var $controllerConstructor;
 
-    beforeEach(module('homeTrax.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration.menu'));
 
     beforeEach(inject(function($controller) {
       $controllerConstructor = $controller;

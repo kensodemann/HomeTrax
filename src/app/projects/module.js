@@ -3,6 +3,7 @@
 
   angular.module('homeTrax.projects', [
     'homeTrax.projects.edit',
-    'homeTrax.projects.list'
+    'homeTrax.projects.list',
+    'homeTrax.projects.menu'
   ]);
 }());

@@ -1,11 +1,15 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.auth')
+  angular.module('homeTrax.auth.login', [
+    'ngRoute',
+    'homeTrax.auth.authService',
+    'homeTrax.common.services.notifier'
+  ])
     .controller('loginController', LoginController)
     .config(function($routeProvider) {
       $routeProvider.when('/login', {
-        templateUrl: 'app/auth/templates/login.html',
+        templateUrl: 'app/auth/login/login.html',
         controller: 'loginController',
         controllerAs: 'controller'
       });

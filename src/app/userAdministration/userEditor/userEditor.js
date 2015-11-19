@@ -1,7 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.userAdministration')
+  angular.module('homeTrax.userAdministration.userEditor', [
+    'ngMessages',
+    'ui.bootstrap'
+  ])
     .factory('userEditor', userEditor)
     .controller('userEditorController', UserEditorController);
 
@@ -12,7 +15,7 @@
 
     function open(user, mode) {
       return $uibModal.open({
-        templateUrl: 'app/userAdministration/templates/userEditor.html',
+        templateUrl: 'app/userAdministration/userEditor/userEditor.html',
         backdrop: 'static',
         controller: 'userEditorController',
         controllerAs: 'controller',

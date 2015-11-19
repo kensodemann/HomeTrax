@@ -1,7 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.main')
+  angular.module('homeTrax.main.mainController', [
+    'ngRoute',
+    'homeTrax.auth.identity'
+  ])
     .controller('mainController', MainController)
     .config(function($routeProvider){
       $routeProvider.when('/', {

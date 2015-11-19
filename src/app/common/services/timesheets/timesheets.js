@@ -1,7 +1,11 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.services.timesheets').factory('timesheets', timesheets);
+  angular.module('homeTrax.common.services.timesheets', [
+    'homeTrax.auth.identity',
+    'homeTrax.common.resources',
+    'homeTrax.common.services.dateUtilities'
+  ]).factory('timesheets', timesheets);
 
   function timesheets($q, Timesheet, identity, dateUtilities) {
     var timesheetCache;
@@ -40,7 +44,7 @@
       return dfd.promise;
     }
 
-    function findCurrentInCache(weekEndDate){
+    function findCurrentInCache(weekEndDate) {
       var ts;
       if (timesheetCache && identity.currentUser === previousUser) {
         ts = _.find(timesheetCache, function(t) {
@@ -68,7 +72,8 @@
         }
       }
 
-      function error() {}
+      function error() {
+      }
     }
   }
 }());

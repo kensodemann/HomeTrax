@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.taskTimers.edit: taskTimerEditorController', function() {
+  describe('homeTrax.taskTimers.edit.taskTimerEditorController', function() {
     var mockModalInstance;
     var mockNotifier;
     var mockProject;
@@ -14,7 +14,7 @@
     var EditorMode;
     var $rootScope;
 
-    beforeEach(module('homeTrax.taskTimers.edit'));
+    beforeEach(module('homeTrax.taskTimers.edit.taskTimerEditorController'));
 
     beforeEach(inject(function($q, $controller, _$rootScope_, _EditorMode_) {
       $controllerConstructor = $controller;

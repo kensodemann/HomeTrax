@@ -1,12 +1,12 @@
 (function() {
   'use strict';
 
-  describe('passwordEditor', function() {
+  describe('homeTrax.userAdministration.passwordEditor', function() {
     var mockModal;
     var mockModalInstance;
     var passwordEditor;
 
-    beforeEach(module('homeTrax.userAdministration'));
+    beforeEach(module('homeTrax.userAdministration.passwordEditor'));
 
     beforeEach(function() {
       mockModalInstance = {};

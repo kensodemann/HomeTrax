@@ -1,7 +1,11 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.auth').factory('identity', identity);
+  angular.module('homeTrax.auth.identity', [
+    'homeTrax.auth.authToken',
+    'homeTrax.common.core.config',
+    'homeTrax.common.services.cacheBuster'
+  ]).factory('identity', identity);
 
   function identity($http, $q, config, authToken, cacheBuster) {
     var service = {

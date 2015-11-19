@@ -1,7 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.services.timesheetTaskTimers').factory('timesheetTaskTimers', timesheetTaskTimers);
+  angular.module('homeTrax.common.services.timesheetTaskTimers', [
+    'homeTrax.common.resources'
+  ]).factory('timesheetTaskTimers', timesheetTaskTimers);
 
   function timesheetTaskTimers(TaskTimer) {
     var currentTimesheet;

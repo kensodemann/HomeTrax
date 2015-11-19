@@ -1,8 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.projects.edit')
-    .factory('projectEditor', projectEditor);
+  angular.module('homeTrax.projects.edit.projectEditor', [
+      'ui.bootstrap'
+  ]).factory('projectEditor', projectEditor);
 
   function projectEditor($uibModal) {
     return {
