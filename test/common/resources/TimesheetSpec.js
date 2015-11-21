@@ -1,14 +1,14 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.common.resources: Timesheet', function() {
+  describe('homeTrax.common.resources.Timesheet', function() {
     var config;
     var httpBackend;
     var scope;
     var testData;
     var Timesheet;
 
-    beforeEach(module('homeTrax.common.resources'));
+    beforeEach(module('homeTrax.common.resources.Timesheet'));
 
     beforeEach(function() {
       initializeTestData();

@@ -6,7 +6,6 @@
     'homeTrax.common.core.EditorMode',
     'homeTrax.common.directives.htTaskTimer',
     'homeTrax.common.filters.hoursMinutes',
-    'homeTrax.common.resources',
     'homeTrax.common.services.dateUtilities',
     'homeTrax.common.services.timesheets',
     'homeTrax.common.services.timesheetTaskTimers',

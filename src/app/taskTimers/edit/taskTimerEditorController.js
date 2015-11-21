@@ -6,7 +6,7 @@
     'homeTrax.common.core.EditorMode',
     'homeTrax.common.core.Status',
     'homeTrax.common.filters.hoursMinutes',
-    'homeTrax.common.resources',
+    'homeTrax.common.resources.Project',
     'homeTrax.common.services.notifier',
     'homeTrax.common.services.stages',
     'homeTrax.common.services.timeUtilities'

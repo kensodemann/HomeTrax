@@ -5,7 +5,7 @@
     'ngMessages',
     'ngRoute',
     'homeTrax.auth.identity',
-    'homeTrax.common.resources',
+    'homeTrax.common.resources.User',
     'homeTrax.common.services.notifier',
     'homeTrax.userAdministration.passwordEditor'
   ]).controller('myProfileController', MyProfileController)

@@ -1,7 +1,9 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.about').factory('versionData', VersionData);
+  angular.module('homeTrax.about.versionData', [
+    'homeTrax.common.resources.Versions'
+  ]).factory('versionData', VersionData);
 
   function VersionData(Versions) {
     var exports = {

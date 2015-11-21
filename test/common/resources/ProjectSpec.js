@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.common.resources: Project', function() {
+  describe('homeTrax.common.resources.Project', function() {
     var httpBackend;
     var project;
     var scope;
@@ -9,7 +9,7 @@
 
     var config;
 
-    beforeEach(module('homeTrax.common.resources'));
+    beforeEach(module('homeTrax.common.resources.Project'));
 
     beforeEach(function() {
       initializeTestData();

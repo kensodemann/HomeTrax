@@ -5,7 +5,7 @@
     'homeTrax.auth.authToken',
     'homeTrax.auth.identity',
     'homeTrax.common.core.config',
-    'homeTrax.common.resources'
+    'homeTrax.common.resources.User'
   ]).factory('authService', AuthService);
 
   function AuthService($http, identity, $q, User, config, authToken) {

@@ -1,8 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.about')
-    .controller('aboutController', AboutController)
+  angular.module('homeTrax.about', [
+    'ngRoute',
+    'homeTrax.about.versionData'
+  ]).controller('aboutController', AboutController)
     .config(function($routeProvider) {
       $routeProvider.when('/about', {
         templateUrl: 'app/about/templates/about.html',

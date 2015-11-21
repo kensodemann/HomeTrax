@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('homeTrax.common.services.timesheetTaskTimers', [
-    'homeTrax.common.resources'
+    'homeTrax.common.resources.TaskTimer'
   ]).factory('timesheetTaskTimers', timesheetTaskTimers);
 
   function timesheetTaskTimers(TaskTimer) {

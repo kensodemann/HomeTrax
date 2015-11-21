@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('homeTrax.common.services.stages', [
-    'homeTrax.common.resources'
+    'homeTrax.common.resources.Stage'
   ]).factory('stages', stages);
 
   function stages(Stage) {

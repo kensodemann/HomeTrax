@@ -2,12 +2,12 @@
   'use strict';
 
   angular.module('homeTrax.projects.list', [
-      'homeTrax.common.core.EditorMode',
-      'homeTrax.common.directives.htWaitBar',
-      'homeTrax.projects.edit',
-      'ngRoute'
-    ])
-    .controller('projectListController', ProjectListController)
+    'homeTrax.common.core.EditorMode',
+    'homeTrax.common.directives.htWaitBar',
+    'homeTrax.common.resources.Project',
+    'homeTrax.projects.edit',
+    'ngRoute'
+  ]).controller('projectListController', ProjectListController)
     .config(function($routeProvider) {
       $routeProvider.when('/projects/list', {
         templateUrl: 'app/projects/list/projectList.html',
@@ -35,7 +35,7 @@
       }
     }
 
-    function editProject(project){
+    function editProject(project) {
       projectEditor.open(project, EditorMode.edit);
     }
 

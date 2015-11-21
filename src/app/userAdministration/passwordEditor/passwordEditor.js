@@ -2,7 +2,9 @@
   'use strict';
 
   angular.module('homeTrax.userAdministration.passwordEditor', [
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'homeTrax.common.services.notifier',
+    'homeTrax.common.resources.UserPassword'
   ]).factory('passwordEditor', passwordEditor)
     .controller('passwordEditorController', PasswordEditorController);
 

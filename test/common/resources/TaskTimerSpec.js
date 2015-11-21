@@ -1,14 +1,14 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.common.resources: TaskTimer', function() {
+  describe('homeTrax.common.resources.TaskTimer', function() {
     var config;
     var httpBackend;
     var scope;
     var testData;
     var TaskTimer;
 
-    beforeEach(module('homeTrax.common.resources'));
+    beforeEach(module('homeTrax.common.resources.TaskTimer'));
 
     beforeEach(function() {
       initializeTestData();

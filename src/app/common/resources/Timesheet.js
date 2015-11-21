@@ -1,8 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.resources')
-    .factory('Timesheet', Timesheet);
+  angular.module('homeTrax.common.resources.Timesheet', [
+    'ngResource',
+    'homeTrax.common.core.config'
+  ]).factory('Timesheet', Timesheet);
 
   function Timesheet($resource, config) {
     return $resource(config.dataService + '/timesheets/:id', {
