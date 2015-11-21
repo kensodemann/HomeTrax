@@ -42,7 +42,7 @@
 
     function createController(id) {
       return $controllerConstructor('passwordEditorController', {
-        $modalInstance: mockModalInstance,
+        $uibModalInstance: mockModalInstance,
         notifier: mockNotifier,
         UserPassword: mockUserPasswordConstructor,
         userId: id

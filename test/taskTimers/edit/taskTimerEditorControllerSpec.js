@@ -53,7 +53,7 @@
 
     function createController(taskTimer, mode) {
       return $controllerConstructor('taskTimerEditorController', {
-        $modalInstance: mockModalInstance,
+        $uibModalInstance: mockModalInstance,
         Project: mockProject,
         stages: mockStages,
         taskTimer: taskTimer || {},

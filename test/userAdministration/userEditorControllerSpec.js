@@ -31,7 +31,7 @@
 
     function createController(user, mode) {
       return $controllerConstructor('userEditorController', {
-        $modalInstance: mockModalInstance,
+        $uibModalInstance: mockModalInstance,
         notifier: mockNotifier,
         user: user || {
           isAdministrator: sinon.stub()
