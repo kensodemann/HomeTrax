@@ -9,7 +9,7 @@
       'homeTrax.common.services.notifier'
     ]).controller('projectEditorController', ProjectEditorController);
 
-  function ProjectEditorController($modalInstance, project, mode, EditorMode, Status, notifier) {
+  function ProjectEditorController($uibModalInstance, project, mode, EditorMode, Status, notifier) {
     var controller = this;
 
     controller.name = project.name;
@@ -28,7 +28,7 @@
       project.$save(onSuccess, onFailure);
 
       function onSuccess(project) {
-        $modalInstance.close(project);
+        $uibModalInstance.close(project);
       }
 
       function onFailure(response) {

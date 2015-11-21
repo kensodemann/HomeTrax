@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('User', function() {
+  describe('homeTrax.common.resources.User', function() {
     var config;
     var httpBackend;
     var User;
@@ -28,7 +28,7 @@
       }];
     });
 
-    beforeEach(module('homeTrax.common.resources'));
+    beforeEach(module('homeTrax.common.resources.User'));
 
     beforeEach(inject(function($rootScope, $httpBackend, _config_, _User_) {
       scope = $rootScope;

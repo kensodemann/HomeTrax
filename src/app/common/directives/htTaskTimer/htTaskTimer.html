@@ -15,10 +15,10 @@
     <span class="pull-right" ng-bind="controller.htTimer.milliseconds | hoursMinutes"></span>
   </section>
   <section class="col-md-2 timerControls">
-    <button class="btn btn-default" ng-hide="controller.htTimer.isActive"><i class="fa fa-clock-o"></i>
+    <button class="btn btn-default" ng-hide="controller.htTimer.isActive" ng-click="controller.htStart()"><i class="fa fa-clock-o"></i>
       <span class="icon-label">Start</span>
     </button>
-    <button class="btn btn-default" ng-show="controller.htTimer.isActive"><i class="fa fa-stop"></i>
+    <button class="btn btn-default" ng-show="controller.htTimer.isActive" ng-click="controller.htStop()"><i class="fa fa-stop"></i>
       <span class="icon-label">Stop</span>
     </button>
     <i class="fa fa-lg fa-pencil-square-o" style="padding-left: 1em" ng-click="controller.htEdit()"></i>

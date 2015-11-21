@@ -33,7 +33,7 @@
     }
   }
 
-  function UserEditorController($modalInstance, user, mode, EditorMode, notifier) {
+  function UserEditorController($uibModalInstance, user, mode, EditorMode, notifier) {
     var controller = this;
 
     controller.firstName = user.firstName;
@@ -51,7 +51,7 @@
 
       function success() {
         notifier.notify(mode === EditorMode.create ? 'User created successfully' : 'Changes to user saved successfully');
-        $modalInstance.close(user);
+        $uibModalInstance.close(user);
       }
 
       function failure(response) {

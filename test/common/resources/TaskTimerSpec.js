@@ -1,14 +1,14 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.common.resources: TaskTimer', function() {
+  describe('homeTrax.common.resources.TaskTimer', function() {
     var config;
     var httpBackend;
     var scope;
     var testData;
     var TaskTimer;
 
-    beforeEach(module('homeTrax.common.resources'));
+    beforeEach(module('homeTrax.common.resources.TaskTimer'));
 
     beforeEach(function() {
       initializeTestData();
@@ -70,7 +70,7 @@
       it('saves new data properly', function() {
         httpBackend.expectPOST(config.dataService + '/timesheets/73/taskTimers')
           .respond({});
-        var res = TaskTimer.save({
+        TaskTimer.save({
           workDate: '2015-12-25',
           name: 'Deliver Gifts',
           timesheetRid: 73
@@ -81,7 +81,7 @@
       it('saves existing data properly', function() {
         httpBackend.expectPOST(config.dataService + '/timesheets/42/taskTimers/2')
           .respond({});
-        var res = TaskTimer.save(testData[1]);
+        TaskTimer.save(testData[1]);
         httpBackend.flush();
       });
     });

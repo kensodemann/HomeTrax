@@ -6,7 +6,6 @@
     'homeTrax.common.core.EditorMode',
     'homeTrax.common.directives.htTaskTimer',
     'homeTrax.common.filters.hoursMinutes',
-    'homeTrax.common.resources',
     'homeTrax.common.services.dateUtilities',
     'homeTrax.common.services.timesheets',
     'homeTrax.common.services.timesheetTaskTimers',
@@ -34,6 +33,8 @@
     controller.selectDate = selectDate;
     controller.editTimer = editTimer;
     controller.newTimer = newTimer;
+    controller.startTimer = timesheetTaskTimers.start;
+    controller.stopTimer = timesheetTaskTimers.stop;
 
     activate();
 

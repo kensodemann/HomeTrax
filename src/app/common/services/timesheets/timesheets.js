@@ -3,7 +3,7 @@
 
   angular.module('homeTrax.common.services.timesheets', [
     'homeTrax.auth.identity',
-    'homeTrax.common.resources',
+    'homeTrax.common.resources.Timesheet',
     'homeTrax.common.services.dateUtilities'
   ]).factory('timesheets', timesheets);
 

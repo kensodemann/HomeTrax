@@ -64,6 +64,12 @@
         },
 
         add: function() {
+        },
+
+        start: function() {
+        },
+
+        stop: function() {
         }
       });
       mockTimesheetTaskTimers.load.returns(loadTaskTimersDfd.promise);
@@ -271,6 +277,52 @@
         controller.editTimer(controller.allTaskTimers[1]);
         expect(mockTaskTimerEditor.open.calledOnce).to.be.true;
         expect(mockTaskTimerEditor.open.calledWith(controller.allTaskTimers[1], EditorMode.edit)).to.be.true;
+      });
+    });
+
+    describe('starting a timer', function() {
+      var controller;
+      beforeEach(function() {
+        controller = createController();
+      });
+
+      it('calls the service to start the timer', function() {
+        controller.startTimer({
+          _id: 42
+        });
+        expect(mockTimesheetTaskTimers.start.calledOnce).to.be.true;
+      });
+
+      it('passes the timer to the service', function() {
+        controller.startTimer({
+          _id: 42
+        });
+        expect(mockTimesheetTaskTimers.start.calledWith({
+          _id: 42
+        })).to.be.true;
+      });
+    });
+
+    describe('stopping a timer', function() {
+      var controller;
+      beforeEach(function() {
+        controller = createController();
+      });
+
+      it('calls the service to stop the timer', function() {
+        controller.stopTimer({
+          _id: 42
+        });
+        expect(mockTimesheetTaskTimers.stop.calledOnce).to.be.true;
+      });
+
+      it('passes the timer to the service', function() {
+        controller.stopTimer({
+          _id: 42
+        });
+        expect(mockTimesheetTaskTimers.stop.calledWith({
+          _id: 42
+        })).to.be.true;
       });
     });
 

@@ -1,7 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.resources').factory('Versions', Versions);
+  angular.module('homeTrax.common.resources.Versions', [
+    'ngResource',
+    'homeTrax.common.core.config'
+  ]).factory('Versions', Versions);
 
   function Versions($resource, config) {
     var millisecondsPerMinute = 60000;
@@ -16,7 +19,7 @@
       }
     });
 
-    function transformArrayResponse(data){
+    function transformArrayResponse(data) {
       var resp = angular.fromJson(data);
       resp.forEach(function(item) {
         if (item.releaseDate) {

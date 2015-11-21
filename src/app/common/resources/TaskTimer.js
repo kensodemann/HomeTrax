@@ -1,8 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.resources')
-    .factory('TaskTimer', TaskTimer);
+  angular.module('homeTrax.common.resources.TaskTimer', [
+    'ngResource',
+    'homeTrax.common.core.config'
+  ]).factory('TaskTimer', TaskTimer);
 
   function TaskTimer($resource, config) {
     return $resource(config.dataService + '/timesheets/:timesheetRid/taskTimers/:id', {

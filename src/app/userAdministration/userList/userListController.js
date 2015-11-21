@@ -4,7 +4,7 @@
   angular.module('homeTrax.userAdministration.userList', [
     'ngRoute',
     'homeTrax.common.core.EditorMode',
-    'homeTrax.common.resources',
+    'homeTrax.common.resources.User',
     'homeTrax.userAdministration.userEditor'
   ])
     .controller('userListController', UserListController)

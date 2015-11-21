@@ -25,7 +25,7 @@
       mockModalConstructor = sinon.stub().returns(mockModal);
 
       module(function($provide) {
-        $provide.value('$modal', mockModalConstructor);
+        $provide.value('$uibModal', mockModalConstructor);
       });
     });
 

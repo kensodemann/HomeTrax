@@ -1,7 +1,10 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.resources').factory('User', User);
+  angular.module('homeTrax.common.resources.User', [
+    'ngResource',
+    'homeTrax.common.core.config'
+  ]).factory('User', User);
 
   function User($resource, config) {
     var UserResource = $resource(config.dataService + '/users/:id', {

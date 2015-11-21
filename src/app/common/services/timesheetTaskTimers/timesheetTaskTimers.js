@@ -2,10 +2,13 @@
   'use strict';
 
   angular.module('homeTrax.common.services.timesheetTaskTimers', [
-    'homeTrax.common.resources'
+    'homeTrax.common.resources.TaskTimer',
+    'homeTrax.common.resources.TaskTimerStart',
+    'homeTrax.common.resources.TaskTimerStop'
   ]).factory('timesheetTaskTimers', timesheetTaskTimers);
 
-  function timesheetTaskTimers(TaskTimer) {
+  function timesheetTaskTimers(TaskTimer, TaskTimerStart, TaskTimerStop) {
+    var forEach = angular.forEach;
     var currentTimesheet;
 
     var service = {
@@ -15,7 +18,9 @@
       get: getTaskTimers,
       totalTime: getTotalTime,
       create: newTaskTimer,
-      add: addTaskTimer
+      add: addTaskTimer,
+      start: startTaskTimer,
+      stop: stopTaskTimer
     };
 
     return service;
@@ -52,6 +57,43 @@
 
     function addTaskTimer(tt) {
       service.all.push(tt);
+    }
+
+    function startTaskTimer(tt) {
+      assertTaskTimerInCache(tt);
+      stopRunningTimers();
+      TaskTimerStart.save(tt, copyData);
+    }
+
+
+    function stopTaskTimer(tt) {
+      assertTaskTimerInCache(tt);
+      TaskTimerStop.save(tt, copyData);
+    }
+
+    function assertTaskTimerInCache(tt) {
+      if (_.indexOf(service.all, tt) === -1) {
+        throw new Error('Invalid Task Timer');
+      }
+    }
+
+    function stopRunningTimers() {
+      forEach(service.all, function(tt) {
+        if (tt.isActive) {
+          TaskTimerStop.save(tt, copyData);
+        }
+      });
+    }
+
+    function copyData(res) {
+      var tt = _.find(service.all, function(timer) {
+        return timer._id === res._id;
+      });
+
+      if (tt) {
+        tt.isActive = res.isActive;
+        tt.milliseconds = res.milliseconds;
+      }
     }
   }
 }());

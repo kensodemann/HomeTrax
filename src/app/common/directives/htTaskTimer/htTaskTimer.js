@@ -13,7 +13,9 @@
       scope: {
         htTimer: '=',
         htAllTimer: '=',
-        htEdit: '&'
+        htEdit: '&',
+        htStart: '&',
+        htStop: '&'
       },
       templateUrl: 'app/common/directives/htTaskTimer/htTaskTimer.html',
       controller: 'htTaskTimerController',

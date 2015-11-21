@@ -6,13 +6,13 @@
     'homeTrax.common.core.EditorMode',
     'homeTrax.common.core.Status',
     'homeTrax.common.filters.hoursMinutes',
-    'homeTrax.common.resources',
+    'homeTrax.common.resources.Project',
     'homeTrax.common.services.notifier',
     'homeTrax.common.services.stages',
     'homeTrax.common.services.timeUtilities'
   ]).controller('taskTimerEditorController', TaskTimerEditorController);
 
-  function TaskTimerEditorController($modalInstance, taskTimer, mode, Project,
+  function TaskTimerEditorController($uibModalInstance, taskTimer, mode, Project,
                                      stages, timeUtilities, hoursMinutesFilter, Status, EditorMode, notifier) {
     var controller = this;
 
@@ -38,7 +38,7 @@
 
       function onSuccess(tt) {
         controller.isSaving = false;
-        $modalInstance.close(tt);
+        $uibModalInstance.close(tt);
       }
 
       function onFailure(response) {

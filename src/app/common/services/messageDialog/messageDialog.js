@@ -4,7 +4,7 @@
   angular.module('homeTrax.common.services.messageDialog', [])
     .factory('messageDialog', messageDialog);
 
-  function messageDialog($modal, $rootScope, $q) {
+  function messageDialog($uibModal, $rootScope, $q) {
     var exports = {
       ask: function(question, title) {
         askDfd = $q.defer();
@@ -20,7 +20,7 @@
 
     var askDfd;
     var askScope = $rootScope.$new(true);
-    var askDlg = $modal({
+    var askDlg = $uibModal({
       template: 'app/common/services/messageDialog/templates/askDialog.html',
       backdrop: 'static',
       show: false,

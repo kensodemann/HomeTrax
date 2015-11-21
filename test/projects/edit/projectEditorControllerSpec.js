@@ -36,7 +36,7 @@
 
     function createController(project, mode) {
       return $controllerConstructor('projectEditorController', {
-        $modalInstance: mockModalInstance,
+        $uibModalInstance: mockModalInstance,
         notifier: mockNotifier,
         project: project || {},
         mode: mode

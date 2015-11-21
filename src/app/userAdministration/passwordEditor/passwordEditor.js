@@ -2,7 +2,9 @@
   'use strict';
 
   angular.module('homeTrax.userAdministration.passwordEditor', [
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'homeTrax.common.services.notifier',
+    'homeTrax.common.resources.UserPassword'
   ]).factory('passwordEditor', passwordEditor)
     .controller('passwordEditorController', PasswordEditorController);
 
@@ -27,7 +29,7 @@
     }
   }
 
-  function PasswordEditorController($modalInstance, notifier, UserPassword, userId) {
+  function PasswordEditorController($uibModalInstance, notifier, UserPassword, userId) {
     var controller = this;
 
     controller.model = undefined;
@@ -46,7 +48,7 @@
 
       function success() {
         notifier.notify('Password changed successfully');
-        $modalInstance.close();
+        $uibModalInstance.close();
 
       }
 

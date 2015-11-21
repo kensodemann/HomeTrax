@@ -12,7 +12,12 @@
   </header>
 
   <section class="taskList">
-    <ht-task-timer ng-repeat="timer in controller.taskTimers" ht-timer="timer" ht-all-timers="controller.taskTimers" ht-edit="controller.editTimer(timer)"></ht-task-timer>
+    <ht-task-timer ng-repeat="timer in controller.taskTimers"
+                   ht-timer="timer"
+                   ht-all-timers="controller.taskTimers"
+                   ht-edit="controller.editTimer(timer)"
+                   ht-start="controller.startTimer(timer)"
+                   ht-stop="controller.stopTimer(timer)"></ht-task-timer>
 
     <div class="row timerTotal" style="padding-top: 1em;">
       <section class="col-md-9 taskDefinition">
