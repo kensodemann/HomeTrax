@@ -33,6 +33,8 @@
     controller.selectDate = selectDate;
     controller.editTimer = editTimer;
     controller.newTimer = newTimer;
+    controller.startTimer = timesheetTaskTimers.start;
+    controller.stopTimer = timesheetTaskTimers.stop;
 
     activate();
 

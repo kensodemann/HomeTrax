@@ -145,6 +145,148 @@
       });
     });
 
+    describe('starting a task timer', function() {
+      beforeEach(function() {
+        httpBackend.expectGET(config.dataService + '/timesheets/4273314159/taskTimers')
+          .respond(testTaskTimers);
+        timesheetTaskTimers.load(testTimesheet);
+        httpBackend.flush();
+      });
+
+      it('throws an error if the task timer is not in the current cache', function() {
+        expect(function() {
+          timesheetTaskTimers.start({
+            _id: 12343,
+            timesheetRid: 4273314159,
+            workDate: '2015-10-14',
+            milliseconds: 4885000
+          });
+        }).to.throw('Invalid Task Timer');
+      });
+
+      it('stops any timer in the cache that is currently running', function() {
+        timesheetTaskTimers.all[2].isActive = true;
+        timesheetTaskTimers.all[4].isActive = true;
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12343/stop')
+          .respond({
+            _id: 12343,
+            timesheetRid: 4273314159,
+            workDate: '2015-10-14',
+            isActive: false,
+            milliseconds: 4887000
+          });
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12345/stop')
+          .respond({
+            _id: 12345,
+            timesheetRid: 4273314159,
+            workDate: '2015-10-12',
+            isActive: false,
+            milliseconds: 3746000
+          });
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12344/start')
+          .respond();
+
+        timesheetTaskTimers.start(timesheetTaskTimers.all[3]);
+        httpBackend.flush();
+
+        expect(timesheetTaskTimers.all[2].isActive).to.be.false;
+        expect(timesheetTaskTimers.all[4].isActive).to.be.false;
+      });
+
+      it('copies the new running time for any stopped timer', function() {
+        timesheetTaskTimers.all[2].isActive = true;
+        timesheetTaskTimers.all[4].isActive = true;
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12343/stop')
+          .respond({
+            _id: 12343,
+            timesheetRid: 4273314159,
+            workDate: '2015-10-14',
+            isActive: false,
+            milliseconds: 4887000
+          });
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12345/stop')
+          .respond({
+            _id: 12345,
+            timesheetRid: 4273314159,
+            workDate: '2015-10-12',
+            isActive: false,
+            milliseconds: 3746000
+          });
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12344/start')
+          .respond();
+
+        timesheetTaskTimers.start(timesheetTaskTimers.all[3]);
+        httpBackend.flush();
+
+        expect(timesheetTaskTimers.all[2].milliseconds).to.equal(4887000);
+        expect(timesheetTaskTimers.all[4].milliseconds).to.equal(3746000);
+      });
+
+      it('starts the requested timer', function() {
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12343/start')
+          .respond({
+            _id: 12343,
+            workDate: '2015-10-14',
+            milliseconds: 4885000,
+            isActive: true
+          });
+        timesheetTaskTimers.start(timesheetTaskTimers.all[2]);
+        httpBackend.flush();
+
+        expect(timesheetTaskTimers.all[2].isActive).to.be.true;
+      });
+    });
+
+    describe('stoping a task timer', function() {
+      beforeEach(function() {
+        httpBackend.expectGET(config.dataService + '/timesheets/4273314159/taskTimers')
+          .respond(testTaskTimers);
+        timesheetTaskTimers.load(testTimesheet);
+        httpBackend.flush();
+      });
+
+      it('throws an error if the task timer is not in the current cache', function() {
+        expect(function() {
+          timesheetTaskTimers.start({
+            _id: 12343,
+            timesheetRid: 4273314159,
+            workDate: '2015-10-14',
+            milliseconds: 4885000
+          });
+        }).to.throw('Invalid Task Timer');
+      });
+
+      it('stops the requested timer', function() {
+        timesheetTaskTimers.all[2].isActive = true;
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12343/stop')
+          .respond({
+            _id: 12343,
+            workDate: '2015-10-14',
+            milliseconds: 4887000,
+            isActive: false
+          });
+        timesheetTaskTimers.stop(timesheetTaskTimers.all[2]);
+        httpBackend.flush();
+
+        expect(timesheetTaskTimers.all[2].isActive).to.be.false;
+      });
+
+      it('copies the new running time for any stopped timer', function() {
+        timesheetTaskTimers.all[2].isActive = true;
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12343/stop')
+          .respond({
+            _id: 12343,
+            workDate: '2015-10-14',
+            milliseconds: 4887000,
+            isActive: false
+          });
+        timesheetTaskTimers.stop(timesheetTaskTimers.all[2]);
+        httpBackend.flush();
+
+        expect(timesheetTaskTimers.all[2].milliseconds).to.equal(4887000);
+      });
+    });
+
     function initializeTestData() {
       testTimesheet = {
         _id: 4273314159,
@@ -153,30 +295,37 @@
 
       testTaskTimers = [{
         _id: 12341,
+        timesheetRid: 4273314159,
         workDate: '2015-10-12',
         milliseconds: 3884000
       }, {
         _id: 12342,
+        timesheetRid: 4273314159,
         workDate: '2015-10-13',
         milliseconds: 1234000
       }, {
         _id: 12343,
+        timesheetRid: 4273314159,
         workDate: '2015-10-14',
         milliseconds: 4885000
       }, {
         _id: 12344,
+        timesheetRid: 4273314159,
         workDate: '2015-10-13',
         milliseconds: 948000
       }, {
         _id: 12345,
+        timesheetRid: 4273314159,
         workDate: '2015-10-12',
         milliseconds: 3746000
       }, {
         _id: 12346,
+        timesheetRid: 4273314159,
         workDate: '2015-10-13',
         milliseconds: 672000
       }, {
         _id: 12347,
+        timesheetRid: 4273314159,
         workDate: '2015-10-15',
         milliseconds: 123000
       }];
