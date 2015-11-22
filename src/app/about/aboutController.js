@@ -3,6 +3,7 @@
 
   angular.module('homeTrax.about', [
     'ngRoute',
+    'ui.bootstrap',
     'homeTrax.about.versionData'
   ]).controller('aboutController', AboutController)
     .config(function($routeProvider) {
@@ -14,12 +15,12 @@
     });
 
   function AboutController(versionData) {
-    var self = this;
+    var controller = this;
 
-    self.versions = versionData.allVersions;
+    controller.versions = versionData.allVersions;
 
-    self.versions.$promise.then(function(d) {
-      self.currentVersion = d[0].name;
+    controller.versions.$promise.then(function(d) {
+      controller.currentVersion = d[0].id;
     });
   }
 }());
