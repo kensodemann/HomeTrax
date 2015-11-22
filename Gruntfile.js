@@ -6,16 +6,6 @@ module.exports = function(grunt) {
   var componentPaths = require('./conf/component-paths');
 
   var paths = {
-    css: [
-      componentPaths.css.angularMotion.dev,
-      componentPaths.css.bootstrapAdditions.dev,
-      componentPaths.css.fullcalendar.dev
-    ],
-    cssRelease: [
-      componentPaths.css.angularMotion.release,
-      componentPaths.css.bootstrapAdditions.release,
-      componentPaths.css.fullcalendar.release
-    ],
     lib: [
       componentPaths.lib.jquery.dev,
       componentPaths.lib.bootstrap.dev,
@@ -25,15 +15,10 @@ module.exports = function(grunt) {
       componentPaths.lib.angularMessages.dev,
       componentPaths.lib.angularResource.dev,
       componentPaths.lib.angularRoute.dev,
-      componentPaths.lib.angularStrap.dev,
-      componentPaths.lib.angularStrapTpl.dev,
-      componentPaths.lib.angularUiCalendar.dev,
+      componentPaths.lib.angularBootstrapUI.dev,
       componentPaths.lib.moment.dev,
-      componentPaths.lib.fullCalendar.dev,
-      componentPaths.lib.bloodhound.dev,
-      componentPaths.lib.typeahead.dev,
-      componentPaths.lib.angularTypeahead.dev,
-      componentPaths.lib.angularAnimate.dev
+      componentPaths.lib.angularAnimate.dev,
+      componentPaths.lib.underscore.dev
     ],
     libRelease: [
       componentPaths.lib.jquery.release,
@@ -44,15 +29,10 @@ module.exports = function(grunt) {
       componentPaths.lib.angularMessages.release,
       componentPaths.lib.angularResource.release,
       componentPaths.lib.angularRoute.release,
-      componentPaths.lib.angularStrap.release,
-      componentPaths.lib.angularStrapTpl.release,
-      componentPaths.lib.angularUiCalendar.release,
+      componentPaths.lib.angularBootstrapUI.release,
       componentPaths.lib.moment.release,
-      componentPaths.lib.fullCalendar.release,
-      componentPaths.lib.bloodhound.release,
-      componentPaths.lib.typeahead.release,
-      componentPaths.lib.angularTypeahead.release,
-      componentPaths.lib.angularAnimate.release
+      componentPaths.lib.angularAnimate.release,
+      componentPaths.lib.underscore.release
     ]
   };
 
@@ -118,14 +98,6 @@ module.exports = function(grunt) {
     },
 
     concat: {
-      css: {
-        src: paths.css,
-        dest: 'www/libs.css'
-      },
-      cssRelease: {
-        src: paths.cssRelease,
-        dest: 'www/libs.css'
-      },
       lib: {
         src: paths.lib,
         dest: 'www/libs.js'
@@ -138,7 +110,7 @@ module.exports = function(grunt) {
         options: {
           sourceMap: true
         },
-        src: ['src/app/app.js', 'src/**/app.*.js', 'src/app/**/*.js'],
+        src: ['src/app/app.js', 'src/**/module.js', 'src/app/**/*.js'],
         dest: 'www/<%= pkg.name %>.js'
       }
     },
@@ -197,7 +169,7 @@ module.exports = function(grunt) {
           'server.js',
           'src/app/**/*.js',
           'src/style/**/*.scss',
-          'src/index.html',
+          'src/**/*.html',
           'src/preprocessedSources/config.js',
           '!src/app/common/core/config.js',
           'test/**/*.js'],
@@ -223,13 +195,12 @@ module.exports = function(grunt) {
   // Tasks
   grunt.registerTask('default', [
     'clean',
+    'preprocess:dev',
     'karma',
     'jshint',
     'jscs',
     'copy',
-    'preprocess:dev',
     'sass',
-    'concat:css',
     'concat:lib',
     'concat:homeTrax',
     'ngAnnotate'
@@ -240,7 +211,6 @@ module.exports = function(grunt) {
     'copy',
     'preprocess:dist',
     'sass',
-    'concat:cssRelease',
     'concat:libRelease',
     'concat:homeTrax',
     'ngAnnotate',

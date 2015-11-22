@@ -1,11 +1,11 @@
 (function() {
   'use strict';
 
-  describe('authInterceptor', function() {
+  describe('homeTrax.auth.authInterceptor', function() {
     var mockAuthToken;
     var authInterceptor;
 
-    beforeEach(module('app.auth'));
+    beforeEach(module('homeTrax.auth.authInterceptor'));
 
     beforeEach(function() {
       mockAuthToken = sinon.stub({

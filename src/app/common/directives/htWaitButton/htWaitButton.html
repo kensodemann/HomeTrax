@@ -1,0 +1,9 @@
+<button ng-click="controller.click()">
+  <div style="position: relative; left: 0; top: 0; right: 0; bottom: 0;">
+    <div  ng-show="controller.waitBusy"
+          style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
+      <span class="fa fa-spinner fa-pulse"></span>
+    </div>
+    <span ng-style="controller.transStyle" ng-transclude></span>
+  </div>
+</button>

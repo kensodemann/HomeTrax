@@ -1,33 +1,55 @@
-/* global angular */
 (function() {
   'use strict';
 
-  angular.module('app.auth').factory('identity', Identity);
+  angular.module('homeTrax.auth.identity', [
+    'homeTrax.auth.authToken',
+    'homeTrax.common.core.config',
+    'homeTrax.common.services.cacheBuster'
+  ]).factory('identity', identity);
 
-  function Identity($http, config, cacheBuster) {
-    var exports = {
+  function identity($http, $q, config, authToken, cacheBuster) {
+    var service = {
       currentUser: undefined,
+
+      get: getCurrentUser,
+      set: setCurrentUser,
+      clear: clearCurrentUser,
+
       isAuthenticated: isAuthenticated,
       isAuthorized: isAuthorized
     };
 
-    setCurrentUser();
+    service.get();
 
-    return exports;
+    return service;
 
-    function setCurrentUser() {
-      $http.get(config.dataService + '/currentUser', { params: { _: cacheBuster.value } })
-        .success(function(data) {
-          exports.currentUser =  data;
-        });
+    function getCurrentUser() {
+      if (service.currentUser) {
+        return $q.when(service.currentUser);
+      } else {
+        return $http.get(config.dataService + '/currentUser', {params: {_: cacheBuster.value}})
+          .then(function(response) {
+            service.currentUser = response.data;
+            return response.data;
+          });
+      }
+    }
+
+    function setCurrentUser(user) {
+      service.currentUser = user;
+    }
+
+    function clearCurrentUser() {
+      service.currentUser = undefined;
     }
 
     function isAuthenticated() {
-      return !!exports.currentUser;
+      return !!authToken.get();
     }
 
     function isAuthorized(role) {
-      return isAuthenticated() && (!role || (!!exports.currentUser.roles && exports.currentUser.roles.indexOf(role) > -1));
+      return isAuthenticated() &&
+        (!role || (!!service.currentUser && !!service.currentUser.roles && service.currentUser.roles.indexOf(role) > -1));
     }
   }
 }());

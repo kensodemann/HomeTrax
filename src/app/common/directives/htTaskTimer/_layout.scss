@@ -1,0 +1,14 @@
+.taskTimer {
+  padding-top: 1em;
+
+  .timeSection {
+    vertical-align: -40%;
+    font-size: x-large;
+  }
+
+  .timerControls {
+    button {
+      min-width: 80px;
+    }
+  }
+}

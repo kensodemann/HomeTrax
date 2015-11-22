@@ -1,0 +1,12 @@
+<ul ng-controller="userAdministrationMenuController as controller" class="nav navbar-nav navbar-right">
+  <li ng-show="controller.identity.isAuthenticated() &amp;&amp; !controller.identity.isAuthorized('admin')"><a
+    href="/userAdministration/myprofile">My Profile</a></li>
+  <li ng-show="controller.identity.isAuthorized('admin')" class="dropdown"><a href="#" data-toggle="dropdown"
+                                                                        class="dropdown-toggle">User Admin <b
+    class="caret"></b></a>
+    <ul class="dropdown-menu">
+      <li><a href="/userAdministration/myprofile">My Profile</a></li>
+      <li><a href="/userAdministration/userlist">User List</a></li>
+    </ul>
+  </li>
+</ul>

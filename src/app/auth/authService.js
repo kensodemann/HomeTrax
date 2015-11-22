@@ -1,7 +1,12 @@
 (function() {
   'use strict';
 
-  angular.module('app.auth').factory('authService', AuthService);
+  angular.module('homeTrax.auth.authService', [
+    'homeTrax.auth.authToken',
+    'homeTrax.auth.identity',
+    'homeTrax.common.core.config',
+    'homeTrax.common.resources.User'
+  ]).factory('authService', AuthService);
 
   function AuthService($http, identity, $q, User, config, authToken) {
     return {
@@ -14,7 +19,7 @@
           if (response.data.success) {
             var u = new User();
             angular.extend(u, response.data.user);
-            identity.currentUser = u;
+            identity.set(u);
             authToken.set(response.data.token);
             dfd.resolve(true);
           } else {
@@ -31,7 +36,7 @@
         $http.post(config.dataService + '/logout', {
           logout: true
         }).then(function() {
-          identity.currentUser = undefined;
+          identity.clear();
           dfd.resolve();
         });
 

@@ -3,6 +3,7 @@
   "undef": true,
   "predef": [
     "$",
+    "_",
     "angular",
     "moment",
     "navigator",

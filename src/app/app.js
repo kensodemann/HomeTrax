@@ -2,41 +2,25 @@
 (function() {
   'use strict';
 
-  angular.module('app',
-    ['app.core', 'app.auth', 'app.calendar', 'app.financial', 'app.household', 'app.userAdministration',
-      'LocalStorageModule', 'ngAnimate', 'ngRoute', 'ngResource']);
+  angular.module('homeTrax', [
+    'homeTrax.about',
+    'homeTrax.auth.authInterceptor',
+    'homeTrax.auth.login',
+    'homeTrax.main',
+    'homeTrax.projects',
+    'homeTrax.timesheets',
+    'homeTrax.userAdministration',
+    'LocalStorageModule'
+  ]);
 
-  angular.module('app')
-    .config(auth)
-    .config(routes)
-    .config(services)
-    .run(routeErrorHandling);
+  angular.module('homeTrax')
+      .config(auth)
+      .config(routes)
+      .config(services)
+      .run(routeErrorHandling);
 
-  function routes($routeProvider, $locationProvider,
-                  mainRoutes, authRoutes, calendarRoutes, financialRoutes, householdRoutes, userAdministrationRoutes) {
+  function routes($locationProvider) {
     $locationProvider.html5Mode(true);
-
-    setupRoutes(mainRoutes);
-    setupRoutes(authRoutes);
-    setupRoutes(calendarRoutes);
-    setupRoutes(financialRoutes);
-    setupRoutes(householdRoutes);
-    setupRoutes(userAdministrationRoutes);
-
-    function setupRoutes(routes) {
-      angular.forEach(routes, function(route) {
-        createRoute(route);
-      });
-
-      function createRoute(route) {
-        $routeProvider.when(route.path, {
-          templateUrl: route.templateUrl,
-          controller: route.controller,
-          controllerAs: 'ctrl',
-          resolve: route.resolve
-        });
-      }
-    }
   }
 
   function auth($httpProvider) {

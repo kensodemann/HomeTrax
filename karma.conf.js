@@ -11,21 +11,24 @@ module.exports = function(config) {
     files: [
       componentPaths.lib.jquery.dev,
       componentPaths.lib.angular.dev,
+      componentPaths.lib.angularLocalStorage.dev,
+      componentPaths.lib.angularMessages.dev,
       componentPaths.lib.angularResource.dev,
+      componentPaths.lib.angularRoute.dev,
+      componentPaths.lib.angularBootstrapUI.dev,
       componentPaths.lib.angularMocks.dev,
       componentPaths.lib.moment.dev,
-      componentPaths.lib.fullCalendar.dev,
-      componentPaths.lib.bloodhound.dev,
+      componentPaths.lib.underscore.dev,
 
       'test/test-app.js',
+      'src/app/**/module.js',
       'src/app/**/*.js',
       'src/app/**/*.html',
       'test/**/*Spec.js'
     ],
 
     exclude: [
-      'src/app/app.js',
-      'src/app/**/app.*.js'
+      'src/app/app.js'
     ],
 
     preprocessors: {

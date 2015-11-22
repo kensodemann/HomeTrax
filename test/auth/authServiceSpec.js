@@ -1,16 +1,18 @@
 (function() {
   'use strict';
 
-  describe('authService', function() {
+  describe('homeTrax.auth.authService', function() {
     var mockAuthToken;
     var mockHttp;
     var mockIdentity;
     var mockUser;
+
+    var config;
     var dfd;
-    var serviceUnderTest;
+    var authService;
     var scope;
 
-    beforeEach(module('app.auth'));
+    beforeEach(module('homeTrax.auth.authService'));
 
     beforeEach(function() {
       mockAuthToken = sinon.stub({
@@ -18,57 +20,65 @@
 
         set: function() {}
       });
+
       mockHttp = sinon.stub({
         post: function() {
         }
       });
+
       mockIdentity = sinon.stub({
+        set:function(){},
+
+        clear:function(){
+        },
+
         isAuthenticated: function() {
         },
 
         isAuthorized: function() {
         }
       });
+
       mockUser = sinon.stub().returns({});
-      var mockConfig = {
-        dataService: 'http://something'
-      };
 
       module(function($provide) {
         $provide.value('$http', mockHttp);
         $provide.value('identity', mockIdentity);
         $provide.value('User', mockUser);
         $provide.value('authToken', mockAuthToken);
-        $provide.value('config', mockConfig);
       });
     });
 
-    beforeEach(inject(function($rootScope, $q, authService) {
+    beforeEach(inject(function($rootScope, $q,_config_, _authService_) {
       scope = $rootScope;
       dfd = $q.defer();
       mockHttp.post.returns(dfd.promise);
-      serviceUnderTest = authService;
+      config = _config_;
+      authService = _authService_;
     }));
 
     describe('authenticateUser', function() {
       it('Returns a promise', function() {
-        var p = serviceUnderTest.authenticateUser('jimmy', 'CrackCornz');
+        var p = authService.authenticateUser('jimmy', 'CrackCornz');
         expect(p.then).to.be.a('function');
       });
 
       it('Calls post, passing username and password', function() {
-        serviceUnderTest.authenticateUser('jimmy', 'CrakzKorn');
-        expect(mockHttp.post.calledWith('http://something/login', {
+        authService.authenticateUser('jimmy', 'CrakzKorn');
+        expect(mockHttp.post.calledWith(config.dataService + '/login', {
           username: 'jimmy',
           password: 'CrakzKorn'
         })).to.be.true;
       });
 
-      it('Resolves True and Sets Current User if login succeeds', function(done) {
-        serviceUnderTest.authenticateUser('jimmy', 'CrakzKorn').then(function(result) {
+      it('Resolves True and sets the identity if login succeeds', function(done) {
+        authService.authenticateUser('jimmy', 'CrakzKorn').then(function(result) {
           expect(result).to.be.true;
-          expect(mockIdentity.currentUser.firstName).to.equal('James');
-          expect(mockIdentity.currentUser.lastName).to.equal('Jones');
+          expect(mockIdentity.set.calledOnce).to.be.true;
+          expect(mockIdentity.set.calledWith({
+            firstName: 'James',
+            lastName: 'Jones'
+          })).to.be.true;
           done();
         });
 
@@ -86,7 +96,7 @@
       });
 
       it('saves the login token on success', function() {
-        serviceUnderTest.authenticateUser('jimmy', 'CrakzKorn');
+        authService.authenticateUser('jimmy', 'CrakzKorn');
         dfd.resolve({
           data: {
             success: true,
@@ -102,10 +112,10 @@
         expect(mockAuthToken.set.calledWith('IAmToken')).to.be.true;
       });
 
-      it('Resolves False and does not set Current User if login fails', function(done) {
-        serviceUnderTest.authenticateUser('jimmy', 'CrakzKorn').then(function(result) {
+      it('Resolves False and does not set the identity if login fails', function(done) {
+        authService.authenticateUser('jimmy', 'CrakzKorn').then(function(result) {
           expect(result).to.be.false;
-          expect(mockIdentity.currentUser).to.be.undefined;
+          expect(mockIdentity.set.called).to.be.false;
           done();
         });
 
@@ -122,7 +132,7 @@
       });
 
       it('clears any existing login token if the login fails', function() {
-        serviceUnderTest.authenticateUser('jimmy', 'CrakzKorn');
+        authService.authenticateUser('jimmy', 'CrakzKorn');
         dfd.resolve({
           data: {
             success: false,
@@ -139,29 +149,25 @@
 
     describe('logoutUser', function() {
       it('clears the auth token', function() {
-        serviceUnderTest.logoutUser();
+        authService.logoutUser();
         expect(mockAuthToken.clear.calledOnce).to.be.true;
       });
 
       it('Returns a promise', function() {
-        var p = serviceUnderTest.logoutUser();
+        var p = authService.logoutUser();
         expect(p.then).to.be.a('function');
       });
 
       it('posts to the logout endpoint', function() {
-        serviceUnderTest.logoutUser();
-        expect(mockHttp.post.calledWith('http://something/logout', {
+        authService.logoutUser();
+        expect(mockHttp.post.calledWith(config.dataService + '/logout', {
           logout: true
         })).to.be.true;
       });
 
       it('Clears the current user when logout complete', function(done) {
-        mockIdentity.currentUser = {
-          firstName: 'James',
-          lastName: 'Jones'
-        };
-        serviceUnderTest.logoutUser().then(function() {
-          expect(mockIdentity.currentUser).to.be.undefined;
+        authService.logoutUser().then(function() {
+          expect(mockIdentity.clear.calledOnce).to.be.true;
           done();
         });
 

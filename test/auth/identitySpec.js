@@ -1,106 +1,203 @@
-/* global beforeEach describe expect inject it sinon */
 (function() {
   'use strict';
 
-  describe('identity', function() {
+  describe('homeTrax.auth.identity', function() {
+    var config;
     var identity;
     var httpBackend;
+    var mockAuthToken;
     var mockCacheBuster;
+    var $rootScope;
 
-    beforeEach(module('app.auth'));
+    beforeEach(module('homeTrax.auth.identity'));
 
     beforeEach(function() {
       mockCacheBuster = {
         value: 'SomeBusterOfCache'
       };
-      var mockConfig = {
-        dataService: 'http://somedataservice'
-      };
+    });
 
-      module(function($provide) {
-        $provide.value('cacheBuster', mockCacheBuster);
-        $provide.value('config', mockConfig);
+    beforeEach(function() {
+      mockAuthToken = sinon.stub({
+        get: function() {}
       });
     });
 
-    beforeEach(inject(function($httpBackend, _identity_) {
+    beforeEach(function() {
+      module(function($provide) {
+        $provide.value('authToken', mockAuthToken);
+        $provide.value('cacheBuster', mockCacheBuster);
+      });
+    });
+
+    beforeEach(inject(function($httpBackend, _$rootScope_, _config_, _identity_) {
+      config = _config_;
       identity = _identity_;
       httpBackend = $httpBackend;
+      $rootScope = _$rootScope_;
     }));
 
+    beforeEach(function() {
+      httpBackend.expectGET(config.dataService + '/currentUser?_=SomeBusterOfCache').respond({
+        _id: 0,
+        name: 'The Initially Fetched User'
+      });
+      httpBackend.flush();
+    });
+
+    afterEach(function() {
+      httpBackend.verifyNoOutstandingExpectation();
+      httpBackend.verifyNoOutstandingRequest();
+    });
+
     describe('instantiation', function() {
-      it('queries the API for the current user', function() {
-        httpBackend.expectGET('http://somedataservice/currentUser?_=SomeBusterOfCache').respond({});
+      it('attempts to get the current user', function() {
+        expect(identity.currentUser).to.deep.equal({
+          _id: 0,
+          name: 'The Initially Fetched User'
+        });
+      });
+    });
+
+    describe('get', function() {
+      it('queries the API for the current user if it has not been set', function() {
+        identity.currentUser = undefined;
+        httpBackend.expectGET(config.dataService + '/currentUser?_=SomeBusterOfCache').respond({});
+        identity.get();
         httpBackend.flush();
       });
 
-      it('sets the current user to the ', function() {
-        httpBackend.expectGET('http://somedataservice/currentUser?_=SomeBusterOfCache').respond({
+      it('resolves to the returned user', function(done) {
+        identity.currentUser = undefined;
+        httpBackend.expectGET(config.dataService + '/currentUser?_=SomeBusterOfCache').respond({
           _id: 42,
           name: 'Ford Prefect'
         });
+        identity.get().then(function(currentUser) {
+          expect(currentUser).to.deep.equal({
+            _id: 42,
+            name: 'Ford Prefect'
+          });
+          expect(identity.currentUser).to.deep.equal({
+            _id: 42,
+            name: 'Ford Prefect'
+          });
+          done();
+        });
+
         httpBackend.flush();
+      });
+    });
+
+    describe('set', function(done) {
+      it('sets the user so it is returned without querying the data service', function(done) {
+        identity.set({
+          _id: 73,
+          name: 'Sheldon Cooper'
+        });
         expect(identity.currentUser).to.deep.equal({
+          _id: 73,
+          name: 'Sheldon Cooper'
+        });
+        identity.get().then(function(currentUser) {
+          expect(currentUser).to.deep.equal({
+            _id: 73,
+            name: 'Sheldon Cooper'
+          });
+          done();
+        });
+
+        $rootScope.$digest();
+      });
+    });
+
+    describe('clear', function() {
+      it('causes the user to have to be requeried', function(done) {
+        identity.set({
+          _id: 73,
+          name: 'Sheldon Cooper'
+        });
+        identity.clear();
+        httpBackend.expectGET(config.dataService + '/currentUser?_=SomeBusterOfCache').respond({
           _id: 42,
           name: 'Ford Prefect'
         });
+        identity.get().then(function(currentUser) {
+          expect(currentUser).to.deep.equal({
+            _id: 42,
+            name: 'Ford Prefect'
+          });
+          done();
+        });
+
+        httpBackend.flush();
       });
     });
 
     describe('isAuthenticated', function() {
-      it('returns false if there is no user', function() {
-        identity.currentUser = undefined;
+      it('returns false if there is no token', function() {
+        mockAuthToken.get.returns(null);
         expect(identity.isAuthenticated()).to.be.false;
       });
 
-      it('returns true if there is a user', function() {
-        identity.currentUser = {};
+      it('returns true if there is a token', function() {
+        mockAuthToken.get.returns('Something');
         expect(identity.isAuthenticated()).to.be.true;
       });
     });
 
     describe('isAuthorized', function() {
-      it('returns false if there is no user', function() {
-        identity.currentUser = undefined;
+      it('returns false if there is no authenticated user', function() {
+        mockAuthToken.get.returns(null);
         expect(identity.isAuthorized('')).to.be.false;
       });
 
-      it('returns false if there is a user, but user does not have role', function() {
-        identity.currentUser = {
-          _id: 'something',
-          roles: ['user', 'cook']
-        };
+      it('returns false if there is an authenticated user, but it has not been fetched', function() {
+        mockAuthToken.get.returns('Something');
         expect(identity.isAuthorized('admin')).to.be.false;
       });
 
-      it('returns true if there is a user, and user does have role', function() {
-        identity.currentUser = {
+      it('returns false if there is an authorized user, but user does not have role', function() {
+        mockAuthToken.get.returns('Something');
+        identity.set({
+          _id: 'something',
+          roles: ['user', 'cook']
+        });
+        expect(identity.isAuthorized('admin')).to.be.false;
+      });
+
+      it('returns true if there is an authorized user, and user does have role', function() {
+        mockAuthToken.get.returns('Something');
+        identity.set({
           _id: 'something',
           roles: ['user', 'cook', 'admin']
-        };
+        });
         expect(identity.isAuthorized('admin')).to.be.true;
       });
 
-      it('returns true if there is a user, and no role is required', function() {
-        identity.currentUser = {
+      it('returns true if there is an authorized user, and no role is required', function() {
+        mockAuthToken.get.returns('Something');
+        identity.set({
           _id: 'something',
           roles: ['user', 'cook', 'admin']
-        };
+        });
         expect(identity.isAuthorized('')).to.be.true;
         expect(identity.isAuthorized()).to.be.true;
       });
 
       it('returns false if a role is required but the user does not have any roles', function() {
-        identity.currentUser = {
+        mockAuthToken.get.returns('Something');
+        identity.set({
           _id: 'something'
-        };
+        });
         expect(identity.isAuthorized('admin')).to.be.false;
       });
 
       it('returns true if a role is not required and the user does not have any roles', function() {
-        identity.currentUser = {
+        mockAuthToken.get.returns('Something');
+        identity.set({
           _id: 'something'
-        };
+        });
         expect(identity.isAuthorized('')).to.be.true;
         expect(identity.isAuthorized()).to.be.true;
       });
