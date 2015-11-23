@@ -20,7 +20,7 @@
     controller.versions = versionData.allVersions;
 
     controller.versions.$promise.then(function(d) {
-      controller.currentVersion = d[0].id;
+      controller.currentVersion = d[0].name;
     });
   }
 }());

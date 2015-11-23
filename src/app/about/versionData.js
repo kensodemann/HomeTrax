@@ -2,16 +2,16 @@
   'use strict';
 
   angular.module('homeTrax.about.versionData', [
-    'homeTrax.common.resources.Versions'
+    'homeTrax.common.resources.ServerVersions'
   ]).factory('versionData', VersionData);
 
-  function VersionData(Versions) {
+  function VersionData(ServerVersions) {
     var exports = {
       allVersions: undefined
     };
 
     if (!exports.allVersions) {
-      exports.allVersions = Versions.query();
+      exports.allVersions = ServerVersions.query();
     }
 
     return exports;
