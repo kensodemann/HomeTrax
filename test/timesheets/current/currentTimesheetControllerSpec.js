@@ -12,6 +12,8 @@
     var getCurrentDfd;
     var loadTaskTimersDfd;
     var modalDfd;
+    var startTimerDfd;
+    var stopTimerDfd;
 
     var EditorMode;
     var $rootScope;
@@ -23,6 +25,8 @@
       getCurrentDfd = $q.defer();
       loadTaskTimersDfd = $q.defer();
       modalDfd = $q.defer();
+      startTimerDfd = $q.defer();
+      stopTimerDfd = $q.defer();
       $rootScope = _$rootScope_;
       EditorMode = _EditorMode_;
     }));
@@ -74,6 +78,12 @@
       });
       mockTimesheetTaskTimers.load.returns(loadTaskTimersDfd.promise);
       mockTimesheetTaskTimers.create.returns(mockTaskTimer);
+      mockTimesheetTaskTimers.start.returns({
+        $promise: startTimerDfd.promise
+      });
+      mockTimesheetTaskTimers.stop.returns({
+        $promise: stopTimerDfd.promise
+      });
     });
 
     var clock;
@@ -284,6 +294,10 @@
       var controller;
       beforeEach(function() {
         controller = createController();
+        resolveCurrentTimesheet();
+        resolveTaskTimerLoad();
+        mockTimesheetTaskTimers.get.reset();
+        mockTimesheetTaskTimers.totalTime.reset();
       });
 
       it('calls the service to start the timer', function() {
@@ -301,12 +315,26 @@
           _id: 42
         })).to.be.true;
       });
+
+      it('recalculates the total time for the date', function() {
+        controller.startTimer({
+          _id: 42
+        });
+        expect(mockTimesheetTaskTimers.totalTime.called).to.be.false;
+        resolveStartTimer();
+        expect(mockTimesheetTaskTimers.totalTime.calledOnce).to.be.true;
+        expect(mockTimesheetTaskTimers.totalTime.calledWith('2015-10-14')).to.be.true;
+      });
     });
 
     describe('stopping a timer', function() {
       var controller;
       beforeEach(function() {
         controller = createController();
+        resolveCurrentTimesheet();
+        resolveTaskTimerLoad();
+        mockTimesheetTaskTimers.get.reset();
+        mockTimesheetTaskTimers.totalTime.reset();
       });
 
       it('calls the service to stop the timer', function() {
@@ -324,10 +352,30 @@
           _id: 42
         })).to.be.true;
       });
+
+      it('recalculates the total time for the date', function() {
+        controller.stopTimer({
+          _id: 42
+        });
+        expect(mockTimesheetTaskTimers.totalTime.called).to.be.false;
+        resolveStopTimer();
+        expect(mockTimesheetTaskTimers.totalTime.calledOnce).to.be.true;
+        expect(mockTimesheetTaskTimers.totalTime.calledWith('2015-10-14')).to.be.true;
+      });
     });
 
     function resolveCurrentTimesheet(ts) {
       getCurrentDfd.resolve(ts || {_id: 123});
+      $rootScope.$digest();
+    }
+
+    function resolveStartTimer() {
+      startTimerDfd.resolve();
+      $rootScope.$digest();
+    }
+
+    function resolveStopTimer() {
+      stopTimerDfd.resolve();
       $rootScope.$digest();
     }
 

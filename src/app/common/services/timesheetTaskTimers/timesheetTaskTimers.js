@@ -62,13 +62,13 @@
     function startTaskTimer(tt) {
       assertTaskTimerInCache(tt);
       stopRunningTimers();
-      TaskTimerStart.save(tt, copyData);
+      return TaskTimerStart.save(tt, copyData);
     }
 
 
     function stopTaskTimer(tt) {
       assertTaskTimerInCache(tt);
-      TaskTimerStop.save(tt, copyData);
+      return TaskTimerStop.save(tt, copyData);
     }
 
     function assertTaskTimerInCache(tt) {

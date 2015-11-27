@@ -33,8 +33,14 @@
     controller.selectDate = selectDate;
     controller.editTimer = editTimer;
     controller.newTimer = newTimer;
-    controller.startTimer = timesheetTaskTimers.start;
-    controller.stopTimer = timesheetTaskTimers.stop;
+
+    controller.startTimer = function(timer) {
+      timesheetTaskTimers.start(timer).$promise.then(refreshCurrentDate);
+    };
+
+    controller.stopTimer = function(timer) {
+      timesheetTaskTimers.stop(timer).$promise.then(refreshCurrentDate);
+    };
 
     activate();
 
