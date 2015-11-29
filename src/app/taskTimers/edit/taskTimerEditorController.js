@@ -6,14 +6,14 @@
     'homeTrax.common.core.EditorMode',
     'homeTrax.common.core.Status',
     'homeTrax.common.filters.hoursMinutes',
-    'homeTrax.common.resources.Project',
     'homeTrax.common.services.notifier',
     'homeTrax.common.services.stages',
-    'homeTrax.common.services.timeUtilities'
+    'homeTrax.common.services.timeUtilities',
+    'homeTrax.taskTimers.edit.taskTimerEditorService'
   ]).controller('taskTimerEditorController', TaskTimerEditorController);
 
-  function TaskTimerEditorController($uibModalInstance, taskTimer, mode, Project,
-                                     stages, timeUtilities, hoursMinutesFilter, Status, EditorMode, notifier) {
+  function TaskTimerEditorController($uibModalInstance, taskTimer, mode, taskTimerEditorService,
+                                     stages, timeUtilities, hoursMinutesFilter, EditorMode, notifier) {
     var controller = this;
 
     controller.projects = [];
@@ -29,7 +29,7 @@
     function save() {
       controller.isSaving = true;
       taskTimer.stage = controller.stage;
-      taskTimer.project = controller.project;
+      taskTimer.project = controller.project.resource;
       if (!taskTimer.isActive) {
         taskTimer.milliseconds = timeUtilities.parse(controller.timeSpent);
       }
@@ -62,32 +62,12 @@
       }
 
       function getProjects() {
-        Project.query({
-          status: Status.active
-        }, onSuccess, onFailure);
-
-        function onSuccess(projects) {
+        taskTimerEditorService.getActiveProjects().then(function(projects) {
           controller.projects = projects;
-          assignProject();
-        }
-
-        function onFailure(response) {
-          notifier.error(response.data.reason);
-          controller.errorMessage = response.data.reason;
-        }
-      }
-
-      function assignProject() {
-        if (taskTimer.project) {
-          controller.project = _.find(controller.projects, function(project) {
-            return project._id === taskTimer.project._id;
-          });
-
-          if (!controller.project) {
-            controller.project = taskTimer.project;
-            controller.projects.push(controller.project);
+          if (taskTimer.project) {
+            controller.project = taskTimerEditorService.selectProject(controller.projects, taskTimer.project);
           }
-        }
+        });
       }
 
       function assignStage() {
