@@ -17,10 +17,17 @@
   function AboutController(versionData) {
     var controller = this;
 
-    controller.versions = versionData.allVersions;
+    controller.clientVersions = versionData.clientVersions;
+    controller.serverVersions = versionData.serverVersions;
 
-    controller.versions.$promise.then(function(d) {
-      controller.currentVersion = d[0].id;
-    });
+    getCurrentVersions();
+
+    function getCurrentVersions(){
+      controller.currentClientVersion = controller.clientVersions[0].name;
+
+      controller.serverVersions.$promise.then(function(d) {
+        controller.currentServerVersion = d[0].name;
+      });
+    }
   }
 }());

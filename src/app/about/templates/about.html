@@ -1,6 +1,9 @@
-<div class="container"><h1 class="text-center">HomeTrax</h1>
+<div class="container">
 
-  <h2 class="text-center">Current Version: {{controller.currentVersion}}</h2>
+  <h1 class="text-center">HomeTrax</h1>
+
+  <h3 class="text-center">Version: {{controller.currentClientVersion}}</h3>
+  <h4 class="text-center">Server: {{controller.currentServerVersion}}</h4>
 
   <p>HomeTrax is a simple time tracking application. Some of the terminology currently used in the application
     is derived from the way we track time at work, since I wrote it to make my time tracking for work easier.</p>
@@ -8,7 +11,7 @@
   <h2>Version History</h2>
 
   <uib-accordion close-others="false">
-    <uib-accordion-group ng-repeat="version in controller.versions" heading="{{version.name}}">
+    <uib-accordion-group ng-repeat="version in controller.clientVersions" heading="{{version.name}}">
       <div class="panel-body"><h4 ng-show="version.releaseDate">Release Date: {{version.releaseDate | date}}</h4>
 
         <p>{{version.description}}</p>

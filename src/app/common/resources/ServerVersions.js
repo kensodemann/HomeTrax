@@ -1,12 +1,12 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.resources.Versions', [
+  angular.module('homeTrax.common.resources.ServerVersions', [
     'ngResource',
     'homeTrax.common.core.config'
-  ]).factory('Versions', Versions);
+  ]).factory('ServerVersions', ServerVersions);
 
-  function Versions($resource, config) {
+  function ServerVersions($resource, config) {
     var millisecondsPerMinute = 60000;
 
     return $resource(config.dataService + '/versions', {

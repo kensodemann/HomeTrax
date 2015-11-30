@@ -42,7 +42,7 @@
       var taskTimers = (dt ? getTaskTimers(dt) : service.all);
 
       angular.forEach(taskTimers, function(t) {
-        time += t.milliseconds;
+        time += t.elapsedTime;
       });
 
       return time;
@@ -62,13 +62,13 @@
     function startTaskTimer(tt) {
       assertTaskTimerInCache(tt);
       stopRunningTimers();
-      TaskTimerStart.save(tt, copyData);
+      return TaskTimerStart.save(tt, copyData);
     }
 
 
     function stopTaskTimer(tt) {
       assertTaskTimerInCache(tt);
-      TaskTimerStop.save(tt, copyData);
+      return TaskTimerStop.save(tt, copyData);
     }
 
     function assertTaskTimerInCache(tt) {
@@ -93,6 +93,7 @@
       if (tt) {
         tt.isActive = res.isActive;
         tt.milliseconds = res.milliseconds;
+        tt.startTime = res.startTime;
       }
     }
   }

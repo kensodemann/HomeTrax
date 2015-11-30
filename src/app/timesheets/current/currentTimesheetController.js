@@ -9,7 +9,7 @@
     'homeTrax.common.services.dateUtilities',
     'homeTrax.common.services.timesheets',
     'homeTrax.common.services.timesheetTaskTimers',
-    'homeTrax.taskTimers.edit'
+    'homeTrax.taskTimers.edit.taskTimerEditor'
   ]).controller('currentTimesheetController', CurrentTimesheetController)
     .config(function($routeProvider) {
       $routeProvider.when('/timesheets/current', {
@@ -19,7 +19,7 @@
       });
     });
 
-  function CurrentTimesheetController($q, dateUtilities, timesheets, timesheetTaskTimers, taskTimerEditor, EditorMode) {
+  function CurrentTimesheetController($q, $interval, dateUtilities, timesheets, timesheetTaskTimers, taskTimerEditor, EditorMode) {
     var controller = this;
 
     controller.dates = [];
@@ -33,8 +33,14 @@
     controller.selectDate = selectDate;
     controller.editTimer = editTimer;
     controller.newTimer = newTimer;
-    controller.startTimer = timesheetTaskTimers.start;
-    controller.stopTimer = timesheetTaskTimers.stop;
+
+    controller.startTimer = function(timer) {
+      timesheetTaskTimers.start(timer).$promise.then(refreshCurrentDate);
+    };
+
+    controller.stopTimer = function(timer) {
+      timesheetTaskTimers.stop(timer).$promise.then(refreshCurrentDate);
+    };
 
     activate();
 
@@ -65,6 +71,7 @@
       loadData().then(function() {
         controller.isReady = true;
         refreshCurrentDate();
+        $interval(refreshCurrentDate, 15000);
       });
     }
 

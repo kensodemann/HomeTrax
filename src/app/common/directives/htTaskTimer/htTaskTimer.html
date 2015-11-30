@@ -9,10 +9,10 @@
         (<span ng-bind="controller.htTimer.project.sbvbTaskId"></span>)
       </span>
     </div>
-    <div class="task" ng-bind="controller.htTimer.task.name"></div>
+    <div class="task" ng-bind="controller.htTimer.stage.name"></div>
   </section>
   <section class="col-md-1 timeSection">
-    <span class="pull-right" ng-bind="controller.htTimer.milliseconds | hoursMinutes"></span>
+    <span class="pull-right" ng-bind="controller.htTimer.elapsedTime | hoursMinutes"></span>
   </section>
   <section class="col-md-2 timerControls">
     <button class="btn btn-default" ng-hide="controller.htTimer.isActive" ng-click="controller.htStart()"><i class="fa fa-clock-o"></i>
