@@ -16,11 +16,12 @@
     var stopTimerDfd;
 
     var EditorMode;
+    var $interval;
     var $rootScope;
 
     beforeEach(module('homeTrax.timesheets.current'));
 
-    beforeEach(inject(function($controller, $q, _$rootScope_, _EditorMode_) {
+    beforeEach(inject(function($controller, $q, _$rootScope_, _$interval_, _EditorMode_) {
       $controllerConstructor = $controller;
       getCurrentDfd = $q.defer();
       loadTaskTimersDfd = $q.defer();
@@ -29,6 +30,7 @@
       stopTimerDfd = $q.defer();
       $rootScope = _$rootScope_;
       EditorMode = _EditorMode_;
+      $interval= _$interval_;
     }));
 
     beforeEach(function() {
@@ -182,6 +184,17 @@
         expect(mockTimesheetTaskTimers.get.calledWith('2015-10-14')).to.be.true;
         expect(mockTimesheetTaskTimers.totalTime.calledOnce).to.be.true;
         expect(mockTimesheetTaskTimers.totalTime.calledWith('2015-10-14')).to.be.true;
+      });
+
+      it('schedules a refresh every 15 seconds', function() {
+        createController();
+        resolveCurrentTimesheet();
+        resolveTaskTimerLoad();
+        mockTimesheetTaskTimers.get.reset();
+        mockTimesheetTaskTimers.totalTime.reset();
+        $interval.flush(15000);
+        expect(mockTimesheetTaskTimers.get.calledOnce).to.be.true;
+        expect(mockTimesheetTaskTimers.totalTime.calledOnce).to.be.true;
       });
     });
 

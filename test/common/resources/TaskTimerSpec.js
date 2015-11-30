@@ -2,6 +2,7 @@
   'use strict';
 
   describe('homeTrax.common.resources.TaskTimer', function() {
+    var clock;
     var config;
     var httpBackend;
     var scope;
@@ -20,6 +21,14 @@
       TaskTimer = _TaskTimer_;
       config = _config_;
     }));
+
+    beforeEach(function() {
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function() {
+      clock.restore();
+    });
 
     afterEach(function() {
       httpBackend.verifyNoOutstandingExpectation();
@@ -83,6 +92,46 @@
           .respond({});
         TaskTimer.save(testData[1]);
         httpBackend.flush();
+      });
+    });
+
+    describe('elapsed time', function() {
+      var res;
+      beforeEach(function() {
+        httpBackend.expectGET(config.dataService + '/timesheets/42/taskTimers')
+          .respond(testData);
+        res = TaskTimer.query({
+          timesheetRid: 42
+        });
+        httpBackend.flush();
+      });
+
+      it('returns zero if there are no milliseconds', function() {
+        var tt = res[2];
+        expect(tt.elapsedTime).to.equal(0);
+      });
+
+      it('returns milliseconds for inactive timer', function() {
+        var tt = res[2];
+        tt.milliseconds = 112345;
+        expect(tt.elapsedTime).to.equal(112345);
+      });
+
+      it('calculates the time based previous milliseconds, current time, and start time for active timer', function() {
+        var tt = res[2];
+        tt.milliseconds = 112345;
+        tt.startTime = 1000;
+        tt.isActive = true;
+        clock.tick(3000);
+        expect(tt.elapsedTime).to.equal(114345);
+      });
+
+      it('calculates the time current time, and start time for active timer without a previous time', function() {
+        var tt = res[2];
+        tt.startTime = 1000;
+        tt.isActive = true;
+        clock.tick(3000);
+        expect(tt.elapsedTime).to.equal(2000);
       });
     });
 

@@ -42,7 +42,7 @@
       var taskTimers = (dt ? getTaskTimers(dt) : service.all);
 
       angular.forEach(taskTimers, function(t) {
-        time += t.milliseconds;
+        time += t.elapsedTime;
       });
 
       return time;
@@ -93,6 +93,7 @@
       if (tt) {
         tt.isActive = res.isActive;
         tt.milliseconds = res.milliseconds;
+        tt.startTime = res.startTime;
       }
     }
   }

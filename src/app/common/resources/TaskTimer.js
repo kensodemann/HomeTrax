@@ -7,9 +7,23 @@
   ]).factory('TaskTimer', TaskTimer);
 
   function TaskTimer($resource, config) {
-    return $resource(config.dataService + '/timesheets/:timesheetRid/taskTimers/:id', {
+    var TaskTimerResource = $resource(config.dataService + '/timesheets/:timesheetRid/taskTimers/:id', {
       id: '@_id',
       timesheetRid: '@timesheetRid'
     });
+
+    Object.defineProperty(TaskTimerResource.prototype, 'elapsedTime', {
+      get: function elapsedTime() {
+        var ms = this.milliseconds || 0;
+        if (this.isActive) {
+          var now = (new Date()).getTime();
+          ms += (now - this.startTime);
+        }
+
+        return ms;
+      }
+    });
+
+    return TaskTimerResource;
   }
 }());

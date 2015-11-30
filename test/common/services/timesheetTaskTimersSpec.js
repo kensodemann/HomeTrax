@@ -8,6 +8,7 @@
     var testTimesheet;
     var testTaskTimers;
 
+    var clock;
     var config;
     var httpBackend;
     var scope;
@@ -36,9 +37,17 @@
       config = _config_;
     }));
 
+    beforeEach(function() {
+      clock = sinon.useFakeTimers();
+    });
+
     afterEach(function() {
       httpBackend.verifyNoOutstandingExpectation();
       httpBackend.verifyNoOutstandingRequest();
+    });
+
+    afterEach(function() {
+      clock.restore();
     });
 
     it('exists', function() {
@@ -85,14 +94,17 @@
 
     describe('get total time', function() {
       beforeEach(function() {
+        testTaskTimers[1].isActive = true;
+        testTaskTimers[1].startTime = 1000;
+        clock.tick(3000);
         httpBackend.expectGET(config.dataService + '/timesheets/4273314159/taskTimers')
           .respond(testTaskTimers);
         timesheetTaskTimers.load(testTimesheet);
         httpBackend.flush();
       });
 
-      it('gets the total time for the specified day', function() {
-        expect(timesheetTaskTimers.totalTime('2015-10-13')).to.equal(1234000 + 948000 + 672000);
+      it('gets the total time for the specified day using elapsed time', function() {
+        expect(timesheetTaskTimers.totalTime('2015-10-13')).to.equal(1236000 + 948000 + 672000);
       });
 
       it('calculates zero if there are no timers for the specified date', function() {
@@ -101,7 +113,7 @@
 
       it('gets the total time for the whole timesheet if no day is specified', function() {
         expect(timesheetTaskTimers.totalTime()).to.equal(
-          3884000 + 1234000 + 4885000 + 948000 + 3746000 + 672000 + 123000);
+          3884000 + 1236000 + 4885000 + 948000 + 3746000 + 672000 + 123000);
       });
     });
 
@@ -234,6 +246,21 @@
         httpBackend.flush();
 
         expect(timesheetTaskTimers.all[2].isActive).to.be.true;
+      });
+
+      it('copies the start time', function() {
+        httpBackend.expectPOST(config.dataService + '/timesheets/4273314159/taskTimers/12343/start')
+          .respond({
+            _id: 12343,
+            workDate: '2015-10-14',
+            milliseconds: 4885000,
+            startTime: 1448894563156,
+            isActive: true
+          });
+        timesheetTaskTimers.start(timesheetTaskTimers.all[2]);
+        httpBackend.flush();
+
+        expect(timesheetTaskTimers.all[2].startTime).to.equal(1448894563156);
       });
     });
 

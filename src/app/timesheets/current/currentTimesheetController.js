@@ -19,7 +19,7 @@
       });
     });
 
-  function CurrentTimesheetController($q, dateUtilities, timesheets, timesheetTaskTimers, taskTimerEditor, EditorMode) {
+  function CurrentTimesheetController($q, $interval, dateUtilities, timesheets, timesheetTaskTimers, taskTimerEditor, EditorMode) {
     var controller = this;
 
     controller.dates = [];
@@ -71,6 +71,7 @@
       loadData().then(function() {
         controller.isReady = true;
         refreshCurrentDate();
+        $interval(refreshCurrentDate, 15000);
       });
     }
 
