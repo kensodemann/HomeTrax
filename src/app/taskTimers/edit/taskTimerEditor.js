@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('homeTrax.taskTimers.edit.taskTimerEditor', [
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'homeTrax.taskTimers.edit.taskTimerEditorController'
   ]).factory('taskTimerEditor', taskTimerEditor);
 
   function taskTimerEditor($uibModal) {

@@ -9,7 +9,7 @@
     'homeTrax.common.services.dateUtilities',
     'homeTrax.common.services.timesheets',
     'homeTrax.common.services.timesheetTaskTimers',
-    'homeTrax.taskTimers.edit'
+    'homeTrax.taskTimers.edit.taskTimerEditor'
   ]).controller('currentTimesheetController', CurrentTimesheetController)
     .config(function($routeProvider) {
       $routeProvider.when('/timesheets/current', {

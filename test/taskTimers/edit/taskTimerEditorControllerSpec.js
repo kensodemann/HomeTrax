@@ -4,9 +4,10 @@
   describe('homeTrax.taskTimers.edit.taskTimerEditorController', function() {
     var mockModalInstance;
     var mockNotifier;
-    var mockProject;
     var mockStages;
+    var mockTaskTimerEditorService;
 
+    var projectsDfd;
     var stagesDfd;
     var testStages;
 
@@ -20,6 +21,7 @@
       $controllerConstructor = $controller;
       EditorMode = _EditorMode_;
       stagesDfd = $q.defer();
+      projectsDfd = $q.defer();
       $rootScope = _$rootScope_;
     }));
 
@@ -29,20 +31,27 @@
 
     beforeEach(function() {
       mockModalInstance = sinon.stub({
-        close: function() {}
+        close: function() {
+        }
       });
     });
 
     beforeEach(function() {
       mockNotifier = sinon.stub({
-        error: function() {}
+        error: function() {
+        }
       });
     });
 
     beforeEach(function() {
-      mockProject = sinon.stub({
-        query: function() {}
+      mockTaskTimerEditorService = sinon.stub({
+        getActiveProjects: function() {
+        },
+
+        selectProject: function() {
+        }
       });
+      mockTaskTimerEditorService.getActiveProjects.returns(projectsDfd.promise);
     });
 
     beforeEach(function() {
@@ -54,7 +63,7 @@
     function createController(taskTimer, mode) {
       return $controllerConstructor('taskTimerEditorController', {
         $uibModalInstance: mockModalInstance,
-        Project: mockProject,
+        taskTimerEditorService: mockTaskTimerEditorService,
         stages: mockStages,
         taskTimer: taskTimer || {},
         mode: mode,
@@ -87,16 +96,14 @@
 
       it('gets the list of active projects', function() {
         createController();
-        expect(mockProject.query.calledOnce).to.be.true;
-        expect(mockProject.query.calledWith({
-          status: 'active'
-        })).to.be.true;
+        expect(mockTaskTimerEditorService.getActiveProjects.calledOnce).to.be.true;
       });
 
       it('assigns the fetched projects', function() {
         var controller = createController();
         var projects = ['these are projects'];
-        mockProject.query.yield(projects);
+        projectsDfd.resolve(projects);
+        $rootScope.$digest();
         expect(controller.projects).to.equal(projects);
       });
 
@@ -117,16 +124,7 @@
       });
 
       it('sets the project to the project on the timer', function() {
-        var projects = [{
-          _id: 42,
-          name: 'Hitchiker'
-        }, {
-          _id: 314159,
-          name: 'Cake'
-        }, {
-          _id: 73,
-          name: 'Sheldon'
-        }];
+        var projects = [1, 2, 7, 6];
         var controller = createController({
           project: {
             _id: 314159
@@ -135,40 +133,20 @@
             _id: 3221
           }
         }, EditorMode.edit);
-        mockProject.query.yield(projects);
-        expect(controller.project).to.equal(projects[1]);
+        mockTaskTimerEditorService.selectProject.returns('IAmTheProject');
+        projectsDfd.resolve(projects);
+        $rootScope.$digest();
+        expect(mockTaskTimerEditorService.selectProject.calledOnce).to.be.true;
+        expect(mockTaskTimerEditorService.selectProject.calledWith(projects, {_id: 314159})).to.be.true;
+        expect(controller.project).to.equal('IAmTheProject');
       });
 
-      it("pushes the timer's project if it is not in the fetched list", function() {
-        var projects = [{
-          _id: 42,
-          name: 'Hitchiker'
-        }, {
-          _id: 314159,
-          name: 'Cake'
-        }, {
-          _id: 73,
-          name: 'Sheldon'
-        }];
-        var controller = createController({
-          project: {
-            _id: 2422,
-            name: 'HomeTrax'
-          },
-          stage: {
-            _id: 3221
-          }
-        }, EditorMode.edit);
-        mockProject.query.yield(projects);
-        expect(controller.projects.length).to.equal(4);
-        expect(controller.projects[3]).to.deep.equal({
-          _id: 2422,
-          name: 'HomeTrax'
-        });
-        expect(controller.project).to.deep.equal({
-          _id: 2422,
-          name: 'HomeTrax'
-        });
+      it('does not attempt to set the project if the editor is in create mode', function() {
+        var projects = [1, 2, 7, 6];
+        var controller = createController({}, EditorMode.create);
+        projectsDfd.resolve(projects);
+        $rootScope.$digest();
+        expect(mockTaskTimerEditorService.selectProject.called).to.be.false;
       });
     });
 
@@ -181,6 +159,13 @@
           $save: sinon.stub()
         };
         controller = createController(taskTimer);
+        controller.project = {
+          displayName: 'Sheldon Cooper',
+          resource: {
+            _id: 73,
+            name: 'Sheldon Cooper'
+          }
+        };
       });
 
       it('copies the selected stage to the taskTimer', function() {
@@ -197,8 +182,11 @@
 
       it('copies the selected project to the taskTimer', function() {
         controller.project = {
-          _id: 42,
-          name: 'Hitchhiking'
+          displayName: 'Douglas Adams',
+          resource: {
+            _id: 42,
+            name: 'Hitchhiking'
+          }
         };
         controller.save();
         expect(taskTimer.project).to.deep.equal({

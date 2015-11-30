@@ -8,7 +8,7 @@
       <label for="project" class="col-md-3 control-label">Project</label>
 
       <div class="col-md-9">
-        <select id="project" name="project" class="form-control" ng-options="project as (project.name + ' [' + project.jiraTaskId +']') for project in controller.projects | orderBy: 'name'" ng_model="controller.project" required>
+        <select id="project" name="project" class="form-control" ng-options="project as project.displayName for project in controller.projects | orderBy: 'name'" ng_model="controller.project" required>
           <option value="">--Select Project--</option>
         </select>
 
