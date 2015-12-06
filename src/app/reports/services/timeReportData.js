@@ -1,34 +1,19 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.reports.services.timeReportData', [
-    'homeTrax.common.resources.TaskTimer',
-    'homeTrax.common.resources.Timesheet'
-  ]).factory('timeReportData', timeReportData);
+  angular.module('homeTrax.reports.services.timeReportData', []).factory('timeReportData', timeReportData);
 
   var forEach = angular.forEach;
+  var unclassified = 'Unclassified';
 
-  function timeReportData($q, Timesheet, TaskTimer) {
-    var timesheet;
-    var taskTimers;
+  function timeReportData() {
 
     return {
-      load: load,
       getSummaryData: getSummaryData,
       getDailySummaryData: getDailySummaryData
     };
 
-    function load(id) {
-      timesheet = Timesheet.get({id: 42});
-      taskTimers = TaskTimer.query({timesheetRid: id});
-
-      return $q.all([
-        timesheet.$promise,
-        taskTimers.$promise
-      ]);
-    }
-
-    function getSummaryData() {
+    function getSummaryData(taskTimers) {
       return {
         totalTime: sum(taskTimers),
         jiraTasks: summarizedJiraTasks(taskTimers),
@@ -36,7 +21,7 @@
       };
     }
 
-    function getDailySummaryData() {
+    function getDailySummaryData(taskTimers) {
       var tasksByDate = _.groupBy(taskTimers, function(timer) {
         return timer.workDate;
       });
@@ -56,7 +41,7 @@
 
     function summarizedJiraTasks(tasks) {
       var jiraTasks = _.groupBy(tasks, function(timer) {
-        return timer.project.jiraTaskId || 'Unclassified';
+        return timer.project.jiraTaskId || unclassified;
       });
 
       return summarize(jiraTasks);
@@ -64,7 +49,7 @@
 
     function summarizedSbvbTasks(tasks) {
       var sbvbTasks = _.groupBy(tasks, function(timer) {
-        return (timer.project.sbvbTaskId ? (timer.project.sbvbTaskId + ' ' + timer.stage.name) : 'Unclassified');
+        return (timer.project.sbvbTaskId || unclassified) + ' ' + timer.stage.name;
       });
 
       return summarize(sbvbTasks);
@@ -94,11 +79,11 @@
     }
 
     function unclassifiedLast(a, b) {
-      if (a === 'Unclassified') {
+      if (a.substring(0, 12) === unclassified) {
         return 1;
       }
 
-      if (b === 'Unclassified') {
+      if (b.substring(0, 12) === unclassified) {
         return -1;
       }
 

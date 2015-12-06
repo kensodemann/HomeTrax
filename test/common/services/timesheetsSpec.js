@@ -70,7 +70,7 @@
 
     describe('all', function() {
       it('queries the timesheets', function() {
-        var allTimesheets = timesheets.all;
+        timesheets.all;
         expect(mockTimesheetConstructor.query.calledOnce).to.be.true;
       });
 
@@ -80,18 +80,18 @@
       });
 
       it('caches the queried timesheets', function() {
-        var allTimesheets = timesheets.all;
-        allTimesheets = timesheets.all;
+        timesheets.all;
+        timesheets.all;
         expect(mockTimesheetConstructor.query.calledOnce).to.be.true;
       });
 
       it('requeries if the identity has changed since the last query', function() {
-        var allTimesheets = timesheets.all;
+        timesheets.all;
         mockIdentity.currentUser = {
           _id: 42,
           name: 'Douglas Adams'
         };
-        allTimesheets = timesheets.all;
+        timesheets.all;
         expect(mockTimesheetConstructor.query.calledTwice).to.be.true;
       });
     });
@@ -142,9 +142,10 @@
         });
 
         it('resolves a new saved timesheet if not found', function(done) {
+          var savedTimesheet = {};
           mockDateUtilities.weekEndDate.returns(new Date(2015, 9, 8));
           timesheets.getCurrent().then(function(current) {
-            expect(current).to.equal(mockTimesheet);
+            expect(current).to.equal(savedTimesheet);
             done();
           });
 
@@ -154,6 +155,7 @@
             endDate: '2015-10-08'
           })).to.be.true;
           expect(mockTimesheet.$save.calledOnce).to.be.true;
+          mockTimesheet.$save.yield(savedTimesheet);
           $rootScope.$digest();
         });
       });
@@ -181,9 +183,10 @@
         });
 
         it('resolves a new timesheet if not found', function(done) {
+          var savedTimesheet = {}
           mockDateUtilities.weekEndDate.returns(new Date(2015, 8, 21));
           timesheets.getCurrent().then(function(current) {
-            expect(current).to.equal(mockTimesheet);
+            expect(current).to.equal(savedTimesheet);
             done();
           });
 
@@ -193,6 +196,7 @@
             endDate: '2015-09-21'
           })).to.be.true;
           expect(mockTimesheet.$save.calledOnce).to.be.true;
+          mockTimesheet.$save.yield(savedTimesheet);
           $rootScope.$digest();
         });
       });
@@ -231,9 +235,10 @@
         });
 
         it('resolves a new timesheet if not found', function(done) {
+          var savedTimesheet = {};
           mockDateUtilities.weekEndDate.returns(new Date(2015, 8, 21));
           timesheets.getCurrent().then(function(current) {
-            expect(current).to.equal(mockTimesheet);
+            expect(current).to.equal(savedTimesheet);
             done();
           });
 
@@ -243,6 +248,7 @@
             endDate: '2015-09-21'
           })).to.be.true;
           expect(mockTimesheet.$save.calledOnce).to.be.true;
+          mockTimesheet.$save.yield(savedTimesheet);
           $rootScope.$digest();
         });
       });
@@ -257,7 +263,7 @@
 
       it('caches the results', function() {
         timesheets.refresh();
-        var allTimesheets = timesheets.all;
+        timesheets.all;
         expect(mockTimesheetConstructor.query.calledOnce).to.be.true;
       });
     });

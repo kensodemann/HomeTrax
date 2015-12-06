@@ -1,12 +1,14 @@
 <div class="container">
   <header>
-    <h2 class="text-center">Time Report for Week Ending: </h2>
+    <h2 class="text-center">Time Report for Week Ending: <span ng-bind="controller.timesheet.endDate | date: 'mediumDate'"></span></h2>
   </header>
 
   <section class="summary">
     <h3>Hours Summary</h3>
-    This will be a summary of hours for the timesheet. Include total hours, then two panels, one showing hours by
-    SBVB task and one showing hours by JIRA task.
+
+    <div>
+      <strong>Total Hours: </strong><span ng-bind="controller.summaryData.totalTime | hoursMinutes"></span>
+    </div>
 
     <div class="row">
       <div class="col-md-6">
@@ -15,7 +17,22 @@
             <h3 class="panel-title">Hours by SBVB Task</h3>
           </div>
           <div class="panel-body">
-            Table of tasks and hours, include unclassified.
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Project</th>
+                <th>Stage</th>
+                <th>Hours</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="task in controller.summaryData.sbvbTasks">
+                <td><span ng-bind="task.project.sbvbTaskId || 'Unclassified'"></span></td>
+                <td><span ng-bind="task.stage.name"></span> (<span ng-bind="task.stage.stageNumber"></span>)</td>
+                <td ng-bind="task.totalTime | hoursMinutes"></td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -26,7 +43,20 @@
             <h3 class="panel-title">Hours by JIRA Task</h3>
           </div>
           <div class="panel-body">
-            Table of tasks and hours, include unclassified.
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Project</th>
+                <th>Hours</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="task in controller.summaryData.jiraTasks">
+                <td><span ng-bind="task.project.jiraTaskId || 'Unclassified'"></span></td>
+                <td ng-bind="task.totalTime | hoursMinutes"></td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -37,7 +67,61 @@
 
   <section class="details">
     <h3>Daily Hours</h3>
-    This section shows a day by day breakdown of hours, each with two panels, one showing hours by SBVB task and stage
-    and one showing hours by JIRA task. This will be done in reverse order.
+
+    <div ng-repeat="day in controller.dailySummaryData">
+      <h4 ng-bind="day.date | date:'mediumDate'"></h4>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Hours by SBVB Task</h3>
+            </div>
+            <div class="panel-body">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>Project</th>
+                  <th>Stage</th>
+                  <th>Hours</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="task in day.sbvbTasks">
+                  <td><span ng-bind="task.project.sbvbTaskId || 'Unclassified'"></span></td>
+                  <td><span ng-bind="task.stage.name"></span> (<span ng-bind="task.stage.stageNumber"></span>)</td>
+                  <td ng-bind="task.totalTime | hoursMinutes"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Hours by JIRA Task</h3>
+            </div>
+            <div class="panel-body">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>Project</th>
+                  <th>Hours</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="task in day.jiraTasks">
+                  <td><span ng-bind="task.project.jiraTaskId || 'Unclassified'"></span></td>
+                  <td ng-bind="task.totalTime | hoursMinutes"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </div>

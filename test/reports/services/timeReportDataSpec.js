@@ -2,100 +2,29 @@
   'use strict';
 
   describe('homeTrax.reports.services.timeReportData', function() {
-    var config;
     var timeReportData;
-
-    var $httpBackend;
 
     var testTimesheet;
     var testTaskTimers;
 
     beforeEach(module('homeTrax.reports.services.timeReportData'));
 
-    beforeEach(inject(function(_timeReportData_, _config_, _$httpBackend_) {
-      config = _config_;
+    beforeEach(inject(function(_timeReportData_) {
       timeReportData = _timeReportData_;
-      $httpBackend = _$httpBackend_;
     }));
 
     beforeEach(function() {
       initializeTestData();
     });
 
-    afterEach(function() {
-      $httpBackend.verifyNoOutstandingExpectation();
-      $httpBackend.verifyNoOutstandingRequest();
-    });
-
     it('exists', function() {
       expect(timeReportData).to.exist;
-    });
-
-    describe('loading data', function() {
-      it('gets the timesheet and task timers', function() {
-        $httpBackend.expectGET(config.dataService + '/timesheets/42').respond();
-        $httpBackend.expectGET(config.dataService + '/timesheets/42/taskTimers').respond();
-        timeReportData.load(42);
-        $httpBackend.flush();
-      });
-
-      it('resolves if both succeed', function(done) {
-        $httpBackend.expectGET(config.dataService + '/timesheets/42').respond();
-        $httpBackend.expectGET(config.dataService + '/timesheets/42/taskTimers').respond();
-        timeReportData.load(42).then(expectedPath, failPath);
-
-        $httpBackend.flush();
-
-        function failPath() {
-          expect(false).to.be.true;
-        }
-
-        function expectedPath() {
-          done();
-        }
-      });
-
-      it('rejects if timesheet get fails', function(done) {
-        $httpBackend.expectGET(config.dataService + '/timesheets/42').respond(400);
-        $httpBackend.expectGET(config.dataService + '/timesheets/42/taskTimers').respond();
-        timeReportData.load(42).then(failPath, expectedPath);
-
-        $httpBackend.flush();
-
-        function failPath() {
-          expect(false).to.be.true;
-        }
-
-        function expectedPath() {
-          done();
-        }
-      });
-
-      it('rejects if timesheet get fails', function(done) {
-        $httpBackend.expectGET(config.dataService + '/timesheets/42').respond();
-        $httpBackend.expectGET(config.dataService + '/timesheets/42/taskTimers').respond(400);
-        timeReportData.load(42).then(failPath, expectedPath);
-
-        $httpBackend.flush();
-
-        function failPath() {
-          expect(false).to.be.true;
-        }
-
-        function expectedPath() {
-          done();
-        }
-      });
     });
 
     describe('summary data', function() {
       var summaryData;
       beforeEach(function() {
-        $httpBackend.expectGET(config.dataService + '/timesheets/42').respond(testTimesheet);
-        $httpBackend.expectGET(config.dataService + '/timesheets/42/taskTimers').respond(testTaskTimers);
-        timeReportData.load(42);
-        $httpBackend.flush();
-        summaryData = timeReportData.getSummaryData();
+        summaryData = timeReportData.getSummaryData(testTaskTimers);
       });
 
       it('sums the total time', function() {
@@ -118,7 +47,7 @@
       });
 
       it('has one entry per SBVB task, including unclassified, and stage', function() {
-        expect(summaryData.sbvbTasks.length).to.equal(8);
+        expect(summaryData.sbvbTasks.length).to.equal(9);
         expect(summaryData.sbvbTasks[0].project.sbvbTaskId).to.equal('RFP14141');
         expect(summaryData.sbvbTasks[0].stage.stageNumber).to.equal(4);
         expect(summaryData.sbvbTasks[1].project.sbvbTaskId).to.equal('RFP14141');
@@ -135,6 +64,8 @@
         expect(summaryData.sbvbTasks[6].stage.stageNumber).to.equal(2);
         expect(summaryData.sbvbTasks[7].project.sbvbTaskId).to.not.exist;
         expect(summaryData.sbvbTasks[7].stage.stageNumber).to.equal(0);
+        expect(summaryData.sbvbTasks[8].project.sbvbTaskId).to.not.exist;
+        expect(summaryData.sbvbTasks[8].stage.stageNumber).to.equal(4);
       });
 
       it('sums each SBVB task, including unclassified, and stage', function() {
@@ -145,18 +76,15 @@
         expect(summaryData.sbvbTasks[4].totalTime).to.equal(7200000);
         expect(summaryData.sbvbTasks[5].totalTime).to.equal(35412364);
         expect(summaryData.sbvbTasks[6].totalTime).to.equal(90000000);
-        expect(summaryData.sbvbTasks[7].totalTime).to.equal(2700000);
+        expect(summaryData.sbvbTasks[7].totalTime).to.equal(900000);
+        expect(summaryData.sbvbTasks[8].totalTime).to.equal(1800000);
       });
     });
 
     describe('daily hours data ', function() {
       var dailyData;
       beforeEach(function() {
-        $httpBackend.expectGET(config.dataService + '/timesheets/42').respond(testTimesheet);
-        $httpBackend.expectGET(config.dataService + '/timesheets/42/taskTimers').respond(testTaskTimers);
-        timeReportData.load(42);
-        $httpBackend.flush();
-        dailyData = timeReportData.getDailySummaryData();
+        dailyData = timeReportData.getDailySummaryData(testTaskTimers);
       });
 
       it('contains one row for each day with hours, sorted by date', function() {
