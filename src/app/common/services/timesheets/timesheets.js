@@ -65,14 +65,14 @@
           var ts = new Timesheet({
             endDate: weekEndDate
           });
-          ts.$save();
-          dfd.resolve(ts);
+          ts.$save(dfd.resolve, dfd.reject);
         } else {
           dfd.resolve(matching[0]);
         }
       }
 
-      function error() {
+      function error(res) {
+        dfd.reject(res);
       }
     }
   }

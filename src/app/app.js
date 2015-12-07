@@ -8,6 +8,7 @@
     'homeTrax.auth.login',
     'homeTrax.main',
     'homeTrax.projects',
+    'homeTrax.reports',
     'homeTrax.timesheets',
     'homeTrax.userAdministration',
     'LocalStorageModule'
