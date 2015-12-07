@@ -3,6 +3,15 @@
 
   angular.module('homeTrax.common.resources.ClientVersions', [])
     .constant('ClientVersions', [{
+      id: '2.0.2',
+      name: 'Icefyre (2.0.2)',
+      releaseDate: '2015-12-06',
+      description: 'Add the Time Report',
+      features: [
+        'Added a report that provides a daily summary of time spent'
+      ],
+      bugFixes: []
+    },{
       id: '2.0.1',
       name: 'Narse (2.0.1)',
       releaseDate: '2015-11-30',
