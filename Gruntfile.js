@@ -80,17 +80,32 @@ module.exports = function(grunt) {
     },
 
     preprocess: {
-      dev: {
+      cloud9: {
         options: {
           context: {
-            DEBUG: true
+            CLOUD9: true
           }
         },
         files: {
           'src/app/common/core/config.js': 'src/preprocessedSources/config.js'
         }
       },
-      dist: {
+      local: {
+        options: {
+          context: {
+            LOCAL: true
+          }
+        },
+        files: {
+          'src/app/common/core/config.js': 'src/preprocessedSources/config.js'
+        }
+      },
+      openShift: {
+        options: {
+          context: {
+            OPENSHIFT: true
+          }
+        },
         files: {
           'src/app/common/core/config.js': 'src/preprocessedSources/config.js'
         }
@@ -193,9 +208,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-preprocess');
 
   // Tasks
-  grunt.registerTask('default', [
-    'clean',
-    'preprocess:dev',
+  grunt.registerTask('testAndBuild', [
     'karma',
     'jshint',
     'jscs',
@@ -205,11 +218,21 @@ module.exports = function(grunt) {
     'concat:homeTrax',
     'ngAnnotate'
   ]);
+  grunt.registerTask('default', [
+    'clean',
+    'preprocess:cloud9',
+    'testAndBuild'
+  ]);
+  grunt.registerTask('local', [
+    'clean',
+    'preprocess:local',
+    'testAndBuild'
+  ]);
   grunt.registerTask('build', ['openShiftBuild', 'karma', 'jshint']);
   grunt.registerTask('openShiftBuild', [
     'clean',
     'copy',
-    'preprocess:dist',
+    'preprocess:openShift',
     'sass',
     'concat:libRelease',
     'concat:homeTrax',
@@ -217,5 +240,5 @@ module.exports = function(grunt) {
     'cssmin',
     'uglify'
   ]);
-  grunt.registerTask('dev', ['default', 'watch']);
+  grunt.registerTask('dev', ['local', 'watch']);
 };
