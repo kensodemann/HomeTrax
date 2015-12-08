@@ -34,9 +34,9 @@ module.exports = {
       dev: 'bower_components/angular-resource/angular-resource.js',
       release: 'bower_components/angular-resource/angular-resource.min.js'
     },
-    angularRoute: {
-      dev: 'bower_components/angular-route/angular-route.js',
-      release: 'bower_components/angular-route/angular-route.min.js'
+    angularUiRouter: {
+      dev: 'bower_components/angular-ui-router/release/angular-ui-router.js',
+      release: 'bower_components/angular-ui-router/release/angular-ui-router.min.js'
     },
     angularMocks: {
       dev: 'bower_components/angular-mocks/angular-mocks.js'

@@ -6,17 +6,17 @@
     'homeTrax.auth.identity'
   ]).controller('loginMenuController', LoginMenuController);
 
-  function LoginMenuController(identity, authService, $location) {
-    var self = this;
+  function LoginMenuController(identity, authService, $state) {
+    var controller = this;
 
-    self.identity = identity;
-    self.logout = logout;
+    controller.identity = identity;
+    controller.logout = logout;
 
     function logout() {
       authService.logoutUser().then(navigateToLogin);
 
       function navigateToLogin() {
-        $location.path('/login');
+        $state.go('app.login');
       }
     }
   }

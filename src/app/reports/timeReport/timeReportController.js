@@ -2,18 +2,23 @@
   'use strict';
 
   angular.module('homeTrax.reports.timeReport.timeReportController', [
-      'ngRoute',
+      'ui.router',
       'homeTrax.common.filters.hoursMinutes',
       'homeTrax.common.services.timesheets',
       'homeTrax.common.services.timesheetTaskTimers',
       'homeTrax.reports.services.timeReportData'
     ])
     .controller('timeReportController', TimeReportController)
-    .config(function($routeProvider) {
-      $routeProvider.when('/reports/timeReport', {
-        templateUrl: 'app/reports/timeReport/timeReport.html',
-        controller: 'timeReportController',
-        controllerAs: 'controller'
+    .config(function($stateProvider) {
+      $stateProvider.state('app.reports.timeReport', {
+        url: '/timeReport',
+        views: {
+          reportView: {
+            templateUrl: 'app/reports/timeReport/timeReport.html',
+            controller: 'timeReportController',
+            controllerAs: 'controller'
+          }
+        }
       });
     });
 

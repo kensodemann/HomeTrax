@@ -2,16 +2,20 @@
   'use strict';
 
   angular.module('homeTrax.timesheets.list', [
-    'ngRoute'
-  ]).controller('timesheetListController', TimesheetListController)
-    .config(function($routeProvider) {
-      $routeProvider.when('/timesheets/list', {
-        templateUrl: 'app/timesheets/list/timesheetList.html',
-        controller: 'timesheetListController',
-        controllerAs: 'controller'
+      'ui.router'
+    ]).controller('timesheetListController', TimesheetListController)
+    .config(function($stateProvider) {
+      $stateProvider.state('app.timesheets.list', {
+        url: '/list',
+        views: {
+          timesheetView: {
+            templateUrl: 'app/timesheets/list/timesheetList.html',
+            controller: 'timesheetListController',
+            controllerAs: 'controller'
+          }
+        }
       });
     });
 
-  function TimesheetListController() {
-  }
+  function TimesheetListController() {}
 }());

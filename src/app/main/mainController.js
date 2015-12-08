@@ -2,15 +2,19 @@
   'use strict';
 
   angular.module('homeTrax.main.mainController', [
-    'ngRoute',
-    'homeTrax.auth.identity'
-  ])
+      'ui.router',
+      'homeTrax.auth.identity'
+    ])
     .controller('mainController', MainController)
-    .config(function($routeProvider){
-      $routeProvider.when('/', {
-        templateUrl: 'app/main/templates/main.html',
-        controller: 'mainController',
-        controllerAs: 'controller'
+    .config(function($stateProvider) {
+      $stateProvider.state('app.main', {
+        url: '/',
+        views: {
+          mainShell: {
+            templateUrl: 'app/main/templates/main.html',
+            controller: 'mainController as controller'
+          }
+        }
       });
     });
 

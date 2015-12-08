@@ -8,7 +8,7 @@
     var $controllerConstructor;
     var dfd;
     var mockAuthService;
-    var mockLocation;
+    var mockState;
     var mockNotifier;
 
     beforeEach(inject(function($controller, $rootScope, $q) {
@@ -19,30 +19,22 @@
 
     beforeEach(function() {
       mockAuthService = sinon.stub({
-        authenticateUser: function() {
-        }
+        authenticateUser: function() {}
       });
       mockNotifier = sinon.stub({
-        error: function() {
-        },
+        error: function() {},
 
-        notify: function() {
-        }
+        notify: function() {}
       });
       mockAuthService.authenticateUser.returns(dfd.promise);
-      mockLocation = sinon.stub({
-        path: function() {
-        },
-
-        replace: function() {
-        }
+      mockState = sinon.stub({
+        go: function() {}
       });
-      mockLocation.path.returns(mockLocation);
     });
 
-    function createController(){
+    function createController() {
       return $controllerConstructor('loginController', {
-        $location: mockLocation,
+        $state: mockState,
         authService: mockAuthService,
         notifier: mockNotifier
       });
@@ -50,7 +42,7 @@
 
     describe('signin', function() {
       var controller;
-      beforeEach(function(){
+      beforeEach(function() {
         controller = createController();
       });
 
@@ -62,8 +54,8 @@
       it('Should redirect to index on success', function() {
         callSigninWithSuccess();
 
-        expect(mockLocation.path.calledWith('/')).to.be.true;
-        expect(mockLocation.replace.calledOnce).to.be.true;
+        expect(mockState.go.calledOnce).to.be.true;
+        expect(mockState.go.calledWith('app.main')).to.be.true;
       });
 
       it('Should welcome the user on success', function() {

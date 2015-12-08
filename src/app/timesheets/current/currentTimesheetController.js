@@ -2,20 +2,25 @@
   'use strict';
 
   angular.module('homeTrax.timesheets.current', [
-    'ngRoute',
-    'homeTrax.common.core.EditorMode',
-    'homeTrax.common.directives.htTaskTimer',
-    'homeTrax.common.filters.hoursMinutes',
-    'homeTrax.common.services.dateUtilities',
-    'homeTrax.common.services.timesheets',
-    'homeTrax.common.services.timesheetTaskTimers',
-    'homeTrax.taskTimers.edit.taskTimerEditor'
-  ]).controller('currentTimesheetController', CurrentTimesheetController)
-    .config(function($routeProvider) {
-      $routeProvider.when('/timesheets/current', {
-        templateUrl: 'app/timesheets/current/currentTimesheet.html',
-        controller: 'currentTimesheetController',
-        controllerAs: 'controller'
+      'ui.router',
+      'homeTrax.common.core.EditorMode',
+      'homeTrax.common.directives.htTaskTimer',
+      'homeTrax.common.filters.hoursMinutes',
+      'homeTrax.common.services.dateUtilities',
+      'homeTrax.common.services.timesheets',
+      'homeTrax.common.services.timesheetTaskTimers',
+      'homeTrax.taskTimers.edit.taskTimerEditor'
+    ]).controller('currentTimesheetController', CurrentTimesheetController)
+    .config(function($stateProvider) {
+      $stateProvider.state('app.timesheets.current', {
+        url: '/current',
+        views: {
+          timesheetView: {
+            templateUrl: 'app/timesheets/current/currentTimesheet.html',
+            controller: 'currentTimesheetController',
+            controllerAs: 'controller'
+          }
+        }
       });
     });
 

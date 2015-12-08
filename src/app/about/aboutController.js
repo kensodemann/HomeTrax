@@ -2,15 +2,19 @@
   'use strict';
 
   angular.module('homeTrax.about', [
-    'ngRoute',
-    'ui.bootstrap',
-    'homeTrax.about.versionData'
-  ]).controller('aboutController', AboutController)
-    .config(function($routeProvider) {
-      $routeProvider.when('/about', {
-        templateUrl: 'app/about/templates/about.html',
-        controller: 'aboutController',
-        controllerAs: 'controller'
+      'ui.router',
+      'ui.bootstrap',
+      'homeTrax.about.versionData'
+    ]).controller('aboutController', AboutController)
+    .config(function($stateProvider) {
+      $stateProvider.state('app.about', {
+        url: '/about',
+        views: {
+          mainShell: {
+            templateUrl: 'app/about/templates/about.html',
+            controller: 'aboutController as controller'
+          }
+        }
       });
     });
 
@@ -22,7 +26,7 @@
 
     getCurrentVersions();
 
-    function getCurrentVersions(){
+    function getCurrentVersions() {
       controller.currentClientVersion = controller.clientVersions[0].name;
 
       controller.serverVersions.$promise.then(function(d) {

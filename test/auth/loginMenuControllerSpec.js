@@ -8,7 +8,7 @@
     var dfd;
     var mockAuthService;
     var mockIdentity;
-    var mockLocation;
+    var mockState;
 
     beforeEach(module('homeTrax.auth.loginMenu'));
 
@@ -20,14 +20,12 @@
 
     beforeEach(function() {
       mockAuthService = sinon.stub({
-        logoutUser: function() {
-        }
+        logoutUser: function() {}
       });
       mockAuthService.logoutUser.returns(dfd.promise);
       mockIdentity = sinon.stub();
-      mockLocation = sinon.stub({
-        path: function() {
-        }
+      mockState = sinon.stub({
+        go: function() {}
       });
     });
 
@@ -35,7 +33,7 @@
       return $controllerConstructor('loginMenuController', {
         identity: mockIdentity,
         authService: mockAuthService,
-        $location: mockLocation
+        $state: mockState
       });
     }
 
@@ -61,7 +59,8 @@
         dfd.resolve();
         scope.$digest();
 
-        expect(mockLocation.path.calledWith('/login')).to.be.true;
+        expect(mockState.go.calledOnce).to.be.true;
+        expect(mockState.go.calledWith('app.login')).to.be.true;
       });
     });
   });

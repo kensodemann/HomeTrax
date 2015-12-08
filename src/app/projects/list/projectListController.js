@@ -2,17 +2,21 @@
   'use strict';
 
   angular.module('homeTrax.projects.list', [
-    'homeTrax.common.core.EditorMode',
-    'homeTrax.common.directives.htWaitBar',
-    'homeTrax.common.resources.Project',
-    'homeTrax.projects.edit',
-    'ngRoute'
-  ]).controller('projectListController', ProjectListController)
-    .config(function($routeProvider) {
-      $routeProvider.when('/projects/list', {
-        templateUrl: 'app/projects/list/projectList.html',
-        controller: 'projectListController',
-        controllerAs: 'controller'
+      'homeTrax.common.core.EditorMode',
+      'homeTrax.common.directives.htWaitBar',
+      'homeTrax.common.resources.Project',
+      'homeTrax.projects.edit',
+      'ui.router'
+    ]).controller('projectListController', ProjectListController)
+    .config(function($stateProvider) {
+      $stateProvider.state('app.projects.list', {
+        url: '/list',
+        views: {
+          projects: {
+            templateUrl: 'app/projects/list/projectList.html',
+            controller: 'projectListController as controller'
+          }
+        }
       });
     });
 

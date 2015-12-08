@@ -5,14 +5,14 @@
     'homeTrax.auth.AuthEvents'
   ]).controller('shellController', ShellController);
 
-  function ShellController($scope, $location, AuthEvents) {
+  function ShellController($scope, $state, AuthEvents) {
     $scope.$on(AuthEvents.notAuthenticated, function() {
-      $location.path('/login');
+      $state.go('app.login');
     });
 
     // TODO: Change this after getting the errors from the server sorted out...
     $scope.$on(AuthEvents.notAuthorized, function() {
-      $location.path('/login');
+      $state.path('app.login');
     });
   }
 }());
