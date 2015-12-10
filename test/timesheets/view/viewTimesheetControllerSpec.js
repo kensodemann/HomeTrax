@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('homeTrax.timesheets.current: currentTimesheetController', function() {
+  describe('homeTrax.timesheets.view: viewTimesheetController', function() {
     var mockModalInstance;
     var mockTaskTimer;
     var mockTaskTimerEditor;
@@ -19,7 +19,7 @@
     var $interval;
     var $rootScope;
 
-    beforeEach(module('homeTrax.timesheets.current'));
+    beforeEach(module('homeTrax.timesheets.view'));
 
     beforeEach(inject(function($controller, $q, _$rootScope_, _$interval_, _EditorMode_) {
       $controllerConstructor = $controller;
@@ -99,7 +99,7 @@
     });
 
     function createController() {
-      return $controllerConstructor('currentTimesheetController', {
+      return $controllerConstructor('viewTimesheetController', {
         timesheets: mockTimesheets,
         taskTimerEditor: mockTaskTimerEditor,
         timesheetTaskTimers: mockTimesheetTaskTimers

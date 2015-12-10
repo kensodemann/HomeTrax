@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.timesheets.current', [
+  angular.module('homeTrax.timesheets.view', [
       'ui.router',
       'homeTrax.common.core.EditorMode',
       'homeTrax.common.directives.htTaskTimer',
@@ -10,21 +10,21 @@
       'homeTrax.common.services.timesheets',
       'homeTrax.common.services.timesheetTaskTimers',
       'homeTrax.taskTimers.edit.taskTimerEditor'
-    ]).controller('currentTimesheetController', CurrentTimesheetController)
+    ]).controller('viewTimesheetController', ViewTimesheetController)
     .config(function($stateProvider) {
-      $stateProvider.state('app.timesheets.current', {
-        url: '/current',
+      $stateProvider.state('app.timesheets.view', {
+        url: '/view',
         views: {
           timesheetView: {
-            templateUrl: 'app/timesheets/current/currentTimesheet.html',
-            controller: 'currentTimesheetController',
+            templateUrl: 'app/timesheets/view/viewTimesheet.html',
+            controller: 'viewTimesheetController',
             controllerAs: 'controller'
           }
         }
       });
     });
 
-  function CurrentTimesheetController($q, $interval, dateUtilities, timesheets, timesheetTaskTimers, taskTimerEditor, EditorMode) {
+  function ViewTimesheetController($q, $interval, dateUtilities, timesheets, timesheetTaskTimers, taskTimerEditor, EditorMode) {
     var controller = this;
 
     controller.dates = [];
