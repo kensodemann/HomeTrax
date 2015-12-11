@@ -1,5 +1,6 @@
 {
   "globals": {
+    "_": true,
     "angular": true,
     "expect": true,
     "inject": true,
