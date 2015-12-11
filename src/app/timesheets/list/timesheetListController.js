@@ -18,7 +18,13 @@
       });
     });
 
-  function TimesheetListController(Timesheet) {
-    this.timesheets = Timesheet.query();
+  function TimesheetListController(Timesheet, messageDialog) {
+    this.timesheets = Timesheet.query(noop, displayError);
+
+    function noop() {}
+
+    function displayError(res) {
+      messageDialog.error('Error Getting Timesheets', res.data.reason);
+    }
   }
 }());

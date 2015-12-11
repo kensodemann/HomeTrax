@@ -4,11 +4,10 @@
 </div>
 <div class="modal-body">
   <form name="messageDialog" class="form-horizontal">
-    <div><i class="fa fa-3x fa-question-circle msg-dlg-ico"></i><span class="msg-dlg-text" ng-bind="controller.message"></span>
+    <div><i class="fa fa-3x fa-exclamation-circle msg-dlg-ico"></i><span class="msg-dlg-text" ng-bind="controller.message"></span>
     </div>
   </form>
 </div>
 <div class="modal-footer">
-  <button type="button" ng-click="controller.$close(true)" class="btn btn-primary">Yes</button>
-  <button type="button" ng-click="controller.$close(false)" class="btn btn-default">No</button>
+  <button type="button" ng-click="controller.$close()" class="btn btn-primary">OK</button>
 </div>

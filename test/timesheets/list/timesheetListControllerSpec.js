@@ -2,6 +2,8 @@
   'use strict';
 
   describe('homeTrax.timesheets.list: timesheetListController', function() {
+    var mockMessageDialog;
+
     var config;
     var $controllerConstructor;
     var $httpBackend;
@@ -20,13 +22,21 @@
       initializeTestData();
     });
 
+    beforeEach(function() {
+      mockMessageDialog = sinon.stub({
+        error: function() {}
+      });
+    });
+
     afterEach(function() {
       $httpBackend.verifyNoOutstandingExpectation();
       $httpBackend.verifyNoOutstandingRequest();
     });
 
     function createController() {
-      return $controllerConstructor('timesheetListController', {});
+      return $controllerConstructor('timesheetListController', {
+        messageDialog: mockMessageDialog
+      });
     }
 
     function setupHttpQuery(status, res) {
@@ -47,6 +57,16 @@
       expect(controller.timesheets.length).to.equal(0);
       $httpBackend.flush();
       expect(controller.timesheets.length).to.equal(6);
+    });
+
+    it('displays an error if the query fails', function() {
+      setupHttpQuery(400, {
+        reason: 'Because you suck eggs'
+      });
+      var controller = createController();
+      $httpBackend.flush();
+      expect(mockMessageDialog.error.calledOnce).to.be.true;
+      expect(mockMessageDialog.error.calledWith('Error Getting Timesheets', 'Because you suck eggs')).to.be.true;
     });
 
     function initializeTestData() {
