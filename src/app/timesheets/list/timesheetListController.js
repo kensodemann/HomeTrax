@@ -2,7 +2,8 @@
   'use strict';
 
   angular.module('homeTrax.timesheets.list', [
-      'ui.router'
+      'ui.router',
+      'homeTrax.common.resources.Timesheet'
     ]).controller('timesheetListController', TimesheetListController)
     .config(function($stateProvider) {
       $stateProvider.state('app.timesheets.list', {
@@ -17,5 +18,7 @@
       });
     });
 
-  function TimesheetListController() {}
+  function TimesheetListController(Timesheet) {
+    this.timesheets = Timesheet.query();
+  }
 }());
