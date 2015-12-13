@@ -2,16 +2,30 @@
   'use strict';
 
   angular.module('homeTrax.timesheets.list', [
-    'ngRoute'
-  ]).controller('timesheetListController', TimesheetListController)
-    .config(function($routeProvider) {
-      $routeProvider.when('/timesheets/list', {
-        templateUrl: 'app/timesheets/list/timesheetList.html',
-        controller: 'timesheetListController',
-        controllerAs: 'controller'
+      'ui.router',
+      'homeTrax.common.resources.Timesheet',
+      'homeTrax.common.services.messageDialog'
+    ]).controller('timesheetListController', TimesheetListController)
+    .config(function($stateProvider) {
+      $stateProvider.state('app.timesheets.list', {
+        url: '/list',
+        views: {
+          timesheetView: {
+            templateUrl: 'app/timesheets/list/timesheetList.html',
+            controller: 'timesheetListController',
+            controllerAs: 'controller'
+          }
+        }
       });
     });
 
-  function TimesheetListController() {
+  function TimesheetListController(Timesheet, messageDialog) {
+    this.timesheets = Timesheet.query(noop, displayError);
+
+    function noop() {}
+
+    function displayError(res) {
+      messageDialog.error('Error Getting Timesheets', res.data.reason);
+    }
   }
 }());

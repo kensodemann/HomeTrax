@@ -15,13 +15,16 @@
   ]);
 
   angular.module('homeTrax')
-      .config(auth)
-      .config(routes)
-      .config(services)
-      .run(routeErrorHandling);
+    .config(auth)
+    .config(routes)
+    .config(services)
+    .config(shell)
+    .run(routeErrorHandling);
 
-  function routes($locationProvider) {
+  function routes($locationProvider, $urlRouterProvider) {
     $locationProvider.html5Mode(true);
+    // all unknown routes: point back to top level, this could go to an error or 404 style page.
+    $urlRouterProvider.otherwise('/');
   }
 
   function auth($httpProvider) {
@@ -32,14 +35,20 @@
     localStorageServiceProvider.setPrefix('HomeTrax');
   }
 
-  function routeErrorHandling($rootScope, $location) {
-    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
-      if (rejection === 'Not Authorized') {
-        $location.path('/');
-      }
-      else if (rejection === 'Not Logged In') {
-        $location.path('/login');
-      }
+  function shell($stateProvider) {
+    $stateProvider.state('app', {
+      abstract: true,
+      template: '<ui-view name="mainShell"></ui-view>'
+    });
+  }
+
+  function routeErrorHandling($log, $rootScope, $state) {
+    $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+      $log.error('$stateChangeError');
+      $log.error(toState);
+      $log.error(error);
+      $state.go('login');
+      $state.get('login').targetState = toState.title;
     });
   }
 }());

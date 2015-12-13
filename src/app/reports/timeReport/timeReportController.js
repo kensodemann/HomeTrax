@@ -2,22 +2,29 @@
   'use strict';
 
   angular.module('homeTrax.reports.timeReport.timeReportController', [
-      'ngRoute',
+      'ui.router',
       'homeTrax.common.filters.hoursMinutes',
+      'homeTrax.common.services.messageDialog',
       'homeTrax.common.services.timesheets',
       'homeTrax.common.services.timesheetTaskTimers',
       'homeTrax.reports.services.timeReportData'
     ])
     .controller('timeReportController', TimeReportController)
-    .config(function($routeProvider) {
-      $routeProvider.when('/reports/timeReport', {
-        templateUrl: 'app/reports/timeReport/timeReport.html',
-        controller: 'timeReportController',
-        controllerAs: 'controller'
+    .config(function($stateProvider) {
+      $stateProvider.state('app.reports.timeReport', {
+        url: '/timeReport',
+        views: {
+          reportView: {
+            templateUrl: 'app/reports/timeReport/timeReport.html',
+            controller: 'timeReportController',
+            controllerAs: 'controller'
+          }
+        }
       });
     });
 
-  function TimeReportController($log, timesheets, timesheetTaskTimers, timeReportData) {
+  function TimeReportController($log, timesheets, timesheetTaskTimers,
+    timeReportData, messageDialog) {
     var controller = this;
 
     controller.timesheet = undefined;
@@ -25,12 +32,12 @@
     activate();
 
     function activate() {
-      timesheets.getCurrent().then(initializeTimesheetData, logError);
+      timesheets.getCurrent().then(initializeTimesheetData, displayError);
     }
 
     function initializeTimesheetData(ts) {
       controller.timesheet = ts;
-      timesheetTaskTimers.load(ts).then(summarizeData, logError);
+      timesheetTaskTimers.load(ts).then(summarizeData, displayError);
     }
 
     function summarizeData() {
@@ -38,8 +45,9 @@
       controller.dailySummaryData = timeReportData.getDailySummaryData(timesheetTaskTimers.all);
     }
 
-    function logError(res) {
+    function displayError(res) {
       $log.error(res);
+      messageDialog.error('Error', res.data.reason);
     }
   }
 }());

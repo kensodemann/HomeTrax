@@ -7,6 +7,9 @@
     "afterEach",
     "beforeEach",
     "describe",
-    "it"
+    "it",
+    "expect",
+    "inject",
+    "sinon"
   ]
 }

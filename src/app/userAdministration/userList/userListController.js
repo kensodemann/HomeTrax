@@ -2,17 +2,22 @@
   'use strict';
 
   angular.module('homeTrax.userAdministration.userList', [
-    'ngRoute',
-    'homeTrax.common.core.EditorMode',
-    'homeTrax.common.resources.User',
-    'homeTrax.userAdministration.userEditor'
-  ])
+      'ui.router',
+      'homeTrax.common.core.EditorMode',
+      'homeTrax.common.resources.User',
+      'homeTrax.userAdministration.userEditor'
+    ])
     .controller('userListController', UserListController)
-    .config(function($routeProvider) {
-      $routeProvider.when('/userAdministration/userlist', {
-        templateUrl: 'app/userAdministration/userList/userList.html',
-        controller: 'userListController',
-        controllerAs: 'controller'
+    .config(function($stateProvider) {
+      $stateProvider.state('app.userAdministration.userList', {
+        url: '/userList',
+        views: {
+          userAdminView: {
+            templateUrl: 'app/userAdministration/userList/userList.html',
+            controller: 'userListController',
+            controllerAs: 'controller'
+          }
+        }
       });
     });
 

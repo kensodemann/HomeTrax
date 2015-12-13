@@ -2,6 +2,7 @@
   'use strict';
 
   describe('timeReportController', function() {
+    var mockMessageDialog;
     var mockTimeReportData;
     var mockTimesheets;
     var mockTimesheetTaskTimers;
@@ -22,12 +23,16 @@
     }));
 
     beforeEach(function() {
-      mockTimeReportData = sinon.stub({
-        getSummaryData: function() {
-        },
+      mockMessageDialog = sinon.stub({
+        error: function() {}
+      });
+    });
 
-        getDailySummaryData: function() {
-        }
+    beforeEach(function() {
+      mockTimeReportData = sinon.stub({
+        getSummaryData: function() {},
+
+        getDailySummaryData: function() {}
       });
       mockTimeReportData.getSummaryData.returns('Summary Data');
       mockTimeReportData.getDailySummaryData.returns('Daily Summary Data');
@@ -35,16 +40,14 @@
 
     beforeEach(function() {
       mockTimesheets = sinon.stub({
-        getCurrent: function() {
-        }
+        getCurrent: function() {}
       });
       mockTimesheets.getCurrent.returns(getCurrentDfd.promise);
     });
 
     beforeEach(function() {
       mockTimesheetTaskTimers = sinon.stub({
-        load: function() {
-        }
+        load: function() {}
       });
       mockTimesheetTaskTimers.load.returns(loadDfd.promise);
     });
@@ -53,7 +56,8 @@
       return $controllerConstructor('timeReportController', {
         timeReportData: mockTimeReportData,
         timesheets: mockTimesheets,
-        timesheetTaskTimers: mockTimesheetTaskTimers
+        timesheetTaskTimers: mockTimesheetTaskTimers,
+        messageDialog: mockMessageDialog
       });
     }
 
@@ -81,6 +85,17 @@
         expect(controller.timesheet).to.equal(timesheet);
       });
 
+      it('displays an error message if timesheet load fails', function() {
+        getCurrentDfd.reject({
+          data: {
+            reason: 'Because you suck eggs'
+          }
+        });
+        $scope.$digest();
+        expect(mockMessageDialog.error.calledOnce).to.be.true;
+        expect(mockMessageDialog.error.calledWith('Error', 'Because you suck eggs')).to.be.true;
+      });
+
       it('loads the task timers after it gets the timesheet', function() {
         var timesheet = {
           _id: 42
@@ -102,6 +117,18 @@
         expect(mockTimeReportData.getSummaryData.calledOnce).to.be.true;
         expect(mockTimeReportData.getSummaryData.calledWith([1, 2, 3, 4])).to.be.true;
         expect(controller.summaryData).to.equal('Summary Data');
+      });
+
+      it('displays an error message if task timer load fails', function() {
+        getCurrentDfd.resolve();
+        loadDfd.reject({
+          data: {
+            reason: 'Because you suck eggs'
+          }
+        });
+        $scope.$digest();
+        expect(mockMessageDialog.error.calledOnce).to.be.true;
+        expect(mockMessageDialog.error.calledWith('Error', 'Because you suck eggs')).to.be.true;
       });
 
       it('assigns the daily summary data after load', function() {

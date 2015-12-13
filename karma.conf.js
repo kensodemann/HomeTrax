@@ -14,7 +14,7 @@ module.exports = function(config) {
       componentPaths.lib.angularLocalStorage.dev,
       componentPaths.lib.angularMessages.dev,
       componentPaths.lib.angularResource.dev,
-      componentPaths.lib.angularRoute.dev,
+      componentPaths.lib.angularUiRouter.dev,
       componentPaths.lib.angularBootstrapUI.dev,
       componentPaths.lib.angularMocks.dev,
       componentPaths.lib.moment.dev,

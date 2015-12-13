@@ -1,42 +1,50 @@
 (function() {
   'use strict';
 
-  angular.module('homeTrax.common.services.messageDialog', [])
-    .factory('messageDialog', messageDialog);
+  angular.module('homeTrax.common.services.messageDialog', [
+      'ui.bootstrap'
+    ])
+    .factory('messageDialog', messageDialog)
+    .controller('messageDialogController', MessageDialogController);
 
-  function messageDialog($uibModal, $rootScope, $q) {
+  function messageDialog($uibModal) {
     var exports = {
-      ask: function(question, title) {
-        askDfd = $q.defer();
-        askScope.question = question;
-        askScope.title = title;
-        askDlg.$promise.then(function() {
-          askDlg.show();
-        });
-
-        return askDfd.promise;
-      }
+      ask: openAskDialog,
+      error: openErrorDialog
     };
 
-    var askDfd;
-    var askScope = $rootScope.$new(true);
-    var askDlg = $uibModal({
-      template: 'app/common/services/messageDialog/templates/askDialog.html',
-      backdrop: 'static',
-      show: false,
-      scope: askScope
-    });
+    function openAskDialog(title, question) {
+      return openDialog(title, question, 'app/common/services/messageDialog/templates/askDialog.html');
+    }
 
-    askScope.yes = function() {
-      askDfd.resolve(true);
-      askDlg.hide();
-    };
+    function openErrorDialog(title, message) {
+      return openDialog(title, message, 'app/common/services/messageDialog/templates/errorDialog.html');
+    }
 
-    askScope.no = function() {
-      askDfd.resolve(false);
-      askDlg.hide();
-    };
+    function openDialog(title, message, templateUrl) {
+      return $uibModal.open({
+        templateUrl: templateUrl,
+        backdrop: 'static',
+        resolve: {
+          title: function() {
+            return title;
+          },
+
+          message: function() {
+            return message;
+          }
+        },
+        controller: 'messageDialogController',
+        controllerAs: 'controller',
+        bindToController: true
+      });
+    }
 
     return exports;
+  }
+
+  function MessageDialogController(title, message) {
+    this.title = title;
+    this.message = message;
   }
 }());

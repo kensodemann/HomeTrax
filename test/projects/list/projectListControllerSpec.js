@@ -2,6 +2,7 @@
   'use strict';
 
   describe('projectListController', function() {
+    var mockMessageDialog;
     var mockModalInstance;
     var mockProject;
     var mockProjectConstructor;
@@ -36,6 +37,12 @@
     });
 
     beforeEach(function() {
+      mockMessageDialog = sinon.stub({
+        error: function() {}
+      });
+    });
+
+    beforeEach(function() {
       mockModalInstance = {
         result: resultDfd.promise
       };
@@ -43,8 +50,7 @@
 
     beforeEach(function() {
       mockProjectEditor = sinon.stub({
-        open: function() {
-        }
+        open: function() {}
       });
       mockProjectEditor.open.returns(mockModalInstance);
     });
@@ -52,7 +58,8 @@
     function createController() {
       return $controllerConstructor('projectListController', {
         Project: mockProjectConstructor,
-        projectEditor: mockProjectEditor
+        projectEditor: mockProjectEditor,
+        messageDialog: mockMessageDialog
       });
     }
 
@@ -82,7 +89,19 @@
         queryDfd.resolve();
         scope.$digest();
         expect(controller.isQuerying).to.be.false;
-      })
+      });
+
+      it('displays error message if query fails', function() {
+        createController();
+        queryDfd.reject({
+          data: {
+            reason: 'Because you suck eggs'
+          }
+        });
+        scope.$digest();
+        expect(mockMessageDialog.error.calledOnce).to.be.true;
+        expect(mockMessageDialog.error.calledWith('Error', 'Because you suck eggs')).to.be.true;
+      });
     });
 
     describe('creating a new project', function() {

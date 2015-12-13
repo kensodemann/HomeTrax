@@ -2,22 +2,27 @@
   'use strict';
 
   angular.module('homeTrax.auth.login', [
-    'ngRoute',
-    'homeTrax.auth.authService',
-    'homeTrax.common.services.notifier'
-  ])
-    .controller('loginController', LoginController)
-    .config(function($routeProvider) {
-      $routeProvider.when('/login', {
-        templateUrl: 'app/auth/login/login.html',
-        controller: 'loginController',
-        controllerAs: 'controller'
+      'ui.router',
+      'homeTrax.auth.authService',
+      'homeTrax.common.directives.htWaitButton',
+      'homeTrax.common.services.notifier'
+    ]).controller('loginController', LoginController)
+    .config(function($stateProvider) {
+      $stateProvider.state('app.login', {
+        url: '/login',
+        views: {
+          mainShell: {
+            templateUrl: 'app/auth/login/login.html',
+            controller: 'loginController as controller'
+          }
+        }
       });
     });
 
-  function LoginController($location, authService, notifier) {
-    var self = this;
-    self.signin = function(username, password) {
+  function LoginController($state, authService, notifier) {
+    var controller = this;
+    
+    controller.signin = function(username, password) {
       var p = authService.authenticateUser(username, password);
       p.then(handleResult);
       return p;
@@ -25,8 +30,9 @@
       function handleResult(success) {
         if (success) {
           notifier.notify('Welcome Home!');
-          $location.path('/').replace();
-        } else {
+          $state.go('app.main');
+        }
+        else {
           notifier.error('Login Failed!');
         }
       }
