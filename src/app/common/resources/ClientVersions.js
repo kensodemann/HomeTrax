@@ -3,6 +3,20 @@
 
   angular.module('homeTrax.common.resources.ClientVersions', [])
     .constant('ClientVersions', [{
+      id: '2.0.3',
+      name: 'Desghidorah (2.0.3)',
+      releaseDate: '2015-12-13',
+      description: 'Timesheet List, Code Cleanup',
+      features: [
+        'Added the list of previous timesheets (links do not work yet)',
+        'Switched to using the UI router',
+        'Refactored some of the code for cleanliness'
+      ],
+      bugFixes: [
+        'Added error handling for fetches',
+        'Removed minor routing bug'
+      ]
+    }, {
       id: '2.0.2',
       name: 'Icefyre (2.0.2)',
       releaseDate: '2015-12-06',
@@ -11,7 +25,7 @@
         'Added a report that provides a daily summary of time spent'
       ],
       bugFixes: []
-    },{
+    }, {
       id: '2.0.1',
       name: 'Narse (2.0.1)',
       releaseDate: '2015-11-30',
