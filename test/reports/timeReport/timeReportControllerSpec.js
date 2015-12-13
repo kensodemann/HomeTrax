@@ -3,6 +3,7 @@
 
   describe('timeReportController', function() {
     var mockMessageDialog;
+    var mockStateParams;
     var mockTimeReportData;
     var mockTimesheets;
     var mockTimesheetTaskTimers;
@@ -10,6 +11,7 @@
     var $controllerConstructor;
 
     var getCurrentDfd;
+    var getDfd;
     var loadDfd;
     var $scope;
 
@@ -19,20 +21,28 @@
       $controllerConstructor = $controller;
       $scope = $rootScope.$new();
       getCurrentDfd = $q.defer();
+      getDfd = $q.defer();
       loadDfd = $q.defer();
     }));
 
     beforeEach(function() {
       mockMessageDialog = sinon.stub({
-        error: function() {}
+        error: function() {
+        }
       });
     });
 
     beforeEach(function() {
-      mockTimeReportData = sinon.stub({
-        getSummaryData: function() {},
+      mockStateParams = {};
+    });
 
-        getDailySummaryData: function() {}
+    beforeEach(function() {
+      mockTimeReportData = sinon.stub({
+        getSummaryData: function() {
+        },
+
+        getDailySummaryData: function() {
+        }
       });
       mockTimeReportData.getSummaryData.returns('Summary Data');
       mockTimeReportData.getDailySummaryData.returns('Daily Summary Data');
@@ -40,14 +50,20 @@
 
     beforeEach(function() {
       mockTimesheets = sinon.stub({
-        getCurrent: function() {}
+        get: function() {
+        },
+
+        getCurrent: function() {
+        }
       });
+      mockTimesheets.get.returns(getDfd.promise);
       mockTimesheets.getCurrent.returns(getCurrentDfd.promise);
     });
 
     beforeEach(function() {
       mockTimesheetTaskTimers = sinon.stub({
-        load: function() {}
+        load: function() {
+        }
       });
       mockTimesheetTaskTimers.load.returns(loadDfd.promise);
     });
@@ -57,7 +73,8 @@
         timeReportData: mockTimeReportData,
         timesheets: mockTimesheets,
         timesheetTaskTimers: mockTimesheetTaskTimers,
-        messageDialog: mockMessageDialog
+        messageDialog: mockMessageDialog,
+        $stateParams: mockStateParams
       });
     }
 
@@ -66,14 +83,30 @@
       expect(controller).to.exist;
     });
 
+    describe('loading the data', function() {
+      describe('with an ID', function() {
+        it('loads the specified timesheet', function() {
+          mockStateParams.id = 7342314159;
+          createController();
+          expect(mockTimesheets.getCurrent.called).to.be.false;
+          expect(mockTimesheets.get.calledOnce).to.be.true;
+          expect(mockTimesheets.get.calledWith(7342314159)).to.be.true;
+        });
+      });
+
+      describe('without an ID', function() {
+        it('loads the current timesheet', function() {
+          createController();
+          expect(mockTimesheets.getCurrent.calledOnce).to.be.true;
+          expect(mockTimesheets.get.called).to.be.false;
+        });
+      });
+    });
+
     describe('activation', function() {
       var controller;
       beforeEach(function() {
         controller = createController();
-      });
-
-      it('loads the current timesheet', function() {
-        expect(mockTimesheets.getCurrent.calledOnce).to.be.true;
       });
 
       it('assigns the resolved timesheet', function() {

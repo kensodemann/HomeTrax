@@ -11,20 +11,31 @@
     ])
     .controller('timeReportController', TimeReportController)
     .config(function($stateProvider) {
-      $stateProvider.state('app.reports.timeReport', {
-        url: '/timeReport',
-        views: {
-          reportView: {
-            templateUrl: 'app/reports/timeReport/timeReport.html',
-            controller: 'timeReportController',
-            controllerAs: 'controller'
+      $stateProvider
+        .state('app.reports.currentTimeReport', {
+          url: '/timeReport',
+          views: {
+            reportView: {
+              templateUrl: 'app/reports/timeReport/timeReport.html',
+              controller: 'timeReportController',
+              controllerAs: 'controller'
+            }
           }
-        }
-      });
+        })
+        .state('app.reports.timeReport', {
+          url: '/timeReport/:id',
+          views: {
+            reportView: {
+              templateUrl: 'app/reports/timeReport/timeReport.html',
+              controller: 'timeReportController',
+              controllerAs: 'controller'
+            }
+          }
+        });
     });
 
-  function TimeReportController($log, timesheets, timesheetTaskTimers,
-    timeReportData, messageDialog) {
+  function TimeReportController($log, $stateParams, timesheets, timesheetTaskTimers,
+                                timeReportData, messageDialog) {
     var controller = this;
 
     controller.timesheet = undefined;
@@ -32,7 +43,8 @@
     activate();
 
     function activate() {
-      timesheets.getCurrent().then(initializeTimesheetData, displayError);
+      var p = $stateParams.id ? timesheets.get($stateParams.id) : timesheets.getCurrent();
+      p.then(initializeTimesheetData, displayError);
     }
 
     function initializeTimesheetData(ts) {

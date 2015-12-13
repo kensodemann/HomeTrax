@@ -35,7 +35,7 @@
           _id: 73,
           name: 'Sheldon Cooper'
         }
-      }
+      };
     });
 
     beforeEach(function() {
@@ -47,6 +47,7 @@
       mockTimesheetConstructor.returns(mockTimesheet);
       mockTimesheetConstructor.query = sinon.stub();
       mockTimesheetConstructor.query.returns(testData);
+      mockTimesheetConstructor.get = sinon.stub();
     });
 
     beforeEach(function() {
@@ -183,7 +184,7 @@
         });
 
         it('resolves a new timesheet if not found', function(done) {
-          var savedTimesheet = {}
+          var savedTimesheet = {};
           mockDateUtilities.weekEndDate.returns(new Date(2015, 8, 21));
           timesheets.getCurrent().then(function(current) {
             expect(current).to.equal(savedTimesheet);
@@ -251,6 +252,50 @@
           mockTimesheet.$save.yield(savedTimesheet);
           $rootScope.$digest();
         });
+      });
+    });
+
+    describe('get', function() {
+      it('resolves the timesheet from cache if it is there', function() {
+        timesheets.refresh();
+        queryDfd.resolve(testData);
+        $rootScope.$digest();
+        var timesheet = {};
+        timesheets.get(5).then(function(res){
+          timesheet = res;
+        });
+
+        $rootScope.$digest();
+        expect(mockTimesheetConstructor.get.called).to.be.false;
+        expect(timesheet).to.equal(testData[3]);
+      });
+
+      it('gets the timesheet from the data service if it is not in the cache', function() {
+        timesheets.refresh();
+        queryDfd.resolve(testData);
+        $rootScope.$digest();
+        timesheets.get(42);
+        expect(mockTimesheetConstructor.get.calledOnce).to.be.true;
+        expect(mockTimesheetConstructor.get.calledWith({_id: 42})).to.be.true;
+      });
+
+      it('gets the timesheet from the data service if the cache has not been loaded yet', function() {
+        timesheets.get(42);
+        expect(mockTimesheetConstructor.get.calledOnce).to.be.true;
+        expect(mockTimesheetConstructor.get.calledWith({_id: 42})).to.be.true;
+      });
+
+      it('gets the timesheet from the data service if the cache was loaded for a different user', function() {
+        timesheets.refresh();
+        queryDfd.resolve(testData);
+        $rootScope.$digest();
+        mockIdentity.currentUser = {
+          _id: 42,
+          name: 'Douglas Adams'
+        };
+        timesheets.get(5);
+        expect(mockTimesheetConstructor.get.calledOnce).to.be.true;
+        expect(mockTimesheetConstructor.get.calledWith({_id: 5})).to.be.true;
       });
     });
 

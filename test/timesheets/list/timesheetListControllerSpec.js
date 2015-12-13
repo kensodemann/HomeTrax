@@ -2,6 +2,7 @@
   'use strict';
 
   describe('homeTrax.timesheets.list: timesheetListController', function() {
+    var mockIdentity;
     var mockMessageDialog;
 
     var config;
@@ -11,6 +12,21 @@
     var testData;
 
     beforeEach(module('homeTrax.timesheets.list'));
+
+    beforeEach(function() {
+      mockIdentity = {
+        currentUser: {
+          _id: 73,
+          name: 'Sheldon Cooper'
+        }
+      };
+    });
+
+    beforeEach(function() {
+      module(function($provide) {
+        $provide.value('identity', mockIdentity);
+      });
+    });
 
     beforeEach(inject(function($controller, _$httpBackend_, _config_) {
       $controllerConstructor = $controller;
@@ -24,7 +40,8 @@
 
     beforeEach(function() {
       mockMessageDialog = sinon.stub({
-        error: function() {}
+        error: function() {
+        }
       });
     });
 
@@ -63,7 +80,7 @@
       setupHttpQuery(400, {
         reason: 'Because you suck eggs'
       });
-      var controller = createController();
+      createController();
       $httpBackend.flush();
       expect(mockMessageDialog.error.calledOnce).to.be.true;
       expect(mockMessageDialog.error.calledWith('Error Getting Timesheets', 'Because you suck eggs')).to.be.true;

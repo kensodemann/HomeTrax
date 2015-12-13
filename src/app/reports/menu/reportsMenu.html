@@ -1,5 +1,5 @@
 <ul ng-controller="reportsMenuController as controller" class="nav navbar-nav">
   <li>
-    <a href="/reports/timeReport" ng-show="controller.identity.isAuthenticated()">Time Report</a>
+    <a ui-sref="app.reports.currentTimeReport" ng-show="controller.identity.isAuthenticated()">Time Report</a>
   </li>
 </ul>
