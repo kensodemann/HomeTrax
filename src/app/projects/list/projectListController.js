@@ -5,6 +5,7 @@
       'homeTrax.common.core.EditorMode',
       'homeTrax.common.directives.htWaitBar',
       'homeTrax.common.resources.Project',
+      'homeTrax.common.services.messageDialog',
       'homeTrax.projects.edit',
       'ui.router'
     ]).controller('projectListController', ProjectListController)
@@ -20,7 +21,7 @@
       });
     });
 
-  function ProjectListController(Project, projectEditor, EditorMode) {
+  function ProjectListController(Project, projectEditor, EditorMode, messageDialog) {
     var controller = this;
 
     controller.isQuerying = true;
@@ -44,9 +45,15 @@
     }
 
     function activate() {
-      controller.projects.$promise.finally(function() {
-        controller.isQuerying = false;
-      });
+      controller.projects.$promise
+        .catch(displayError)
+        .finally(function() {
+          controller.isQuerying = false;
+        });
+
+      function displayError(res) {
+        messageDialog.error('Error', res.data.reason);
+      }
     }
   }
 }());

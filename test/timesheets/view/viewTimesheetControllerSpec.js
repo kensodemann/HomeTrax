@@ -2,6 +2,7 @@
   'use strict';
 
   describe('homeTrax.timesheets.view: viewTimesheetController', function() {
+    var mockMessageDialog;
     var mockModalInstance;
     var mockTaskTimer;
     var mockTaskTimerEditor;
@@ -30,8 +31,14 @@
       stopTimerDfd = $q.defer();
       $rootScope = _$rootScope_;
       EditorMode = _EditorMode_;
-      $interval= _$interval_;
+      $interval = _$interval_;
     }));
+
+    beforeEach(function() {
+      mockMessageDialog = sinon.stub({
+        error: function() {}
+      });
+    });
 
     beforeEach(function() {
       mockModalInstance = {
@@ -41,42 +48,33 @@
 
     beforeEach(function() {
       mockTaskTimerEditor = sinon.stub({
-        open: function() {
-        }
+        open: function() {}
       });
       mockTaskTimerEditor.open.returns(mockModalInstance);
     });
 
     beforeEach(function() {
       mockTimesheets = sinon.stub({
-        getCurrent: function() {
-        }
+        getCurrent: function() {}
       });
       mockTimesheets.getCurrent.returns(getCurrentDfd.promise);
     });
 
     beforeEach(function() {
       mockTimesheetTaskTimers = sinon.stub({
-        load: function() {
-        },
+        load: function() {},
 
-        get: function() {
-        },
+        get: function() {},
 
-        totalTime: function() {
-        },
+        totalTime: function() {},
 
-        create: function() {
-        },
+        create: function() {},
 
-        add: function() {
-        },
+        add: function() {},
 
-        start: function() {
-        },
+        start: function() {},
 
-        stop: function() {
-        }
+        stop: function() {}
       });
       mockTimesheetTaskTimers.load.returns(loadTaskTimersDfd.promise);
       mockTimesheetTaskTimers.create.returns(mockTaskTimer);
@@ -102,7 +100,8 @@
       return $controllerConstructor('viewTimesheetController', {
         timesheets: mockTimesheets,
         taskTimerEditor: mockTaskTimerEditor,
-        timesheetTaskTimers: mockTimesheetTaskTimers
+        timesheetTaskTimers: mockTimesheetTaskTimers,
+        messageDialog: mockMessageDialog
       });
     }
 
@@ -195,6 +194,13 @@
         $interval.flush(15000);
         expect(mockTimesheetTaskTimers.get.calledOnce).to.be.true;
         expect(mockTimesheetTaskTimers.totalTime.calledOnce).to.be.true;
+      });
+
+      it('displays error message if query fails', function() {
+        createController();
+        rejectCurrentTimesheet('Because you suck eggs');
+        expect(mockMessageDialog.error.calledOnce).to.be.true;
+        expect(mockMessageDialog.error.calledWith('Error', 'Because you suck eggs'));
       });
     });
 
@@ -378,7 +384,18 @@
     });
 
     function resolveCurrentTimesheet(ts) {
-      getCurrentDfd.resolve(ts || {_id: 123});
+      getCurrentDfd.resolve(ts || {
+        _id: 123
+      });
+      $rootScope.$digest();
+    }
+
+    function rejectCurrentTimesheet(msg) {
+      getCurrentDfd.reject({
+        data: {
+          reason: msg
+        }
+      });
       $rootScope.$digest();
     }
 

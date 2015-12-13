@@ -3,7 +3,8 @@
 
   angular.module('homeTrax.timesheets.list', [
       'ui.router',
-      'homeTrax.common.resources.Timesheet'
+      'homeTrax.common.resources.Timesheet',
+      'homeTrax.common.services.messageDialog'
     ]).controller('timesheetListController', TimesheetListController)
     .config(function($stateProvider) {
       $stateProvider.state('app.timesheets.list', {

@@ -7,6 +7,7 @@
       'homeTrax.common.directives.htTaskTimer',
       'homeTrax.common.filters.hoursMinutes',
       'homeTrax.common.services.dateUtilities',
+      'homeTrax.common.services.messageDialog',
       'homeTrax.common.services.timesheets',
       'homeTrax.common.services.timesheetTaskTimers',
       'homeTrax.taskTimers.edit.taskTimerEditor'
@@ -24,7 +25,8 @@
       });
     });
 
-  function ViewTimesheetController($q, $interval, dateUtilities, timesheets, timesheetTaskTimers, taskTimerEditor, EditorMode) {
+  function ViewTimesheetController($q, $interval, dateUtilities, timesheets,
+    timesheetTaskTimers, taskTimerEditor, EditorMode, messageDialog) {
     var controller = this;
 
     controller.dates = [];
@@ -73,11 +75,17 @@
       var today = dateUtilities.removeTimezoneOffset(new Date());
       generateWeek(today);
       selectDay(today);
-      loadData().then(function() {
+      loadData().then(finishActivation, displayError);
+
+      function finishActivation() {
         controller.isReady = true;
         refreshCurrentDate();
         $interval(refreshCurrentDate, 15000);
-      });
+      }
+
+      function displayError(res) {
+        messageDialog.error('Error', res.data.reason);
+      }
     }
 
     function generateWeek(day) {
