@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('homeTrax.timesheets.menu', [
+    'ui.router',
     'homeTrax.auth.identity'
   ]).controller('timesheetsMenuController', TimesheetssMenuController);
 

@@ -11,7 +11,7 @@
       <tbody>
         <tr ng-repeat="timesheet in controller.timesheets">
           <td>Week Ending: <span ng-bind="timesheet.endDate | date: 'mediumDate'"></span></td>
-          <td><a href="#">View/Edit</a></td>
+          <td><a ui-sref="app.timesheets.view({id: timesheet._id})">View/Edit</a></td>
           <td><a ui-sref="app.reports.timeReport({id: timesheet._id})">Time Report</a></td>
         </tr>
       </tbody>

@@ -2,31 +2,42 @@
   'use strict';
 
   angular.module('homeTrax.timesheets.view', [
-      'ui.router',
-      'homeTrax.common.core.EditorMode',
-      'homeTrax.common.directives.htTaskTimer',
-      'homeTrax.common.filters.hoursMinutes',
-      'homeTrax.common.services.dateUtilities',
-      'homeTrax.common.services.messageDialog',
-      'homeTrax.common.services.timesheets',
-      'homeTrax.common.services.timesheetTaskTimers',
-      'homeTrax.taskTimers.edit.taskTimerEditor'
-    ]).controller('viewTimesheetController', ViewTimesheetController)
+    'ui.router',
+    'homeTrax.common.core.EditorMode',
+    'homeTrax.common.directives.htTaskTimer',
+    'homeTrax.common.filters.hoursMinutes',
+    'homeTrax.common.services.dateUtilities',
+    'homeTrax.common.services.messageDialog',
+    'homeTrax.common.services.timesheets',
+    'homeTrax.common.services.timesheetTaskTimers',
+    'homeTrax.taskTimers.edit.taskTimerEditor'
+  ]).controller('viewTimesheetController', ViewTimesheetController)
     .config(function($stateProvider) {
-      $stateProvider.state('app.timesheets.view', {
-        url: '/view',
-        views: {
-          timesheetView: {
-            templateUrl: 'app/timesheets/view/viewTimesheet.html',
-            controller: 'viewTimesheetController',
-            controllerAs: 'controller'
+      $stateProvider
+        .state('app.timesheets.viewCurrent', {
+          url: '/view',
+          views: {
+            timesheetView: {
+              templateUrl: 'app/timesheets/view/viewTimesheet.html',
+              controller: 'viewTimesheetController',
+              controllerAs: 'controller'
+            }
           }
-        }
-      });
+        })
+        .state('app.timesheets.view', {
+          url: '/view/:id',
+          views: {
+            timesheetView: {
+              templateUrl: 'app/timesheets/view/viewTimesheet.html',
+              controller: 'viewTimesheetController',
+              controllerAs: 'controller'
+            }
+          }
+        });
     });
 
-  function ViewTimesheetController($q, $interval, dateUtilities, timesheets,
-    timesheetTaskTimers, taskTimerEditor, EditorMode, messageDialog) {
+  function ViewTimesheetController($q, $interval, $stateParams, dateUtilities, timesheets,
+                                   timesheetTaskTimers, taskTimerEditor, EditorMode, messageDialog) {
     var controller = this;
 
     controller.dates = [];
@@ -73,11 +84,11 @@
 
     function activate() {
       var today = dateUtilities.removeTimezoneOffset(new Date());
-      generateWeek(today);
-      selectDay(today);
       loadData().then(finishActivation, displayError);
 
       function finishActivation() {
+        generateWeek();
+        selectDay(today);
         controller.isReady = true;
         refreshCurrentDate();
         $interval(refreshCurrentDate, 15000);
@@ -88,22 +99,15 @@
       }
     }
 
-    function generateWeek(day) {
-      var endDate = dateUtilities.weekEndDate(day);
-      controller.dates = dateUtilities.generateWeek(endDate);
-    }
-
-    function selectDay(day) {
-      controller.currentDate = day.toISOString().substring(0, 10);
-      angular.forEach(controller.dates, function(day) {
-        day.active = (day.isoDateString === controller.currentDate);
-      });
-    }
-
     function loadData() {
       var dfd = $q.defer();
 
-      timesheets.getCurrent().then(getTaskTimers, dfd.reject);
+      if ($stateParams.id) {
+        timesheets.get($stateParams.id).then(getTaskTimers, dfd.reject);
+      } else {
+        timesheets.getCurrent().then(getTaskTimers, dfd.reject);
+      }
+
       return dfd.promise;
 
       function getTaskTimers(currentTimesheet) {
@@ -111,6 +115,19 @@
         controller.allTaskTimers = timesheetTaskTimers.load(currentTimesheet).then(dfd.resolve, dfd.reject);
       }
     }
+
+    function generateWeek() {
+      controller.dates = dateUtilities.generateWeek(controller.timesheet.endDate);
+    }
+
+    function selectDay(day) {
+      controller.currentDate =
+        $stateParams.id ? controller.dates[0].isoDateString : day.toISOString().substring(0, 10);
+      angular.forEach(controller.dates, function(day) {
+        day.active = (day.isoDateString === controller.currentDate);
+      });
+    }
+
 
     function refreshCurrentDate() {
       controller.taskTimers = timesheetTaskTimers.get(controller.currentDate);
