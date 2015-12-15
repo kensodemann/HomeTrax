@@ -1,6 +1,6 @@
 <div class="container">
   <header>
-    <h2 class="text-center">Current Timesheet</h2>
+    <h2 class="text-center">Timesheet for Week Ending: <span ng-bind="controller.timesheet.endDate | date: 'mediumDate'"></span></h2>
     <uib-tabset justified="true">
       <uib-tab ng-repeat="day in controller.dates" active="day.active" select="controller.selectDate($index)">
         <uib-tab-heading>

@@ -2,10 +2,10 @@
   'use strict';
 
   angular.module('homeTrax.timesheets.list', [
-      'ui.router',
-      'homeTrax.common.resources.Timesheet',
-      'homeTrax.common.services.messageDialog'
-    ]).controller('timesheetListController', TimesheetListController)
+    'ui.router',
+    'homeTrax.common.services.timesheets',
+    'homeTrax.common.services.messageDialog'
+  ]).controller('timesheetListController', TimesheetListController)
     .config(function($stateProvider) {
       $stateProvider.state('app.timesheets.list', {
         url: '/list',
@@ -19,13 +19,19 @@
       });
     });
 
-  function TimesheetListController(Timesheet, messageDialog) {
-    this.timesheets = Timesheet.query(noop, displayError);
+  function TimesheetListController(timesheets, messageDialog) {
+    var controller = this;
 
-    function noop() {}
+    controller.timesheets = timesheets.all;
 
-    function displayError(res) {
-      messageDialog.error('Error Getting Timesheets', res.data.reason);
+    activate();
+
+    function activate() {
+      controller.timesheets.$promise.catch(displayError);
+
+      function displayError(res) {
+        messageDialog.error('Error Getting Timesheets', res.data.reason);
+      }
     }
   }
 }());

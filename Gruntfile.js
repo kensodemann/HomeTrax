@@ -188,7 +188,7 @@ module.exports = function(grunt) {
           'src/preprocessedSources/config.js',
           '!src/app/common/core/config.js',
           'test/**/*.js'],
-        tasks: ['default']
+        tasks: ['local']
       }
     }
   });

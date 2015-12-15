@@ -12,11 +12,12 @@
     var previousUser;
 
     return {
+      get: getTimesheet,
       getCurrent: getCurrentTimesheet,
       refresh: getAllTimesheets,
 
       get all() {
-        if (!timesheetCache || previousUser !== identity.currentUser) {
+        if (!cacheIsValid()) {
           getAllTimesheets();
         }
 
@@ -27,6 +28,30 @@
     function getAllTimesheets() {
       previousUser = identity.currentUser;
       timesheetCache = Timesheet.query();
+    }
+
+    function getTimesheet(id) {
+      var dfd = $q.defer();
+
+      var ts = findInCache(id);
+      if (ts) {
+        dfd.resolve(ts);
+      } else {
+        Timesheet.get({id: id}, dfd.resolve, dfd.reject);
+      }
+
+      return dfd.promise;
+    }
+
+    function findInCache(id) {
+      var ts;
+      if (cacheIsValid()) {
+        ts = _.find(timesheetCache, function(ts) {
+          return ts._id === id;
+        });
+      }
+
+      return ts;
     }
 
     function getCurrentTimesheet() {
@@ -46,7 +71,7 @@
 
     function findCurrentInCache(weekEndDate) {
       var ts;
-      if (timesheetCache && identity.currentUser === previousUser) {
+      if (cacheIsValid()) {
         ts = _.find(timesheetCache, function(t) {
           return t.endDate === weekEndDate;
         });
@@ -58,7 +83,7 @@
     function getCurrentFromDataService(dfd, weekEndDate) {
       Timesheet.query({
         endDate: weekEndDate
-      }, success, error);
+      }, success, dfd.reject);
 
       function success(matching) {
         if (matching.length === 0) {
@@ -70,10 +95,10 @@
           dfd.resolve(matching[0]);
         }
       }
+    }
 
-      function error(res) {
-        dfd.reject(res);
-      }
+    function cacheIsValid() {
+      return timesheetCache && identity.currentUser === previousUser;
     }
   }
 }());
