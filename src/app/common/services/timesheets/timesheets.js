@@ -37,7 +37,7 @@
       if (ts) {
         dfd.resolve(ts);
       } else {
-        Timesheet.get({_id: id}, dfd.resolve, dfd.reject);
+        Timesheet.get({id: id}, dfd.resolve, dfd.reject);
       }
 
       return dfd.promise;

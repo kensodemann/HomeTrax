@@ -276,13 +276,13 @@
         $rootScope.$digest();
         timesheets.get(42);
         expect(mockTimesheetConstructor.get.calledOnce).to.be.true;
-        expect(mockTimesheetConstructor.get.calledWith({_id: 42})).to.be.true;
+        expect(mockTimesheetConstructor.get.calledWith({id: 42})).to.be.true;
       });
 
       it('gets the timesheet from the data service if the cache has not been loaded yet', function() {
         timesheets.get(42);
         expect(mockTimesheetConstructor.get.calledOnce).to.be.true;
-        expect(mockTimesheetConstructor.get.calledWith({_id: 42})).to.be.true;
+        expect(mockTimesheetConstructor.get.calledWith({id: 42})).to.be.true;
       });
 
       it('gets the timesheet from the data service if the cache was loaded for a different user', function() {
@@ -295,7 +295,7 @@
         };
         timesheets.get(5);
         expect(mockTimesheetConstructor.get.calledOnce).to.be.true;
-        expect(mockTimesheetConstructor.get.calledWith({_id: 5})).to.be.true;
+        expect(mockTimesheetConstructor.get.calledWith({id: 5})).to.be.true;
       });
     });
 
