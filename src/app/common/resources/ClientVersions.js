@@ -3,6 +3,19 @@
 
   angular.module('homeTrax.common.resources.ClientVersions', [])
     .constant('ClientVersions', [{
+      id: '2.0.4',
+      name: 'Fírnen (2.0.4)',
+      releaseDate: '2015-12-15',
+      description: 'View Prior Timesheets',
+      features: [
+        'Allow previous timesheets to be viewed and modified',
+        'Allow the time report for previous timesheets to be viewed'
+      ],
+      bugFixes: [
+        'Added error handling for fetches',
+        'Removed minor routing bug'
+      ]
+    },{
       id: '2.0.3',
       name: 'Desghidorah (2.0.3)',
       releaseDate: '2015-12-13',
