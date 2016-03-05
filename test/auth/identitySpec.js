@@ -1,3 +1,4 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
@@ -89,7 +90,7 @@
       });
     });
 
-    describe('set', function(done) {
+    describe('set', function() {
       it('sets the user so it is returned without querying the data service', function(done) {
         identity.set({
           _id: 73,

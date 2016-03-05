@@ -5,7 +5,6 @@ bower_components
 
 www/
 
-src/app/common/core/config.js
 src/style/*.css
 src/style/*.map
 

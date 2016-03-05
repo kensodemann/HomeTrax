@@ -1,3 +1,4 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
@@ -35,7 +36,7 @@
 
     describe('all', function() {
       it('queries the stages', function() {
-        var allStages = stages.all;
+        stages.all;
         expect(mockStage.query.calledOnce).to.be.true;
       });
 

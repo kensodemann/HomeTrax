@@ -1,3 +1,4 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
@@ -138,7 +139,7 @@
         expect(controller.projects[5]).to.deep.equal({
           _id: 6,
           name: 'The New One'
-        })
+        });
       });
     });
 

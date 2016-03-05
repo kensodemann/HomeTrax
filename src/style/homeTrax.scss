@@ -7,7 +7,7 @@ $icon-font-path: "fonts/bootstrap/";
 $fa-font-path: "fonts";
 @import "../../bower_components/font-awesome/scss/font-awesome";
 
-@import "../../bower_components/toastr/toastr";
+@import "../../bower_components/toastr/toastr.scss";
 
 @import "dialog";
 @import "form";

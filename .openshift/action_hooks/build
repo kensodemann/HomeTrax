@@ -15,8 +15,8 @@ export HOME=$OPENSHIFT_REPO_DIR
 bower install
 
 ##########
-echo "INFO: Running 'grunt openShiftBuild'"
-grunt openShiftBuild
+echo "INFO: Running gulp"
+gulp --type=release --dataSource=openshift
 
 #########
 export HOME=$OLD_HOME

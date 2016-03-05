@@ -1,3 +1,4 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
@@ -450,7 +451,7 @@
         }, {
           _id: 2,
           name: 'taskTimerTwo'
-        }]
+        }];
       });
 
       it('opens the task timer editor', function() {

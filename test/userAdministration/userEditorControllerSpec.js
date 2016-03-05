@@ -1,3 +1,4 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
@@ -133,7 +134,7 @@
           var controller = createController(testUser, EditorMode.edit);
           controller.password = 'IAmPassword';
           controller.save();
-          expect(testUser.password).to.not.exist
+          expect(testUser.password).to.not.exist;
         });
       });
 

@@ -1,3 +1,4 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
@@ -143,7 +144,7 @@
 
       it('does not attempt to set the project if the editor is in create mode', function() {
         var projects = [1, 2, 7, 6];
-        var controller = createController({}, EditorMode.create);
+        createController({}, EditorMode.create);
         projectsDfd.resolve(projects);
         $rootScope.$digest();
         expect(mockTaskTimerEditorService.selectProject.called).to.be.false;

@@ -1,8 +1,8 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
   describe('homeTrax.common.services.timeUtilities: timeUtilities', function() {
-    var millisecondsPerMinute = 60000;
     var timeUtilities;
 
     beforeEach(module('homeTrax.common.services.timeUtilities'));

@@ -1,3 +1,4 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
@@ -67,7 +68,7 @@
       it('saves new data properly', function() {
         httpBackend.expectPOST(config.dataService + '/timesheets')
           .respond({});
-        var res = Timesheet.save({
+        Timesheet.save({
           endDate: '2015-12-25'
         });
         httpBackend.flush();
@@ -76,7 +77,7 @@
       it('saves existing data properly', function() {
         httpBackend.expectPOST(config.dataService + '/timesheets/2')
           .respond({});
-        var res = Timesheet.save(testData[1]);
+        Timesheet.save(testData[1]);
         httpBackend.flush();
       });
     });

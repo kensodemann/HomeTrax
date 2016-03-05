@@ -1,4 +1,4 @@
-/* global beforeEach describe expect inject it sinon */
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 

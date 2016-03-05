@@ -1,3 +1,4 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
@@ -16,7 +17,7 @@
 
     it('exists', function() {
       var controller = createController();
-      expect(controller).to.exist;
+      expect(controller).to.exißst;
     });
   });
 }());

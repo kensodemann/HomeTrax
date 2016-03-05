@@ -1,3 +1,4 @@
+/* jshint expr: true, undef: false */
 (function() {
   'use strict';
 
@@ -68,7 +69,7 @@
       it('saves new data properly', function() {
         httpBackend.expectPOST(config.dataService + '/projects')
           .respond({});
-        var res = project.save({
+        project.save({
           name: 'Bozo'
         });
         httpBackend.flush();
@@ -77,7 +78,7 @@
       it('saves existing data properly', function() {
         httpBackend.expectPOST(config.dataService + '/projects/2')
           .respond({});
-        var res = project.save(testData[1]);
+        project.save(testData[1]);
         httpBackend.flush();
       });
     });
