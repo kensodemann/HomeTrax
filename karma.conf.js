@@ -24,8 +24,7 @@ module.exports = function(config) {
       'src/app/**/module.js',
       'src/app/**/*.js',
       'src/app/**/*.html',
-      'src/app/**/*.spec.js',
-      'test/**/*Spec.js'
+      'src/app/**/*.spec.js'
     ],
 
     exclude: [
