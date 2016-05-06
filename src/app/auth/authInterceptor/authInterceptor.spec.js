@@ -3,23 +3,14 @@
   'use strict';
 
   describe('homeTrax.auth.authInterceptor', function() {
-    var mockAuthToken;
+    var authToken;
     var authInterceptor;
 
     beforeEach(module('homeTrax.auth.authInterceptor'));
 
-    beforeEach(function() {
-      mockAuthToken = sinon.stub({
-        get: function() {}
-      });
-
-      module(function($provide) {
-        $provide.value('authToken', mockAuthToken);
-      });
-    });
-
-    beforeEach(inject(function(_authInterceptor_) {
+    beforeEach(inject(function(_authInterceptor_, _authToken_) {
       authInterceptor = _authInterceptor_;
+      authToken = _authToken_;
     }));
 
     it('exists', function() {
@@ -27,19 +18,27 @@
     });
 
     describe('request', function() {
+      beforeEach(function() {
+        sinon.stub(authToken, 'get');
+      });
+
+      afterEach(function() {
+        authToken.get.restore();
+      });
+
       it('gets the login token', function() {
         authInterceptor.request({headers: {}});
-        expect(mockAuthToken.get.calledOnce).to.be.true;
+        expect(authToken.get.calledOnce).to.be.true;
       });
 
       it('adds an Authentication header if a token exists', function() {
-        mockAuthToken.get.returns('IAmToken');
+        authToken.get.returns('IAmToken');
         var req = authInterceptor.request({headers: {}});
         expect(req.headers.Authorization).to.equal('Bearer IAmToken');
       });
 
       it('does not add an Authentication header if a token does not exist', function() {
-        mockAuthToken.get.returns('');
+        authToken.get.returns('');
         var req = authInterceptor.request({headers: {}});
         expect(req.headers.Authorization).to.not.exist;
       });
