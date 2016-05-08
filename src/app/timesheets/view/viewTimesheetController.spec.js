@@ -40,8 +40,7 @@
 
     beforeEach(function() {
       mockMessageDialog = sinon.stub({
-        error: function() {
-        }
+        error: function() {}
       });
     });
 
@@ -57,19 +56,16 @@
 
     beforeEach(function() {
       mockTaskTimerEditor = sinon.stub({
-        open: function() {
-        }
+        open: function() {}
       });
       mockTaskTimerEditor.open.returns(mockModalInstance);
     });
 
     beforeEach(function() {
       mockTimesheets = sinon.stub({
-        get: function() {
-        },
+        get: function() {},
 
-        getCurrent: function() {
-        }
+        getCurrent: function() {}
       });
       mockTimesheets.getCurrent.returns(getCurrentDfd.promise);
       mockTimesheets.get.returns(getDfd.promise);
@@ -77,26 +73,19 @@
 
     beforeEach(function() {
       mockTimesheetTaskTimers = sinon.stub({
-        load: function() {
-        },
+        load: function() {},
 
-        get: function() {
-        },
+        get: function() {},
 
-        totalTime: function() {
-        },
+        totalTime: function() {},
 
-        create: function() {
-        },
+        create: function() {},
 
-        add: function() {
-        },
+        add: function() {},
 
-        start: function() {
-        },
+        start: function() {},
 
-        stop: function() {
-        }
+        stop: function() {}
       });
       mockTimesheetTaskTimers.load.returns(loadTaskTimersDfd.promise);
       mockTimesheetTaskTimers.create.returns(mockTaskTimer);
@@ -209,6 +198,7 @@
           createController();
           resolveCurrentTimesheet();
           resolveTaskTimerLoad();
+          expect(mockTimesheetTaskTimers.load.calledOnce).to.be.true;
           expect(mockTimesheetTaskTimers.get.calledOnce).to.be.true;
           expect(mockTimesheetTaskTimers.get.calledWith('2015-10-14')).to.be.true;
           expect(mockTimesheetTaskTimers.totalTime.calledOnce).to.be.true;
@@ -219,9 +209,12 @@
           createController();
           resolveCurrentTimesheet();
           resolveTaskTimerLoad();
+          mockTimesheetTaskTimers.load.reset();
           mockTimesheetTaskTimers.get.reset();
           mockTimesheetTaskTimers.totalTime.reset();
           $interval.flush(15000);
+          resolveTaskTimerLoad();
+          expect(mockTimesheetTaskTimers.load.calledOnce).to.be.true;
           expect(mockTimesheetTaskTimers.get.calledOnce).to.be.true;
           expect(mockTimesheetTaskTimers.totalTime.calledOnce).to.be.true;
         });
@@ -362,6 +355,7 @@
         controller = createController();
         resolveCurrentTimesheet();
         resolveTaskTimerLoad();
+        mockTimesheetTaskTimers.load.reset();
         mockTimesheetTaskTimers.get.reset();
         mockTimesheetTaskTimers.totalTime.reset();
       });
@@ -371,14 +365,17 @@
         expect(controller.currentDate).to.equal('2015-10-13');
       });
 
-      it('selects the timesheets for that day', function() {
+      it('reloads the tasks times and selects timers for that day', function() {
         controller.selectDate(2);
+        expect(mockTimesheetTaskTimers.load.calledOnce).to.be.true;
+        resolveTaskTimerLoad();
         expect(mockTimesheetTaskTimers.get.calledOnce).to.be.true;
         expect(mockTimesheetTaskTimers.get.calledWith('2015-10-13')).to.be.true;
       });
 
       it('calculates the total time for that day', function() {
         controller.selectDate(2);
+        resolveTaskTimerLoad();
         expect(mockTimesheetTaskTimers.totalTime.calledOnce).to.be.true;
         expect(mockTimesheetTaskTimers.totalTime.calledWith('2015-10-13')).to.be.true;
       });
@@ -442,7 +439,7 @@
         controller = createController();
         resolveCurrentTimesheet();
         resolveTaskTimerLoad();
-        controller.allTaskTimers = [{
+        controller.taskTimers = [{
           _id: 1,
           name: 'taskTimerOne'
         }, {
@@ -455,9 +452,9 @@
       });
 
       it('opens the task timer editor', function() {
-        controller.editTimer(controller.allTaskTimers[1]);
+        controller.editTimer(controller.taskTimers[1]);
         expect(mockTaskTimerEditor.open.calledOnce).to.be.true;
-        expect(mockTaskTimerEditor.open.calledWith(controller.allTaskTimers[1], EditorMode.edit)).to.be.true;
+        expect(mockTaskTimerEditor.open.calledWith(controller.taskTimers[1], EditorMode.edit)).to.be.true;
       });
     });
 
@@ -535,19 +532,19 @@
       });
     });
 
-    function resolveSpecifiedTimesheet(ts){
+    function resolveSpecifiedTimesheet(ts) {
       getDfd.resolve(ts || {
-          _id: 123,
-          endDate: '2015-10-17'
-        });
+        _id: 123,
+        endDate: '2015-10-17'
+      });
       $rootScope.$digest();
     }
 
     function resolveCurrentTimesheet(ts) {
       getCurrentDfd.resolve(ts || {
-          _id: 123,
-          endDate: '2015-10-17'
-        });
+        _id: 123,
+        endDate: '2015-10-17'
+      });
       $rootScope.$digest();
     }
 
