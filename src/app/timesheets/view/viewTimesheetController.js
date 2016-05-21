@@ -37,13 +37,12 @@
     });
 
   function ViewTimesheetController($q, $interval, $stateParams, dateUtilities, timesheets,
-                                   timesheetTaskTimers, taskTimerEditor, EditorMode, messageDialog) {
+    timesheetTaskTimers, taskTimerEditor, EditorMode, messageDialog) {
     var controller = this;
 
     controller.dates = [];
     controller.currentDate = '';
     controller.timesheet = undefined;
-    controller.allTaskTimers = [];
     controller.taskTimers = [];
     controller.totalTime = 0;
     controller.isReady = false;
@@ -84,13 +83,15 @@
 
     function activate() {
       var today = dateUtilities.removeTimezoneOffset(new Date());
-      loadData().then(finishActivation, displayError);
+      loadTimesheet().then(finishActivation, displayError);
 
       function finishActivation() {
         generateWeek();
         selectDay(today);
-        controller.isReady = true;
-        refreshCurrentDate();
+        refreshCurrentDate().then(function() {
+          controller.isReady = true;
+        });
+
         $interval(refreshCurrentDate, 15000);
       }
 
@@ -99,20 +100,17 @@
       }
     }
 
-    function loadData() {
-      var dfd = $q.defer();
+    function loadTimesheet() {
+      return getTimesheet().then(function(ts) {
+        controller.timesheet = ts;
+      });
 
-      if ($stateParams.id) {
-        timesheets.get($stateParams.id).then(getTaskTimers, dfd.reject);
-      } else {
-        timesheets.getCurrent().then(getTaskTimers, dfd.reject);
-      }
-
-      return dfd.promise;
-
-      function getTaskTimers(currentTimesheet) {
-        controller.timesheet = currentTimesheet;
-        controller.allTaskTimers = timesheetTaskTimers.load(currentTimesheet).then(dfd.resolve, dfd.reject);
+      function getTimesheet() {
+        if ($stateParams.id) {
+          return timesheets.get($stateParams.id);
+        } else {
+          return timesheets.getCurrent();
+        }
       }
     }
 
@@ -128,10 +126,11 @@
       });
     }
 
-
     function refreshCurrentDate() {
-      controller.taskTimers = timesheetTaskTimers.get(controller.currentDate);
-      controller.totalTime = timesheetTaskTimers.totalTime(controller.currentDate);
+      return timesheetTaskTimers.load(controller.timesheet).then(function() {
+        controller.taskTimers = timesheetTaskTimers.get(controller.currentDate);
+        controller.totalTime = timesheetTaskTimers.totalTime(controller.currentDate);
+      });
     }
   }
 }());

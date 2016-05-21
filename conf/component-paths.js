@@ -1,6 +1,10 @@
 /*jshint node: true */
 
 module.exports = {
+  bower_components: 'bower_components',
+  homeTraxSccs: 'src/style/homeTrax.scss',
+  test: 'tests',
+  src: 'src',
   lib: {
     jquery: {
       dev: 'bower_components/jquery/dist/jquery.js',

@@ -5,6 +5,7 @@
   angular.module('homeTrax', [
     'homeTrax.about',
     'homeTrax.auth.authInterceptor',
+    'homeTrax.auth.authService',
     'homeTrax.auth.login',
     'homeTrax.main',
     'homeTrax.projects',
@@ -19,6 +20,7 @@
     .config(routes)
     .config(services)
     .config(shell)
+    .run(refreshLogin)
     .run(routeErrorHandling);
 
   function routes($locationProvider, $urlRouterProvider) {
@@ -29,6 +31,12 @@
 
   function auth($httpProvider) {
     $httpProvider.interceptors.push('authInterceptor');
+  }
+
+  function refreshLogin($interval, authService) {
+    var twentyMinutes = 20 * 60 * 1000;
+    authService.refreshLogin();
+    $interval(authService.refreshLogin, twentyMinutes);
   }
 
   function services(localStorageServiceProvider) {
